@@ -10,10 +10,7 @@ Mycket fokus kommer ligga på att få spelaren att känna att hon har full kontr
 
 Utöver den tekniska aspekten av spelet så kommer huvuddelen av fokus ligga på att designa intressanta plattformshinder och en bra labyrint. Ett bra plattformshinder ska vara en utmaning men inte orättvist, spelaren ska inte överraskas av saker hon inte har kontroll över. Dessutom så bör ett bra plattformshinder kunna överkommas snabbt och graciöst om man vet hur man ska göra, ett hinder där man tvingas vänta mycket på att saker ska flytta på sig är troligen inte särskilt bra. En bra labyrint skulle kunna ha olika möjliga vägar till målet, det ger även mer "replay value". Eventuellt skulle man kunna slumpa själva labyrinten och bara designa rummen för hand.
 
-Utvecklingen kommer att ske i C++ med SDL + Ogre3D eller i Unreal Engine 4. Eftersom huvudkaraktären är en kub så bör det inte vara några problem att klara av projektet om ingen medlem har erfarenhet av att göra modeller eller texturer.
-
-## Prerequisites
-- Grundläggande erfarenhet av C++
+Utvecklingen kommer att ske i C++ med SDL + Ogre3D eller i Unreal Engine 4. Eftersom huvudkaraktären är en kub så bör det inte vara några problem att klara av projektet även om ingen medlem har erfarenhet av att göra modeller eller texturer.
 
 ### Förslagslämnare
 - Peter Hillerström
