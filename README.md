@@ -10,7 +10,7 @@ Mycket fokus kommer ligga på att ge spelaren full kontroll över karaktären oc
 
 Ett vanligt problem i spel är att göra bra modeller och texturer, men eftersom huvudkaraktären är en kub så behöver inte särskilt avancerade saker göras. Men om intresse i gruppen finns kan tid givetvis läggas på detta. Antagligen kommer mer tid läggas på att skriva bra shaders och liknande. Överlag är det viktigaste att grafiken är ren och tydlig, grafiken får inte bli ett hinder för spelaren.
 
-Utöver den tekniska aspekten av spelet så kommer huvuddelen av fokus ligga på att designa intressanta plattformshinder och en bra labyrint. Ett bra plattformshinder ska vara en utmaning men inte orättvist, spelaren ska inte överraskas av saker hon inte har kontroll över. Dessutom så bör ett bra plattformshinder kunna överkommas snabbt och graciöst av en erfaren spelare. En bra labyrint skulle kunna ha olika möjliga vägar till målet, det ger även mer "replay value". Eventuellt skulle man kunna slumpa själva labyrinten och bara designa rummen för hand.
+Utöver den tekniska aspekten av spelet så kommer huvuddelen av fokus ligga på att designa intressanta plattformshinder och en bra labyrint. Ett bra plattformshinder ska vara en utmaning men inte orättvist, spelaren ska inte överraskas av saker hon inte har kontroll över. Dessutom så bör ett bra hinder kunna överkommas snabbt och graciöst av en erfaren spelare. En bra labyrint skulle kunna ha olika möjliga vägar till målet, det ger även mer omspelningsvärde. Eventuellt skulle man kunna slumpa själva labyrinten och bara designa rummen för hand.
 
 Utvecklingen kommer att ske i C++ med SDL + Ogre3D eller i Unreal Engine 4.
 
