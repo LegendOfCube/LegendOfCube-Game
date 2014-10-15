@@ -12,7 +12,7 @@ Ett vanligt problem i spel är att göra bra modeller och texturer, men eftersom
 
 Utöver den tekniska aspekten av spelet så kommer huvuddelen av fokus ligga på att designa intressanta plattformshinder och en bra labyrint. Ett bra plattformshinder ska vara en utmaning men inte orättvist, spelaren ska inte överraskas av saker hon inte har kontroll över. Dessutom så bör ett bra hinder kunna överkommas snabbt och graciöst av en erfaren spelare. En bra labyrint skulle kunna ha olika möjliga vägar till målet, det ger även mer omspelningsvärde. Eventuellt skulle man kunna slumpa själva labyrinten och bara designa rummen för hand.
 
-Utvecklingen kommer att ske i C++ med SDL + Ogre3D eller i Unreal Engine 4.
+Utvecklingen kommer att ske i C++ med SDL + Ogre3D eller i Unreal Engine 4. Koden ska vara så plattformsoberoende som möjligt och stödja åtminstone Windows och Mac OS X.
 
 ### Förslagslämnare
 - Peter Hillerström
