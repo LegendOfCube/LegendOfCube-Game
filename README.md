@@ -1,4 +1,4 @@
-# Legend of Cube
+# Legend of Cube - Plattformsspel i 3D
 
 ## Bakgrund
 Sedan övergången till 3D har plattformsspel inte fått lika mycket fokus som de hade under 2D-eran. En trolig anledning till detta är att det är betydligt svårare att ge spelaren samma nivå av kontroll i 3D som de hade i 2D. Du har fler riktningar du kan röra dig i och därmed mer potential för misstag. Detta förstärks av att du har en kamera som kanske inte alltid visar exakt det som spelaren behöver se. Några lyckade exempel på plattformsspel i 3D är Super Mario 64 och Super Mario Galaxy från Nintendo. Många skulle dock argumentera att man i dessa spel fortfarande inte har samma nivå av kontroll som man har i moderna 2D spel såsom Super Meat Boy. 
