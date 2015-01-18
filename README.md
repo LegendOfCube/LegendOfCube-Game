@@ -15,7 +15,10 @@ It is advisable to let CMake generate the wanted build solution in a directory c
 
 ### Windows
 #### Installing dependencies
-- Install latest version of CMake and add it to your `Path` variable. (Warning: Backup your `Path` before installing. The installer is buggy and has on occasion deleted all the contents of my `Path` variable.)
+##### CMake
+Install latest version of CMake and add it to your `Path` variable. Warning: Backup your `Path` before installing. The installer is buggy and has on occasion deleted all the contents of my `Path` variable.
+##### Boost
+Download and install the pre-built Boost binaries (as of writing you want the file called `boost_1_57_0-msvc-12.0-64.exe`). Then you need create an environment variable called `BOOST_ROOT` pointing to the root of the Boost installation. You also need to create an environment variable called `BOOST_LIBRARYDIR` which points to the directory containing the compiled libraries (`.lib` and `.dll`), this will by default be a directory called `lib64-msvc-12.0` inside the Boost root directory.
 
 #### Generating Visual Studio solution
 Create a directory called `build` inside the project root directory and then open `cmd` inside this `build` directory. Run the following command:
