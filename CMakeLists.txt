@@ -21,11 +21,16 @@ link_directories(${Boost_LIBRARY_DIRS})
 # SDL2 (sets ${SDL2_INCLUDE_DIR}, ${SDL2_LIBRARY})
 find_package(SDL2 REQUIRED)
 
+# Ogre3D
+find_package(OGRE REQUIRED)
+
+
 # Include directories
 include_directories(
 	${SRC_DIR}
 	${Boost_INCLUDE_DIRS}
 	${SDL2_INCLUDE_DIR}
+	${OGRE_INCLUDE_DIRS}
 )
 
 # Main Executable
@@ -41,6 +46,7 @@ target_link_libraries(
 
 	${Boost_LIBRARIES}
 	${SDL2_LIBRARY}
+	${OGRE_LIBRARIES}
 )
 
 # Copies assets to '/bin' dir in build directory. Only run when CMakeLists.txt is invoked.
