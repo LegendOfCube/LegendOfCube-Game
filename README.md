@@ -1,4 +1,5 @@
-LegendOfCube_Projektbeskrivning
-===============================
+# Legend of Cube
+3D platformer using Monogame starring a Cube.
 
-Projektbeskrivning av Legend Of Cube att skicka in.
+## License
+TBD
