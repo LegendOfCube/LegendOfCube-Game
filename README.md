@@ -15,7 +15,7 @@ Currently only Windows is supported. Likely it's possible to create a cross plat
 2. Run the installer (you can safely untick the checkbox for VS 2010 and 2012 templates).
 
 #### Open Project
-Find `LegendOfCube.sln` and open in Visual Studio.
+Find `LegendOfCube-Win.sln` and open in Visual Studio.
 
 ### Mac OS X
 TBD

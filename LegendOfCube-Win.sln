@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegendOfCube", "LegendOfCube\LegendOfCube.csproj", "{05C19366-45C0-4B23-94A2-A72CDBD5F9B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegendOfCube-Win-OpenGL", "LegendOfCube\LegendOfCube-Win-OpenGL.csproj", "{05C19366-45C0-4B23-94A2-A72CDBD5F9B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
