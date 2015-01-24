@@ -50,6 +50,8 @@ namespace LegendOfCube
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferMultiSampling = true;
+
             Content.RootDirectory = "Content";
         }
 
@@ -83,9 +85,17 @@ namespace LegendOfCube
             indexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
 
             basicEffect = new BasicEffect(graphics.GraphicsDevice); //(device, null);
-            basicEffect.LightingEnabled = false;
+            basicEffect.LightingEnabled = true;
             basicEffect.VertexColorEnabled = true;
             basicEffect.TextureEnabled = false;
+
+            if (basicEffect.LightingEnabled)
+            {
+                basicEffect.AmbientLightColor = new Vector3(0.5f, 0.5f, 0.5f);
+                basicEffect.DirectionalLight0.Enabled = true;
+                basicEffect.DirectionalLight0.SpecularColor = new Vector3(1.0f, 0.0f, 0.0f);
+                basicEffect.DirectionalLight0.DiffuseColor = new Vector3(1.0f, 0.0f, 0.0f);
+            }
 
             graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
             base.Initialize();
@@ -139,6 +149,8 @@ namespace LegendOfCube
             cubeRotation += (0.0025f) * (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             Matrix World = Matrix.CreateRotationY(cubeRotation);
             Matrix World2 = Matrix.CreateTranslation(new Vector3(0, 6, 0)) * Matrix.CreateScale(0.1f) * Matrix.CreateRotationY(-cubeRotation);
+
+            basicEffect.DirectionalLight0.Direction = Vector3.Transform(new Vector3(0.0f, 0.0f, 0.0f), World);
 
             vertexBuffer.SetData(cube, 0, 8, SetDataOptions.Discard);
             indexBuffer.SetData(cubeIndices, 0, 36, SetDataOptions.Discard);
