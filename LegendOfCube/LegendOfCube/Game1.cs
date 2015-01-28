@@ -86,11 +86,22 @@ namespace LegendOfCube
 
             cube.vertexBuffer = new DynamicVertexBuffer(graphics.GraphicsDevice, typeof(VertexPositionColor), 8, BufferUsage.WriteOnly);
             cube.indexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
-
+            cube.vertexBuffer.SetData(cube.verts);
+            cube.indexBuffer.SetData(cubeIndices);
             cube.modelToWorld = Matrix.Identity;
+
+            Window.ClientSizeChanged += new EventHandler<EventArgs>(SizeChanged);
 
             base.Initialize();
         }
+
+        void SizeChanged(object o, EventArgs e)
+        {
+            // For some reason, buffers seem to need updating after resize
+            cube.vertexBuffer.SetData(cube.verts);
+            cube.indexBuffer.SetData(cubeIndices);
+        }
+
 
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
@@ -149,8 +160,6 @@ namespace LegendOfCube
             Matrix view = Matrix.CreateLookAt(new Vector3(5f, 3f, 0f), Vector3.Zero, new Vector3(0f, 1f, 0f));
             Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fov), GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
-            cube.vertexBuffer.SetData(cube.verts, 0, 8, SetDataOptions.Discard);
-            cube.indexBuffer.SetData(cubeIndices, 0, 36, SetDataOptions.Discard);
             GraphicsDevice.Indices = cube.indexBuffer;
             GraphicsDevice.SetVertexBuffer(cube.vertexBuffer);
 
