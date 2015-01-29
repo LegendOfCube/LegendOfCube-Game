@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegendOfCube", "LegendOfCube\LegendOfCube\LegendOfCube.csproj", "{1C01F875-D02E-4021-AC39-4688F49147C7}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "LegendOfCubeContent", "LegendOfCube\LegendOfCubeContent\LegendOfCubeContent.contentproj", "{728B00A3-3B63-48FA-A5B7-73D28E7EBCD1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegendOfCubeContent", "LegendOfCube\LegendOfCubeContent\LegendOfCubeContent.contentproj", "{728B00A3-3B63-48FA-A5B7-73D28E7EBCD1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
