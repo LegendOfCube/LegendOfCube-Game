@@ -29,10 +29,10 @@ namespace LegendOfCube
 		private SpriteBatch spriteBatch;
 		private Model barrelModel;
 		private BasicEffect basicEffect;
-		private float rotation;
 		private Texture2D cubeImage;
 		private GfxObj cube;
 		private GfxObj ground;
+		private Matrix[] barrels;
 
 		private readonly ushort[] cubeIndices =
 		{
@@ -57,6 +57,7 @@ namespace LegendOfCube
 
 		// Used for detecting that a key recently has been pressed
 		private KeyboardState oldKeyState;
+		private Boolean dubbleJump = true;
 
 		public Game1()
 		{
@@ -72,6 +73,14 @@ namespace LegendOfCube
 		/// </summary>
 		protected override void Initialize()
 		{
+			barrels = new Matrix[100];
+
+			Random rnd = new Random();
+			for (int i = 0; i < barrels.Length; i++)
+			{
+				barrels[i] = Matrix.CreateTranslation(rnd.Next(-1000, 1000), 1f, rnd.Next(-1000, 1000)) * Matrix.CreateScale(0.1f);
+			}
+
 			Window.AllowUserResizing = true;
 			graphics.PreferMultiSampling = true;
 			GraphicsDevice.BlendState = BlendState.Opaque;
@@ -173,23 +182,31 @@ namespace LegendOfCube
 			}
 			if (keyState.IsKeyDown(Keys.W))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Left) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Forward) * cube.modelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.A))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Backward) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Left) * cube.modelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.S))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Right) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Backward) * cube.modelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.D))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Forward) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Right) * cube.modelToWorld;
 			}
-			if (keyState.IsKeyDown(Keys.Space) && cube.modelToWorld.Translation.Y == 0)
+			if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space))
 			{
-				cube.vel.Y += 0.18f;
+				if (cube.modelToWorld.Translation.Y == 0)
+				{
+					cube.vel.Y += 0.21f;
+				}
+				else if (cube.modelToWorld.Translation.Y > 0 && dubbleJump) 
+				{
+					cube.vel.Y += 0.21f;
+					dubbleJump = false;
+				}
 			}
 
 			oldKeyState = keyState;
@@ -202,6 +219,7 @@ namespace LegendOfCube
 			{
 				pos.Y = 0;
 				cube.vel.Y = 0;
+				dubbleJump = true;
 			}
 			cube.modelToWorld.Translation = pos;
 
@@ -221,8 +239,10 @@ namespace LegendOfCube
 			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 			float fov = 45;
+			
+			Vector3 cameraPos = new Vector3(cube.modelToWorld.Translation.X+1.5f, 4f, cube.modelToWorld.Translation.Z+8f);
 
-			Matrix view = Matrix.CreateLookAt(new Vector3(7f, 2f, 0f), new Vector3(0f, 1f, 0f), new Vector3(0f, 1f, 0f));
+			Matrix view = Matrix.CreateLookAt(cameraPos, cube.modelToWorld.Translation, new Vector3(0f, 1f, 0f));
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fov), GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
 			GraphicsDevice.Indices = cube.indexBuffer;
@@ -249,8 +269,19 @@ namespace LegendOfCube
 				GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 4, 0, 2);
 			}
 
-			Matrix barrelWorld = Matrix.CreateTranslation(0f, 1f, -15f) * Matrix.CreateScale(0.1f);
-			barrelModel.Draw(barrelWorld, view, projection);
+			Matrix barrelWorld1 = Matrix.CreateTranslation(25f, 1f, -25f) * Matrix.CreateScale(0.1f);
+			Matrix barrelWorld2 = Matrix.CreateTranslation(25f, 1f, 25f) * Matrix.CreateScale(0.1f);
+			Matrix barrelWorld3 = Matrix.CreateTranslation(-25f, 1f, -25f) * Matrix.CreateScale(0.1f);
+			Matrix barrelWorld4 = Matrix.CreateTranslation(-25f, 1f, 25f) * Matrix.CreateScale(0.1f);
+			barrelModel.Draw(barrelWorld1, view, projection);
+			barrelModel.Draw(barrelWorld2, view, projection);
+			barrelModel.Draw(barrelWorld3, view, projection);
+			barrelModel.Draw(barrelWorld4, view, projection);
+
+			foreach (Matrix barrel in barrels)
+			{
+				barrelModel.Draw(barrel, view, projection);	
+			}
 
 			spriteBatch.Begin();
 			spriteBatch.Draw(cubeImage, new Rectangle(0, 0, 200, 200), Color.White);
