@@ -173,21 +173,21 @@ namespace LegendOfCube
 			}
 			if (keyState.IsKeyDown(Keys.W))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Forward) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Left) * cube.modelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.A))
 			{
-				cube.modelToWorld = Matrix.CreateRotationY(0.1f) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Backward) * cube.modelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.S))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(-0.1f * cube.modelToWorld.Forward) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Right) * cube.modelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.D))
 			{
-				cube.modelToWorld = Matrix.CreateRotationY(-0.1f) * cube.modelToWorld;
+				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Forward) * cube.modelToWorld;
 			}
-			if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space))
+			if (keyState.IsKeyDown(Keys.Space) && cube.modelToWorld.Translation.Y == 0)
 			{
 				cube.vel.Y += 0.18f;
 			}
