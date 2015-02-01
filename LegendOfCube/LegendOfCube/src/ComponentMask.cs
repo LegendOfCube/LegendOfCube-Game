@@ -18,6 +18,10 @@ namespace LegendOfCube
 		public const UInt64 POSITION = 1 << 0;
 		public const UInt64 VELOCITY = 1 << 1;
 		public const UInt64 ACCELERATION = 1 << 2;
+		public const UInt64 AFFECTED_BY_GRAVITY = 1 << 3;
+		public const UInt64 RECEIVE_INPUT = 1 << 4;
+		public const UInt64 MODEL = 1 << 5;
+		public const UInt64 TRANSFORM = 1 << 6;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube
 {
@@ -17,11 +18,13 @@ namespace LegendOfCube
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		public readonly UInt32 MAX_NUM_ENTITIES;
-		public UInt32 numEntities;
-		public ComponentMask[] componentMasks;
-		public Vector3[] positions;
-		public Vector3[] velocities;
-		public Vector3[] accelerations;
+		public UInt32 NumEntities;
+		public ComponentMask[] ComponentMasks;
+		public Vector3[] Positions;
+		public Vector3[] Velocities;
+		public Vector3[] Accelerations;
+		public Model[] Models;
+		public Matrix[] Transforms;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -29,20 +32,24 @@ namespace LegendOfCube
 		public World(UInt32 maxNumEntities)
 		{
 			MAX_NUM_ENTITIES = maxNumEntities;
-			numEntities = 0;
-			componentMasks = new ComponentMask[MAX_NUM_ENTITIES];
+			NumEntities = 0;
+			ComponentMasks = new ComponentMask[MAX_NUM_ENTITIES];
 			for (UInt32 i = 0; i < MAX_NUM_ENTITIES; i++) {
-				componentMasks[i] = NO_COMPONENTS;
+				ComponentMasks[i] = NO_COMPONENTS;
 			}
 
 			// Components
-			positions = new Vector3[MAX_NUM_ENTITIES];
-			velocities = new Vector3[MAX_NUM_ENTITIES];
-			accelerations = new Vector3[MAX_NUM_ENTITIES];
+			Positions = new Vector3[MAX_NUM_ENTITIES];
+			Velocities = new Vector3[MAX_NUM_ENTITIES];
+			Accelerations = new Vector3[MAX_NUM_ENTITIES];
+			Models = new Model[MAX_NUM_ENTITIES];
+			Transforms = new Matrix[MAX_NUM_ENTITIES];
 			for (UInt32 i = 0; i < MAX_NUM_ENTITIES; i++) {
-				positions[i] = new Vector3(0, 0, 0);
-				velocities[i] = new Vector3(0, 0, 0);
-				accelerations[i] = new Vector3(0, 0, 0);
+				Positions[i] = new Vector3(0, 0, 0);
+				Velocities[i] = new Vector3(0, 0, 0);
+				Accelerations[i] = new Vector3(0, 0, 0);
+				Models[i] = null;
+				Transforms[i] = Matrix.Identity;
 			}
 		}
 
@@ -51,7 +58,7 @@ namespace LegendOfCube
 
 		public bool canCreateMoreEntities()
 		{
-			return numEntities < MAX_NUM_ENTITIES;
+			return NumEntities < MAX_NUM_ENTITIES;
 		}
 
 		public Entity createEntity(ComponentMask wantedComponents)
@@ -64,14 +71,15 @@ namespace LegendOfCube
 			}
 			UInt32 entity;
 			for (entity = 0; entity < MAX_NUM_ENTITIES; entity++) {
-				if (componentMasks[entity] == NO_COMPONENTS) {
+				if (ComponentMasks[entity] == NO_COMPONENTS) {
 					break;
 				}
 			}
 			if (entity >= MAX_NUM_ENTITIES) {
 				throw new InvalidOperationException("Something went terribly wrong.");
 			}
-			numEntities++;
+			ComponentMasks[entity] = wantedComponents;
+			NumEntities++;
 			return new Entity(entity);
 		}
 
@@ -80,13 +88,15 @@ namespace LegendOfCube
 			if (entityToDestroy.ID >= MAX_NUM_ENTITIES) {
 				throw new ArgumentException("Entity to be destroyed doesn't exist.");
 			}
-			componentMasks[entityToDestroy.ID] = NO_COMPONENTS;
-			numEntities--;
+			ComponentMasks[entityToDestroy.ID] = NO_COMPONENTS;
+			NumEntities--;
 
 			// Clean-up components
-			positions[entityToDestroy.ID] = new Vector3(0, 0, 0);
-			velocities[entityToDestroy.ID] = new Vector3(0, 0, 0);
-			accelerations[entityToDestroy.ID] = new Vector3(0, 0, 0);
+			Positions[entityToDestroy.ID] = new Vector3(0, 0, 0);
+			Velocities[entityToDestroy.ID] = new Vector3(0, 0, 0);
+			Accelerations[entityToDestroy.ID] = new Vector3(0, 0, 0);
+			Models[entityToDestroy.ID] = null;
+			Transforms[entityToDestroy.ID] = Matrix.Identity;
 		}
 	}
 }

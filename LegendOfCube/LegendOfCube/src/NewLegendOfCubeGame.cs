@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,27 @@ namespace LegendOfCube
 		private PhysicsSystem _physicsSystem;
 		private RenderSystem _renderSystem;
 
+
+		private Entity barrelEntity;
+		private Model barrelModel;
+
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public NewLegendOfCubeGame()
 		{
+			_world = new World(100);
+			_renderSystem = new RenderSystem(this);
 
+			Content.RootDirectory = "Content";
+
+			// Temporary code to create a barrel entity that should render.
+			ComponentMask barrelMask = new ComponentMask(ComponentMask.POSITION |
+			                                             ComponentMask.TRANSFORM |
+														 ComponentMask.MODEL);
+			barrelEntity = _world.createEntity(barrelMask);
+			_world.Positions[barrelEntity.ID] = new Vector3(0, 0, 0);
+			_world.Transforms[barrelEntity.ID] = Matrix.CreateScale(0.1f);
 		}
 
 		// Overriden XNA methods
@@ -35,7 +51,10 @@ namespace LegendOfCube
 		 */
 		protected override void Initialize()
 		{
+			_renderSystem.Initialize();
 
+
+			base.Initialize();
 		}
 
 		/**
@@ -44,7 +63,8 @@ namespace LegendOfCube
 		 */
 		protected override void LoadContent()
 		{
-
+			barrelModel = Content.Load<Model>("barrel");
+			_world.Models[barrelEntity.ID] = barrelModel;
 		}
 
 		/**
@@ -64,6 +84,8 @@ namespace LegendOfCube
 		protected override void Update(GameTime gameTime)
 		{
 
+
+			base.Update(gameTime);
 		}
 
 		/**
@@ -72,8 +94,20 @@ namespace LegendOfCube
 		 */
 		protected override void Draw(GameTime gameTime)
 		{
+			GraphicsDevice.Clear(Color.CornflowerBlue);
+			GraphicsDevice.BlendState = BlendState.Opaque;
+			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
+			_renderSystem.updateTranslationTransforms(_world);
+			_renderSystem.DrawEntities(_world);
+
+
+			base.Draw(gameTime);
 		}
-		
+
+		// Helper methods
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+
 	}
 }
