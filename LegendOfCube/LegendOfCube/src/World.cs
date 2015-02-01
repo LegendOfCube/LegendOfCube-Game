@@ -31,6 +31,9 @@ namespace LegendOfCube
             MAX_NUM_ENTITIES = maxNumEntities;
             numEntities = 0;
             componentMasks = new ComponentMask[MAX_NUM_ENTITIES];
+            for (UInt32 i = 0; i < MAX_NUM_ENTITIES; i++) {
+                componentMasks[i] = NO_COMPONENTS;
+            }
 
             // Components
             positions = new Vector3[MAX_NUM_ENTITIES];
