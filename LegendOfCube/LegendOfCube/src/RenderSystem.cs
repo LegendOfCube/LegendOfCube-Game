@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LegendOfCube
 {
-    class RenderingSystem
-    {
-    }
+	class RenderSystem
+	{
+	}
 }

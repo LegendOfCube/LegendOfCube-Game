@@ -78,7 +78,7 @@
     <Compile Include="src\Entity.cs" />
     <Compile Include="src\InputSystem.cs" />
     <Compile Include="src\PhysicsSystem.cs" />
-    <Compile Include="src\RenderingSystem.cs" />
+    <Compile Include="src\RenderSystem.cs" />
     <Compile Include="src\World.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="src\LegendOfCubeGame.cs" />
