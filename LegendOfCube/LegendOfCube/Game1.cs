@@ -14,18 +14,18 @@ namespace LegendOfCube
 {
 	struct GfxObj
 	{
-		public VertexPositionColor[] verts;
-		public DynamicVertexBuffer vertexBuffer;
-		public DynamicIndexBuffer indexBuffer;
-		public Matrix modelToWorld;
-		public Vector3 vel;
+		public VertexPositionColor[] Verts;
+		public DynamicVertexBuffer VertexBuffer;
+		public DynamicIndexBuffer IndexBuffer;
+		public Matrix ModelToWorld;
+		public Vector3 Vel;
 	}
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
 	public class Game1 : Microsoft.Xna.Framework.Game
 	{
-		private GraphicsDeviceManager graphics;
+		private readonly GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
 		private Model barrelModel;
 		private BasicEffect basicEffect;
@@ -57,7 +57,9 @@ namespace LegendOfCube
 
 		// Used for detecting that a key recently has been pressed
 		private KeyboardState oldKeyState;
-		private Boolean dubbleJump = true;
+
+		private bool doubleJump = true;
+		private float fov = 45.0f;
 
 		public Game1()
 		{
@@ -89,40 +91,38 @@ namespace LegendOfCube
 
 			basicEffect = new BasicEffect(graphics.GraphicsDevice);
 
-			cube = new GfxObj();
-			cube.verts = new VertexPositionColor[8];
-			cube.verts[0] = new VertexPositionColor(new Vector3(-0.5f, 0.0f, -0.5f), new Color(0.0f, 0.0f, 0.0f));
-			cube.verts[1] = new VertexPositionColor(new Vector3(-0.5f, 0.0f, 0.5f), new Color(0.0f, 0.0f, 1.0f));
-			cube.verts[2] = new VertexPositionColor(new Vector3(-0.5f, 1.0f, -0.5f), new Color(0.0f, 1.0f, 0.0f));
-			cube.verts[3] = new VertexPositionColor(new Vector3(-0.5f, 1.0f, 0.5f), new Color(0.0f, 1.0f, 1.0f));
-			cube.verts[4] = new VertexPositionColor(new Vector3(0.5f, 0.0f, -0.5f), new Color(1.0f, 0.0f, 0.0f));
-			cube.verts[5] = new VertexPositionColor(new Vector3(0.5f, 0.0f, 0.5f), new Color(1.0f, 0.0f, 1.0f));
-			cube.verts[6] = new VertexPositionColor(new Vector3(0.5f, 1.0f, -0.5f), new Color(1.0f, 1.0f, 0.0f));
-			cube.verts[7] = new VertexPositionColor(new Vector3(0.5f, 1.0f, 0.5f), new Color(1.0f, 1.0f, 1.0f));
+			cube = new GfxObj {Verts = new VertexPositionColor[8]};
+			cube.Verts[0] = new VertexPositionColor(new Vector3(-0.5f, 0.0f, -0.5f), new Color(0.0f, 0.0f, 0.0f));
+			cube.Verts[1] = new VertexPositionColor(new Vector3(-0.5f, 0.0f, 0.5f), new Color(0.0f, 0.0f, 1.0f));
+			cube.Verts[2] = new VertexPositionColor(new Vector3(-0.5f, 1.0f, -0.5f), new Color(0.0f, 1.0f, 0.0f));
+			cube.Verts[3] = new VertexPositionColor(new Vector3(-0.5f, 1.0f, 0.5f), new Color(0.0f, 1.0f, 1.0f));
+			cube.Verts[4] = new VertexPositionColor(new Vector3(0.5f, 0.0f, -0.5f), new Color(1.0f, 0.0f, 0.0f));
+			cube.Verts[5] = new VertexPositionColor(new Vector3(0.5f, 0.0f, 0.5f), new Color(1.0f, 0.0f, 1.0f));
+			cube.Verts[6] = new VertexPositionColor(new Vector3(0.5f, 1.0f, -0.5f), new Color(1.0f, 1.0f, 0.0f));
+			cube.Verts[7] = new VertexPositionColor(new Vector3(0.5f, 1.0f, 0.5f), new Color(1.0f, 1.0f, 1.0f));
 
-			cube.vertexBuffer = new DynamicVertexBuffer(graphics.GraphicsDevice, typeof(VertexPositionColor), 8, BufferUsage.WriteOnly);
-			cube.indexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
-			cube.vertexBuffer.SetData(cube.verts);
-			cube.indexBuffer.SetData(cubeIndices);
-			cube.modelToWorld = Matrix.Identity;
+			cube.VertexBuffer = new DynamicVertexBuffer(graphics.GraphicsDevice, typeof(VertexPositionColor), 8, BufferUsage.WriteOnly);
+			cube.IndexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
+			cube.VertexBuffer.SetData(cube.Verts);
+			cube.IndexBuffer.SetData(cubeIndices);
+			cube.ModelToWorld = Matrix.Identity;
 
-			ground = new GfxObj();
-			ground.verts = new VertexPositionColor[4];
-			ground.verts[0] = new VertexPositionColor(new Vector3(-1000, 0f, -1000), Color.SlateGray);
-			ground.verts[1] = new VertexPositionColor(new Vector3(-1000, 0f, 1000), Color.SlateGray);
-			ground.verts[2] = new VertexPositionColor(new Vector3(1000, 0f, 1000), Color.SlateGray);
-			ground.verts[3] = new VertexPositionColor(new Vector3(1000, 0f, -1000), Color.SlateGray);
+			ground = new GfxObj {Verts = new VertexPositionColor[4]};
+			ground.Verts[0] = new VertexPositionColor(new Vector3(-1000, 0f, -1000), Color.SlateGray);
+			ground.Verts[1] = new VertexPositionColor(new Vector3(-1000, 0f, 1000), Color.SlateGray);
+			ground.Verts[2] = new VertexPositionColor(new Vector3(1000, 0f, 1000), Color.SlateGray);
+			ground.Verts[3] = new VertexPositionColor(new Vector3(1000, 0f, -1000), Color.SlateGray);
 
-			ground.vertexBuffer = new DynamicVertexBuffer(graphics.GraphicsDevice, typeof(VertexPositionColor), 4, BufferUsage.WriteOnly);
-			ground.indexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 6, BufferUsage.WriteOnly);
+			ground.VertexBuffer = new DynamicVertexBuffer(graphics.GraphicsDevice, typeof(VertexPositionColor), 4, BufferUsage.WriteOnly);
+			ground.IndexBuffer = new DynamicIndexBuffer(graphics.GraphicsDevice, typeof(ushort), 6, BufferUsage.WriteOnly);
 
-			ground.vertexBuffer.SetData(ground.verts);
-			ground.indexBuffer.SetData(new ushort[]
+			ground.VertexBuffer.SetData(ground.Verts);
+			ground.IndexBuffer.SetData(new ushort[]
 			{
 				0,2,1,
 				3,2,0
 			});
-			ground.modelToWorld = Matrix.Identity;
+			ground.ModelToWorld = Matrix.Identity;
 
 			Window.ClientSizeChanged += SizeChanged;
 
@@ -132,11 +132,11 @@ namespace LegendOfCube
 		void SizeChanged(object o, EventArgs e)
 		{
 			// For some reason, buffers seem to need updating after resize
-			cube.vertexBuffer.SetData(cube.verts);
-			cube.indexBuffer.SetData(cubeIndices);
+			cube.VertexBuffer.SetData(cube.Verts);
+			cube.IndexBuffer.SetData(cubeIndices);
 
-			ground.vertexBuffer.SetData(ground.verts);
-			ground.indexBuffer.SetData(new ushort[]
+			ground.VertexBuffer.SetData(ground.Verts);
+			ground.IndexBuffer.SetData(new ushort[]
 			{
 				0,2,1,
 				3,2,0  
@@ -182,46 +182,46 @@ namespace LegendOfCube
 			}
 			if (keyState.IsKeyDown(Keys.W))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Forward) * cube.modelToWorld;
+				cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Forward) * cube.ModelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.A))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Left) * cube.modelToWorld;
+				cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Left) * cube.ModelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.S))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Backward) * cube.modelToWorld;
+				cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Backward) * cube.ModelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.D))
 			{
-				cube.modelToWorld = Matrix.CreateTranslation(0.1f * cube.modelToWorld.Right) * cube.modelToWorld;
+				cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Right) * cube.ModelToWorld;
 			}
 			if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space))
 			{
-				if (cube.modelToWorld.Translation.Y == 0)
+				if (cube.ModelToWorld.Translation.Y == 0)
 				{
-					cube.vel.Y += 0.21f;
+					cube.Vel.Y += 0.21f;
 				}
-				else if (cube.modelToWorld.Translation.Y > 0 && dubbleJump) 
+				else if (cube.ModelToWorld.Translation.Y > 0 && doubleJump) 
 				{
-					cube.vel.Y += 0.21f;
-					dubbleJump = false;
+					cube.Vel.Y += 0.21f;
+					doubleJump = false;
 				}
 			}
 
 			oldKeyState = keyState;
 
 			// Epic physics handling
-			cube.vel.Y -= 0.01f;
-			cube.modelToWorld = Matrix.CreateTranslation(cube.vel) * cube.modelToWorld;
-			Vector3 pos = cube.modelToWorld.Translation;
+			cube.Vel.Y -= 0.01f;
+			cube.ModelToWorld = Matrix.CreateTranslation(cube.Vel) * cube.ModelToWorld;
+			Vector3 pos = cube.ModelToWorld.Translation;
 			if (pos.Y < 0)
 			{
 				pos.Y = 0;
-				cube.vel.Y = 0;
-				dubbleJump = true;
+				cube.Vel.Y = 0;
+				doubleJump = true;
 			}
-			cube.modelToWorld.Translation = pos;
+			cube.ModelToWorld.Translation = pos;
 
 			// TODO: Add your update logic here
 
@@ -237,18 +237,16 @@ namespace LegendOfCube
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 			GraphicsDevice.BlendState = BlendState.Opaque;
 			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-			float fov = 45;
 			
-			Vector3 cameraPos = new Vector3(cube.modelToWorld.Translation.X+1.5f, 4f, cube.modelToWorld.Translation.Z+8f);
+			Vector3 cameraPos = new Vector3(cube.ModelToWorld.Translation.X+1.5f, 4f, cube.ModelToWorld.Translation.Z+8f);
 
-			Matrix view = Matrix.CreateLookAt(cameraPos, cube.modelToWorld.Translation, new Vector3(0f, 1f, 0f));
+			Matrix view = Matrix.CreateLookAt(cameraPos, cube.ModelToWorld.Translation, new Vector3(0f, 1f, 0f));
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(fov), GraphicsDevice.Viewport.AspectRatio, 0.1f, 1000f);
 
-			GraphicsDevice.Indices = cube.indexBuffer;
-			GraphicsDevice.SetVertexBuffer(cube.vertexBuffer);
+			GraphicsDevice.Indices = cube.IndexBuffer;
+			GraphicsDevice.SetVertexBuffer(cube.VertexBuffer);
 
-			basicEffect.World = cube.modelToWorld;
+			basicEffect.World = cube.ModelToWorld;
 			basicEffect.View = view;
 			basicEffect.Projection = projection;
 			basicEffect.VertexColorEnabled = true;
@@ -259,9 +257,9 @@ namespace LegendOfCube
 				GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 8, 0, 36);
 			}
 
-			basicEffect.World = ground.modelToWorld;
-			GraphicsDevice.Indices = ground.indexBuffer;
-			GraphicsDevice.SetVertexBuffer(ground.vertexBuffer);
+			basicEffect.World = ground.ModelToWorld;
+			GraphicsDevice.Indices = ground.IndexBuffer;
+			GraphicsDevice.SetVertexBuffer(ground.VertexBuffer);
 
 			foreach (EffectPass pass in basicEffect.CurrentTechnique.Passes)
 			{
