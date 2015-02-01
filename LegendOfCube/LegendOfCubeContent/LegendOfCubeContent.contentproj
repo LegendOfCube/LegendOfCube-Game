@@ -37,11 +37,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExplosiveBarrel_Reference.jpg">
+    <None Include="ExplosiveBarrel_Reference.jpg">
       <Name>ExplosiveBarrel_Reference</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="cube.png">
