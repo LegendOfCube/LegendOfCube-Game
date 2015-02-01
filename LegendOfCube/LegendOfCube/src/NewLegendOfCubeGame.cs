@@ -19,7 +19,6 @@ namespace LegendOfCube
 
 
 		private Entity barrelEntity;
-		private Model barrelModel;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -27,6 +26,7 @@ namespace LegendOfCube
 		public NewLegendOfCubeGame()
 		{
 			_world = new World(100);
+			_inputSystem = new InputSystem(this);
 			_renderSystem = new RenderSystem(this);
 
 			Content.RootDirectory = "Content";
@@ -34,7 +34,8 @@ namespace LegendOfCube
 			// Temporary code to create a barrel entity that should render.
 			ComponentMask barrelMask = new ComponentMask(ComponentMask.POSITION |
 			                                             ComponentMask.TRANSFORM |
-														 ComponentMask.MODEL);
+														 ComponentMask.MODEL |
+			                                             ComponentMask.RECEIVE_INPUT);
 			barrelEntity = _world.createEntity(barrelMask);
 			_world.Positions[barrelEntity.ID] = new Vector3(0, 0, 0);
 			_world.Transforms[barrelEntity.ID] = Matrix.CreateScale(0.1f);
@@ -63,8 +64,7 @@ namespace LegendOfCube
 		 */
 		protected override void LoadContent()
 		{
-			barrelModel = Content.Load<Model>("barrel");
-			_world.Models[barrelEntity.ID] = barrelModel;
+			_world.Models[barrelEntity.ID] = Content.Load<Model>("barrel");
 		}
 
 		/**
@@ -83,7 +83,7 @@ namespace LegendOfCube
 		 */
 		protected override void Update(GameTime gameTime)
 		{
-
+			_inputSystem.ApplyInput(gameTime, _world);
 
 			base.Update(gameTime);
 		}
@@ -98,7 +98,8 @@ namespace LegendOfCube
 			GraphicsDevice.BlendState = BlendState.Opaque;
 			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-			_renderSystem.updateTranslationTransforms(_world);
+
+			//_renderSystem.updateTranslationTransforms(_world);
 			_renderSystem.DrawEntities(_world);
 
 

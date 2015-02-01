@@ -69,6 +69,8 @@ namespace LegendOfCube
 			if (!canCreateMoreEntities()) {
 				throw new InvalidOperationException("Can't create more entites.");
 			}
+			
+			// Find free slot for new entity
 			UInt32 entity;
 			for (entity = 0; entity < MAX_NUM_ENTITIES; entity++) {
 				if (ComponentMasks[entity] == NO_COMPONENTS) {
@@ -78,6 +80,8 @@ namespace LegendOfCube
 			if (entity >= MAX_NUM_ENTITIES) {
 				throw new InvalidOperationException("Something went terribly wrong.");
 			}
+
+			// Set ComponentMask at the free slot to the wanted components to create the entity.
 			ComponentMasks[entity] = wantedComponents;
 			NumEntities++;
 			return new Entity(entity);
@@ -88,6 +92,8 @@ namespace LegendOfCube
 			if (entityToDestroy.ID >= MAX_NUM_ENTITIES) {
 				throw new ArgumentException("Entity to be destroyed doesn't exist.");
 			}
+
+			// Set ComponentMask at entity slot to NO_COMPONENTS to destroy it.
 			ComponentMasks[entityToDestroy.ID] = NO_COMPONENTS;
 			NumEntities--;
 

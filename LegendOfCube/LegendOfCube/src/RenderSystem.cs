@@ -21,14 +21,13 @@ namespace LegendOfCube
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private Microsoft.Xna.Framework.Game _game;
+		private Game _game;
 		private GraphicsDeviceManager _graphics;
-		private BasicEffect _basicEffect;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public RenderSystem(Microsoft.Xna.Framework.Game game)
+		public RenderSystem(Game game)
 		{
 			_game = game;
 			_graphics = new GraphicsDeviceManager(game);
@@ -44,9 +43,6 @@ namespace LegendOfCube
 			_game.GraphicsDevice.BlendState = BlendState.Opaque;
 			_game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 			_graphics.ApplyChanges();
-
-			_basicEffect = new BasicEffect(_graphics.GraphicsDevice);
-
 		}
 
 		public void updateTranslationTransforms(World world)
@@ -63,9 +59,11 @@ namespace LegendOfCube
 			Vector3 camPos = new Vector3(0, 1, -5);
 			Vector3 camTarget = new Vector3(0, 0, 0);
 			Vector3 up = new Vector3(0, 1, 0);
+			float fov = 75;
+
 			Matrix view = Matrix.CreateLookAt(camPos, camTarget, up);
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(
-			                        MathHelper.ToRadians(75),
+			                        MathHelper.ToRadians(fov),
 								    _game.GraphicsDevice.Viewport.AspectRatio,
 									0.1f,
 									1000.0f);
