@@ -73,9 +73,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="src\ComponentMask.cs" />
+    <Compile Include="src\Entity.cs" />
     <Compile Include="src\World.cs" />
     <Compile Include="src\Program.cs" />
-    <Compile Include="src\Game1.cs" />
+    <Compile Include="src\LegendOfCubeGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

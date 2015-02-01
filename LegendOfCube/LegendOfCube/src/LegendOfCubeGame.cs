@@ -23,7 +23,7 @@ namespace LegendOfCube
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
-	public class Game1 : Microsoft.Xna.Framework.Game
+	public class LegendOfCubeGame : Microsoft.Xna.Framework.Game
 	{
 		private readonly GraphicsDeviceManager graphics;
 		private SpriteBatch spriteBatch;
@@ -61,7 +61,7 @@ namespace LegendOfCube
 		private bool doubleJump = true;
 		private float fov = 45.0f;
 
-		public Game1()
+		public LegendOfCubeGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
