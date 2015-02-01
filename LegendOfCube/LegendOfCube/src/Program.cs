@@ -5,7 +5,7 @@ namespace LegendOfCube
 	{
 		static void Main(string[] args)
 		{
-			using (var game = new NewLegendOfCubeGame())
+			using (var game = new LegendOfCubeGame())
 			{
 				game.Run();
 			}
