@@ -7,30 +7,30 @@ using System.Text;
 
 namespace LegendOfCube
 {
-	class RenderSystem
+	public class RenderSystem
 	{
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		private static readonly ComponentMask POS_AND_TRANSFORM = new ComponentMask(
-																      ComponentMask.POSITION |
-																      ComponentMask.TRANSFORM);
+		                                                              ComponentMask.POSITION |
+		                                                              ComponentMask.TRANSFORM);
 		private static readonly ComponentMask MODEL_AND_TRANSFORM = new ComponentMask(
 		                                                                ComponentMask.MODEL |
-																		ComponentMask.TRANSFORM);
+		                                                                ComponentMask.TRANSFORM);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private Game _game;
-		private GraphicsDeviceManager _graphics;
+		private Game game;
+		private GraphicsDeviceManager graphics;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public RenderSystem(Game game)
 		{
-			_game = game;
-			_graphics = new GraphicsDeviceManager(game);
+			this.game = game;
+			graphics = new GraphicsDeviceManager(game);
 		}
 
 		// Public methods
@@ -38,17 +38,17 @@ namespace LegendOfCube
 
 		public void Initialize()
 		{
-			_game.Window.AllowUserResizing = true;
-			_graphics.PreferMultiSampling = true;
-			_game.GraphicsDevice.BlendState = BlendState.Opaque;
-			_game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-			_graphics.ApplyChanges();
+			game.Window.AllowUserResizing = true;
+			graphics.PreferMultiSampling = true;
+			game.GraphicsDevice.BlendState = BlendState.Opaque;
+			game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+			graphics.ApplyChanges();
 		}
 
-		public void updateTranslationTransforms(World world)
+		public void UpdateTranslationTransforms(World world)
 		{
-			for (UInt32 i = 0; i < world.MAX_NUM_ENTITIES; i++) {
-				if (world.ComponentMasks[i].satisfies(POS_AND_TRANSFORM)) {
+			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
+				if (world.ComponentMasks[i].Satisfies(POS_AND_TRANSFORM)) {
 					world.Transforms[i].Translation = world.Positions[i];
 				}
 			}
@@ -64,12 +64,12 @@ namespace LegendOfCube
 			Matrix view = Matrix.CreateLookAt(camPos, camTarget, up);
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(
 			                        MathHelper.ToRadians(fov),
-								    _game.GraphicsDevice.Viewport.AspectRatio,
-									0.1f,
-									1000.0f);
+			                        game.GraphicsDevice.Viewport.AspectRatio,
+			                        0.1f,
+			                        1000.0f);
 
-			for (UInt32 i = 0; i < world.MAX_NUM_ENTITIES; i++) {
-				if (world.ComponentMasks[i].satisfies(MODEL_AND_TRANSFORM)) {
+			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
+				if (world.ComponentMasks[i].Satisfies(MODEL_AND_TRANSFORM)) {
 					world.Models[i].Draw(world.Transforms[i], view, projection);
 				}
 			}

@@ -7,27 +7,27 @@ using System.Text;
 
 namespace LegendOfCube
 {
-	class InputSystem
+	public class InputSystem
 	{
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		ComponentMask MOVEMENT_INPUT = new ComponentMask(ComponentMask.TRANSFORM |
-		                                                 ComponentMask.RECEIVE_INPUT);
+		public static readonly ComponentMask MOVEMENT_INPUT = new ComponentMask(ComponentMask.TRANSFORM |
+		                                                                        ComponentMask.RECEIVE_INPUT);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private Game _game;
-		private KeyboardState _oldKeyState;
+		private Game game;
+		private KeyboardState oldKeyState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public InputSystem(Game game)
 		{
-			_game = game;
-			KeyboardState _oldKeyState = Keyboard.GetState();
+			this.game = game;
+			oldKeyState = Keyboard.GetState();
 		}
 
 		// Public methods
@@ -37,8 +37,8 @@ namespace LegendOfCube
 		{
 			KeyboardState keyState = Keyboard.GetState();
 
-			for (UInt32 i = 0; i < world.MAX_NUM_ENTITIES; i++) {
-				if (!world.ComponentMasks[i].satisfies(MOVEMENT_INPUT)) continue;
+			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
+				if (!world.ComponentMasks[i].Satisfies(MOVEMENT_INPUT)) continue;
 
 				if (keyState.IsKeyDown(Keys.W))
 				{
@@ -75,7 +75,7 @@ namespace LegendOfCube
 				}*/
 			}
 
-			_oldKeyState = keyState;
+			oldKeyState = keyState;
 		}
 	}
 }

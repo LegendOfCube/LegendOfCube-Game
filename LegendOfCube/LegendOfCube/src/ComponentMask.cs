@@ -5,9 +5,12 @@ using System.Text;
 
 namespace LegendOfCube
 {
-	/** Specifies a combination of Components. */
+	/// <summary>
+	/// Specifies a combination of Components.
+	/// </summary>
 	public struct ComponentMask
 	{
+
 		// Mask Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -26,7 +29,7 @@ namespace LegendOfCube
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public readonly UInt64 Mask;
+		private UInt64 Mask;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -39,8 +42,12 @@ namespace LegendOfCube
 		// Public Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		/** Checks whether this ComponentMask contains all the Components in the param Mask. */
-		public bool satisfies(ComponentMask requirements)
+		/// <summary>
+		/// Checks whether this ComponentMask contains all the Components in the param Mask.
+		/// </summary>
+		/// <param name="requirements">The mask to check against</param>
+		/// <returns>True if all requirements are filled</returns>
+		public bool Satisfies(ComponentMask requirements)
 		{
 			return ((this.Mask & requirements.Mask) == requirements.Mask);
 		}
@@ -62,6 +69,16 @@ namespace LegendOfCube
 		public static bool operator !=(ComponentMask lhs, ComponentMask rhs)
 		{
 			return lhs.Mask != rhs.Mask;
+		}
+
+		public bool Equals(ComponentMask other)
+		{
+			return Mask == other.Mask;
+		}
+
+		public override int GetHashCode()
+		{
+			return Mask.GetHashCode();
 		}
 	}
 }

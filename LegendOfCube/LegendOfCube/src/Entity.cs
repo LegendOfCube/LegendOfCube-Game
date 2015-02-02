@@ -5,13 +5,15 @@ using System.Text;
 
 namespace LegendOfCube
 {
-	/** Type used to specify an entity in the World. */
+	/// <summary>
+	/// Type used to specify an entity in the World.
+	/// </summary>
 	public struct Entity
 	{
-		public readonly UInt32 ID;
+		public readonly UInt32 Id;
 		public Entity(UInt32 id)
 		{
-			ID = id;
+			Id = id;
 		}
 	}
 }

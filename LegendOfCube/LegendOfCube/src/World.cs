@@ -7,7 +7,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube
 {
-	/** Class responsible for keeping track of all entities. */
+	/// <summary>
+	/// Class responsible for keeping track of all entities.
+	/// </summary>
 	public class World
 	{
 		// Constants
@@ -17,8 +19,10 @@ namespace LegendOfCube
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		public readonly UInt32 MAX_NUM_ENTITIES;
+		public readonly UInt32 MaxNumEntities;
 		public UInt32 NumEntities;
+
+		// Describe what components an entity has
 		public ComponentMask[] ComponentMasks;
 		public Vector3[] Positions;
 		public Vector3[] Velocities;
@@ -31,20 +35,20 @@ namespace LegendOfCube
 		
 		public World(UInt32 maxNumEntities)
 		{
-			MAX_NUM_ENTITIES = maxNumEntities;
+			MaxNumEntities = maxNumEntities;
 			NumEntities = 0;
-			ComponentMasks = new ComponentMask[MAX_NUM_ENTITIES];
-			for (UInt32 i = 0; i < MAX_NUM_ENTITIES; i++) {
+			ComponentMasks = new ComponentMask[MaxNumEntities];
+			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				ComponentMasks[i] = NO_COMPONENTS;
 			}
 
 			// Components
-			Positions = new Vector3[MAX_NUM_ENTITIES];
-			Velocities = new Vector3[MAX_NUM_ENTITIES];
-			Accelerations = new Vector3[MAX_NUM_ENTITIES];
-			Models = new Model[MAX_NUM_ENTITIES];
-			Transforms = new Matrix[MAX_NUM_ENTITIES];
-			for (UInt32 i = 0; i < MAX_NUM_ENTITIES; i++) {
+			Positions = new Vector3[MaxNumEntities];
+			Velocities = new Vector3[MaxNumEntities];
+			Accelerations = new Vector3[MaxNumEntities];
+			Models = new Model[MaxNumEntities];
+			Transforms = new Matrix[MaxNumEntities];
+			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				Positions[i] = new Vector3(0, 0, 0);
 				Velocities[i] = new Vector3(0, 0, 0);
 				Accelerations[i] = new Vector3(0, 0, 0);
@@ -56,28 +60,28 @@ namespace LegendOfCube
 		// Public Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public bool canCreateMoreEntities()
+		public bool CanCreateMoreEntities()
 		{
-			return NumEntities < MAX_NUM_ENTITIES;
+			return NumEntities < MaxNumEntities;
 		}
 
-		public Entity createEntity(ComponentMask wantedComponents)
+		public Entity CreateEntity(ComponentMask wantedComponents)
 		{
 			if (wantedComponents == NO_COMPONENTS) {
 				throw new ArgumentException("Entity must contain at least one component.");
 			}
-			if (!canCreateMoreEntities()) {
+			if (!CanCreateMoreEntities()) {
 				throw new InvalidOperationException("Can't create more entites.");
 			}
 			
 			// Find free slot for new entity
 			UInt32 entity;
-			for (entity = 0; entity < MAX_NUM_ENTITIES; entity++) {
+			for (entity = 0; entity < MaxNumEntities; entity++) {
 				if (ComponentMasks[entity] == NO_COMPONENTS) {
 					break;
 				}
 			}
-			if (entity >= MAX_NUM_ENTITIES) {
+			if (entity >= MaxNumEntities) {
 				throw new InvalidOperationException("Something went terribly wrong.");
 			}
 
@@ -87,22 +91,22 @@ namespace LegendOfCube
 			return new Entity(entity);
 		}
 
-		public void destroyEntity(Entity entityToDestroy)
+		public void DestroyEntity(Entity entityToDestroy)
 		{
-			if (entityToDestroy.ID >= MAX_NUM_ENTITIES) {
+			if (entityToDestroy.Id >= MaxNumEntities) {
 				throw new ArgumentException("Entity to be destroyed doesn't exist.");
 			}
 
 			// Set ComponentMask at entity slot to NO_COMPONENTS to destroy it.
-			ComponentMasks[entityToDestroy.ID] = NO_COMPONENTS;
+			ComponentMasks[entityToDestroy.Id] = NO_COMPONENTS;
 			NumEntities--;
 
 			// Clean-up components
-			Positions[entityToDestroy.ID] = new Vector3(0, 0, 0);
-			Velocities[entityToDestroy.ID] = new Vector3(0, 0, 0);
-			Accelerations[entityToDestroy.ID] = new Vector3(0, 0, 0);
-			Models[entityToDestroy.ID] = null;
-			Transforms[entityToDestroy.ID] = Matrix.Identity;
+			Positions[entityToDestroy.Id] = new Vector3(0, 0, 0);
+			Velocities[entityToDestroy.Id] = new Vector3(0, 0, 0);
+			Accelerations[entityToDestroy.Id] = new Vector3(0, 0, 0);
+			Models[entityToDestroy.Id] = null;
+			Transforms[entityToDestroy.Id] = Matrix.Identity;
 		}
 	}
 }

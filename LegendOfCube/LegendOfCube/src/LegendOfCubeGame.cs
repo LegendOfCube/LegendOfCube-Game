@@ -7,15 +7,17 @@ using System.Text;
 
 namespace LegendOfCube
 {
-	class LegendOfCubeGame : Microsoft.Xna.Framework.Game
+
+	public class LegendOfCubeGame : Microsoft.Xna.Framework.Game
 	{
+
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private World _world;
-		private InputSystem _inputSystem;
-		private PhysicsSystem _physicsSystem;
-		private RenderSystem _renderSystem;
+		private World world;
+		private InputSystem inputSystem;
+		private PhysicsSystem physicsSystem;
+		private RenderSystem renderSystem;
 
 
 		private Entity barrelEntity;
@@ -25,73 +27,73 @@ namespace LegendOfCube
 
 		public LegendOfCubeGame()
 		{
-			_world = new World(100);
-			_inputSystem = new InputSystem(this);
-			_renderSystem = new RenderSystem(this);
+			world = new World(100);
+			inputSystem = new InputSystem(this);
+			renderSystem = new RenderSystem(this);
 
 			Content.RootDirectory = "Content";
 
 			// Temporary code to create a barrel entity that should render.
 			ComponentMask barrelMask = new ComponentMask(ComponentMask.POSITION |
 			                                             ComponentMask.TRANSFORM |
-														 ComponentMask.MODEL |
+			                                             ComponentMask.MODEL |
 			                                             ComponentMask.RECEIVE_INPUT);
-			barrelEntity = _world.createEntity(barrelMask);
-			_world.Positions[barrelEntity.ID] = new Vector3(0, 0, 0);
-			_world.Transforms[barrelEntity.ID] = Matrix.CreateScale(0.1f);
+			barrelEntity = world.CreateEntity(barrelMask);
+			world.Positions[barrelEntity.Id] = new Vector3(0, 0, 0);
+			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);
 		}
 
 		// Overriden XNA methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		/**
-		 * Allows the game to perform any initialization it needs to before starting to run.
-		 * This is where it can query for any required services and load any non-graphic
-		 * related content.  Calling base.Initialize will enumerate through any components
-		 * and initialize them as well.
-		 */
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
 		protected override void Initialize()
 		{
-			_renderSystem.Initialize();
+			renderSystem.Initialize();
 
 
 			base.Initialize();
 		}
 
-		/**
-		 * LoadContent will be called once per game and is the place to load
-		 * all of your content.
-		 */
+		/// <summary>
+		/// LoadContent will be called once per game and is the place to load
+		/// all of your content.
+		/// </summary>
 		protected override void LoadContent()
 		{
-			_world.Models[barrelEntity.ID] = Content.Load<Model>("barrel");
+			world.Models[barrelEntity.Id] = Content.Load<Model>("barrel");
 		}
 
-		/**
-		 * UnloadContent will be called once per game and is the place to unload
-		 * all content.
-		 */
+		/// <summary>
+		/// UnloadContent will be called once per game and is the place to unload
+		/// all content.
+		/// </summary>
 		protected override void UnloadContent()
 		{
 			// TODO: Unload any non ContentManager content here
 		}
 
-		/**
-		 * Allows the game to run logic such as updating the world,
-		 * checking for collisions, gathering input, and playing audio.
-		 * @param gameTime Provides a snapshot of timing values.
-		 */
+		/// <summary>
+		/// Allows the game to run logic such as updating the world,
+		/// checking for collisions, gathering input, and playing audio.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			_inputSystem.ApplyInput(gameTime, _world);
+			inputSystem.ApplyInput(gameTime, world);
 
 			base.Update(gameTime);
 		}
 
-		/**
-		 * This is called when the game should draw itself.
-		 * @param gameTime Provides a snapshot of timing values.
-		 */
+		/// <summary>
+		/// This is called when the game should draw itself.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -100,7 +102,7 @@ namespace LegendOfCube
 
 
 			//_renderSystem.updateTranslationTransforms(_world);
-			_renderSystem.DrawEntities(_world);
+			renderSystem.DrawEntities(world);
 
 
 			base.Draw(gameTime);

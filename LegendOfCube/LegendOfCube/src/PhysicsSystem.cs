@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LegendOfCube
 {
-	class PhysicsSystem
+	public class PhysicsSystem
 	{
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -14,10 +14,10 @@ namespace LegendOfCube
 		                                                         ComponentMask.POSITION |
 		                                                         ComponentMask.VELOCITY);
 		private static readonly ComponentMask ACCELERATABLE = new ComponentMask(
-																	   ComponentMask.VELOCITY |
-																	   ComponentMask.ACCELERATION);
+		                                                               ComponentMask.VELOCITY |
+		                                                               ComponentMask.ACCELERATION);
 		private static readonly ComponentMask GRAVITY = new ComponentMask(
 		                                                         ComponentMask.VELOCITY |
-																 ComponentMask.AFFECTED_BY_GRAVITY);
+		                                                         ComponentMask.AFFECTED_BY_GRAVITY);
 	}
 }
