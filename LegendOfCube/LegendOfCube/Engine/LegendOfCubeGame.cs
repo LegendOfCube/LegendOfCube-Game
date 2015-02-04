@@ -26,6 +26,7 @@ namespace LegendOfCube.Engine
 			world = new World(100);
 			inputSystem = new InputSystem(this);
 			renderSystem = new RenderSystem(this);
+			physicsSystem = new PhysicsSystem();
 
 			Content.RootDirectory = "Content";
 
@@ -33,10 +34,13 @@ namespace LegendOfCube.Engine
 			ComponentMask barrelMask = new ComponentMask(ComponentMask.POSITION |
 			                                             ComponentMask.TRANSFORM |
 			                                             ComponentMask.MODEL |
-			                                             ComponentMask.RECEIVE_INPUT);
+			                                             ComponentMask.RECEIVE_INPUT |
+														 ComponentMask.VELOCITY |
+														 ComponentMask.AFFECTED_BY_GRAVITY);
 			barrelEntity = world.CreateEntity(barrelMask);
 			world.Positions[barrelEntity.Id] = new Vector3(0, 0, 0);
 			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);
+			world.Velocities[barrelEntity.Id] = new Vector3(0, 0, 0);
 		}
 
 		// Overriden XNA methods
@@ -82,6 +86,8 @@ namespace LegendOfCube.Engine
 		protected override void Update(GameTime gameTime)
 		{
 			inputSystem.ApplyInput(gameTime, world);
+
+			physicsSystem.ApplyPhysics(gameTime, world);
 
 			base.Update(gameTime);
 		}
