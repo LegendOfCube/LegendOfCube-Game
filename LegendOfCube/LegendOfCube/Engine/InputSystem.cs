@@ -17,6 +17,7 @@ namespace LegendOfCube.Engine
 
 		private Game game;
 		private KeyboardState oldKeyState;
+        private GamePadState oldGamePadState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -25,6 +26,7 @@ namespace LegendOfCube.Engine
 		{
 			this.game = game;
 			oldKeyState = Keyboard.GetState();
+            oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
 		}
 
 		// Public methods
@@ -33,6 +35,12 @@ namespace LegendOfCube.Engine
 		public void ApplyInput(GameTime gameTime, World world)
 		{
 			KeyboardState keyState = Keyboard.GetState();
+            GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+
+            if (!gamePadState.IsConnected)
+            {
+                Console.WriteLine("Controller disconnected");
+            }
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
 				if (!world.ComponentMasks[i].Satisfies(MOVEMENT_INPUT)) continue;
