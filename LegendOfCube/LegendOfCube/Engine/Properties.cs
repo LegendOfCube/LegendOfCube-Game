@@ -66,5 +66,33 @@ namespace LegendOfCube.Engine
 		{
 			mask &= (~subtract.mask);
 		}
+
+		public bool Equals(Properties other)
+		{
+			return mask == other.mask;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is Properties && Equals((Properties)obj);
+		}
+
+		public override int GetHashCode()
+		{
+			return mask.GetHashCode();
+		}
+
+		// Operators
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		public static bool operator ==(Properties c1, Properties c2)
+		{
+			return c1.mask == c2.mask;
+		}
+
+		public static bool operator !=(Properties c1, Properties c2)
+		{
+			return c1.mask != c2.mask;
+		}
 	}
 }

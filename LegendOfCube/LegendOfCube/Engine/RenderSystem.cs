@@ -8,9 +8,7 @@ namespace LegendOfCube.Engine
 	{
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		private static readonly Properties POS_AND_TRANSFORM = new Properties(
-		                                                              Properties.POSITION |
-		                                                              Properties.TRANSFORM);
+        private static readonly Properties TRANSFORM = new Properties(Properties.TRANSFORM);
 		private static readonly Properties MODEL_AND_TRANSFORM = new Properties(
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM);
@@ -42,18 +40,9 @@ namespace LegendOfCube.Engine
 			graphics.ApplyChanges();
 		}
 
-		public void UpdateTranslationTransforms(World world)
-		{
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
-				if (world.ComponentMasks[i].Satisfies(POS_AND_TRANSFORM)) {
-					world.Transforms[i].Translation = world.Positions[i];
-				}
-			}
-		}
-
 		public void DrawEntities(World world)
 		{
-			Vector3 camPos = new Vector3(0, 1, -5);
+			Vector3 camPos = new Vector3(0, 1, 5);
 			Vector3 camTarget = new Vector3(0, 0, 0);
 			Vector3 up = new Vector3(0, 1, 0);
 			float fov = 75;

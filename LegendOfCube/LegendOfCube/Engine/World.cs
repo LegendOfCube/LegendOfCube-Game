@@ -21,11 +21,10 @@ namespace LegendOfCube.Engine
 
 		// Describe what components an entity has
 		public Properties[] ComponentMasks;
-		public Vector3[] Positions;
+        public Matrix[] Transforms;
 		public Vector3[] Velocities;
 		public Vector3[] Accelerations;
 		public Model[] Models;
-		public Matrix[] Transforms;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -40,13 +39,11 @@ namespace LegendOfCube.Engine
 			}
 
 			// Components
-			Positions = new Vector3[MaxNumEntities];
 			Velocities = new Vector3[MaxNumEntities];
 			Accelerations = new Vector3[MaxNumEntities];
 			Models = new Model[MaxNumEntities];
 			Transforms = new Matrix[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
-				Positions[i] = new Vector3(0, 0, 0);
 				Velocities[i] = new Vector3(0, 0, 0);
 				Accelerations[i] = new Vector3(0, 0, 0);
 				Models[i] = null;
@@ -99,7 +96,6 @@ namespace LegendOfCube.Engine
 			NumEntities--;
 
 			// Clean-up components
-			Positions[entityToDestroy.Id] = new Vector3(0, 0, 0);
 			Velocities[entityToDestroy.Id] = new Vector3(0, 0, 0);
 			Accelerations[entityToDestroy.Id] = new Vector3(0, 0, 0);
 			Models[entityToDestroy.Id] = null;
