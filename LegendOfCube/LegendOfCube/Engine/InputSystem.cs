@@ -53,25 +53,25 @@ namespace LegendOfCube.Engine
 				if (keyState.IsKeyDown(Keys.W))
 				{
                     directionInput.Y++;
-                    // world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Forward) * world.Transforms[i];
+                    world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Forward) * world.Transforms[i];
                 }
 
 				if (keyState.IsKeyDown(Keys.S))
 				{
                     directionInput.Y--;
-					// world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Backward) * world.Transforms[i];
+				    world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Backward) * world.Transforms[i];
 				}
 				
 				if (keyState.IsKeyDown(Keys.A))
 				{
                     directionInput.X--;
-					// world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Left) * world.Transforms[i];
+					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Left) * world.Transforms[i];
 				}
 				
 				if (keyState.IsKeyDown(Keys.D))
 				{
                     directionInput.X++;
-					// world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
+				    world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
 				}
 
                 // Normalize the vector to our needs, then set direction
