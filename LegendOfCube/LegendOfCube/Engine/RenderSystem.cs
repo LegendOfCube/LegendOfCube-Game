@@ -42,10 +42,21 @@ namespace LegendOfCube.Engine
 
 		public void DrawEntities(World world)
 		{
-			Vector3 camPos = world.Transforms[0].Translation;
+			Vector3 playerPos = new Vector3();
+			//Find player
+			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			{
+				if (world.EntityProperties[i].Satisfies(new Properties(Properties.INPUT_FLAG)))
+				{
+					playerPos = world.Transforms[i].Translation;
+					break;
+				}
+			}
+
+			Vector3 camPos = playerPos;
 			camPos.Y = 4;
 			camPos.Z += 5;
-			Vector3 camTarget = world.Transforms[0].Translation;
+			Vector3 camTarget = playerPos;
 			Vector3 up = new Vector3(0, 1, 0);
 			float fov = 75;
 

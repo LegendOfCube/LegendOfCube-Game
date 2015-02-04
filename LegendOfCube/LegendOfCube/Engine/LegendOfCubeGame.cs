@@ -17,7 +17,7 @@ namespace LegendOfCube.Engine
 		private RenderSystem renderSystem;
 
 
-		public Entity barrelEntity;
+		private Entity barrelEntity;
 		private Entity[] barrels;
 
 		// Constructors
@@ -59,7 +59,7 @@ namespace LegendOfCube.Engine
 			for (int i = 0; i < barrels.Length; i++)
 			{
 				barrels[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
-				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-100, 100), 0, rnd.Next(-100, 100))) * Matrix.CreateScale(0.1f);
+				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-200, 200), 0, rnd.Next(-200, 200))) * Matrix.CreateScale(0.1f);
 				world.Transforms[barrels[i].Id] = test;
 			}
 
