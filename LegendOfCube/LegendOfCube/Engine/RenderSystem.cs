@@ -57,7 +57,7 @@ namespace LegendOfCube.Engine
 			                        1000.0f);
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
-				if (world.ComponentMasks[i].Satisfies(MODEL_AND_TRANSFORM)) {
+				if (world.EntityProperties[i].Satisfies(MODEL_AND_TRANSFORM)) {
 					world.Models[i].Draw(world.Transforms[i], view, projection);
 				}
 			}

@@ -99,9 +99,10 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			inputSystem.ApplyInput(gameTime, world);
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			physicsSystem.ApplyPhysics(gameTime, world);
+			inputSystem.ApplyInput(gameTime, world);
+			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 
 			base.Update(gameTime);
 		}

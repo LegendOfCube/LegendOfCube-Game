@@ -35,7 +35,7 @@ namespace LegendOfCube.Engine
 			KeyboardState keyState = Keyboard.GetState();
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
-				if (!world.ComponentMasks[i].Satisfies(MOVEMENT_INPUT)) continue;
+				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
 
 				if (keyState.IsKeyDown(Keys.W))
 				{

@@ -38,10 +38,10 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		/// <summary>
-		/// Checks whether this ComponentMask contains all the Components in the param Mask.
+		/// Checks whether these Properties contains all the Properties in the param mask.
 		/// </summary>
 		/// <param name="requirements">The mask to check against</param>
-		/// <returns>True if all requirements are filled</returns>
+		/// <returns>True if all requirements are fulfilled</returns>
 		public bool Satisfies(Properties requirements)
 		{
 			return ((this.mask & requirements.mask) == requirements.mask);

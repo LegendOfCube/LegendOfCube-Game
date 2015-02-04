@@ -8,34 +8,52 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
+        private static readonly Properties ACCELERATABLE = new Properties(
+                                                                       Properties.VELOCITY |
+                                                                       Properties.ACCELERATION);
+
+        private static readonly Properties HAS_GRAVITY = new Properties(
+                                                                 Properties.VELOCITY |
+                                                                 Properties.GRAVITY_FLAG);
+
 		private static readonly Properties MOVABLE = new Properties(
 		                                                         Properties.TRANSFORM |
 		                                                         Properties.VELOCITY);
-		private static readonly Properties ACCELERATABLE = new Properties(
-		                                                               Properties.VELOCITY |
-		                                                               Properties.ACCELERATION);
-		private static readonly Properties GRAVITY = new Properties(
-		                                                         Properties.VELOCITY |
-		                                                         Properties.GRAVITY_FLAG);
 
-		public void ApplyPhysics(GameTime gameTime, World world)
+        private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
+
+		public void ApplyPhysics(float delta, World world)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
-				if (!world.ComponentMasks[i].Satisfies(GRAVITY)) continue;
+                Properties properties = world.EntityProperties[i];
+               
+                // Check if velocity should be updated
+                if (properties.Satisfies(ACCELERATABLE))
+                {
+                    world.Velocities[i] += (world.Accelerations[i] * delta);
+                }
 
-				world.Transforms[i] = Matrix.CreateTranslation(world.Velocities[i].Y * world.Transforms[i].Up) * world.Transforms[i];
-				if (world.Transforms[i].Translation.Y <= 0) 
-				{
-					Vector3 pos = world.Transforms[i].Translation;
-					pos.Y = 0;
-					world.Transforms[i].Translation = pos;
-					world.Velocities[i].Y = 0;
-				}
-				else
-				{
-					world.Velocities[i].Y -= 0.2f;
-				}
+                // Apply gravity
+                if (properties.Satisfies(HAS_GRAVITY))
+                {
+                    world.Velocities[i] += (GRAVITY * delta);
+                }
+
+                // Update position
+                if (properties.Satisfies(MOVABLE))
+                {
+                    world.Transforms[i].Translation += (world.Velocities[i] * delta);
+
+					// Hacky floor
+					if (world.Transforms[i].Translation.Y < 0)
+					{
+						Vector3 translation = world.Transforms[i].Translation;
+						translation.Y = 0.0f;
+						world.Transforms[i].Translation = translation;
+						world.Velocities[i].Y = 0.0f;
+					}
+                }
 			}
 		}
 	}
