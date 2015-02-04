@@ -8,12 +8,12 @@ namespace LegendOfCube.Engine
 	{
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-		private static readonly ComponentMask POS_AND_TRANSFORM = new ComponentMask(
-		                                                              ComponentMask.POSITION |
-		                                                              ComponentMask.TRANSFORM);
-		private static readonly ComponentMask MODEL_AND_TRANSFORM = new ComponentMask(
-		                                                                ComponentMask.MODEL |
-		                                                                ComponentMask.TRANSFORM);
+		private static readonly Properties POS_AND_TRANSFORM = new Properties(
+		                                                              Properties.POSITION |
+		                                                              Properties.TRANSFORM);
+		private static readonly Properties MODEL_AND_TRANSFORM = new Properties(
+		                                                                Properties.MODEL |
+		                                                                Properties.TRANSFORM);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

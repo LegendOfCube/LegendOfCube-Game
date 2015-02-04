@@ -30,10 +30,10 @@ namespace LegendOfCube.Engine
 			Content.RootDirectory = "Content";
 
 			// Temporary code to create a barrel entity that should render.
-			ComponentMask barrelMask = new ComponentMask(ComponentMask.POSITION |
-			                                             ComponentMask.TRANSFORM |
-			                                             ComponentMask.MODEL |
-			                                             ComponentMask.RECEIVE_INPUT);
+			Properties barrelMask = new Properties(Properties.POSITION |
+			                                             Properties.TRANSFORM |
+			                                             Properties.MODEL |
+			                                             Properties.RECEIVE_INPUT);
 			barrelEntity = world.CreateEntity(barrelMask);
 			world.Positions[barrelEntity.Id] = new Vector3(0, 0, 0);
 			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);

@@ -9,8 +9,8 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public static readonly ComponentMask MOVEMENT_INPUT = new ComponentMask(ComponentMask.TRANSFORM |
-		                                                                        ComponentMask.RECEIVE_INPUT);
+		public static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
+		                                                                        Properties.RECEIVE_INPUT);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

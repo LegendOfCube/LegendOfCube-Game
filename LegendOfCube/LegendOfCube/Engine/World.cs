@@ -12,7 +12,7 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private static readonly ComponentMask NO_COMPONENTS = new ComponentMask(ComponentMask.NO_COMPONENTS);
+		private static readonly Properties NO_COMPONENTS = new Properties(Properties.NO_COMPONENTS);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -20,7 +20,7 @@ namespace LegendOfCube.Engine
 		public UInt32 NumEntities;
 
 		// Describe what components an entity has
-		public ComponentMask[] ComponentMasks;
+		public Properties[] ComponentMasks;
 		public Vector3[] Positions;
 		public Vector3[] Velocities;
 		public Vector3[] Accelerations;
@@ -34,7 +34,7 @@ namespace LegendOfCube.Engine
 		{
 			MaxNumEntities = maxNumEntities;
 			NumEntities = 0;
-			ComponentMasks = new ComponentMask[MaxNumEntities];
+			ComponentMasks = new Properties[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				ComponentMasks[i] = NO_COMPONENTS;
 			}
@@ -62,7 +62,7 @@ namespace LegendOfCube.Engine
 			return NumEntities < MaxNumEntities;
 		}
 
-		public Entity CreateEntity(ComponentMask wantedComponents)
+		public Entity CreateEntity(Properties wantedComponents)
 		{
 			if (wantedComponents == NO_COMPONENTS) {
 				throw new ArgumentException("Entity must contain at least one component.");

@@ -5,9 +5,8 @@ namespace LegendOfCube.Engine
 	/// <summary>
 	/// Specifies a combination of Components.
 	/// </summary>
-	public struct ComponentMask
+	public struct Properties
 	{
-
 		// Mask Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -15,13 +14,12 @@ namespace LegendOfCube.Engine
 		// '1 << x' means that the bit at the x:th position is set.
 
 		public const UInt64 NO_COMPONENTS = 0;
-		public const UInt64 POSITION = 1 << 0;
+        public const UInt64 TRANSFORM = 1 << 0;
 		public const UInt64 VELOCITY = 1 << 1;
 		public const UInt64 ACCELERATION = 1 << 2;
 		public const UInt64 AFFECTED_BY_GRAVITY = 1 << 3;
 		public const UInt64 RECEIVE_INPUT = 1 << 4;
 		public const UInt64 MODEL = 1 << 5;
-		public const UInt64 TRANSFORM = 1 << 6;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -31,7 +29,7 @@ namespace LegendOfCube.Engine
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public ComponentMask(UInt64 mask)
+		public Properties(UInt64 mask)
 		{
 			this.mask = mask;
 		}
@@ -44,7 +42,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		/// <param name="requirements">The mask to check against</param>
 		/// <returns>True if all requirements are filled</returns>
-		public bool Satisfies(ComponentMask requirements)
+		public bool Satisfies(Properties requirements)
 		{
 			return ((this.mask & requirements.mask) == requirements.mask);
 		}
@@ -59,12 +57,12 @@ namespace LegendOfCube.Engine
 			mask &= (~subtract);
 		}
 
-		public void Add(ComponentMask add)
+		public void Add(Properties add)
 		{
 			mask |= add.mask;
 		}
 
-		public void Subtact(ComponentMask subtract)
+		public void Subtact(Properties subtract)
 		{
 			mask &= (~subtract.mask);
 		}
