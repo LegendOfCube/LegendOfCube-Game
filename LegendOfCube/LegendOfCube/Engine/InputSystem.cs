@@ -18,16 +18,14 @@ namespace LegendOfCube.Engine
 		private Game game;
 		private KeyboardState oldKeyState;
         private GamePadState oldGamePadState;
-        private InputDataImpl inputData;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game, InputData inputData)
+		public InputSystem(Game game)
 		{
             // TODO: settings for inverted y axis
 			this.game = game;
-            this.inputData = (InputDataImpl) inputData;
 			oldKeyState = Keyboard.GetState();
             oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
 		}
@@ -40,6 +38,7 @@ namespace LegendOfCube.Engine
 			KeyboardState keyState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
             Vector2 directionInput = new Vector2(0, 0);
+            
 
             if (!gamePadState.IsConnected)
             {
@@ -49,6 +48,8 @@ namespace LegendOfCube.Engine
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
 				if (!world.ComponentMasks[i].Satisfies(MOVEMENT_INPUT)) continue;
+                InputDataImpl inputData = (InputDataImpl) world.InputData[i];
+
 
 				if (keyState.IsKeyDown(Keys.W))
 				{
@@ -78,8 +79,13 @@ namespace LegendOfCube.Engine
                 if (!directionInput.Equals(new Vector2(0, 0)))
                 {
                     directionInput = Vector2.Normalize(directionInput);
+                    // TODO: Apply speed modifier
                 }
-                // TODO: Apply speed modifier
+                else
+                {
+                    directionInput = gamePadState.ThumbSticks.Left;                    
+                }
+
                 inputData.SetDirection(directionInput);
 
 				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)
