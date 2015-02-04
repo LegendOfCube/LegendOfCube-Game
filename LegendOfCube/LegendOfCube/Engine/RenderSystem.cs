@@ -53,7 +53,7 @@ namespace LegendOfCube.Engine
 
 		public void DrawEntities(World world)
 		{
-			Vector3 camPos = new Vector3(0, 1, -5);
+			Vector3 camPos = new Vector3(0, 1, 5);
 			Vector3 camTarget = new Vector3(0, 0, 0);
 			Vector3 up = new Vector3(0, 1, 0);
 			float fov = 75;

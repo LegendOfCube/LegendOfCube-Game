@@ -39,26 +39,25 @@ namespace LegendOfCube.Engine
 
 				if (keyState.IsKeyDown(Keys.W))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(0.5f * world.Transforms[i].Forward) * world.Transforms[i];
+					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Forward) * world.Transforms[i];
 				}
 
-				/*if (keyState.IsKeyDown(Keys.W))
-				{
-					cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Forward) * cube.ModelToWorld;
-				}
-				if (keyState.IsKeyDown(Keys.A))
-				{
-					cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Left) * cube.ModelToWorld;
-				}
 				if (keyState.IsKeyDown(Keys.S))
 				{
-					cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Backward) * cube.ModelToWorld;
+					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Backward) * world.Transforms[i];
 				}
+				
+				if (keyState.IsKeyDown(Keys.A))
+				{
+					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Left) * world.Transforms[i];
+				}
+				
 				if (keyState.IsKeyDown(Keys.D))
 				{
-					cube.ModelToWorld = Matrix.CreateTranslation(0.1f * cube.ModelToWorld.Right) * cube.ModelToWorld;
+					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
 				}
-				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space))
+
+				/*if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space))
 				{
 					if (cube.ModelToWorld.Translation.Y == 0)
 					{
