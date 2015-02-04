@@ -34,7 +34,7 @@ namespace LegendOfCube.Engine
 				}
 				else
 				{
-					world.Velocities[i].Y -= 0.1f;
+					world.Velocities[i].Y -= 0.2f;
 				}
 			}
 		}
