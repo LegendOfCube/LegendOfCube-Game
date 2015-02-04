@@ -33,9 +33,9 @@ namespace LegendOfCube.Engine
 			// Temporary code to create a barrel entity that should render.
 			Properties barrelMask = new Properties(Properties.TRANSFORM |
 			                                       Properties.MODEL |
-			                                       Properties.RECEIVE_INPUT |
+			                                       Properties.INPUT_FLAG |
                                                    Properties.VELOCITY |
-                                                   Properties.AFFECTED_BY_GRAVITY);
+                                                   Properties.GRAVITY_FLAG);
 
 			barrelEntity = world.CreateEntity(barrelMask);
 			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);

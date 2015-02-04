@@ -16,7 +16,7 @@ namespace LegendOfCube.Engine
 		                                                               Properties.ACCELERATION);
 		private static readonly Properties GRAVITY = new Properties(
 		                                                         Properties.VELOCITY |
-		                                                         Properties.AFFECTED_BY_GRAVITY);
+		                                                         Properties.GRAVITY_FLAG);
 
 		public void ApplyPhysics(GameTime gameTime, World world)
 		{

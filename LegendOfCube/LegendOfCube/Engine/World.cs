@@ -12,7 +12,7 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private static readonly Properties NO_COMPONENTS = new Properties(Properties.NO_COMPONENTS);
+		private static readonly Properties NO_COMPONENTS = new Properties(Properties.NO_PROPERTIES);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
