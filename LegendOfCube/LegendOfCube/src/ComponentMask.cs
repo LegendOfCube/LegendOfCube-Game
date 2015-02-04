@@ -29,14 +29,14 @@ namespace LegendOfCube
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private UInt64 Mask;
+		private UInt64 mask;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public ComponentMask(UInt64 mask)
 		{
-			Mask = mask;
+			this.mask = mask;
 		}
 
 		// Public Methods
@@ -49,36 +49,27 @@ namespace LegendOfCube
 		/// <returns>True if all requirements are filled</returns>
 		public bool Satisfies(ComponentMask requirements)
 		{
-			return ((this.Mask & requirements.Mask) == requirements.Mask);
+			return ((this.mask & requirements.mask) == requirements.mask);
 		}
 
-		// Operators
-		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		public override bool Equals(object obj)
+		public void Add(UInt64 add)
 		{
-			if (!(obj is ComponentMask)) return false;
-			return this == ((ComponentMask)obj);
+			mask |= add;
 		}
 
-		public static bool operator ==(ComponentMask lhs, ComponentMask rhs)
+		public void Subtact(UInt64 subtract)
 		{
-			return lhs.Mask == rhs.Mask;
+			mask &= (~subtract);
 		}
 
-		public static bool operator !=(ComponentMask lhs, ComponentMask rhs)
+		public void Add(ComponentMask add)
 		{
-			return lhs.Mask != rhs.Mask;
+			mask |= add.mask;
 		}
 
-		public bool Equals(ComponentMask other)
+		public void Subtact(ComponentMask subtract)
 		{
-			return Mask == other.Mask;
-		}
-
-		public override int GetHashCode()
-		{
-			return Mask.GetHashCode();
+			mask &= (~subtract.mask);
 		}
 	}
 }
