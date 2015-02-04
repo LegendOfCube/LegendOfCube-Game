@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
@@ -17,6 +18,7 @@ namespace LegendOfCube.Engine
 
 
 		private Entity barrelEntity;
+		private Entity[] barrels;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -29,17 +31,12 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 
 			Content.RootDirectory = "Content";
+		}
 
-			// Temporary code to create a barrel entity that should render.
-			Properties barrelMask = new Properties(Properties.TRANSFORM |
-			                                       Properties.MODEL |
-			                                       Properties.INPUT_FLAG |
-                                                   Properties.VELOCITY |
-                                                   Properties.GRAVITY_FLAG);
-
-			barrelEntity = world.CreateEntity(barrelMask);
-			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);
-			world.Velocities[barrelEntity.Id] = new Vector3(0, 0, 0);
+		//Temp entityFactory with an empty prop.
+		public Entity CreateEntity(Properties props)
+		{
+			return world.CreateEntity(props);
 		}
 
 		// Overriden XNA methods
@@ -55,6 +52,19 @@ namespace LegendOfCube.Engine
 		{
 			renderSystem.Initialize();
 
+			// Temporary code to create a barrel entity that should render.
+			barrelEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
+			barrels = new Entity[50];
+			Random rnd = new Random();
+			for (int i = 0; i < barrels.Length; i++)
+			{
+				barrels[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
+				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-200, 200), 0, rnd.Next(-200, 200))) * Matrix.CreateScale(0.1f);
+				world.Transforms[barrels[i].Id] = test;
+			}
+
+			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);
+			world.Velocities[barrelEntity.Id] = new Vector3(0, 0, 0);
 
 			base.Initialize();
 		}
@@ -66,6 +76,11 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			world.Models[barrelEntity.Id] = Content.Load<Model>("barrel");
+			for (int i = 0; i < barrels.Length; i++)
+			{
+				world.Models[barrels[i].Id] = Content.Load<Model>("barrel");	
+			}
+
 		}
 
 		/// <summary>
