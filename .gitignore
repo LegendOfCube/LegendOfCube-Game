@@ -96,6 +96,7 @@ ClientBin
 Generated_Code #added for RIA/Silverlight projects
 *.userprefs
 *.cachefile
+*.DotSettings
 
 # Backup & report files from converting an old project file to a newer
 # Visual Studio version. Backup files are not needed, because we have git ;-)
