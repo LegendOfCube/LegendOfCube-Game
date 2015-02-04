@@ -25,7 +25,17 @@ namespace LegendOfCube.Engine
 				if (!world.ComponentMasks[i].Satisfies(GRAVITY)) continue;
 
 				world.Transforms[i] = Matrix.CreateTranslation(world.Velocities[i].Y * world.Transforms[i].Up) * world.Transforms[i];
-				world.Velocities[i].Y -= 0.02f;
+				if (world.Transforms[i].Translation.Y <= 0) 
+				{
+					Vector3 pos = world.Transforms[i].Translation;
+					pos.Y = 0;
+					world.Transforms[i].Translation = pos;
+					world.Velocities[i].Y = 0;
+				}
+				else
+				{
+					world.Velocities[i].Y -= 0.1f;
+				}
 			}
 		}
 	}

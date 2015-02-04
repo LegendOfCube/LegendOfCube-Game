@@ -57,9 +57,9 @@ namespace LegendOfCube.Engine
 					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
 				}
 
-				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space))
+				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)
 				{
-					world.Velocities[i].Y = 0.2f;
+					world.Velocities[i].Y = 4f;
 					/*if (cube.ModelToWorld.Translation.Y == 0)
 					{
 						cube.Vel.Y += 0.21f;
