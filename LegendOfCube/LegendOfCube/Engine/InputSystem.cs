@@ -24,6 +24,7 @@ namespace LegendOfCube.Engine
 
 		public InputSystem(Game game)
 		{
+            // TODO: settings for inverted y axis
 			this.game = game;
 			oldKeyState = Keyboard.GetState();
             oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
