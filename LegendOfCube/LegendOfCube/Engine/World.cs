@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace LegendOfCube
+namespace LegendOfCube.Engine
 {
 	/// <summary>
 	/// Class responsible for keeping track of all entities.

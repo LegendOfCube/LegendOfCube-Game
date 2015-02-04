@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace LegendOfCube
+namespace LegendOfCube.Engine
 {
 	/// <summary>
 	/// Type used to specify an entity in the World.

@@ -1,4 +1,4 @@
-namespace LegendOfCube
+namespace LegendOfCube.Engine
 {
 #if WINDOWS || XBOX
 	static class Program
