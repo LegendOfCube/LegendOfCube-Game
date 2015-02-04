@@ -39,7 +39,8 @@ namespace LegendOfCube.Engine
 
             if (!gamePadState.IsConnected)
             {
-                Console.WriteLine("Controller disconnected");
+                //Only writes message once when controller was disconnected
+                if(oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
             }
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
