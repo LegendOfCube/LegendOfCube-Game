@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
             return direction;
         }
 
-        public void setDirection(Vector2 direction)
+        public void SetDirection(Vector2 direction)
         {
             this.direction = direction;
         }

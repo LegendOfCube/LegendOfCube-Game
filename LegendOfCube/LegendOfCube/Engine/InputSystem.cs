@@ -18,14 +18,16 @@ namespace LegendOfCube.Engine
 		private Game game;
 		private KeyboardState oldKeyState;
         private GamePadState oldGamePadState;
+        private InputDataImpl inputData;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game)
+		public InputSystem(Game game, InputData inputData)
 		{
             // TODO: settings for inverted y axis
 			this.game = game;
+            this.inputData = (InputDataImpl) inputData;
 			oldKeyState = Keyboard.GetState();
             oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
 		}
@@ -37,6 +39,7 @@ namespace LegendOfCube.Engine
 		{
 			KeyboardState keyState = Keyboard.GetState();
             GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+            Vector2 directionInput = new Vector2(0, 0);
 
             if (!gamePadState.IsConnected)
             {
@@ -49,23 +52,35 @@ namespace LegendOfCube.Engine
 
 				if (keyState.IsKeyDown(Keys.W))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Forward) * world.Transforms[i];
-				}
+                    directionInput.Y++;
+                    // world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Forward) * world.Transforms[i];
+                }
 
 				if (keyState.IsKeyDown(Keys.S))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Backward) * world.Transforms[i];
+                    directionInput.Y--;
+					// world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Backward) * world.Transforms[i];
 				}
 				
 				if (keyState.IsKeyDown(Keys.A))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Left) * world.Transforms[i];
+                    directionInput.X--;
+					// world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Left) * world.Transforms[i];
 				}
 				
 				if (keyState.IsKeyDown(Keys.D))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
+                    directionInput.X++;
+					// world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
 				}
+
+                // Normalize the vector to our needs, then set direction
+                if (!directionInput.Equals(new Vector2(0, 0)))
+                {
+                    directionInput = Vector2.Normalize(directionInput);
+                }
+                // TODO: Apply speed modifier
+                inputData.SetDirection(directionInput);
 
 				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)
 				{
