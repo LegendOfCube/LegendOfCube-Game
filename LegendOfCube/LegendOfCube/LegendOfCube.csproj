@@ -72,6 +72,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\EntityBuilder.cs" />
     <Compile Include="Engine\Properties.cs" />
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\InputSystem.cs" />
