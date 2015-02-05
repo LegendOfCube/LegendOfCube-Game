@@ -54,22 +54,6 @@ namespace LegendOfCube.Engine
 		{
 			renderSystem.Initialize();
 
-			// Temporary code to create a cube entity that should render.
-			playerEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
-			InputData inputData = new InputDataImpl();
-			world.InputData[playerEntity.Id] = inputData;
-			otherCubes = new Entity[50];
-			Random rnd = new Random();
-			for (int i = 0; i < otherCubes.Length; i++)
-			{
-				otherCubes[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
-				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)));
-				world.Transforms[otherCubes[i].Id] = test;
-			}
-
-			world.Transforms[playerEntity.Id] = Matrix.Identity;
-			world.Velocities[playerEntity.Id] = new Vector3(0, 0, 0);
-
 			base.Initialize();
 		}
 
@@ -79,12 +63,23 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
+			// Not how an effect properly should be set probably
 			Model cubeModel = Content.Load<Model>("Models/cube_plain");
+			playerEntity =
+				new EntityBuilder().WithModel(cubeModel)
+					.WithPosition(Vector3.Zero)
+					.WithVelocity(Vector3.Zero)
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
+					.AddToWorld(world);
 
-			world.Models[playerEntity.Id] = cubeModel;
+			otherCubes = new Entity[50];
+			Random rnd = new Random(0);
 			for (int i = 0; i < otherCubes.Length; i++)
 			{
-				world.Models[otherCubes[i].Id] = cubeModel;
+				otherCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithPosition(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)))
+						.AddToWorld(world);
 			}
 
 		}
