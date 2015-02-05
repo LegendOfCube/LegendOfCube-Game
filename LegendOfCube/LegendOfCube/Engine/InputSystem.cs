@@ -52,9 +52,9 @@ namespace LegendOfCube.Engine
 				InputDataImpl inputData = (InputDataImpl)world.InputData[i];
 
 				// Y direction is inverted since world coordinates are
-				if (keyState.IsKeyDown(Keys.W)) directionInput.Y--;
+				if (keyState.IsKeyDown(Keys.W)) directionInput.Y++;
 
-				if (keyState.IsKeyDown(Keys.S)) directionInput.Y++;
+				if (keyState.IsKeyDown(Keys.S)) directionInput.Y--;
 
 				if (keyState.IsKeyDown(Keys.A)) directionInput.X--;
 
