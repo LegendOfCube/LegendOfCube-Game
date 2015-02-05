@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
@@ -16,7 +17,8 @@ namespace LegendOfCube.Engine
 		private RenderSystem renderSystem;
 
 
-		private Entity barrelEntity;
+		private Entity playerEntity;
+		private Entity[] otherCubes;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -29,17 +31,12 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 
 			Content.RootDirectory = "Content";
+		}
 
-			// Temporary code to create a barrel entity that should render.
-			Properties barrelMask = new Properties(Properties.TRANSFORM |
-			                                       Properties.MODEL |
-			                                       Properties.RECEIVE_INPUT |
-                                                   Properties.VELOCITY |
-                                                   Properties.AFFECTED_BY_GRAVITY);
-
-			barrelEntity = world.CreateEntity(barrelMask);
-			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);
-			world.Velocities[barrelEntity.Id] = new Vector3(0, 0, 0);
+		//Temp entityFactory with an empty prop.
+		public Entity CreateEntity(Properties props)
+		{
+			return world.CreateEntity(props);
 		}
 
 		// Overriden XNA methods
@@ -55,6 +52,19 @@ namespace LegendOfCube.Engine
 		{
 			renderSystem.Initialize();
 
+			// Temporary code to create a cube entity that should render.
+			playerEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
+			otherCubes = new Entity[50];
+			Random rnd = new Random();
+			for (int i = 0; i < otherCubes.Length; i++)
+			{
+				otherCubes[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
+				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)));
+				world.Transforms[otherCubes[i].Id] = test;
+			}
+
+			world.Transforms[playerEntity.Id] = Matrix.Identity;
+			world.Velocities[playerEntity.Id] = new Vector3(0, 0, 0);
 
 			base.Initialize();
 		}
@@ -65,7 +75,14 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			world.Models[barrelEntity.Id] = Content.Load<Model>("barrel");
+			Model cubeModel = Content.Load<Model>("Models/cube_plain");
+
+			world.Models[playerEntity.Id] = cubeModel;
+			for (int i = 0; i < otherCubes.Length; i++)
+			{
+				world.Models[otherCubes[i].Id] = cubeModel;
+			}
+
 		}
 
 		/// <summary>
@@ -84,9 +101,10 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			inputSystem.ApplyInput(gameTime, world);
+            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			physicsSystem.ApplyPhysics(gameTime, world);
+			inputSystem.ApplyInput(gameTime, world);
+			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 
 			base.Update(gameTime);
 		}

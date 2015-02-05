@@ -12,7 +12,7 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private static readonly Properties NO_COMPONENTS = new Properties(Properties.NO_COMPONENTS);
+		private static readonly Properties NO_COMPONENTS = new Properties(Properties.NO_PROPERTIES);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -20,7 +20,7 @@ namespace LegendOfCube.Engine
 		public UInt32 NumEntities;
 
 		// Describe what components an entity has
-		public Properties[] ComponentMasks;
+		public Properties[] EntityProperties;
         public Matrix[] Transforms;
 		public Vector3[] Velocities;
 		public Vector3[] Accelerations;
@@ -34,9 +34,9 @@ namespace LegendOfCube.Engine
 		{
 			MaxNumEntities = maxNumEntities;
 			NumEntities = 0;
-			ComponentMasks = new Properties[MaxNumEntities];
+			EntityProperties = new Properties[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
-				ComponentMasks[i] = NO_COMPONENTS;
+				EntityProperties[i] = NO_COMPONENTS;
 			}
 
 			// Components
@@ -74,7 +74,7 @@ namespace LegendOfCube.Engine
 			// Find free slot for new entity
 			UInt32 entity;
 			for (entity = 0; entity < MaxNumEntities; entity++) {
-				if (ComponentMasks[entity] == NO_COMPONENTS) {
+				if (EntityProperties[entity] == NO_COMPONENTS) {
 					break;
 				}
 			}
@@ -83,7 +83,7 @@ namespace LegendOfCube.Engine
 			}
 
 			// Set ComponentMask at the free slot to the wanted components to create the entity.
-			ComponentMasks[entity] = wantedComponents;
+			EntityProperties[entity] = wantedComponents;
 			NumEntities++;
 			return new Entity(entity);
 		}
@@ -95,7 +95,7 @@ namespace LegendOfCube.Engine
 			}
 
 			// Set ComponentMask at entity slot to NO_COMPONENTS to destroy it.
-			ComponentMasks[entityToDestroy.Id] = NO_COMPONENTS;
+			EntityProperties[entityToDestroy.Id] = NO_COMPONENTS;
 			NumEntities--;
 
 			// Clean-up components

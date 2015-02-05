@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                        Properties.RECEIVE_INPUT);
+		                                                                        Properties.INPUT_FLAG);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -47,7 +47,8 @@ namespace LegendOfCube.Engine
             }
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
-				if (!world.ComponentMasks[i].Satisfies(MOVEMENT_INPUT)) continue;
+				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
+
                 InputDataImpl inputData = (InputDataImpl) world.InputData[i];
 
 
@@ -90,7 +91,7 @@ namespace LegendOfCube.Engine
 
 				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)
 				{
-					world.Velocities[i].Y = 4f;
+					world.Velocities[i].Y = 8f;
 					/*if (cube.ModelToWorld.Translation.Y == 0)
 					{
 						cube.Vel.Y += 0.21f;

@@ -42,8 +42,21 @@ namespace LegendOfCube.Engine
 
 		public void DrawEntities(World world)
 		{
-			Vector3 camPos = new Vector3(0, 1, 5);
-			Vector3 camTarget = new Vector3(0, 0, 0);
+			Vector3 playerPos = new Vector3();
+			//Find player
+			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			{
+				if (world.EntityProperties[i].Satisfies(new Properties(Properties.INPUT_FLAG)))
+				{
+					playerPos = world.Transforms[i].Translation;
+					break;
+				}
+			}
+
+			Vector3 camPos = playerPos;
+			camPos.Y = 4;
+			camPos.Z += 5;
+			Vector3 camTarget = playerPos;
 			Vector3 up = new Vector3(0, 1, 0);
 			float fov = 75;
 
@@ -55,7 +68,7 @@ namespace LegendOfCube.Engine
 			                        1000.0f);
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
-				if (world.ComponentMasks[i].Satisfies(MODEL_AND_TRANSFORM)) {
+				if (world.EntityProperties[i].Satisfies(MODEL_AND_TRANSFORM)) {
 					world.Models[i].Draw(world.Transforms[i], view, projection);
 				}
 			}
