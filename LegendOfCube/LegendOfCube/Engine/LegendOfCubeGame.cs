@@ -59,8 +59,9 @@ namespace LegendOfCube.Engine
 			for (int i = 0; i < otherCubes.Length; i++)
 			{
 				otherCubes[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
-				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)));
-				world.Transforms[otherCubes[i].Id] = test;
+				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-100, 100), 0, rnd.Next(-100, 100)));
+				Matrix rotation = Matrix.CreateRotationY(rnd.Next(-10, 10));
+				world.Transforms[otherCubes[i].Id] = test * rotation;
 			}
 
 			world.Transforms[playerEntity.Id] = Matrix.Identity;
@@ -76,11 +77,12 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			Model cubeModel = Content.Load<Model>("Models/cube_plain");
+			Model wallModel = Content.Load<Model>("Models/wall");
 
 			world.Models[playerEntity.Id] = cubeModel;
 			for (int i = 0; i < otherCubes.Length; i++)
 			{
-				world.Models[otherCubes[i].Id] = cubeModel;
+				world.Models[otherCubes[i].Id] = wallModel;
 			}
 
 		}
