@@ -37,6 +37,16 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="cube_plain.FBX">
+      <Name>cube_plain</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="cube_1x1g_wood.FBX">
+      <Name>cube_1x1g_wood</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="ExplosiveBarrel_Reference.jpg">
       <Name>ExplosiveBarrel_Reference</Name>
       <Importer>TextureImporter</Importer>

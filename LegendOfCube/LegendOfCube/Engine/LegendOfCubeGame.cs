@@ -75,7 +75,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			world.Models[barrelEntity.Id] = Content.Load<Model>("barrel");
+			world.Models[barrelEntity.Id] = Content.Load<Model>("cube_plain");
 			for (int i = 0; i < barrels.Length; i++)
 			{
 				world.Models[barrels[i].Id] = Content.Load<Model>("barrel");	
