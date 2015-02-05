@@ -39,22 +39,22 @@ namespace LegendOfCube.Engine
 
 				if (keyState.IsKeyDown(Keys.W))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(7f * world.Transforms[i].Forward) * world.Transforms[i];
+					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Forward) * world.Transforms[i];
 				}
 
 				if (keyState.IsKeyDown(Keys.S))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(7f * world.Transforms[i].Backward) * world.Transforms[i];
+					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Backward) * world.Transforms[i];
 				}
 				
 				if (keyState.IsKeyDown(Keys.A))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(7f * world.Transforms[i].Left) * world.Transforms[i];
+					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Left) * world.Transforms[i];
 				}
 				
 				if (keyState.IsKeyDown(Keys.D))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(7f * world.Transforms[i].Right) * world.Transforms[i];
+					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Right) * world.Transforms[i];
 				}
 
 				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)

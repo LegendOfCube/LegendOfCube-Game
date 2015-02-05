@@ -17,8 +17,8 @@ namespace LegendOfCube.Engine
 		private RenderSystem renderSystem;
 
 
-		private Entity barrelEntity;
-		private Entity[] barrels;
+		private Entity playerEntity;
+		private Entity[] otherCubes;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -52,19 +52,19 @@ namespace LegendOfCube.Engine
 		{
 			renderSystem.Initialize();
 
-			// Temporary code to create a barrel entity that should render.
-			barrelEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
-			barrels = new Entity[50];
+			// Temporary code to create a cube entity that should render.
+			playerEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
+			otherCubes = new Entity[50];
 			Random rnd = new Random();
-			for (int i = 0; i < barrels.Length; i++)
+			for (int i = 0; i < otherCubes.Length; i++)
 			{
-				barrels[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
-				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-200, 200), 0, rnd.Next(-200, 200))) * Matrix.CreateScale(0.1f);
-				world.Transforms[barrels[i].Id] = test;
+				otherCubes[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
+				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)));
+				world.Transforms[otherCubes[i].Id] = test;
 			}
 
-			world.Transforms[barrelEntity.Id] = Matrix.CreateScale(0.1f);
-			world.Velocities[barrelEntity.Id] = new Vector3(0, 0, 0);
+			world.Transforms[playerEntity.Id] = Matrix.Identity;
+			world.Velocities[playerEntity.Id] = new Vector3(0, 0, 0);
 
 			base.Initialize();
 		}
@@ -75,10 +75,12 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			world.Models[barrelEntity.Id] = Content.Load<Model>("cube_plain");
-			for (int i = 0; i < barrels.Length; i++)
+			Model cubeModel = Content.Load<Model>("Models/cube_plain");
+
+			world.Models[playerEntity.Id] = cubeModel;
+			for (int i = 0; i < otherCubes.Length; i++)
 			{
-				world.Models[barrels[i].Id] = Content.Load<Model>("barrel");	
+				world.Models[otherCubes[i].Id] = cubeModel;
 			}
 
 		}
