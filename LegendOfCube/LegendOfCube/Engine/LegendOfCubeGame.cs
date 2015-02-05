@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Engine
 {
@@ -19,6 +20,8 @@ namespace LegendOfCube.Engine
 
 		private Entity playerEntity;
 		private Entity[] walls;
+
+		private Song song;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -76,6 +79,8 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
+			song = Content.Load<Song>("Audio/ACBF");
+
 			Model cubeModel = Content.Load<Model>("Models/cube_plain");
 			Model wallModel = Content.Load<Model>("Models/wall");
 
@@ -84,6 +89,8 @@ namespace LegendOfCube.Engine
 			{
 				world.Models[walls[i].Id] = wallModel;
 			}
+
+			MediaPlayer.Play(song);
 
 		}
 
