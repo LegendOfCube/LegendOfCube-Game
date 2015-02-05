@@ -10,21 +10,23 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                        Properties.INPUT_FLAG);
+																				Properties.INPUT_FLAG);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private Game game;
 		private KeyboardState oldKeyState;
+		private GamePadState oldGamePadState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game)
+		public InputSystem()
 		{
-			this.game = game;
+			// TODO: settings for inverted y axis
 			oldKeyState = Keyboard.GetState();
+			oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
 		}
 
 		// Public methods
@@ -33,42 +35,51 @@ namespace LegendOfCube.Engine
 		public void ApplyInput(GameTime gameTime, World world)
 		{
 			KeyboardState keyState = Keyboard.GetState();
+			GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+			Vector2 directionInput = new Vector2(0, 0);
 
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
+
+			if (!gamePadState.IsConnected)
+			{
+				//Only writes message once when controller was disconnected
+				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
+			}
+
+			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			{
 				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
 
-				if (keyState.IsKeyDown(Keys.W))
+				InputDataImpl inputData = (InputDataImpl)world.InputData[i];
+
+				// Y direction is inverted since world coordinates are
+				if (keyState.IsKeyDown(Keys.W)) directionInput.Y++;
+
+				if (keyState.IsKeyDown(Keys.S)) directionInput.Y--;
+
+				if (keyState.IsKeyDown(Keys.A)) directionInput.X--;
+
+				if (keyState.IsKeyDown(Keys.D)) directionInput.X++;
+
+				// Normalize the vector to our needs, then set direction
+				if (!directionInput.Equals(new Vector2(0, 0)))
 				{
-					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Forward) * world.Transforms[i];
+					directionInput = Vector2.Normalize(directionInput);
+					// TODO: Apply speed modifier
+				}
+				else
+				{
+					directionInput = gamePadState.ThumbSticks.Left;
 				}
 
-				if (keyState.IsKeyDown(Keys.S))
-				{
-					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Backward) * world.Transforms[i];
-				}
-				
-				if (keyState.IsKeyDown(Keys.A))
-				{
-					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Left) * world.Transforms[i];
-				}
-				
-				if (keyState.IsKeyDown(Keys.D))
-				{
-					world.Transforms[i] = Matrix.CreateTranslation(0.2f * world.Transforms[i].Right) * world.Transforms[i];
-				}
+				inputData.SetDirection(directionInput);
 
-				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)
+				if (keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
 				{
-					world.Velocities[i].Y = 8f;
-					/*if (cube.ModelToWorld.Translation.Y == 0)
-					{
-						cube.Vel.Y += 0.21f;
-					}
-					else if (cube.ModelToWorld.Translation.Y > 0 && doubleJump)
-					{
-						cube.Vel.Y += 0.21f;
-						doubleJump = false;
-					}*/
+					inputData.SetStateOfJumping(true);
+				}
+				else
+				{
+					inputData.SetStateOfJumping(false);
 				}
 			}
 

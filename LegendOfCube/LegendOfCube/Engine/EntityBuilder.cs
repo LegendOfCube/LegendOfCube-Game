@@ -103,6 +103,11 @@ namespace LegendOfCube.Engine
 			{
 				world.Models[entity.Id] = model;
 			}
+			if (properties.Satisfies(new Properties(Properties.INPUT_FLAG)))
+			{
+				// Not entirely sure if INPUT_FLAG implies having InputData
+				world.InputData[entity.Id] = new InputDataImpl();
+			}
 			return entity;
 		}
 	}
