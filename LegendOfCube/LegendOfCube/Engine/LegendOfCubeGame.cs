@@ -91,6 +91,7 @@ namespace LegendOfCube.Engine
 			}
 
 			MediaPlayer.Play(song);
+			MediaPlayer.IsRepeating = true;
 
 		}
 
