@@ -21,10 +21,11 @@ namespace LegendOfCube.Engine
 
 		// Describe what components an entity has
 		public Properties[] EntityProperties;
-        public Matrix[] Transforms;
+		public Matrix[] Transforms;
 		public Vector3[] Velocities;
 		public Vector3[] Accelerations;
 		public Model[] Models;
+		public InputData[] InputData;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -43,11 +44,13 @@ namespace LegendOfCube.Engine
 			Accelerations = new Vector3[MaxNumEntities];
 			Models = new Model[MaxNumEntities];
 			Transforms = new Matrix[MaxNumEntities];
+			InputData = new InputData[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				Velocities[i] = new Vector3(0, 0, 0);
 				Accelerations[i] = new Vector3(0, 0, 0);
 				Models[i] = null;
 				Transforms[i] = Matrix.Identity;
+				InputData[i] = null;
 			}
 		}
 
