@@ -37,11 +37,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube.fbx">
-      <Name>cube</Name>
+    <Compile Include="Models\cube_plain.FBX">
+      <Name>cube_plain</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Models\cube_diff.jpg">
+      <Name>cube_diff</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
