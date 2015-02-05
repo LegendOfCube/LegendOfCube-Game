@@ -75,23 +75,12 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			BasicEffect effect = new BasicEffect(GraphicsDevice);
-			effect.EnableDefaultLighting();
-			effect.PreferPerPixelLighting = true;
+			Model cubeModel = Content.Load<Model>("Models/cube_plain");
 
-			// Not how an effect properly should be set probably
-			Model cubeModel = Content.Load<Model>("Models/cube");
-			foreach (ModelMesh mesh in cubeModel.Meshes)
-			{
-				foreach (ModelMeshPart part in mesh.MeshParts)
-				{
-					part.Effect = effect;
-				}
-			}
 			world.Models[playerEntity.Id] = cubeModel;
 			for (int i = 0; i < otherCubes.Length; i++)
 			{
-				world.Models[otherCubes[i].Id] = cubeModel;	
+				world.Models[otherCubes[i].Id] = cubeModel;
 			}
 
 		}

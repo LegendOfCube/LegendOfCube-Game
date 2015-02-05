@@ -37,8 +37,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube.fbx">
-      <Name>cube</Name>
+    <Compile Include="Models\cube_plain.FBX">
+      <Name>cube_plain</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
