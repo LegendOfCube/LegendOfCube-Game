@@ -18,7 +18,7 @@ namespace LegendOfCube.Engine
 
 
 		private Entity playerEntity;
-		private Entity[] otherCubes;
+		private Entity[] walls;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -54,14 +54,14 @@ namespace LegendOfCube.Engine
 
 			// Temporary code to create a cube entity that should render.
 			playerEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
-			otherCubes = new Entity[50];
+			walls = new Entity[50];
 			Random rnd = new Random();
-			for (int i = 0; i < otherCubes.Length; i++)
+			for (int i = 0; i < walls.Length; i++)
 			{
-				otherCubes[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
+				walls[i] = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL));
 				Matrix test = Matrix.CreateTranslation(new Vector3(rnd.Next(-100, 100), 0, rnd.Next(-100, 100)));
 				Matrix rotation = Matrix.CreateRotationY(rnd.Next(-10, 10));
-				world.Transforms[otherCubes[i].Id] = test * rotation;
+				world.Transforms[walls[i].Id] = test * rotation;
 			}
 
 			world.Transforms[playerEntity.Id] = Matrix.Identity;
@@ -80,9 +80,9 @@ namespace LegendOfCube.Engine
 			Model wallModel = Content.Load<Model>("Models/wall");
 
 			world.Models[playerEntity.Id] = cubeModel;
-			for (int i = 0; i < otherCubes.Length; i++)
+			for (int i = 0; i < walls.Length; i++)
 			{
-				world.Models[otherCubes[i].Id] = wallModel;
+				world.Models[walls[i].Id] = wallModel;
 			}
 
 		}
