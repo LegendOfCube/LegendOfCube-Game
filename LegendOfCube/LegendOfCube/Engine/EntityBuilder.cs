@@ -16,6 +16,11 @@ namespace LegendOfCube.Engine
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
 
+		/// <summary>
+		/// Assign a model for the entity being built.
+		/// </summary>
+		/// <param name="model">The XNA 3D model</param>
+		/// <returns>An instance of this, for chaining</returns>
 		public EntityBuilder WithModel(Model model)
 		{
 			properties.Add(Properties.MODEL);
@@ -23,6 +28,13 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		/// <summary>
+		/// Assign a position for the entity being built. If WithTransform
+		/// has been called, the translation data will be replaced, but the
+		/// rest will remain unchanged.
+		/// </summary>
+		/// <param name="position">The position in world space</param>
+		/// <returns>An instance of this, for chaining</returns>
 		public EntityBuilder WithPosition(Vector3 position)
 		{
 			properties.Add(Properties.TRANSFORM);
@@ -30,6 +42,12 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		/// <summary>
+		/// Assign a transform matrix for the entity being built. This will
+		/// the effect of having prevously called WithPosition.
+		/// </summary>
+		/// <param name="transform">The model-to-world matrix</param>
+		/// <returns>An instance of this, for chaining</returns>
 		public EntityBuilder WithTransform(Matrix transform)
 		{
 			properties.Add(Properties.TRANSFORM);
@@ -37,6 +55,11 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		/// <summary>
+		/// Assign a velocity for the entity being built.
+		/// </summary>
+		/// <param name="velocity">The initial velocity for the entity</param>
+		/// <returns>An instance of this, for chaining</returns>
 		public EntityBuilder WithVelocity(Vector3 velocity)
 		{
 			properties.Add(Properties.VELOCITY);
@@ -44,17 +67,26 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		/// <summary>
+		/// Add any property flags to the entity being created.
+		/// </summary>
+		/// <param name="properties">The properties to add</param>
+		/// <returns>An instance of this, for chaining</returns>
 		public EntityBuilder WithAdditionalProperties(Properties properties)
 		{
 			this.properties.Add(properties);
 			return this;
 		}
 
+		/// <summary>
+		/// Adds an Entity to the world, with the properties given to the builder.
+		/// </summary>
+		/// <param name="world">The world to add the entity to</param>
+		/// <returns>A representation of the Entity</returns>
 		public Entity AddToWorld(World world)
 		{
 			Entity entity = world.CreateEntity(properties);
-			Debug.WriteLine(entity.Id);
-			Debug.WriteLine(Convert.ToString((int)properties.mask, 2));
+
 			if (properties.Satisfies(new Properties(Properties.TRANSFORM)))
 			{
 				world.Transforms[entity.Id] = transform;
