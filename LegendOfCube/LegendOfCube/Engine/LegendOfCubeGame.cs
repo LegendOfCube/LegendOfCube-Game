@@ -54,6 +54,8 @@ namespace LegendOfCube.Engine
 
 			// Temporary code to create a cube entity that should render.
 			playerEntity = CreateEntity(new Properties(Properties.TRANSFORM | Properties.MODEL | Properties.INPUT_FLAG | Properties.VELOCITY | Properties.GRAVITY_FLAG));
+			InputData inputData = new InputDataImpl();
+			world.InputData[playerEntity.Id] = inputData;
 			otherCubes = new Entity[50];
 			Random rnd = new Random();
 			for (int i = 0; i < otherCubes.Length; i++)
