@@ -50,30 +50,14 @@ namespace LegendOfCube.Engine
 
                 InputDataImpl inputData = (InputDataImpl) world.InputData[i];
 
+				// Y direction is inverted since world coordinates are
+				if (keyState.IsKeyDown(Keys.W)) directionInput.Y--;
 
-				if (keyState.IsKeyDown(Keys.W))
-				{
-                    directionInput.Y++;
-                    world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Forward) * world.Transforms[i];
-                }
-
-				if (keyState.IsKeyDown(Keys.S))
-				{
-                    directionInput.Y--;
-				    world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Backward) * world.Transforms[i];
-				}
+				if (keyState.IsKeyDown(Keys.S)) directionInput.Y++;
 				
-				if (keyState.IsKeyDown(Keys.A))
-				{
-                    directionInput.X--;
-					world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Left) * world.Transforms[i];
-				}
+				if (keyState.IsKeyDown(Keys.A)) directionInput.X--;
 				
-				if (keyState.IsKeyDown(Keys.D))
-				{
-                    directionInput.X++;
-				    world.Transforms[i] = Matrix.CreateTranslation(2.5f * world.Transforms[i].Right) * world.Transforms[i];
-				}
+				if (keyState.IsKeyDown(Keys.D)) directionInput.X++;
 
                 // Normalize the vector to our needs, then set direction
                 if (!directionInput.Equals(new Vector2(0, 0)))
@@ -88,18 +72,13 @@ namespace LegendOfCube.Engine
 
                 inputData.SetDirection(directionInput);
 
-				if (keyState.IsKeyDown(Keys.Space) && !oldKeyState.IsKeyDown(Keys.Space) && world.Transforms[i].Translation.Y <= 0)
+				if (keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
 				{
-					world.Velocities[i].Y = 8f;
-					/*if (cube.ModelToWorld.Translation.Y == 0)
-					{
-						cube.Vel.Y += 0.21f;
-					}
-					else if (cube.ModelToWorld.Translation.Y > 0 && doubleJump)
-					{
-						cube.Vel.Y += 0.21f;
-						doubleJump = false;
-					}*/
+					inputData.SetStateOfJumping(true);
+				}
+				else
+				{
+					inputData.SetStateOfJumping(false);
 				}
 			}
 

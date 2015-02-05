@@ -15,6 +15,7 @@ namespace LegendOfCube.Engine
 		private InputSystem inputSystem;
 		private PhysicsSystem physicsSystem;
 		private RenderSystem renderSystem;
+		private GameplaySystem gameplaySystem;
 
 
 		private Entity playerEntity;
@@ -29,6 +30,7 @@ namespace LegendOfCube.Engine
 			inputSystem = new InputSystem();
 			renderSystem = new RenderSystem(this);
 			physicsSystem = new PhysicsSystem();
+			gameplaySystem = new GameplaySystem();
 
 			Content.RootDirectory = "Content";
 		}
@@ -106,6 +108,7 @@ namespace LegendOfCube.Engine
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, world);
+			gameplaySystem.processInputData(world);
 			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 
 			base.Update(gameTime);
