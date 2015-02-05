@@ -63,7 +63,6 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			// Not how an effect properly should be set probably
 			Model cubeModel = Content.Load<Model>("Models/cube_plain");
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
