@@ -22,10 +22,9 @@ namespace LegendOfCube.Engine
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game)
+		public InputSystem()
 		{
             // TODO: settings for inverted y axis
-			this.game = game;
 			oldKeyState = Keyboard.GetState();
             oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
 		}
