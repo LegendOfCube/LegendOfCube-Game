@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,15 +18,16 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		public readonly UInt32 MaxNumEntities;
-		public UInt32 NumEntities;
+		public UInt32 NumEntities { get; private set; }
+		public UInt32 HighestOccupiedId { get; private set; }
 
 		// Describe what components an entity has
-		public Properties[] EntityProperties;
-		public Matrix[] Transforms;
-		public Vector3[] Velocities;
-		public Vector3[] Accelerations;
-		public Model[] Models;
-		public InputData[] InputData;
+		public readonly Properties[] EntityProperties;
+		public readonly Matrix[] Transforms;
+		public readonly Vector3[] Velocities;
+		public readonly Vector3[] Accelerations;
+		public readonly Model[] Models;
+		public readonly InputData[] InputData;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -34,6 +36,7 @@ namespace LegendOfCube.Engine
 		{
 			MaxNumEntities = maxNumEntities;
 			NumEntities = 0;
+			HighestOccupiedId = 0;
 			EntityProperties = new Properties[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				EntityProperties[i] = NO_COMPONENTS;
@@ -85,7 +88,19 @@ namespace LegendOfCube.Engine
 			// Set ComponentMask at the free slot to the wanted components to create the entity.
 			EntityProperties[entity] = wantedComponents;
 			NumEntities++;
+			HighestOccupiedId = Math.Max(entity, HighestOccupiedId);
 			return new Entity(entity);
+		}
+
+		public IEnumerable<Entity> EnumerateEntities(Properties filter)
+		{
+			for (UInt32 i = 0; i < HighestOccupiedId; i++)
+			{
+				if (EntityProperties[i].Satisfies(filter))
+				{
+					yield return new Entity(i);
+				}
+			}
 		}
 
 		public void DestroyEntity(Entity entityToDestroy)
