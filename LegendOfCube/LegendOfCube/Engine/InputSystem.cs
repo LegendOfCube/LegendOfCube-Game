@@ -47,16 +47,14 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (keyWasPressed(Keys.Escape))
+			if (KeyWasPressed(Keys.Escape))
 			{
 				game.Exit();
 			}
 
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
-			{
-				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
+			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {
 
-				InputDataImpl inputData = (InputDataImpl)world.InputData[i];
+				InputDataImpl inputData = (InputDataImpl)world.InputData[e.Id];
 
 				if (keyState.IsKeyDown(Keys.W) || gamePadState.DPad.Up == ButtonState.Pressed) directionInput.Y++;
 
@@ -96,12 +94,12 @@ namespace LegendOfCube.Engine
 			oldKeyState = keyState;
 		}
 
-		private bool keyWasPressed(Keys key)
+		private bool KeyWasPressed(Keys key)
 		{
 			return keyState.IsKeyDown(key) && !oldKeyState.IsKeyDown(key);
 		}
 
-		private bool keyWasReleased(Keys key)
+		private bool KeyWasReleased(Keys key)
 		{
 			return keyState.IsKeyUp(key) && !oldKeyState.IsKeyUp(key);
 		}

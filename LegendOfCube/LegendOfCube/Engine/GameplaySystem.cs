@@ -11,21 +11,18 @@ namespace LegendOfCube.Engine
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
 																				Properties.INPUT_FLAG);
 
-		public void processInputData(World world)
+		public void ProcessInputData(World world)
 		{
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT))
 			{
-				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
-
 				// Updates velocities according to input
 				//TODO: Make it better
-                // Movement
-				world.Velocities[i] = new Vector3(world.InputData[i].GetDirection().X * 10, world.Velocities[i].Y, -world.InputData[i].GetDirection().Y * 10);
+				// Movement
+				world.Velocities[e.Id].X = 10 * world.InputData[e.Id].GetDirection().X;
+				world.Velocities[e.Id].Z = - 10 * world.InputData[e.Id].GetDirection().Y;
 				// Jumping
-                if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
-
+				if (world.InputData[e.Id].IsJumping()) world.Velocities[e.Id].Y = 8.0f;
 			}
-
 		}
 	}
 }
