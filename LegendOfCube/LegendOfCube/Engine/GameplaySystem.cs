@@ -22,6 +22,14 @@ namespace LegendOfCube.Engine
 				//TODO: Make it better
                 // Movement
 				world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * ACCELERATION, 0, -world.InputData[i].GetDirection().Y * ACCELERATION);
+				/*if (world.Accelerations[i].Length() > ACCELERATION)
+				{
+					Vector2 temp = new Vector2(world.Accelerations[i].X, world.Accelerations[i].Z);
+					temp.Normalize();
+					temp *= ACCELERATION;
+					world.Accelerations[i].X = temp.X;
+					world.Accelerations[i].Z = temp.Y;
+				}*/
 				// Jumping
                 if (world.InputData[i].IsJumping()) world.Accelerations[i].Y = 18.0f;
 
