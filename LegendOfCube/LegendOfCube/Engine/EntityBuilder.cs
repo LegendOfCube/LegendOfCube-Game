@@ -68,6 +68,18 @@ namespace LegendOfCube.Engine
 		}
 
 		/// <summary>
+		/// Assign an acceleration for the entity being built.
+		/// </summary>
+		/// <param name="acceleration">The initial acceleration for the entity</param>
+		/// <returns>An instance of this, for chaining</returns>
+		public EntityBuilder WithAcceleration(Vector3 acceleration)
+		{
+			properties.Add(Properties.ACCELERATION);
+			this.acceleration = acceleration;
+			return this;
+		}
+
+		/// <summary>
 		/// Add any property flags to the entity being created.
 		/// </summary>
 		/// <param name="properties">The properties to add</param>
