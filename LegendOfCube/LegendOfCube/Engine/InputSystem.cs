@@ -16,14 +16,16 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private Game game;
+		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
 		private GamePadState oldGamePadState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem()
+		public InputSystem(Game game)
 		{
+			this.game = game;
 			// TODO: settings for inverted y axis
 			oldKeyState = Keyboard.GetState();
 			oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
@@ -34,7 +36,7 @@ namespace LegendOfCube.Engine
 
 		public void ApplyInput(GameTime gameTime, World world)
 		{
-			KeyboardState keyState = Keyboard.GetState();
+			keyState = Keyboard.GetState();
 			GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
 			Vector2 directionInput = new Vector2(0, 0);
 
@@ -43,6 +45,11 @@ namespace LegendOfCube.Engine
 			{
 				//Only writes message once when controller was disconnected
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
+			}
+
+			if (keyWasPressed(Keys.Escape))
+			{
+				game.Exit();
 			}
 
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
@@ -87,6 +94,16 @@ namespace LegendOfCube.Engine
 			}
 
 			oldKeyState = keyState;
+		}
+
+		private bool keyWasPressed(Keys key)
+		{
+			return keyState.IsKeyDown(key) && !oldKeyState.IsKeyDown(key);
+		}
+
+		private bool keyWasReleased(Keys key)
+		{
+			return keyState.IsKeyUp(key) && !oldKeyState.IsKeyUp(key);
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace LegendOfCube.Engine
 		public LegendOfCubeGame()
 		{
 			world = new World(100);
-			inputSystem = new InputSystem();
+			inputSystem = new InputSystem(this);
 			renderSystem = new RenderSystem(this);
 			physicsSystem = new PhysicsSystem();
 			gameplaySystem = new GameplaySystem();
