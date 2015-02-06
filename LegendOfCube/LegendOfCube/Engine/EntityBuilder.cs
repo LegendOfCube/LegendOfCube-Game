@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine
 		}
 
 		/// <summary>
-		/// Assign a transform matrix for the entity being built. This will
+		/// Assign a transform matrix for the entity being built. This will override
 		/// the effect of having prevously called WithPosition.
 		/// </summary>
 		/// <param name="transform">The model-to-world matrix</param>
