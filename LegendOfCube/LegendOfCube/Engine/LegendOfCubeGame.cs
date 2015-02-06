@@ -69,7 +69,7 @@ namespace LegendOfCube.Engine
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero)
 					.WithAcceleration(Vector3.Zero)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
 					.AddToWorld(world);
 
 			otherCubes = new Entity[50];
