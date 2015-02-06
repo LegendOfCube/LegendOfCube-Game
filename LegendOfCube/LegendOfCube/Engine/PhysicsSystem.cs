@@ -20,6 +20,11 @@ namespace LegendOfCube.Engine
 		                                                         Properties.TRANSFORM |
 		                                                         Properties.VELOCITY);
 
+		private static readonly Properties HAS_FRICTION = new Properties(
+														 Properties.TRANSFORM |
+														 Properties.VELOCITY |
+														 Properties.FRICTION_FLAG);
+
         private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
 		private static readonly float MAX_VELOCITY = 15f;
 		private static readonly float FRICTION = -5f;
@@ -48,7 +53,7 @@ namespace LegendOfCube.Engine
                 if (properties.Satisfies(HAS_GRAVITY))
                 {
                     world.Velocities[i] += (GRAVITY * delta);
-                }
+				}
 
 				// Apply "friction"
 				if (properties.Satisfies(HAS_FRICTION))
@@ -57,6 +62,7 @@ namespace LegendOfCube.Engine
 					temp *= -1;
 					temp.Normalize();
 					world.Accelerations[i].X += FRICTION * temp.X;
+					world.Accelerations[i].Z += FRICTION * temp.Y;
 				}
 
                 // Update position
