@@ -10,6 +10,7 @@ namespace LegendOfCube.Engine
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
 																				Properties.INPUT_FLAG);
+		private static readonly float ACCELERATION = 30;
 
 		public void processInputData(World world)
 		{
@@ -20,9 +21,9 @@ namespace LegendOfCube.Engine
 				// Updates velocities according to input
 				//TODO: Make it better
                 // Movement
-				world.Accelerations[i] += new Vector3(world.InputData[i].GetDirection().X * 10, world.Velocities[i].Y, -world.InputData[i].GetDirection().Y * 10);
+				world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * ACCELERATION, 0, -world.InputData[i].GetDirection().Y * ACCELERATION);
 				// Jumping
-                if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
+                if (world.InputData[i].IsJumping()) world.Accelerations[i].Y = 18.0f;
 
 			}
 

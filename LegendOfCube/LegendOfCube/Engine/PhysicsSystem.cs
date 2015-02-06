@@ -21,6 +21,7 @@ namespace LegendOfCube.Engine
 		                                                         Properties.VELOCITY);
 
         private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
+		private static readonly float MAX_VELOCITY = 15;
 
 		public void ApplyPhysics(float delta, World world)
 		{
@@ -32,6 +33,14 @@ namespace LegendOfCube.Engine
                 if (properties.Satisfies(ACCELERATABLE))
                 {
                     world.Velocities[i] += (world.Accelerations[i] * delta);
+					if (world.Velocities[i].Length() > MAX_VELOCITY)
+					{
+						Vector2 temp = new Vector2(world.Velocities[i].X,world.Velocities[i].Z);
+						temp.Normalize();
+						temp *= MAX_VELOCITY;
+						world.Velocities[i].X = temp.X;
+						world.Velocities[i].Z = temp.Y;
+					}
                 }
 
                 // Apply gravity
@@ -43,10 +52,7 @@ namespace LegendOfCube.Engine
                 // Update position
                 if (properties.Satisfies(MOVABLE))
                 {
-					world.Velocities[i] += world.Accelerations[i] * delta;
                     world.Transforms[i].Translation += (world.Velocities[i] * delta);
-					world.Accelerations[i] *= 0.1f;//+= new Vector3(-0.1f * world.Velocities[i].X, GRAVITY.Y, -0.1f * world.Velocities[i].Z);  
-
 					// Hacky floor
 					if (world.Transforms[i].Translation.Y < 0)
 					{
