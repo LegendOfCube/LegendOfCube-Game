@@ -44,13 +44,10 @@ namespace LegendOfCube.Engine
 		{
 			Vector3 playerPos = new Vector3();
 			//Find player
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			foreach (Entity e in world.EnumerateEntities(new Properties(Properties.INPUT_FLAG)))
 			{
-				if (world.EntityProperties[i].Satisfies(new Properties(Properties.INPUT_FLAG)))
-				{
-					playerPos = world.Transforms[i].Translation;
-					break;
-				}
+				playerPos = world.Transforms[e.Id].Translation;
+				break;
 			}
 
 			Vector3 camPos = playerPos;
@@ -67,10 +64,9 @@ namespace LegendOfCube.Engine
 			                        0.1f,
 			                        1000.0f);
 
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++) {
-				if (world.EntityProperties[i].Satisfies(MODEL_AND_TRANSFORM)) {
-					world.Models[i].Draw(world.Transforms[i], view, projection);
-				}
+			foreach (Entity e in world.EnumerateEntities(MODEL_AND_TRANSFORM))
+			{
+				world.Models[e.Id].Draw(world.Transforms[e.Id], view, projection);
 			}
 		}
 	}
