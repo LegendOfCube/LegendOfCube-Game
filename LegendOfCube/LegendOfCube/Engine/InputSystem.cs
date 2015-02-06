@@ -51,24 +51,27 @@ namespace LegendOfCube.Engine
 
 				InputDataImpl inputData = (InputDataImpl)world.InputData[i];
 
-				// Y direction is inverted since world coordinates are
-				if (keyState.IsKeyDown(Keys.W)) directionInput.Y++;
+				if (keyState.IsKeyDown(Keys.W) || gamePadState.DPad.Up == ButtonState.Pressed) directionInput.Y++;
 
-				if (keyState.IsKeyDown(Keys.S)) directionInput.Y--;
+				if (keyState.IsKeyDown(Keys.S) || gamePadState.DPad.Down == ButtonState.Pressed) directionInput.Y--;
 
-				if (keyState.IsKeyDown(Keys.A)) directionInput.X--;
+				if (keyState.IsKeyDown(Keys.A) || gamePadState.DPad.Left == ButtonState.Pressed) directionInput.X--;
 
-				if (keyState.IsKeyDown(Keys.D)) directionInput.X++;
+				if (keyState.IsKeyDown(Keys.D) || gamePadState.DPad.Right == ButtonState.Pressed) directionInput.X++;
 
 				// Normalize the vector to our needs, then set direction
 				if (!directionInput.Equals(new Vector2(0, 0)))
 				{
 					directionInput = Vector2.Normalize(directionInput);
-					// TODO: Apply speed modifier
 				}
 				else
 				{
 					directionInput = gamePadState.ThumbSticks.Left;
+				}
+
+				if (keyState.IsKeyDown(Keys.LeftShift) || gamePadState.Triggers.Left > 0)
+				{
+					directionInput *= 0.5f;
 				}
 
 				inputData.SetDirection(directionInput);
