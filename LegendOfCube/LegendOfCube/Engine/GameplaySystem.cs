@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
-namespace LegendOfCube.Engine
+﻿namespace LegendOfCube.Engine
 {
 	class GameplaySystem
 	{
@@ -9,7 +6,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-																				Properties.INPUT_FLAG);
+		                                                                   Properties.INPUT_FLAG);
 
 		public void ProcessInputData(World world)
 		{

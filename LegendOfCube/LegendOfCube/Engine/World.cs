@@ -23,7 +23,7 @@ namespace LegendOfCube.Engine
 		public UInt32 HighestOccupiedId { get; private set; }
 
 		// Describe what components an entity has
-		public readonly Properties[] EntityProperties;
+		public readonly Properties[] EntityProperties ;
 		public readonly Matrix[] Transforms;
 		public readonly Vector3[] Velocities;
 		public readonly Vector3[] Accelerations;

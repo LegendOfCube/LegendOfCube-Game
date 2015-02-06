@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-																				Properties.INPUT_FLAG);
+		                                                                  Properties.INPUT_FLAG);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -65,14 +65,7 @@ namespace LegendOfCube.Engine
 				if (keyState.IsKeyDown(Keys.D) || gamePadState.DPad.Right == ButtonState.Pressed) directionInput.X++;
 
 				// Normalize the vector to our needs, then set direction
-				if (!directionInput.Equals(new Vector2(0, 0)))
-				{
-					directionInput = Vector2.Normalize(directionInput);
-				}
-				else
-				{
-					directionInput = gamePadState.ThumbSticks.Left;
-				}
+				directionInput = !directionInput.Equals(Vector2.Zero) ? Vector2.Normalize(directionInput) : gamePadState.ThumbSticks.Left;
 
 				if (keyState.IsKeyDown(Keys.LeftShift) || gamePadState.Triggers.Left > 0)
 				{

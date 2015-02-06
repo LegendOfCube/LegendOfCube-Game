@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
 {
@@ -9,9 +8,7 @@ namespace LegendOfCube.Engine
 		Vector2 GetDirection();
 		Vector2 GetCameraDirection();
 		bool IsJumping();
-		bool newJump();
-
-
+		bool NewJump();
 	}
 	public class InputDataImpl : InputData
 	{
@@ -46,7 +43,7 @@ namespace LegendOfCube.Engine
 			return isJumping;
 		}
 
-		public bool newJump()
+		public bool NewJump()
 		{
 			return true;
 		}

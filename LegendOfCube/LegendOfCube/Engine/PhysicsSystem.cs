@@ -9,16 +9,16 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties ACCELERATABLE = new Properties(
-																	   Properties.VELOCITY |
-																	   Properties.ACCELERATION);
+		                                                               Properties.VELOCITY |
+		                                                               Properties.ACCELERATION);
 
 		private static readonly Properties HAS_GRAVITY = new Properties(
-																 Properties.VELOCITY |
-																 Properties.GRAVITY_FLAG);
+		                                                         Properties.VELOCITY |
+		                                                         Properties.GRAVITY_FLAG);
 
 		private static readonly Properties MOVABLE = new Properties(
-																 Properties.TRANSFORM |
-																 Properties.VELOCITY);
+		                                                         Properties.TRANSFORM |
+		                                                         Properties.VELOCITY);
 
 		private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
 
