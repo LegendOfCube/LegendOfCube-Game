@@ -20,6 +20,11 @@ namespace LegendOfCube.Engine
 		                                                         Properties.TRANSFORM |
 		                                                         Properties.VELOCITY);
 
+		private static readonly Properties HAS_FRICTION = new Properties(
+														 Properties.TRANSFORM |
+														 Properties.VELOCITY |
+														 Properties.FRICTION_FLAG);
+
         private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
 		private static readonly float MAX_VELOCITY = 15;
 
@@ -47,12 +52,12 @@ namespace LegendOfCube.Engine
                 if (properties.Satisfies(HAS_GRAVITY))
                 {
                     world.Velocities[i] += (GRAVITY * delta);
-                }
+				}
 
-                // Update position
-                if (properties.Satisfies(MOVABLE))
-                {
-                    world.Transforms[i].Translation += (world.Velocities[i] * delta);
+				// Update position
+				if (properties.Satisfies(MOVABLE))
+				{
+					world.Transforms[i].Translation += (world.Velocities[i] * delta);
 					// Hacky floor
 					if (world.Transforms[i].Translation.Y < 0)
 					{
