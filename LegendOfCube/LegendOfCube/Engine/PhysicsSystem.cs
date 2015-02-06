@@ -43,7 +43,9 @@ namespace LegendOfCube.Engine
                 // Update position
                 if (properties.Satisfies(MOVABLE))
                 {
+					world.Velocities[i] += world.Accelerations[i] * delta;
                     world.Transforms[i].Translation += (world.Velocities[i] * delta);
+					world.Accelerations[i] *= 0.1f;//+= new Vector3(-0.1f * world.Velocities[i].X, GRAVITY.Y, -0.1f * world.Velocities[i].Z);  
 
 					// Hacky floor
 					if (world.Transforms[i].Translation.Y < 0)

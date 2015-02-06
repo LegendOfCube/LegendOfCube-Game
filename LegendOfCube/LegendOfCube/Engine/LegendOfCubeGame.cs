@@ -68,6 +68,7 @@ namespace LegendOfCube.Engine
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero)
+					.WithAcceleration(Vector3.Zero)
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
 					.AddToWorld(world);
 
