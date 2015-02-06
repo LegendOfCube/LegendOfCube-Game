@@ -94,7 +94,7 @@ namespace LegendOfCube.Engine
 
 		public IEnumerable<Entity> EnumerateEntities(Properties filter)
 		{
-			for (UInt32 i = 0; i < HighestOccupiedId; i++)
+			for (UInt32 i = 0; i <= HighestOccupiedId; i++)
 			{
 				if (EntityProperties[i].Satisfies(filter))
 				{
