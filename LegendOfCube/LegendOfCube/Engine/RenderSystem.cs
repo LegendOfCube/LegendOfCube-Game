@@ -42,22 +42,24 @@ namespace LegendOfCube.Engine
 
 		public void DrawEntities(World world)
 		{
-			Vector3 playerPos = new Vector3();
+			Matrix playerTransform = new Matrix();
 			//Find player
 			foreach (Entity e in world.EnumerateEntities(new Properties(Properties.INPUT_FLAG)))
 			{
-				playerPos = world.Transforms[e.Id].Translation;
+				playerTransform = world.Transforms[e.Id];
 				break;
 			}
 
-			Vector3 camPos = playerPos;
-			camPos.Y = 4;
-			camPos.Z += 5;
-			Vector3 camTarget = playerPos;
-			Vector3 up = new Vector3(0, 1, 0);
+			Vector3 backward = playerTransform.Backward;
+			backward.Normalize();
+			Vector3 up = playerTransform.Up;
+			up.Normalize();
+			Vector3 camPos = playerTransform.Translation + backward*3.0f + up*1.5f;
+			Vector3 camTarget = playerTransform.Translation;
+			Vector3 upVec = new Vector3(0, 1, 0);
 			float fov = 75;
 
-			Matrix view = Matrix.CreateLookAt(camPos, camTarget, up);
+			Matrix view = Matrix.CreateLookAt(camPos, camTarget, upVec);
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(
 			                        MathHelper.ToRadians(fov),
 			                        game.GraphicsDevice.Viewport.AspectRatio,

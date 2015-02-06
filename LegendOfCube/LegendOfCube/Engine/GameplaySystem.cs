@@ -24,6 +24,15 @@ namespace LegendOfCube.Engine
 				// Jumping
                 if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
 
+				Vector3 pos = world.Transforms[i].Translation;
+				Vector3 vel = world.Velocities[i];
+				if (vel.Length() > 0.5f)
+				{
+					vel.Normalize();
+					float angle = (float)Math.Atan2(vel.Z, -vel.X) + (float)(Math.PI / 2);
+					Matrix.CreateRotationY(angle, out world.Transforms[i]);
+					world.Transforms[i].Translation = pos;
+				}
 			}
 
 		}
