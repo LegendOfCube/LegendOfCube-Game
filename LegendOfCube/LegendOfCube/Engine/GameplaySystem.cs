@@ -19,8 +19,10 @@ namespace LegendOfCube.Engine
 
 				// Updates velocities according to input
 				//TODO: Make it better
+                // Movement
 				world.Velocities[i] = new Vector3(world.InputData[i].GetDirection().X * 10, world.Velocities[i].Y, -world.InputData[i].GetDirection().Y * 10);
-				if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
+				// Jumping
+                if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
 
 			}
 
