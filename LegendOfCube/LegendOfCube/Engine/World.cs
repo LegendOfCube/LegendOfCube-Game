@@ -29,6 +29,8 @@ namespace LegendOfCube.Engine
 		public readonly Vector3[] Accelerations;
 		public readonly Model[] Models;
 		public readonly InputData[] InputData;
+		public Vector3 LightPosition;
+
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

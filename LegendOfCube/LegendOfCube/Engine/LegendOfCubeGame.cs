@@ -17,7 +17,6 @@ namespace LegendOfCube.Engine
 		private RenderSystem renderSystem;
 		private GameplaySystem gameplaySystem;
 
-
 		private Entity playerEntity;
 		private Entity[] otherCubes;
 
@@ -63,12 +62,27 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			Model cubeModel = Content.Load<Model>("Models/cube_plain");
+			var cubeModel = Content.Load<Model>("Models/cube_plain");
+
+			// For now, override loaded effect with custom shader. Need to
+			// manually find texture it seems. It might be possible to write
+			// custom "content importer" to handle this instead.
+			var renderEffect = Content.Load<Effect>("Effects/StandardEffect");
+			var cubeTexture = Content.Load<Texture>("Models/cube_diff");
+			renderEffect.Parameters["DiffuseTexture"].SetValue(cubeTexture);
+			foreach (var mesh in cubeModel.Meshes)
+			{
+				foreach (var meshPart in mesh.MeshParts)
+				{
+					meshPart.Effect = renderEffect;
+				}
+			}
+
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FULL_LIGHT_EFFECT))
 					.AddToWorld(world);
 
 			otherCubes = new Entity[50];
@@ -78,6 +92,7 @@ namespace LegendOfCube.Engine
 				otherCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
 						.WithPosition(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)))
+						.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 						.AddToWorld(world);
 			}
 
@@ -118,11 +133,7 @@ namespace LegendOfCube.Engine
 			GraphicsDevice.BlendState = BlendState.Opaque;
 			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-
-			//_renderSystem.updateTranslationTransforms(_world);
-			renderSystem.DrawEntities(world);
-
-
+			renderSystem.RenderWorld(world);
 			base.Draw(gameTime);
 		}
 
