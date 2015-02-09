@@ -82,7 +82,7 @@ namespace LegendOfCube.Engine
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FULL_LIGHT_EFFECT))
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG  | Properties.FULL_LIGHT_EFFECT))
 					.AddToWorld(world);
 
 			otherCubes = new Entity[50];
@@ -117,7 +117,7 @@ namespace LegendOfCube.Engine
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, world);
-			gameplaySystem.ProcessInputData(world);
+			gameplaySystem.processInputData(world, delta);
 			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 
 			base.Update(gameTime);
