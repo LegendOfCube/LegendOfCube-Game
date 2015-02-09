@@ -70,7 +70,14 @@ namespace LegendOfCube.Engine
 				}*/
 
 				// Jumping
-				if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
+				if (world.InputData[i].IsJumping())
+				{
+					if (world.PlayerCubeState.currentJumps < PlayerCubeState.MAXJUMPS)
+					{
+						world.Velocities[i].Y = 8.0f;
+						world.PlayerCubeState.currentJumps++;
+					}
+				}
 			}
 		}
 	}

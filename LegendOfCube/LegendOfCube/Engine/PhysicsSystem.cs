@@ -66,6 +66,8 @@ namespace LegendOfCube.Engine
 						translation.Y = 0.0f;
 						world.Transforms[i].Translation = translation;
 						world.Velocities[i].Y = 0.0f;
+						//Reset # of jumps.
+						world.PlayerCubeState.currentJumps = 0;
 					}
 				}
 			}

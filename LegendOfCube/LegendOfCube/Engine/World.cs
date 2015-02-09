@@ -29,6 +29,7 @@ namespace LegendOfCube.Engine
 		public readonly Vector3[] Accelerations;
 		public readonly Model[] Models;
 		public readonly InputData[] InputData;
+		public PlayerCubeState PlayerCubeState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -56,6 +57,7 @@ namespace LegendOfCube.Engine
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
 			}
+			PlayerCubeState = new PlayerCubeState();
 		}
 
 		// Public Methods
