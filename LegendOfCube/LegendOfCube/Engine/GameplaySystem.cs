@@ -10,8 +10,8 @@ namespace LegendOfCube.Engine
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
 																				Properties.INPUT_FLAG
 																				| Properties.ACCELERATION
+																				| Properties.ACCELERATION_RATE
 																				| Properties.VELOCITY);
-		private static readonly float ACCELERATION = 30;
 		// TODO: make stop_time a function of the velocity
 		private static readonly float STOP_TIME = 1f;
 		private bool isStopping = false;
@@ -55,8 +55,8 @@ namespace LegendOfCube.Engine
 				else
 				{
 					isStopping = false;
-					world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * ACCELERATION, 
-						0, -world.InputData[i].GetDirection().Y * ACCELERATION);
+					world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * world.AccelerationRate[i], 
+						0, -world.InputData[i].GetDirection().Y * world.AccelerationRate[i]);
 				}
 
 				
@@ -72,10 +72,11 @@ namespace LegendOfCube.Engine
 				// Jumping
 				if (world.InputData[i].IsJumping())
 				{
-					if (world.PlayerCubeState.currentJumps < PlayerCubeState.MAXJUMPS)
+					//Limitation: only the player can jump.
+					if (world.PlayerCubeState.CurrentJumps < PlayerCubeState.MAXJUMPS)
 					{
 						world.Velocities[i].Y = 8.0f;
-						world.PlayerCubeState.currentJumps++;
+						world.PlayerCubeState.CurrentJumps++;
 					}
 				}
 			}

@@ -69,6 +69,8 @@ namespace LegendOfCube.Engine
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero)
 					.WithAcceleration(Vector3.Zero)
+					.WithAccelerationRate(30)
+					.WithMaxSpeed(15)
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
 					.AddToWorld(world);
 
