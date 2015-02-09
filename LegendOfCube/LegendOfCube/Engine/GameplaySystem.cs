@@ -73,7 +73,7 @@ namespace LegendOfCube.Engine
 
 				// For testing, set a light source right above the player
 				// TODO: Remove at some point
-				world.LightPosition = world.Transforms[e.Id].Translation + 1.5f * Vector3.Up;
+				world.LightPosition = world.Transforms[i].Translation + 1.5f * Vector3.Up;
 			}
 		}
 	}
