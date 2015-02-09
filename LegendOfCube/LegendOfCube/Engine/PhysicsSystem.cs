@@ -27,25 +27,25 @@ namespace LegendOfCube.Engine
 
         private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
 		private static readonly float MAX_VELOCITY = 15f;
-		private static readonly float FRICTION = -0.3f;
+		private static readonly float FRICTION = 0.8f;
 
 		public void ApplyPhysics(float delta, World world)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
                 Properties properties = world.EntityProperties[i];
-
+				/*
 				// Apply "friction"
-				/*if (properties.Satisfies(HAS_FRICTION))
+				if (properties.Satisfies(HAS_FRICTION))
 				{
 					Vector2 temp = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
 					if (temp.Length() != 0)
 					{
-						world.Accelerations[i].X += FRICTION * temp.X;
-						world.Accelerations[i].Z += FRICTION * temp.Y;
+						world.Accelerations[i].X *= FRICTION ;
+						world.Accelerations[i].Z *= FRICTION ;
 					}
-				}*/
-               
+				}
+               */
                 // Check if velocity should be updated
                 if (properties.Satisfies(ACCELERATABLE))
                 {

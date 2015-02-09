@@ -9,10 +9,16 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-																				Properties.INPUT_FLAG);
+																				Properties.INPUT_FLAG
+																				| Properties.ACCELERATION
+																				| Properties.VELOCITY);
 		private static readonly float ACCELERATION = 30;
+		// TODO: make stop_time a function of the velocity
+		private static readonly float STOP_TIME = 1f;
+		private bool isStopping = false;
+		private float stopTimeLeft;
 
-		public void processInputData(World world)
+		public void processInputData(World world, float delta)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
@@ -20,8 +26,40 @@ namespace LegendOfCube.Engine
 
 				// Updates velocities according to input
 				//TODO: Make it better
-                // Movement
-				world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * ACCELERATION, 0, -world.InputData[i].GetDirection().Y * ACCELERATION);
+				// Movement
+				if(world.InputData[i].GetDirection().Length() <= 0.01)
+				{
+					if (!isStopping)
+					{
+						stopTimeLeft = STOP_TIME;
+					}
+					else
+					{
+						stopTimeLeft -= delta;
+						if (stopTimeLeft < 0)
+						{
+							stopTimeLeft = 0;
+						}
+					}
+					isStopping = true;
+					if (stopTimeLeft != 0)
+					{
+						Vector3 antiVelocity = (-world.Velocities[i]) / stopTimeLeft;
+						world.Accelerations[i] = antiVelocity;
+					}
+					else
+					{
+						world.Accelerations[i] = Vector3.Zero;
+					}
+				}
+				else
+				{
+					isStopping = false;
+					world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * ACCELERATION, 
+						0, -world.InputData[i].GetDirection().Y * ACCELERATION);
+				}
+
+				
 				/*if (world.Accelerations[i].Length() > ACCELERATION)
 				{
 					Vector2 temp = new Vector2(world.Accelerations[i].X, world.Accelerations[i].Z);
@@ -31,9 +69,13 @@ namespace LegendOfCube.Engine
 					world.Accelerations[i].Z = temp.Y;
 				}*/
 				// Jumping
-                if (world.InputData[i].IsJumping()) world.Accelerations[i].Y = 18.0f;
+				if (world.InputData[i].IsJumping())
+				{
+					world.Accelerations[i].Y = 18.0f;
+				}
 
 			}
+
 
 		}
 	}
