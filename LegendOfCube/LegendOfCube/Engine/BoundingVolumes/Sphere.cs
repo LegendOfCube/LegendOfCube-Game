@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	struct BS
+	struct Sphere
 	{
 	}
 }
