@@ -81,7 +81,7 @@ namespace LegendOfCube.Engine
 
 		public EntityBuilder WithAccelerationRate(float accelerationRate)
 		{
-			properties.Add(Properties.ACCELERATION);
+			properties.Add(Properties.ACCELERATION_RATE);
 			this.accelerationRate = accelerationRate;
 			return this;
 		}
