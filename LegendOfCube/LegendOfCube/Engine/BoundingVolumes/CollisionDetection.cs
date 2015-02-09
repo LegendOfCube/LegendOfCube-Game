@@ -5,7 +5,11 @@ using System.Text;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	struct Sphere
+	class CollisionDetection
 	{
+		public static bool Intersects(ref AABB boxA, ref AABB boxB)
+		{
+			return boxA.Intersects(ref boxB);
+		}
 	}
 }
