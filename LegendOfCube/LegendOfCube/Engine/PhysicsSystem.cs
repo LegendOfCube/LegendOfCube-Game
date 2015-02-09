@@ -26,7 +26,7 @@ namespace LegendOfCube.Engine
 		                                                 Properties.FRICTION_FLAG);
 
 		private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
-		private static readonly float MAX_VELOCITY = 15f;
+		private const float MAX_VELOCITY = 15f;
 
 		public void ApplyPhysics(float delta, World world)
 		{
@@ -37,13 +37,15 @@ namespace LegendOfCube.Engine
 				if (properties.Satisfies(ACCELERATABLE))
 				{
 					world.Velocities[i] += (world.Accelerations[i] * delta);
-					if (world.Velocities[i].Length() > MAX_VELOCITY)
+
+					// Clamp velocity in X and Y direction
+					Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+					if (groundVelocity.Length() > MAX_VELOCITY)
 					{
-						Vector2 temp = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
-						temp.Normalize();
-						temp *= MAX_VELOCITY;
-						world.Velocities[i].X = temp.X;
-						world.Velocities[i].Z = temp.Y;
+						groundVelocity.Normalize();
+						groundVelocity *= MAX_VELOCITY;
+						world.Velocities[i].X = groundVelocity.X;
+						world.Velocities[i].Z = groundVelocity.Y;
 					}
 				}
 
