@@ -22,19 +22,22 @@ It as allowed to use `ALL_UPPERCASE_CONSTANT` over the recommended `UpperCamelCa
 
 ### Indentation
 It's preferred to do the leading indentation to the scope level using tabs, and use spaces for additional indentation. As in:
+
 ```c#
-void f()
+void Foo()
 {
---->if(true)
+--->if (true)
 --->{
---->--->doSomething(withThisArgument,
+--->--->DoSomething(withThisArgument,
 --->--->............andThisOne);
 --->}
 }
 ```
+
 (where `--->` is tab and `.` is a space.)
 
-But due to problems with Visual Studio, it is ok to use tabs for additional indentation.
+- Due to problems with Visual Studio, it is ok to use tabs for additional indentation.
+- To use tabs by default in Visual Studio, enable "Keep tabs" in "Tools > Options... > Text Editor > C# > Tabs".
 
 ## License
 TBD

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -22,7 +23,7 @@ namespace LegendOfCube.Engine
 		public UInt32 HighestOccupiedId { get; private set; }
 
 		// Describe what components an entity has
-		public readonly Properties[] EntityProperties;
+		public readonly Properties[] EntityProperties ;
 		public readonly Matrix[] Transforms;
 		public readonly Vector3[] Velocities;
 		public readonly Vector3[] Accelerations;
@@ -92,6 +93,16 @@ namespace LegendOfCube.Engine
 			return new Entity(entity);
 		}
 
+		/// <summary>
+		/// Enumerator for entities in the world, with a property filter.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// for(var e in EnumerateEntities(property)) {...}
+		/// </code>
+		/// </example>
+		/// <param name="filter">The property filter to apply</param>
+		/// <returns>An enumerator object</returns>
 		public IEnumerable<Entity> EnumerateEntities(Properties filter)
 		{
 			for (UInt32 i = 0; i <= HighestOccupiedId; i++)
@@ -100,6 +111,23 @@ namespace LegendOfCube.Engine
 				{
 					yield return new Entity(i);
 				}
+			}
+		}
+
+		/// <summary>
+		/// Enumerator for entities in the world.
+		/// </summary>
+		/// <example>
+		/// <code>
+		/// for(var e in EnumerateEntities)) {...}
+		/// </code>
+		/// </example>
+		/// <returns>An enumerator object</returns>
+		public IEnumerable EnumerateEntities()
+		{
+			for (UInt32 i = 0; i <= HighestOccupiedId; i++)
+			{
+				yield return new Entity(i);
 			}
 		}
 
@@ -119,5 +147,6 @@ namespace LegendOfCube.Engine
 			Models[entityToDestroy.Id] = null;
 			Transforms[entityToDestroy.Id] = Matrix.Identity;
 		}
+
 	}
 }

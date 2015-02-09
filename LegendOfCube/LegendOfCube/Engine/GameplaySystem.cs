@@ -1,6 +1,5 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-
+﻿using Microsoft.Xna.Framework;
+using System;
 namespace LegendOfCube.Engine
 {
 	class GameplaySystem
@@ -23,7 +22,6 @@ namespace LegendOfCube.Engine
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
 				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
-
 				// Updates velocities according to input
 				//TODO: Make it better
 				// Movement
@@ -68,15 +66,10 @@ namespace LegendOfCube.Engine
 					world.Accelerations[i].X = temp.X;
 					world.Accelerations[i].Z = temp.Y;
 				}*/
+
 				// Jumping
-				if (world.InputData[i].IsJumping())
-				{
-					world.Accelerations[i].Y = 18.0f;
-				}
-
+				if (world.InputData[i].IsJumping()) world.Velocities[i].Y = 8.0f;
 			}
-
-
 		}
 	}
 }

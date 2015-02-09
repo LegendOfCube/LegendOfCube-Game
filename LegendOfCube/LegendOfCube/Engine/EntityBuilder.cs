@@ -1,6 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
@@ -10,7 +8,7 @@ namespace LegendOfCube.Engine
 	/// </summary>
 	public class EntityBuilder
 	{
-		private Properties properties;
+		private Properties properties = new Properties();
 		private Model model;
 		private Vector3 velocity;
 		private Vector3 acceleration;
