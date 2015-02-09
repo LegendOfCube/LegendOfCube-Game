@@ -26,6 +26,7 @@ namespace LegendOfCube.Engine
 		                                                 Properties.FRICTION_FLAG);
 
 		private static readonly Vector3 GRAVITY = new Vector3(0.0f, 1.5f*(-9.82f), 0.0f);
+		private const float MAX_VELOCITY = 15f;
 
 		public void ApplyPhysics(float delta, World world)
 		{
@@ -39,10 +40,10 @@ namespace LegendOfCube.Engine
 
 					// Clamp velocity in X and Y direction
 					Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
-					if (groundVelocity.Length() > PlayerCubeState.MAXSPEED)
+					if (groundVelocity.Length() > MAX_VELOCITY)
 					{
 						groundVelocity.Normalize();
-						groundVelocity *= PlayerCubeState.MAXSPEED;
+						groundVelocity *= MAX_VELOCITY;
 						world.Velocities[i].X = groundVelocity.X;
 						world.Velocities[i].Z = groundVelocity.Y;
 					}
@@ -66,7 +67,7 @@ namespace LegendOfCube.Engine
 						world.Transforms[i].Translation = translation;
 						world.Velocities[i].Y = 0.0f;
 						//Reset # of jumps.
-						world.PlayerCubeState.CurrentJumps = 0;
+						world.PlayerCubeState.currentJumps = 0;
 					}
 				}
 			}
