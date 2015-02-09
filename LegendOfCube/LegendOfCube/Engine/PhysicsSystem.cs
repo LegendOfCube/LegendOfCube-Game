@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
 		                                                 Properties.VELOCITY |
 		                                                 Properties.FRICTION_FLAG);
 
-		private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
+		private static readonly Vector3 GRAVITY = new Vector3(0.0f, 1.5f*(-9.82f), 0.0f);
 		private const float MAX_VELOCITY = 15f;
 
 		public void ApplyPhysics(float delta, World world)

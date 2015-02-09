@@ -74,7 +74,7 @@ namespace LegendOfCube.Engine
 
 				inputData.SetDirection(directionInput);
 
-				if (keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
+				if ((keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed) && keyState != oldKeyState)
 				{
 					inputData.SetStateOfJumping(true);
 				}
