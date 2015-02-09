@@ -24,6 +24,7 @@ namespace LegendOfCube.Engine
 
 		private Game game;
 		private GraphicsDeviceManager graphics;
+		private StandardEffect standardEffect;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -32,6 +33,8 @@ namespace LegendOfCube.Engine
 		{
 			this.game = game;
 			graphics = new GraphicsDeviceManager(game);
+
+			// TODO: Remove this. It's for unlocking frame rate temporarily.
 			graphics.SynchronizeWithVerticalRetrace = false;
 		}
 
@@ -45,6 +48,22 @@ namespace LegendOfCube.Engine
 			game.GraphicsDevice.BlendState = BlendState.Opaque;
 			game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 			graphics.ApplyChanges();
+
+			this.standardEffect = new StandardEffect(game.Content.Load<Effect>("Effects/standardEffect"));
+
+			// TODO: Load textures somewhere more appropriate
+			// For now, override loaded effect with custom shader. Need to
+			// manually find texture it seems. It might be possible to write
+			// custom "content importer" to handle this instead.
+			var cubeDiffuseTexture = game.Content.Load<Texture>("Models/cube_diff");
+			var cubeSpecularTexture = game.Content.Load<Texture>("Models/cube_specular");
+			var cubeEmissiveTexture = game.Content.Load<Texture>("Models/cube_emissive");
+
+			// TODO: Store texture to use for each entity
+			standardEffect.SetDiffuseTexture(cubeDiffuseTexture);
+			standardEffect.SetSpecularTexture(cubeSpecularTexture);
+			standardEffect.SetEmissiveTexture(cubeEmissiveTexture);
+			standardEffect.SetMaterialEmissiveIntensity(0.5f);
 		}
 
 		public void RenderWorld(World world)
@@ -85,44 +104,40 @@ namespace LegendOfCube.Engine
 			var model = world.Models[entity.Id];
 			var worldTransform = world.Transforms[entity.Id];
 
+			// Don't render if entity wouldn't be seen
 			if (!ModelInFrustrum(model, boundingFrustum, ref worldTransform))
 			{
 				return;
 			}
 
-			
+			standardEffect.SetOncePerFrameParams(ref view, ref projection, ref world.LightPosition);
+
+			// Not exactly sure about the reason for this, but seems to be the standard way to do it
 			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
 			foreach (var mesh in model.Meshes)
 			{
-				foreach (var effect in mesh.Effects)
+				if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
 				{
-					if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
+					foreach (var meshPart in mesh.MeshParts)
 					{
-						// Will assume has standard effect later
-
-						Matrix worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
-						effect.Parameters["World"].SetValue(worldMatrix);
-						effect.Parameters["View"].SetValue(view);
-						effect.Parameters["Projection"].SetValue(projection);
-
-						// Precalculate normal matrix used in effect
-						Matrix worldViewMatrix = view*worldMatrix;
-						Matrix worldViewInverse;
-						Matrix.Invert(ref worldViewMatrix, out worldViewInverse);
-						Matrix normalMatrix;
-						Matrix.Transpose(ref worldViewInverse, out normalMatrix);
-
-						effect.Parameters["NormalMatrix"].SetValue(normalMatrix);
-						effect.Parameters["ViewSpaceLightPosition"].SetValue(Vector3.Transform(world.LightPosition, view));
+						// TODO: Move from here. Ugly and unnecessary to do all the time.
+						// Replace with standard effect
+						meshPart.Effect = standardEffect.Effect;
 					}
-					else
+					var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
+					standardEffect.SetWorld(ref worldMatrix);
+				}
+				else
+				{
+					// Make it still possible to render with the default BasicEffect
+					foreach (var effect in mesh.Effects)
 					{
 						var basicEffect = effect as BasicEffect;
 						if (basicEffect != null)
 						{
-							basicEffect.World = transforms[mesh.ParentBone.Index]*worldTransform;
+							basicEffect.World = transforms[mesh.ParentBone.Index] * worldTransform;
 							basicEffect.View = view;
 							basicEffect.Projection = projection;
 						}
@@ -132,19 +147,20 @@ namespace LegendOfCube.Engine
 			}
 		}
 
-		private bool ModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
+		private static bool ModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
 		{
-			bool inFrustrum = false;
+			// Go through all BoundingSpheres in Model and check if inside frustrums
 			foreach (var mesh in model.Meshes)
 			{
-				var res = boundingFrustum.Contains(mesh.BoundingSphere.Transform(worldTransform));
-				if (res.HasFlag(ContainmentType.Contains) || res.HasFlag(ContainmentType.Intersects))
+				BoundingSphere boundingSphere;
+				mesh.BoundingSphere.Transform(ref worldTransform, out boundingSphere);
+				var containmentType = boundingFrustum.Contains(boundingSphere);
+				if (containmentType != ContainmentType.Disjoint)
 				{
-					inFrustrum = true;
-					break;
+					return true;
 				}
 			}
-			return inFrustrum;
+			return false;
 		}
 	}
 }

@@ -19,8 +19,8 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		public readonly UInt32 MaxNumEntities;
-		public UInt32 NumEntities { get; private set; }
-		public UInt32 HighestOccupiedId { get; private set; }
+		public UInt32 NumEntities;
+		public UInt32 HighestOccupiedId;
 
 		// Describe what components an entity has
 		public readonly Properties[] EntityProperties ;

@@ -30,8 +30,10 @@ namespace LegendOfCube.Engine
 			renderSystem = new RenderSystem(this);
 			physicsSystem = new PhysicsSystem();
 			gameplaySystem = new GameplaySystem();
-			IsFixedTimeStep = false;
 			Content.RootDirectory = "Content";
+
+			// TODO: Remove this. It's for unlocking frame rate temporarily.
+			IsFixedTimeStep = false;
 		}
 
 		//Temp entityFactory with an empty prop.
@@ -63,25 +65,6 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			var cubeModel = Content.Load<Model>("Models/cube_plain");
-
-			// For now, override loaded effect with custom shader. Need to
-			// manually find texture it seems. It might be possible to write
-			// custom "content importer" to handle this instead.
-			var renderEffect = Content.Load<Effect>("Effects/StandardEffect");
-			var cubeDiffuseTexture = Content.Load<Texture>("Models/cube_diff");
-			var cubeSpecularTexture = Content.Load<Texture>("Models/cube_specular");
-			var cubeEmissiveTexture = Content.Load<Texture>("Models/cube_emissive");
-			renderEffect.Parameters["DiffuseTexture"].SetValue(cubeDiffuseTexture);
-			renderEffect.Parameters["SpecularTexture"].SetValue(cubeSpecularTexture);
-			renderEffect.Parameters["EmissiveTexture"].SetValue(cubeEmissiveTexture);
-			renderEffect.Parameters["MaterialEmissiveIntensity"].SetValue(0.5f);
-			foreach (var mesh in cubeModel.Meshes)
-			{
-				foreach (var meshPart in mesh.MeshParts)
-				{
-					meshPart.Effect = renderEffect;
-				}
-			}
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
