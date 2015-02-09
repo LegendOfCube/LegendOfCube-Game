@@ -42,12 +42,14 @@ namespace LegendOfCube.Engine
 					isStopping = true;
 					if (stopTimeLeft != 0)
 					{
-						Vector3 antiVelocity = (-world.Velocities[i]) / stopTimeLeft;
-						world.Accelerations[i] = antiVelocity;
+						Vector2 antiVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+						antiVelocity /= -stopTimeLeft;
+						world.Accelerations[i].X = antiVelocity.X;
+						world.Accelerations[i].Z = antiVelocity.Y;
 					}
 					else
 					{
-						world.Accelerations[i] = Vector3.Zero;
+						world.Accelerations[i] = new Vector3(0,world.Accelerations[i].Y,0);
 					}
 				}
 				else
