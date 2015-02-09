@@ -12,10 +12,6 @@ namespace LegendOfCube.Engine
 	{
 		public const int MAXJUMPS = 2;
 		public int CurrentJumps;
-		public const float MAXSPEED = 15f;
-		public const float ACCELERATION = 30f;
-		//Unused props
-		public bool IsInAir;
 		public bool OnWall;
 	}
 }
