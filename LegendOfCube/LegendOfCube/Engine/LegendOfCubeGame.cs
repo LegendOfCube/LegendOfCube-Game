@@ -25,12 +25,12 @@ namespace LegendOfCube.Engine
 
 		public LegendOfCubeGame()
 		{
-			world = new World(100);
+			world = new World(1001);
 			inputSystem = new InputSystem(this);
 			renderSystem = new RenderSystem(this);
 			physicsSystem = new PhysicsSystem();
 			gameplaySystem = new GameplaySystem();
-
+			IsFixedTimeStep = false;
 			Content.RootDirectory = "Content";
 		}
 
@@ -68,8 +68,13 @@ namespace LegendOfCube.Engine
 			// manually find texture it seems. It might be possible to write
 			// custom "content importer" to handle this instead.
 			var renderEffect = Content.Load<Effect>("Effects/StandardEffect");
-			var cubeTexture = Content.Load<Texture>("Models/cube_diff");
-			renderEffect.Parameters["DiffuseTexture"].SetValue(cubeTexture);
+			var cubeDiffuseTexture = Content.Load<Texture>("Models/cube_diff");
+			var cubeSpecularTexture = Content.Load<Texture>("Models/cube_specular");
+			var cubeEmissiveTexture = Content.Load<Texture>("Models/cube_emissive");
+			renderEffect.Parameters["DiffuseTexture"].SetValue(cubeDiffuseTexture);
+			renderEffect.Parameters["SpecularTexture"].SetValue(cubeSpecularTexture);
+			renderEffect.Parameters["EmissiveTexture"].SetValue(cubeEmissiveTexture);
+			renderEffect.Parameters["MaterialEmissiveIntensity"].SetValue(0.5f);
 			foreach (var mesh in cubeModel.Meshes)
 			{
 				foreach (var meshPart in mesh.MeshParts)
@@ -86,13 +91,13 @@ namespace LegendOfCube.Engine
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG  | Properties.FULL_LIGHT_EFFECT))
 					.AddToWorld(world);
 
-			otherCubes = new Entity[50];
+			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
 			for (int i = 0; i < otherCubes.Length; i++)
 			{
 				otherCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithPosition(new Vector3(rnd.Next(-50, 50), 0, rnd.Next(-50, 50)))
+						.WithPosition(new Vector3(rnd.Next(-25, 25), rnd.Next(0, 5), rnd.Next(-25, 25)))
 						.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 						.AddToWorld(world);
 			}

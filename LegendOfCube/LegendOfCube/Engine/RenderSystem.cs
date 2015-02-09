@@ -32,6 +32,7 @@ namespace LegendOfCube.Engine
 		{
 			this.game = game;
 			graphics = new GraphicsDeviceManager(game);
+			graphics.SynchronizeWithVerticalRetrace = false;
 		}
 
 		// Public methods
@@ -70,17 +71,26 @@ namespace LegendOfCube.Engine
 			                        0.1f,
 			                        1000.0f);
 
+			var boundingFrustum = new BoundingFrustum(view * projection);
+
 			foreach (var e in world.EnumerateEntities(MODEL_AND_TRANSFORM))
 			{
-				RenderEntity(e, world, ref view, ref projection);
+				RenderEntity(e, world, boundingFrustum, ref view, ref projection);
 			}
 		}
 
-		private void RenderEntity(Entity entity, World world, ref Matrix view, ref Matrix projection)
+		private void RenderEntity(Entity entity, World world, BoundingFrustum boundingFrustum, ref Matrix view, ref Matrix projection)
 		{
-			var model = world.Models[entity.Id];
 
+			var model = world.Models[entity.Id];
 			var worldTransform = world.Transforms[entity.Id];
+
+			if (!ModelInFrustrum(model, boundingFrustum, ref worldTransform))
+			{
+				return;
+			}
+
+			
 			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
@@ -88,37 +98,53 @@ namespace LegendOfCube.Engine
 			{
 				foreach (var effect in mesh.Effects)
 				{
-					var basicEffect = effect as BasicEffect;
-					if (basicEffect != null)
+					if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
 					{
-						basicEffect.World = transforms[mesh.ParentBone.Index]*worldTransform;
-						basicEffect.View = view;
-						basicEffect.Projection = projection;
-					}
-					else
-					{
-						// Assume any reasonable effect has World, View and Projection
+						// Will assume has standard effect later
+
 						Matrix worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
 						effect.Parameters["World"].SetValue(worldMatrix);
 						effect.Parameters["View"].SetValue(view);
 						effect.Parameters["Projection"].SetValue(projection);
 
-						if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
-						{
-							// Precalculate normal matrix used in effect
-							Matrix worldViewMatrix = view * worldMatrix;
-							Matrix worldViewInverse;
-							Matrix.Invert(ref worldViewMatrix, out worldViewInverse);
-							Matrix normalMatrix;
-							Matrix.Transpose(ref worldViewInverse, out normalMatrix);
+						// Precalculate normal matrix used in effect
+						Matrix worldViewMatrix = view*worldMatrix;
+						Matrix worldViewInverse;
+						Matrix.Invert(ref worldViewMatrix, out worldViewInverse);
+						Matrix normalMatrix;
+						Matrix.Transpose(ref worldViewInverse, out normalMatrix);
 
-							effect.Parameters["NormalMatrix"].SetValue(normalMatrix);
-							effect.Parameters["ViewSpaceLightPosition"].SetValue(Vector3.Transform(world.LightPosition, view));
+						effect.Parameters["NormalMatrix"].SetValue(normalMatrix);
+						effect.Parameters["ViewSpaceLightPosition"].SetValue(Vector3.Transform(world.LightPosition, view));
+					}
+					else
+					{
+						var basicEffect = effect as BasicEffect;
+						if (basicEffect != null)
+						{
+							basicEffect.World = transforms[mesh.ParentBone.Index]*worldTransform;
+							basicEffect.View = view;
+							basicEffect.Projection = projection;
 						}
 					}
 				}
 				mesh.Draw();
 			}
+		}
+
+		private bool ModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
+		{
+			bool inFrustrum = false;
+			foreach (var mesh in model.Meshes)
+			{
+				var res = boundingFrustum.Contains(mesh.BoundingSphere.Transform(worldTransform));
+				if (res.HasFlag(ContainmentType.Contains) || res.HasFlag(ContainmentType.Intersects))
+				{
+					inFrustrum = true;
+					break;
+				}
+			}
+			return inFrustrum;
 		}
 	}
 }

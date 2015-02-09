@@ -17,17 +17,37 @@ float MaterialDiffuseIntensity = 1.0;
 
 // Defines the specular look of an object (highlights)
 // An specular texture could be added
+texture SpecularTexture;
 float4 MaterialSpecularColor = float4(1.0, 1.0, 1.0, 1.0);
 float MaterialSpecularIntensity = 1.0;
 float Shininess = 30.0;
 
 // Defines the self illumination of an object
 // An emmisive texture could be added
+texture EmissiveTexture;
 float4 MaterialEmissiveColor = float4(1.0, 1.0, 1.0, 1.0);
 float MaterialEmissiveIntensity = 0.0;
 
 sampler2D diffuseTextureSampler = sampler_state {
 	Texture = (DiffuseTexture);
+	mipfilter = linear;
+	magfilter = linear;
+	minfilter = anisotropic;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler2D specularTextureSampler = sampler_state {
+	Texture = (SpecularTexture);
+	mipfilter = linear;
+	magfilter = linear;
+	minfilter = anisotropic;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler2D emissiveTextureSampler = sampler_state {
+	Texture = (EmissiveTexture);
 	mipfilter = linear;
 	magfilter = linear;
 	minfilter = anisotropic;
@@ -87,6 +107,8 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 
 	// Sample the texture
 	float4 diffuseTextureColor = tex2D(diffuseTextureSampler, input.TextureCoordinate);
+	float4 specularTextureColor = tex2D(specularTextureSampler, input.TextureCoordinate);
+	float4 emissiveTextureColor = tex2D(emissiveTextureSampler, input.TextureCoordinate);
 
 	// Determine diffuse and specular effect (0 to 1)
 	float diffuseFactor = lightDistanceFactor * max(0.0, dot(normal, directionToLight));
@@ -95,8 +117,8 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	// Determine final colors of different lighting component
 	float4 ambient = MaterialAmbientIntensity * MaterialAmbientColor * diffuseTextureColor;
 	float4 diffuse = diffuseFactor * MaterialDiffuseIntensity * MaterialDiffuseColor * diffuseTextureColor;
-	float4 specular = specularFactor * MaterialSpecularIntensity * MaterialSpecularColor;
-	float4 emissive = MaterialEmissiveIntensity * MaterialEmissiveColor;
+	float4 specular = specularFactor * MaterialSpecularIntensity * MaterialSpecularColor * specularTextureColor;
+	float4 emissive = MaterialEmissiveIntensity * MaterialEmissiveColor * emissiveTextureColor;
 
 	return saturate(
 		ambient +
@@ -111,7 +133,7 @@ technique Technique1
 {
 	pass Pass1
 	{
-		VertexShader = compile vs_2_0 VertexShaderFunction();
-		PixelShader = compile ps_2_0 PixelShaderFunction();
+		VertexShader = compile vs_3_0 VertexShaderFunction();
+		PixelShader = compile ps_3_0 PixelShaderFunction();
 	}
 }
