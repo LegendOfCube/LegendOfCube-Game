@@ -69,9 +69,9 @@ namespace LegendOfCube.Engine
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(Vector3.Zero)
-					.WithVelocity(Vector3.Zero)
-					.WithAcceleration(Vector3.Zero)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG  | Properties.FULL_LIGHT_EFFECT))
+					.WithVelocity(Vector3.Zero, 15)
+					.WithAcceleration(Vector3.Zero, 30)
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG | Properties.FULL_LIGHT_EFFECT))
 					.AddToWorld(world);
 
 			otherCubes = new Entity[1000];
