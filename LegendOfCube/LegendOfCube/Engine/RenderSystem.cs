@@ -33,9 +33,6 @@ namespace LegendOfCube.Engine
 		{
 			this.game = game;
 			graphics = new GraphicsDeviceManager(game);
-
-			// TODO: Remove this. It's for unlocking frame rate temporarily.
-			graphics.SynchronizeWithVerticalRetrace = false;
 		}
 
 		// Public methods
@@ -45,6 +42,9 @@ namespace LegendOfCube.Engine
 		{
 			game.Window.AllowUserResizing = true;
 			graphics.PreferMultiSampling = true;
+			// TODO: Remove this. It's for unlocking frame rate temporarily.
+			graphics.SynchronizeWithVerticalRetrace = false;
+
 			game.GraphicsDevice.BlendState = BlendState.Opaque;
 			game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 			graphics.ApplyChanges();
@@ -90,6 +90,8 @@ namespace LegendOfCube.Engine
 			                        0.1f,
 			                        1000.0f);
 
+			standardEffect.SetOncePerFrameParams(ref view, ref projection, ref world.LightPosition);
+
 			var boundingFrustum = new BoundingFrustum(view * projection);
 
 			foreach (var e in world.EnumerateEntities(MODEL_AND_TRANSFORM))
@@ -100,7 +102,6 @@ namespace LegendOfCube.Engine
 
 		private void RenderEntity(Entity entity, World world, BoundingFrustum boundingFrustum, ref Matrix view, ref Matrix projection)
 		{
-
 			var model = world.Models[entity.Id];
 			var worldTransform = world.Transforms[entity.Id];
 
@@ -109,8 +110,6 @@ namespace LegendOfCube.Engine
 			{
 				return;
 			}
-
-			standardEffect.SetOncePerFrameParams(ref view, ref projection, ref world.LightPosition);
 
 			// Not exactly sure about the reason for this, but seems to be the standard way to do it
 			var transforms = new Matrix[model.Bones.Count];
@@ -152,10 +151,15 @@ namespace LegendOfCube.Engine
 			// Go through all BoundingSpheres in Model and check if inside frustrums
 			foreach (var mesh in model.Meshes)
 			{
-				BoundingSphere boundingSphere;
-				mesh.BoundingSphere.Transform(ref worldTransform, out boundingSphere);
-				var containmentType = boundingFrustum.Contains(boundingSphere);
-				if (containmentType != ContainmentType.Disjoint)
+				// Not entirely sure if model.Root.Transform should be used in
+				// this context, but it seems like mesh.BoundingSphere doesn't
+				// cover the whole object otherwise. The bug might lie
+				// elsewhere.
+				var modifiedWorldTransform = model.Root.Transform * worldTransform;
+				
+				BoundingSphere worldBoundingSphere;
+				mesh.BoundingSphere.Transform(ref modifiedWorldTransform, out worldBoundingSphere);
+				if (boundingFrustum.Intersects(worldBoundingSphere))
 				{
 					return true;
 				}

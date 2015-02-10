@@ -19,13 +19,14 @@ namespace LegendOfCube.Engine
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
+		private Entity ground;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public LegendOfCubeGame()
 		{
-			world = new World(1001);
+			world = new World(1002);
 			inputSystem = new InputSystem(this);
 			renderSystem = new RenderSystem(this);
 			physicsSystem = new PhysicsSystem();
@@ -86,6 +87,13 @@ namespace LegendOfCube.Engine
 						.AddToWorld(world);
 			}
 
+			// This is definitely the most natural way to represent the ground
+			ground =
+				new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(1000.0f))
+					.WithPosition(new Vector3(0, -1000.0f, 0))
+					.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
+					.AddToWorld(world);
 		}
 
 		/// <summary>
