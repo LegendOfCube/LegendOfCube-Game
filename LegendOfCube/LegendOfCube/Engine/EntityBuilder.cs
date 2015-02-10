@@ -13,6 +13,8 @@ namespace LegendOfCube.Engine
 		private Vector3 velocity;
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
+		private float accelerationRate;
+		private float maxSpeed;
 
 		/// <summary>
 		/// Assign a model for the entity being built.
@@ -77,6 +79,20 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		public EntityBuilder WithAccelerationRate(float accelerationRate)
+		{
+			properties.Add(Properties.ACCELERATION_RATE);
+			this.accelerationRate = accelerationRate;
+			return this;
+		}
+
+		public EntityBuilder WithMaxSpeed(float maxSpeed)
+		{
+			properties.Add(Properties.MAX_SPEED);
+			this.maxSpeed = maxSpeed;
+			return this;
+		}
+
 		/// <summary>
 		/// Add any property flags to the entity being created.
 		/// </summary>
@@ -117,6 +133,14 @@ namespace LegendOfCube.Engine
 			{
 				// Not entirely sure if INPUT_FLAG implies having InputData
 				world.InputData[entity.Id] = new InputDataImpl();
+			}
+			if (properties.Satisfies(new Properties(Properties.MAX_SPEED)))
+			{
+				world.MaxSpeed[entity.Id] = maxSpeed;
+			}
+			if (properties.Satisfies(new Properties(Properties.ACCELERATION_RATE)))
+			{
+				world.AccelerationRate[entity.Id] = accelerationRate;
 			}
 			return entity;
 		}

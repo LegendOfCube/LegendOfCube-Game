@@ -21,6 +21,8 @@ namespace LegendOfCube.Engine
 		public const UInt64 INPUT_FLAG = 1 << 4;
 		public const UInt64 MODEL = 1 << 5;
 		public const UInt64 FRICTION_FLAG = 1 << 6;
+		public const UInt64 MAX_SPEED = 1 << 7;
+		public const UInt64 ACCELERATION_RATE = 1 << 8;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

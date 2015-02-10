@@ -29,6 +29,11 @@ namespace LegendOfCube.Engine
 		public readonly Vector3[] Accelerations;
 		public readonly Model[] Models;
 		public readonly InputData[] InputData;
+		public readonly float[] MaxSpeed;
+		public readonly float[] AccelerationRate;
+
+		// Player state
+		public PlayerCubeState PlayerCubeState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -49,13 +54,18 @@ namespace LegendOfCube.Engine
 			Models = new Model[MaxNumEntities];
 			Transforms = new Matrix[MaxNumEntities];
 			InputData = new InputData[MaxNumEntities];
+			MaxSpeed = new float[MaxNumEntities];
+			AccelerationRate = new float[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				Velocities[i] = new Vector3(0, 0, 0);
 				Accelerations[i] = new Vector3(0, 0, 0);
 				Models[i] = null;
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
+				MaxSpeed[i] = 0;
+				AccelerationRate[i] = 0;
 			}
+			PlayerCubeState = new PlayerCubeState();
 		}
 
 		// Public Methods
