@@ -80,7 +80,8 @@ namespace LegendOfCube.Engine
 			{
 				otherCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithPosition(new Vector3(rnd.Next(-25, 25), rnd.Next(0, 5), rnd.Next(-25, 25)))
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 						.AddToWorld(world);
 			}
