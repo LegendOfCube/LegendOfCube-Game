@@ -30,7 +30,7 @@ namespace LegendOfCube.Engine
 		public readonly Model[] Models;
 		public readonly InputData[] InputData;
 		public readonly float[] MaxSpeed;
-		public readonly float[] AccelerationRate;
+		public readonly float[] MaxAcceleration;
 
 		// Player state
 		public PlayerCubeState PlayerCubeState;
@@ -55,7 +55,7 @@ namespace LegendOfCube.Engine
 			Transforms = new Matrix[MaxNumEntities];
 			InputData = new InputData[MaxNumEntities];
 			MaxSpeed = new float[MaxNumEntities];
-			AccelerationRate = new float[MaxNumEntities];
+			MaxAcceleration = new float[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				Velocities[i] = new Vector3(0, 0, 0);
 				Accelerations[i] = new Vector3(0, 0, 0);
@@ -63,7 +63,7 @@ namespace LegendOfCube.Engine
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
 				MaxSpeed[i] = 0;
-				AccelerationRate[i] = 0;
+				MaxAcceleration[i] = 0;
 			}
 			PlayerCubeState = new PlayerCubeState();
 		}

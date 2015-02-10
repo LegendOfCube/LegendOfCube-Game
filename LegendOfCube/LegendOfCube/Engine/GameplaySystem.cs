@@ -10,7 +10,6 @@ namespace LegendOfCube.Engine
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
 																				Properties.INPUT_FLAG
 																				| Properties.ACCELERATION
-																				| Properties.ACCELERATION_RATE
 																				| Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
 		private static readonly float STOP_TIME = 1f;
@@ -55,8 +54,8 @@ namespace LegendOfCube.Engine
 				else
 				{
 					isStopping = false;
-					world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * world.AccelerationRate[i], 
-						0, -world.InputData[i].GetDirection().Y * world.AccelerationRate[i]);
+					world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * world.MaxAcceleration[i], 
+						0, -world.InputData[i].GetDirection().Y * world.MaxAcceleration[i]);
 				}
 
 				

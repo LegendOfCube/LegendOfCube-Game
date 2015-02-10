@@ -10,8 +10,7 @@ namespace LegendOfCube.Engine
 
 		private static readonly Properties ACCELERATABLE = new Properties(
 		                                                               Properties.VELOCITY |
-		                                                               Properties.ACCELERATION |
-																	   Properties.MAX_SPEED);
+		                                                               Properties.ACCELERATION);
 
 		private static readonly Properties HAS_GRAVITY = new Properties(
 		                                                         Properties.VELOCITY |

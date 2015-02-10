@@ -13,7 +13,7 @@ namespace LegendOfCube.Engine
 		private Vector3 velocity;
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
-		private float accelerationRate;
+		private float maxAcceleration;
 		private float maxSpeed;
 
 		/// <summary>
@@ -60,10 +60,11 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		/// <param name="velocity">The initial velocity for the entity</param>
 		/// <returns>An instance of this, for chaining</returns>
-		public EntityBuilder WithVelocity(Vector3 velocity)
+		public EntityBuilder WithVelocity(Vector3 velocity, float maxSpeed)
 		{
 			properties.Add(Properties.VELOCITY);
 			this.velocity = velocity;
+			this.maxSpeed = maxSpeed;
 			return this;
 		}
 
@@ -72,24 +73,11 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		/// <param name="acceleration">The initial acceleration for the entity</param>
 		/// <returns>An instance of this, for chaining</returns>
-		public EntityBuilder WithAcceleration(Vector3 acceleration)
+		public EntityBuilder WithAcceleration(Vector3 acceleration, float maxAcceleration)
 		{
 			properties.Add(Properties.ACCELERATION);
 			this.acceleration = acceleration;
-			return this;
-		}
-
-		public EntityBuilder WithAccelerationRate(float accelerationRate)
-		{
-			properties.Add(Properties.ACCELERATION_RATE);
-			this.accelerationRate = accelerationRate;
-			return this;
-		}
-
-		public EntityBuilder WithMaxSpeed(float maxSpeed)
-		{
-			properties.Add(Properties.MAX_SPEED);
-			this.maxSpeed = maxSpeed;
+			this.maxAcceleration = maxAcceleration;
 			return this;
 		}
 
@@ -120,10 +108,12 @@ namespace LegendOfCube.Engine
 			if (properties.Satisfies(new Properties(Properties.ACCELERATION)))
 			{
 				world.Accelerations[entity.Id] = acceleration;
+				world.MaxAcceleration[entity.Id] = maxAcceleration;
 			}
 			if (properties.Satisfies(new Properties(Properties.VELOCITY)))
 			{
 				world.Velocities[entity.Id] = velocity;
+				world.MaxSpeed[entity.Id] = maxSpeed;
 			}
 			if (properties.Satisfies(new Properties(Properties.MODEL)))
 			{
@@ -133,14 +123,6 @@ namespace LegendOfCube.Engine
 			{
 				// Not entirely sure if INPUT_FLAG implies having InputData
 				world.InputData[entity.Id] = new InputDataImpl();
-			}
-			if (properties.Satisfies(new Properties(Properties.MAX_SPEED)))
-			{
-				world.MaxSpeed[entity.Id] = maxSpeed;
-			}
-			if (properties.Satisfies(new Properties(Properties.ACCELERATION_RATE)))
-			{
-				world.AccelerationRate[entity.Id] = accelerationRate;
 			}
 			return entity;
 		}
