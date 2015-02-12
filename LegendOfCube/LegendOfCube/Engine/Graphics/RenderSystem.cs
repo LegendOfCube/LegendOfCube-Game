@@ -80,7 +80,7 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetAmbientIntensity(0.1f);
 
 			var lightColor = LIGHT_COLOR;
-			var lightStrength = 5.0f;
+			var lightStrength = 18.0f;
 			standardEffect.SetPointLight0Properties(ref world.LightPosition, ref lightStrength, ref lightColor);
 
 			var boundingFrustum = new BoundingFrustum(view * projection);

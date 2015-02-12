@@ -82,6 +82,7 @@ namespace LegendOfCube.Engine
 				SpecularTexture = Content.Load<Texture>("Models/cube_specular"),
 				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
 				NormalTexture = Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.White.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
 			};
 
