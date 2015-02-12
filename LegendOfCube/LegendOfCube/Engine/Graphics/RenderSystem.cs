@@ -17,6 +17,8 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.TRANSFORM |
 		                                                                Properties.FULL_LIGHT_EFFECT);
 
+		public static readonly Vector4 LIGHT_COLOR = Color.Orange.ToVector4();
+
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -74,7 +76,12 @@ namespace LegendOfCube.Engine.Graphics
 			                        0.1f,
 			                        1000.0f);
 
-			standardEffect.SetOncePerFrameParams(ref view, ref projection, ref world.LightPosition);
+			standardEffect.SetViewProjection(ref view, ref projection);
+			standardEffect.SetAmbientIntensity(0.1f);
+
+			var lightColor = LIGHT_COLOR;
+			var lightStrength = 5.0f;
+			standardEffect.SetPointLight0Properties(ref world.LightPosition, ref lightStrength, ref lightColor);
 
 			var boundingFrustum = new BoundingFrustum(view * projection);
 
@@ -100,11 +107,15 @@ namespace LegendOfCube.Engine.Graphics
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
 			var sep = world.StandardEffectParams[entity.Id];
+
+			standardEffect.SetDiffuseColor(sep.DiffuseColor);
+			standardEffect.SetSpecularColor(sep.SpecularColor);
+			standardEffect.SetEmissiveColor(sep.EmissiveColor);
+
 			standardEffect.SetDiffuseTexture(sep.DiffuseTexture);
 			standardEffect.SetEmissiveTexture(sep.EmissiveTexture);
 			standardEffect.SetSpecularTexture(sep.SpecularTexture);
 			standardEffect.SetNormalTexture(sep.NormalTexture);
-			standardEffect.SetMaterialEmissiveIntensity(sep.EmissiveIntensity);
 
 			foreach (var mesh in model.Meshes)
 			{

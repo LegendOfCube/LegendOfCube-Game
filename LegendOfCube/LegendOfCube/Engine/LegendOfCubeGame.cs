@@ -68,13 +68,27 @@ namespace LegendOfCube.Engine
 		{
 			var cubeModel = Content.Load<Model>("Models/cube_plain");
 
-			StandardEffectParams sep = new StandardEffectParams
+			var playerEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),
+				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
+				SpecularColor = Color.Gray.ToVector4(),
+				EmissiveColor = Color.White.ToVector4()
+			};
+
+			var otherCubeEffect = new StandardEffectParams
 			{
 				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),
 				SpecularTexture = Content.Load<Texture>("Models/cube_specular"),
 				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
 				NormalTexture = Content.Load<Texture>("Models/cube_normal"),
-				EmissiveIntensity = 1.0f
+				EmissiveColor = Color.White.ToVector4()
+			};
+
+			var groundEffect = new StandardEffectParams
+			{
+				DiffuseColor = Color.Gray.ToVector4(),
+				SpecularColor = 0.5f * Color.White.ToVector4()
 			};
 
 			playerEntity =
@@ -82,7 +96,7 @@ namespace LegendOfCube.Engine
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
-					.WithStandardEffectParams(sep)
+					.WithStandardEffectParams(playerEffect)
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
 					.AddToWorld(world);
 
@@ -94,7 +108,7 @@ namespace LegendOfCube.Engine
 					new EntityBuilder().WithModel(cubeModel)
 						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
-						.WithStandardEffectParams(sep)
+						.WithStandardEffectParams(otherCubeEffect)
 						.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 						.AddToWorld(world);
 			}
@@ -104,7 +118,7 @@ namespace LegendOfCube.Engine
 				new EntityBuilder().WithModel(cubeModel)
 					.WithTransform(Matrix.CreateScale(1000.0f))
 					.WithPosition(new Vector3(0, -1000.0f, 0))
-					.WithStandardEffectParams(sep)
+					.WithStandardEffectParams(groundEffect)
 					.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 					.AddToWorld(world);
 		}
