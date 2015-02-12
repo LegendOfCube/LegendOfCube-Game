@@ -37,7 +37,6 @@ namespace LegendOfCube.Engine.Graphics
 			this.projectionParam = effect.Parameters["Projection"];
 			this.normalMatrixParam = effect.Parameters["NormalMatrix"];
 			this.viewSpacePointLight0Param = effect.Parameters["ViewSpacePointLight0"];
-			this.viewSpaceDirectionLight0Param = effect.Parameters["ViewSpaceDirectionLight0"];
 			this.diffuseTextureParam = effect.Parameters["DiffuseTexture"];
 			this.specularTextureParam = effect.Parameters["SpecularTexture"];
 			this.emissiveTextureParam = effect.Parameters["EmissiveTexture"];
