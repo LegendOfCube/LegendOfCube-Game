@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Engine.Graphics
 {
 	/// <summary>
 	/// Wrap around a custom shader/XNA effect that could be used for rendering
@@ -22,11 +18,12 @@ namespace LegendOfCube.Engine
 		private readonly EffectParameter viewParam;
 		private readonly EffectParameter projectionParam;
 		private readonly EffectParameter normalMatrixParam;
-		private readonly EffectParameter viewSpaceLightPostionParam;
+		private readonly EffectParameter viewSpacePointLight0Param;
 		private readonly EffectParameter diffuseTextureParam;
 		private readonly EffectParameter specularTextureParam;
 		private readonly EffectParameter emissiveTextureParam;
 		private readonly EffectParameter emissiveIntensityParam;
+		private readonly EffectParameter normalTextureParam;
 
 		private Matrix view;
 
@@ -39,20 +36,22 @@ namespace LegendOfCube.Engine
 			this.viewParam = effect.Parameters["View"];
 			this.projectionParam = effect.Parameters["Projection"];
 			this.normalMatrixParam = effect.Parameters["NormalMatrix"];
-			this.viewSpaceLightPostionParam = effect.Parameters["ViewSpaceLightPosition"];
+			this.viewSpacePointLight0Param = effect.Parameters["ViewSpacePointLight0"];
+			this.viewSpaceDirectionLight0Param = effect.Parameters["ViewSpaceDirectionLight0"];
 			this.diffuseTextureParam = effect.Parameters["DiffuseTexture"];
 			this.specularTextureParam = effect.Parameters["SpecularTexture"];
 			this.emissiveTextureParam = effect.Parameters["EmissiveTexture"];
 			this.emissiveIntensityParam = effect.Parameters["MaterialEmissiveIntensity"];
+			this.normalTextureParam = effect.Parameters["NormalTexture"];
 		}
 
-		public void SetOncePerFrameParams(ref Matrix view, ref Matrix projection, ref Vector3 lightPosition)
+		public void SetOncePerFrameParams(ref Matrix view, ref Matrix projection, ref Vector3 pointLightPosition0)
 		{
 			this.view = view;
 			viewParam.SetValue(view);
 			projectionParam.SetValue(projection);
 
-			viewSpaceLightPostionParam.SetValue(Vector3.Transform(lightPosition, view));
+			viewSpacePointLight0Param.SetValue(Vector3.Transform(pointLightPosition0, view));
 		}
 
 		public void SetWorld(ref Matrix world)
@@ -94,5 +93,9 @@ namespace LegendOfCube.Engine
 			emissiveIntensityParam.SetValue(intensity);
 		}
 
+		public void SetNormalTexture(Texture normalTexture)
+		{
+			normalTextureParam.SetValue(normalTexture);
+		}
 	}
 }

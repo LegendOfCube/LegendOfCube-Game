@@ -3,8 +3,8 @@ float4x4 View;
 float4x4 Projection;
 float4x4 NormalMatrix;
 
-// A light position is is needed for diffuse and specular illumination
-float3 ViewSpaceLightPosition;
+// Light position for diffuse and specular illumination
+float3 ViewSpacePointLight0;
 
 // Defines the the ambient look of an object (simulate that all surfaces are somewhat lit)
 float4 MaterialAmbientColor = float4(1.0, 1.0, 1.0, 1.0);
@@ -16,41 +16,55 @@ float4 MaterialDiffuseColor = float4(1.0, 1.0, 1.0, 1.0);
 float MaterialDiffuseIntensity = 1.0;
 
 // Defines the specular look of an object (highlights)
-// An specular texture could be added
 texture SpecularTexture;
 float4 MaterialSpecularColor = float4(1.0, 1.0, 1.0, 1.0);
 float MaterialSpecularIntensity = 1.0;
 float Shininess = 30.0;
 
 // Defines the self illumination of an object
-// An emmisive texture could be added
 texture EmissiveTexture;
 float4 MaterialEmissiveColor = float4(1.0, 1.0, 1.0, 1.0);
 float MaterialEmissiveIntensity = 0.0;
 
+// Defines the normals for an object
+texture NormalTexture;
+
 sampler2D diffuseTextureSampler = sampler_state {
 	Texture = (DiffuseTexture);
-	mipfilter = linear;
-	magfilter = linear;
-	minfilter = anisotropic;
+	MipFilter = linear;
+	MagFilter = linear;
+	MinFilter = anisotropic;
+	MaxAnisotropy = 16;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
 
 sampler2D specularTextureSampler = sampler_state {
 	Texture = (SpecularTexture);
-	mipfilter = linear;
-	magfilter = linear;
-	minfilter = anisotropic;
+	MipFilter = linear;
+	MagFilter = linear;
+	MinFilter = anisotropic;
+	MaxAnisotropy = 16;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
 
 sampler2D emissiveTextureSampler = sampler_state {
 	Texture = (EmissiveTexture);
-	mipfilter = linear;
-	magfilter = linear;
-	minfilter = anisotropic;
+	MipFilter = linear;
+	MagFilter = linear;
+	MinFilter = anisotropic;
+	MaxAnisotropy = 16;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler2D normalTextureSampler = sampler_state {
+	Texture = (NormalTexture);
+	MipFilter = linear;
+	MagFilter = linear;
+	MinFilter = anisotropic;
+	MaxAnisotropy = 16;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
@@ -58,7 +72,6 @@ sampler2D emissiveTextureSampler = sampler_state {
 struct VertexShaderInput
 {
 	float4 Position : POSITION0;
-	float4 Normal : NORMAL0;
 	float2 TextureCoordinate : TEXCOORD0;
 };
 
@@ -67,7 +80,6 @@ struct VertexShaderOutput
 	float4 Position : POSITION0;
 	float2 TextureCoordinate : TEXCOORD0;
 	float3 ViewSpacePos : TEXCOORD1; // Using TEXCOORD looks incorrect, not sure if there is alternative
-	float3 ViewSpaceNormal : TEXCOORD2;
 };
 
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
@@ -78,12 +90,10 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	float4 worldPosition = mul(input.Position, World);
 	float4 viewPosition = mul(worldPosition, View);
 	float4 projecPosition = mul(viewPosition, Projection);
-	float4 viewSpaceNormal = normalize(mul(input.Normal, NormalMatrix));
 
 	// Pass along to pixel shader
 	output.ViewSpacePos = viewPosition;
 	output.Position = projecPosition;
-	output.ViewSpaceNormal = viewSpaceNormal;
 	output.TextureCoordinate = input.TextureCoordinate;
 
 	return output;
@@ -92,11 +102,17 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	// Interpolation can denormalize the normal, need to renormalize
-	float3 normal = normalize(input.ViewSpaceNormal);
+	// TODO: Have the option to use this normal
+	//	float3 normal = normalize(input.ViewSpaceNormal);
+
+	// Get normal from normal map
+	float4 modelNormal = 2.0f * tex2D(normalTextureSampler, input.TextureCoordinate) - 1.0f;
+	float4 normal4 = mul(NormalMatrix, modelNormal);
+	float3 normal = normalize(modelNormal.xyz);
 
 	// Let distance from light modify result. If a light from a sun was
 	// simulated, this wouldn't be necessary.
-	float3 lightDifference = ViewSpaceLightPosition - input.ViewSpacePos;
+	float3 lightDifference = ViewSpacePointLight0 - input.ViewSpacePos;
 	float lightDistance = length(lightDifference);
 	float lightDistanceFactor = 1.0 / (1 + pow(0.05 * lightDistance, 2));
 

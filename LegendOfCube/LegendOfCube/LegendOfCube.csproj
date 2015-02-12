@@ -83,8 +83,9 @@
     <Compile Include="Engine\OldLegendOfCubeGame.cs" />
     <Compile Include="Engine\PhysicsSystem.cs" />
     <Compile Include="Engine\Program.cs" />
-    <Compile Include="Engine\RenderSystem.cs" />
-    <Compile Include="Engine\StandardEffect.cs" />
+    <Compile Include="Engine\Graphics\RenderSystem.cs" />
+    <Compile Include="Engine\Graphics\StandardEffect.cs" />
+    <Compile Include="Engine\Graphics\StandardEffectParams.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

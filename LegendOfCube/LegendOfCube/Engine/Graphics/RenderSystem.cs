@@ -1,9 +1,7 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Engine.Graphics
 {
 	public class RenderSystem
 	{
@@ -50,20 +48,6 @@ namespace LegendOfCube.Engine
 			graphics.ApplyChanges();
 
 			this.standardEffect = new StandardEffect(game.Content.Load<Effect>("Effects/standardEffect"));
-
-			// TODO: Load textures somewhere more appropriate
-			// For now, override loaded effect with custom shader. Need to
-			// manually find texture it seems. It might be possible to write
-			// custom "content importer" to handle this instead.
-			var cubeDiffuseTexture = game.Content.Load<Texture>("Models/cube_diff");
-			var cubeSpecularTexture = game.Content.Load<Texture>("Models/cube_specular");
-			var cubeEmissiveTexture = game.Content.Load<Texture>("Models/cube_emissive");
-
-			// TODO: Store texture to use for each entity
-			standardEffect.SetDiffuseTexture(cubeDiffuseTexture);
-			standardEffect.SetSpecularTexture(cubeSpecularTexture);
-			standardEffect.SetEmissiveTexture(cubeEmissiveTexture);
-			standardEffect.SetMaterialEmissiveIntensity(0.5f);
 		}
 
 		public void RenderWorld(World world)
@@ -115,6 +99,13 @@ namespace LegendOfCube.Engine
 			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
+			var sep = world.StandardEffectParams[entity.Id];
+			standardEffect.SetDiffuseTexture(sep.DiffuseTexture);
+			standardEffect.SetEmissiveTexture(sep.EmissiveTexture);
+			standardEffect.SetSpecularTexture(sep.SpecularTexture);
+			standardEffect.SetNormalTexture(sep.NormalTexture);
+			standardEffect.SetMaterialEmissiveIntensity(sep.EmissiveIntensity);
+
 			foreach (var mesh in model.Meshes)
 			{
 				if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
@@ -156,10 +147,11 @@ namespace LegendOfCube.Engine
 				// cover the whole object otherwise. The bug might lie
 				// elsewhere.
 				var modifiedWorldTransform = model.Root.Transform * worldTransform;
-				
 				BoundingSphere worldBoundingSphere;
 				mesh.BoundingSphere.Transform(ref modifiedWorldTransform, out worldBoundingSphere);
-				if (boundingFrustum.Intersects(worldBoundingSphere))
+				bool intersects;
+				boundingFrustum.Intersects(ref worldBoundingSphere, out intersects);
+				if (intersects)
 				{
 					return true;
 				}

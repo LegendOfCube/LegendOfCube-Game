@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LegendOfCube.Engine.Graphics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
@@ -9,12 +10,13 @@ namespace LegendOfCube.Engine
 	public class EntityBuilder
 	{
 		private Properties properties = new Properties();
-		private Model model;
 		private Vector3 velocity;
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
 		private float maxAcceleration;
 		private float maxSpeed;
+		private Model model;
+		private StandardEffectParams sep;
 
 		/// <summary>
 		/// Assign a model for the entity being built.
@@ -81,6 +83,13 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		public EntityBuilder WithStandardEffectParams(StandardEffectParams sep)
+		{
+			properties.Add(Properties.FULL_LIGHT_EFFECT);
+			this.sep = sep;
+			return this;
+		}
+
 		/// <summary>
 		/// Add any property flags to the entity being created.
 		/// </summary>
@@ -118,6 +127,10 @@ namespace LegendOfCube.Engine
 			if (properties.Satisfies(new Properties(Properties.MODEL)))
 			{
 				world.Models[entity.Id] = model;
+			}
+			if (properties.Satisfies(new Properties(Properties.FULL_LIGHT_EFFECT)))
+			{
+				world.StandardEffectParams[entity.Id] = sep;
 			}
 			if (properties.Satisfies(new Properties(Properties.INPUT_FLAG)))
 			{

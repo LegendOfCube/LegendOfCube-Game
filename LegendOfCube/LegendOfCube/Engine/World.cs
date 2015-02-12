@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -27,10 +28,12 @@ namespace LegendOfCube.Engine
 		public readonly Matrix[] Transforms;
 		public readonly Vector3[] Velocities;
 		public readonly Vector3[] Accelerations;
-		public readonly Model[] Models;
 		public readonly InputData[] InputData;
 		public readonly float[] MaxSpeed;
 		public readonly float[] MaxAcceleration;
+
+		public readonly Model[] Models;
+		public readonly StandardEffectParams[] StandardEffectParams;
 
 		// Player state
 		public PlayerCubeState PlayerCubeState;
@@ -53,19 +56,22 @@ namespace LegendOfCube.Engine
 			// Components
 			Velocities = new Vector3[MaxNumEntities];
 			Accelerations = new Vector3[MaxNumEntities];
-			Models = new Model[MaxNumEntities];
 			Transforms = new Matrix[MaxNumEntities];
 			InputData = new InputData[MaxNumEntities];
 			MaxSpeed = new float[MaxNumEntities];
 			MaxAcceleration = new float[MaxNumEntities];
+
+			Models = new Model[MaxNumEntities];
+			StandardEffectParams = new StandardEffectParams[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				Velocities[i] = new Vector3(0, 0, 0);
 				Accelerations[i] = new Vector3(0, 0, 0);
-				Models[i] = null;
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
 				MaxSpeed[i] = 0;
 				MaxAcceleration[i] = 0;
+				Models[i] = null;
+				StandardEffectParams[i] = null;
 			}
 			PlayerCubeState = new PlayerCubeState();
 		}
@@ -156,8 +162,10 @@ namespace LegendOfCube.Engine
 			// Clean-up components
 			Velocities[entityToDestroy.Id] = new Vector3(0, 0, 0);
 			Accelerations[entityToDestroy.Id] = new Vector3(0, 0, 0);
-			Models[entityToDestroy.Id] = null;
 			Transforms[entityToDestroy.Id] = Matrix.Identity;
+
+			Models[entityToDestroy.Id] = null;
+			StandardEffectParams[entityToDestroy.Id] = null;
 		}
 
 	}
