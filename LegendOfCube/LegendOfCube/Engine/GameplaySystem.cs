@@ -69,7 +69,7 @@ namespace LegendOfCube.Engine
 				}*/
 
 				// Jumping
-				if (world.InputData[i].IsJumping())
+				if (world.InputData[i].NewJump())
 				{
 					//Limitation: only the player can jump.
 					if (world.PlayerCubeState.CurrentJumps < PlayerCubeState.MAXJUMPS)
