@@ -140,14 +140,19 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 	float4 specularTextureColor = UseSpecularTexture ? tex2D(specularTextureSampler, input.TextureCoordinate) : WHITE_COLOR;
 	float4 emissiveTextureColor = UseEmissiveTexture ? tex2D(emissiveTextureSampler, input.TextureCoordinate) : WHITE_COLOR;
 
-	// Determine diffuse and specular effect (0 to 1)
+	// Determine diffuse, specular and fresnel factor (0 to 1)
 	float diffuseFactor = lightDistanceFactor * max(0.0, dot(normal, directionToLight));
 	float specularFactor = lightDistanceFactor * max(pow(dot(h, normal), Shininess), 0.0);
+	float fresnelFactor = pow(clamp(1.0 - dot(directionToEye, normal), 0.0, 1.0), 5.0);
+
+	// Apply fresnel effect
+	float4 specularCombined = MaterialSpecularColor * specularTextureColor;
+	float4 fresnelSpecular = specularCombined + (WHITE_COLOR - specularCombined) * fresnelFactor;
 
 	// Determine final colors of different lighting component
-	float4 ambient = MaterialAmbientIntensity * MaterialDiffuseColor * diffuseTextureColor; // Right now locked to diffuse color
+	float4 ambient = MaterialAmbientIntensity * MaterialDiffuseColor * diffuseTextureColor; // Currently locked to diffuse color
 	float4 diffuse = diffuseFactor * PointLight0Color * MaterialDiffuseColor * diffuseTextureColor;
-	float4 specular = specularFactor * PointLight0Color * MaterialSpecularColor * specularTextureColor;
+	float4 specular = specularFactor * PointLight0Color * fresnelSpecular;
 	float4 emissive =  MaterialEmissiveColor * emissiveTextureColor;
 
 	return saturate(
