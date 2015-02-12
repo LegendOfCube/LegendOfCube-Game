@@ -104,6 +104,7 @@ namespace LegendOfCube.Engine
 			inputSystem.ApplyInput(gameTime, world);
 			gameplaySystem.processInputData(world);
 			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
+			renderSystem.UpdateCamera(world);
 
 			base.Update(gameTime);
 		}

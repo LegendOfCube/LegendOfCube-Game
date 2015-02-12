@@ -84,6 +84,9 @@ namespace LegendOfCube.Engine
 				{
 					inputData.SetStateOfJumping(false);
 				}
+
+				inputData.SetCameraDirection(gamePadState.ThumbSticks.Right);
+
 			}
 
 			oldKeyState = keyState;
