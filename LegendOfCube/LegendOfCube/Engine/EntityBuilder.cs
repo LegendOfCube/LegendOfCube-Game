@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,11 +9,14 @@ namespace LegendOfCube.Engine
 	/// </summary>
 	public class EntityBuilder
 	{
-		private Properties properties;
-		private Model model;
+		private Properties properties = new Properties();
 		private Vector3 velocity;
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
+		private float maxAcceleration;
+		private float maxSpeed;
+		private Model model;
+		private StandardEffectParams sep;
 
 		/// <summary>
 		/// Assign a model for the entity being built.
@@ -60,10 +62,31 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		/// <param name="velocity">The initial velocity for the entity</param>
 		/// <returns>An instance of this, for chaining</returns>
-		public EntityBuilder WithVelocity(Vector3 velocity)
+		public EntityBuilder WithVelocity(Vector3 velocity, float maxSpeed)
 		{
 			properties.Add(Properties.VELOCITY);
 			this.velocity = velocity;
+			this.maxSpeed = maxSpeed;
+			return this;
+		}
+
+		/// <summary>
+		/// Assign an acceleration for the entity being built.
+		/// </summary>
+		/// <param name="acceleration">The initial acceleration for the entity</param>
+		/// <returns>An instance of this, for chaining</returns>
+		public EntityBuilder WithAcceleration(Vector3 acceleration, float maxAcceleration)
+		{
+			properties.Add(Properties.ACCELERATION);
+			this.acceleration = acceleration;
+			this.maxAcceleration = maxAcceleration;
+			return this;
+		}
+
+		public EntityBuilder WithStandardEffectParams(StandardEffectParams sep)
+		{
+			properties.Add(Properties.FULL_LIGHT_EFFECT);
+			this.sep = sep;
 			return this;
 		}
 
@@ -94,14 +117,20 @@ namespace LegendOfCube.Engine
 			if (properties.Satisfies(new Properties(Properties.ACCELERATION)))
 			{
 				world.Accelerations[entity.Id] = acceleration;
+				world.MaxAcceleration[entity.Id] = maxAcceleration;
 			}
 			if (properties.Satisfies(new Properties(Properties.VELOCITY)))
 			{
 				world.Velocities[entity.Id] = velocity;
+				world.MaxSpeed[entity.Id] = maxSpeed;
 			}
 			if (properties.Satisfies(new Properties(Properties.MODEL)))
 			{
 				world.Models[entity.Id] = model;
+			}
+			if (properties.Satisfies(new Properties(Properties.FULL_LIGHT_EFFECT)))
+			{
+				world.StandardEffectParams[entity.Id] = sep;
 			}
 			if (properties.Satisfies(new Properties(Properties.INPUT_FLAG)))
 			{

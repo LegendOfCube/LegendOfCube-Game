@@ -72,6 +72,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\PlayerCubeState.cs" />
     <Compile Include="Engine\EntityBuilder.cs" />
     <Compile Include="Engine\GameplaySystem.cs" />
     <Compile Include="Engine\InputData.cs" />
@@ -82,7 +83,9 @@
     <Compile Include="Engine\OldLegendOfCubeGame.cs" />
     <Compile Include="Engine\PhysicsSystem.cs" />
     <Compile Include="Engine\Program.cs" />
-    <Compile Include="Engine\RenderSystem.cs" />
+    <Compile Include="Engine\Graphics\RenderSystem.cs" />
+    <Compile Include="Engine\Graphics\StandardEffect.cs" />
+    <Compile Include="Engine\Graphics\StandardEffectParams.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
