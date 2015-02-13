@@ -29,7 +29,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			this.halfExtents.Y = extents.Y / 2.0f;
 			this.halfExtents.Z = extents.Z / 2.0f;
 
-			ensureCorrectState();
+			EnsureCorrectState();
 		}
 
 		public OBB(Vector3 centerPos, Vector3 xAxis, Vector3 yAxis, Vector3 zAxis, float xExtent, float yExtent, float zExtent)
@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			this.halfExtents.Y = yExtent / 2.0f;
 			this.halfExtents.Z = zExtent / 2.0f;
 
-			ensureCorrectState();
+			EnsureCorrectState();
 		}
 
 		// Public properties
@@ -208,26 +208,26 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		// Private functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private bool approxEqu(float lhs, float rhs, float epsilon)
+		private bool ApproxEqu(float lhs, float rhs, float epsilon)
 		{
 			return (lhs - epsilon) <= rhs && (lhs + epsilon) >= rhs; 
 		}
 
-		private bool approxEqu(Vector3 lhs, Vector3 rhs, float epsilon)
+		private bool ApproxEqu(Vector3 lhs, Vector3 rhs, float epsilon)
 		{
-			if (!approxEqu(lhs.X, rhs.X, epsilon)) return false;
-			if (!approxEqu(lhs.Y, rhs.Y, epsilon)) return false;
-			if (!approxEqu(lhs.Z, rhs.Z, epsilon)) return false;
+			if (!ApproxEqu(lhs.X, rhs.X, epsilon)) return false;
+			if (!ApproxEqu(lhs.Y, rhs.Y, epsilon)) return false;
+			if (!ApproxEqu(lhs.Z, rhs.Z, epsilon)) return false;
 			return true;
 		}
 
-		private void ensureCorrectState()
+		private void EnsureCorrectState()
 		{
 			// Axes are orthogonal
 			const float EPSILON = 0.001f;
-			if (!approxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
-			if (!approxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
-			if (!approxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 
 			// Extents
 			if (halfExtents.X <= 0) throw new ArgumentException("halfExtents.X <= 0");

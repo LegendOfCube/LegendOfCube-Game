@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	class CollisionDetection
+	class IntersectionsTests
 	{
 		private const float EPSILON = 0.0001f;
 
@@ -48,16 +48,16 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			// Axes Ax, Ay and Az
 			for (uint i = 0; i < 3; i++)
 			{
-				radiusA = at(boxA.HalfExtents, i);
+				radiusA = At(boxA.HalfExtents, i);
 				radiusB = Vector3.Dot(bToAAbs.RowAt(i), boxB.HalfExtents);
-				if (Math.Abs(at(translVecA, i)) > radiusA + radiusB) return false;
+				if (Math.Abs(At(translVecA, i)) > radiusA + radiusB) return false;
 			}
 
 			// Axes Bx, By and Bz
 			for (uint i = 0; i < 3; i++ )
 			{
 				radiusA = Vector3.Dot(aToBAbs.RowAt(i), boxA.HalfExtents);
-				radiusB = at(boxB.HalfExtents, i);
+				radiusB = At(boxB.HalfExtents, i);
 				if (Math.Abs(Vector3.Dot(aToB.RowAt(i), translVecA)) > radiusA + radiusB) return false;
 			}
 
@@ -72,7 +72,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		// Private helpers
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		
-		private static float at(Vector3 v, uint index)
+		private static float At(Vector3 v, uint index)
 		{
 			switch (index)
 			{
