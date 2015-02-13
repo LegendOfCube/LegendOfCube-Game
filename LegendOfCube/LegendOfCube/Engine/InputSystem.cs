@@ -93,7 +93,20 @@ namespace LegendOfCube.Engine
 					inputData.SetNewJump(false);
 				}
 
-				inputData.SetCameraDirection(gamePadState.ThumbSticks.Right);
+				Vector2 cameraDirection = new Vector2(0,0);
+				// Camera movement
+				if (keyState.IsKeyDown(Keys.Up) ) cameraDirection.Y++;
+
+				if (keyState.IsKeyDown(Keys.Down)) cameraDirection.Y--;
+
+				if (keyState.IsKeyDown(Keys.Left)) cameraDirection.X--;
+
+				if (keyState.IsKeyDown(Keys.Right)) cameraDirection.X++;
+
+				// Normalize the vector to our needs, then set direction
+				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : gamePadState.ThumbSticks.Right;
+
+				inputData.SetDirection(cameraDirection);
 
 			}
 
