@@ -107,7 +107,6 @@ namespace LegendOfCube.Engine
 						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(otherCubeEffect)
-						.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 						.AddToWorld(world);
 			}
 
@@ -117,7 +116,6 @@ namespace LegendOfCube.Engine
 					.WithTransform(Matrix.CreateScale(1000.0f))
 					.WithPosition(new Vector3(0, -1000.0f, 0))
 					.WithStandardEffectParams(groundEffect)
-					.WithAdditionalProperties(new Properties(Properties.FULL_LIGHT_EFFECT))
 					.AddToWorld(world);
 		}
 
@@ -140,7 +138,7 @@ namespace LegendOfCube.Engine
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, world);
-			gameplaySystem.processInputData(world, delta);
+			gameplaySystem.ProcessInputData(world, delta);
 			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 
 			base.Update(gameTime);

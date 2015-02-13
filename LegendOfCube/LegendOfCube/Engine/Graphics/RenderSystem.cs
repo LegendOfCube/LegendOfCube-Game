@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Diagnostics;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine.Graphics
@@ -104,6 +105,41 @@ namespace LegendOfCube.Engine.Graphics
 			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
+			if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
+			{
+				RenderWithStandardEffect(entity, model, transforms, world, worldTransform, view, projection);
+			}
+			else
+			{
+				RenderWithBasicEffect(entity, model, transforms, world, worldTransform, view, projection);
+			}
+		}
+
+		private void RenderWithBasicEffect(Entity entity, Model model, Matrix[] transforms, World world, Matrix worldTransform, Matrix view, Matrix projection)
+		{
+			foreach (var mesh in model.Meshes)
+			{
+				// Make it still possible to render with the default BasicEffect
+				foreach (var effect in mesh.Effects)
+				{
+					var basicEffect = effect as BasicEffect;
+					if (basicEffect != null)
+					{
+						basicEffect.World = transforms[mesh.ParentBone.Index]*worldTransform;
+						basicEffect.View = view;
+						basicEffect.Projection = projection;
+					}
+					else
+					{
+						Debug.Assert(false, "Model for entity has unknown effect");
+					}
+				}
+				mesh.Draw();
+			}
+		}
+
+		private void RenderWithStandardEffect(Entity entity, Model model, Matrix[] transforms, World world, Matrix worldTransform, Matrix view, Matrix projection)
+		{
 			var sep = world.StandardEffectParams[entity.Id];
 
 			standardEffect.SetDiffuseColor(sep.DiffuseColor);
@@ -117,33 +153,30 @@ namespace LegendOfCube.Engine.Graphics
 
 			foreach (var mesh in model.Meshes)
 			{
-				if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
+				foreach (var meshPart in mesh.MeshParts)
 				{
-					foreach (var meshPart in mesh.MeshParts)
-					{
-						// TODO: Move from here. Ugly and unnecessary to do all the time.
-						// Replace with standard effect
-						meshPart.Effect = standardEffect.Effect;
-					}
-					var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
-					standardEffect.SetWorld(ref worldMatrix);
+					// TODO: Move from here. Ugly and unnecessary to do all the time.
+					// Replace with standard effect
+					meshPart.Effect = standardEffect.Effect;
 				}
-				else
-				{
-					// Make it still possible to render with the default BasicEffect
-					foreach (var effect in mesh.Effects)
-					{
-						var basicEffect = effect as BasicEffect;
-						if (basicEffect != null)
-						{
-							basicEffect.World = transforms[mesh.ParentBone.Index] * worldTransform;
-							basicEffect.View = view;
-							basicEffect.Projection = projection;
-						}
-					}
-				}
+				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
+				standardEffect.SetWorld(ref worldMatrix);
 				mesh.Draw();
 			}
+		}
+
+		private void RenderWithStandardEffect(Entity entity, World world, Matrix view, Matrix projection)
+		{
+			var sep = world.StandardEffectParams[entity.Id];
+
+			standardEffect.SetDiffuseColor(sep.DiffuseColor);
+			standardEffect.SetSpecularColor(sep.SpecularColor);
+			standardEffect.SetEmissiveColor(sep.EmissiveColor);
+
+			standardEffect.SetDiffuseTexture(sep.DiffuseTexture);
+			standardEffect.SetEmissiveTexture(sep.EmissiveTexture);
+			standardEffect.SetSpecularTexture(sep.SpecularTexture);
+			standardEffect.SetNormalTexture(sep.NormalTexture);
 		}
 
 		private static bool ModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)

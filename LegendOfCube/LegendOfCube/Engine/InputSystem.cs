@@ -9,7 +9,7 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
+		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
 		                                                                  Properties.INPUT_FLAG);
 
 		// Members
@@ -106,6 +106,11 @@ namespace LegendOfCube.Engine
 		private bool KeyWasReleased(Keys key)
 		{
 			return keyState.IsKeyUp(key) && !oldKeyState.IsKeyUp(key);
+		}
+
+		private bool ButtonWasJustPressed(Keys key)
+		{
+			return keyState.IsKeyDown(key) && !oldKeyState.IsKeyDown(key);
 		}
 	}
 }
