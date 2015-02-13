@@ -19,62 +19,68 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		{
 			// We're using SAT (Separating Axis Theorem). There are 15 axes we need to test to determine if intersection occurred.
 
-			// This thing seems insane, it isn't.
-			// Given two change of basis matrices, Ua and Ub (equal to that axises in boxA and B).
-			// bToASpace == transpose(Ua) * Ub == inverse(Ua) * Ub == worldToA * bToWorld
-			// inverse(Ua) == transpose(Ua) because Ua (and Ub) are orthogonal matrices.
-			Matrix bToA = Matrix.CreateScale(1.0f); // TODO: Trololo identity matrix hack, might not be necessary.
-			bToA.M11 = Vector3.Dot(boxA.AxisX, boxB.AxisX);
-			bToA.M12 = Vector3.Dot(boxA.AxisX, boxB.AxisY);
-			bToA.M13 = Vector3.Dot(boxA.AxisX, boxB.AxisZ);
-			bToA.M21 = Vector3.Dot(boxA.AxisY, boxB.AxisX);
-			bToA.M22 = Vector3.Dot(boxA.AxisY, boxB.AxisY);
-			bToA.M23 = Vector3.Dot(boxA.AxisY, boxB.AxisZ);
-			bToA.M31 = Vector3.Dot(boxA.AxisZ, boxB.AxisX);
-			bToA.M32 = Vector3.Dot(boxA.AxisZ, boxB.AxisY);
-			bToA.M33 = Vector3.Dot(boxA.AxisZ, boxB.AxisZ);
+			Matrix3x3 aToWorld = Matrix3x3.CreateChangeOfBasis(boxA.AxisX, boxA.AxisY, boxA.AxisZ);
+			Matrix3x3 bToWorld = Matrix3x3.CreateChangeOfBasis(boxB.AxisX, boxB.AxisY, boxB.AxisZ);
+			Matrix3x3 worldToA = aToWorld.Transpose(); // Transpose is equal to inverse since orthogonal matrix
+			Matrix3x3 worldToB = bToWorld.Transpose();
 
-			// Computes the translation vector between boxA and B then transforms into into A space
-			// Second row is equal to: inverse(Ua) * translVec == transpose(Ua) * translVec
-			Vector3 translVec = boxB.CenterPos - boxA.CenterPos;
-			translVec = new Vector3(Vector3.Dot(translVec, boxA.AxisX), Vector3.Dot(translVec, boxA.AxisY), Vector3.Dot(translVec, boxA.AxisZ));
+			Matrix3x3 bToA = worldToA * bToWorld;
+			Matrix3x3 aToB = worldToB * aToWorld;
 
-			// Common subexpressions apparently.
 			// Epsilon term to counteract arithmetic errors when two edges are parallell
-			Matrix bToAAbs = Matrix.CreateScale(1.0f); // TODO: indentity hack
-			bToAAbs.M11 = Math.Abs(bToA.M11) + EPSILON;
-			bToAAbs.M12 = Math.Abs(bToA.M12) + EPSILON;
-			bToAAbs.M13 = Math.Abs(bToA.M13) + EPSILON;
-			bToAAbs.M21 = Math.Abs(bToA.M21) + EPSILON;
-			bToAAbs.M22 = Math.Abs(bToA.M22) + EPSILON;
-			bToAAbs.M23 = Math.Abs(bToA.M23) + EPSILON;
-			bToAAbs.M31 = Math.Abs(bToA.M31) + EPSILON;
-			bToAAbs.M32 = Math.Abs(bToA.M32) + EPSILON;
-			bToAAbs.M33 = Math.Abs(bToA.M33) + EPSILON;
+			Matrix3x3 bToAAbs = new Matrix3x3();
+			Matrix3x3 aToBAbs = new Matrix3x3();
+			for (uint i = 1; i <= 3; i++)
+			{
+				for (uint j = 1; j <= 3; j++)
+				{
+					bToAAbs.Set(i, j, Math.Abs(bToA.At(i, j)) + EPSILON);
+					aToBAbs.Set(i, j, Math.Abs(aToB.At(i, j)) + EPSILON);
+				}
+			}
 
-			// Tests all 15 axes in order of importance
+			// Computes translation vector between boxA and B and transforms it into A space
+			Vector3 translVecA = worldToA * (boxB.CenterPos - boxA.CenterPos);
 
+			// Test all 15 axes in order of importance
 			float radiusA, radiusB;
 
-			// Axis Ax
-			radiusA = boxA.HalfExtentX;
-			radiusB = boxB.HalfExtentX * bToAAbs.M11 + boxB.HalfExtentY * bToAAbs.M12 + boxB.HalfExtentZ * bToAAbs.M13;
-			if (Math.Abs(translVec.X) > radiusA + radiusB) return false;
-			// Axis Ay
-			radiusA = boxA.HalfExtentY;
-			radiusB = boxB.HalfExtentX * bToAAbs.M21 + boxB.HalfExtentY * bToAAbs.M22 + boxB.HalfExtentZ * bToAAbs.M23;
-			if (Math.Abs(translVec.Y) > radiusA + radiusB) return false;
-			// Axis Az
-			radiusA = boxA.HalfExtentZ;
-			radiusB = boxB.HalfExtentX * bToAAbs.M31 + boxB.HalfExtentY * bToAAbs.M32 + boxB.HalfExtentZ * bToAAbs.M33;
-			if (Math.Abs(translVec.Z) > radiusA + radiusB) return false;
+			// Axes Ax, Ay and Az
+			for (uint i = 0; i < 3; i++)
+			{
+				radiusA = at(boxA.HalfExtents, i);
+				radiusB = Vector3.Dot(bToAAbs.RowAt(i), boxB.HalfExtents);
+				if (Math.Abs(at(translVecA, i)) > radiusA + radiusB) return false;
+			}
 
-			// Axis Bx
-			radiusA = boxB.HalfExtentX;
-			radiusB = boxB.HalfExtentX;
+			// Axes Bx, By and Bz
+			for (uint i = 0; i < 3; i++ )
+			{
+				radiusA = Vector3.Dot(aToBAbs.RowAt(i), boxA.HalfExtents);
+				radiusB = at(boxB.HalfExtents, i);
+				if (Math.Abs(Vector3.Dot(aToB.RowAt(i), translVecA)) > radiusA + radiusB) return false;
+			}
 
+			// TODO: 9 more axes to test
+			// This means that about 15% of the time intersection will be reported when it's not actually happening.
+			// Test is still conservative.
 
+			// Since we made it this far we have not disproven intersection, so it might be true.
 			return true;
+		}
+
+		// Private helpers
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		
+		private static float at(Vector3 v, uint index)
+		{
+			switch (index)
+			{
+				case 1: return v.X;
+				case 2: return v.Y;
+				case 3: return v.Z;
+				default: throw new ArgumentException("Not fulfilled: 1 <= index <= 3");
+			}
 		}
 	}
 }

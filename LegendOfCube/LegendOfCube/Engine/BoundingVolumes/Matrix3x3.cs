@@ -15,24 +15,43 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		public float M21, M22, M23;
 		public float M31, M32, M33;
 
+		// Creation functions
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		public static Matrix3x3 CreateIdentity()
+		{
+			Matrix3x3 temp = new Matrix3x3();
+			temp.ResetToIdentity();
+			return temp;
+		}
+
+		public static Matrix3x3 CreateChangeOfBasis(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis)
+		{
+			Matrix3x3 temp = new Matrix3x3();
+			temp.SetColumn(1, xAxis);
+			temp.SetColumn(2, yAxis);
+			temp.SetColumn(3, zAxis);
+			return temp;
+		}
+
 		// Public functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void resetToIdentity()
+		public void ResetToIdentity()
 		{
 			M11 = 1; M12 = 0; M13 = 0;
 			M21 = 0; M22 = 1; M23 = 0;
 			M31 = 0; M32 = 0; M33 = 1;
 		}
 
-		public Matrix3x3 transpose()
+		public Matrix3x3 Transpose()
 		{
 			Matrix3x3 transp = this;
 			for (uint i = 1; i <= 3; i++)
 			{
 				for (uint j = 1; j <= 3; j++)
 				{
-					transp.set(i, j, this.at(j, i));
+					transp.Set(i, j, this.At(j, i));
 				}
 			}
 			return transp;
@@ -41,16 +60,29 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		public static Vector3 operator* (Matrix3x3 m, Vector3 v)
 		{
 			Vector3 result = new Vector3();
-			result.X = Vector3.Dot(m.rowAt(1), v);
-			result.Y = Vector3.Dot(m.rowAt(2), v);
-			result.Z = Vector3.Dot(m.rowAt(3), v);
+			result.X = Vector3.Dot(m.RowAt(1), v);
+			result.Y = Vector3.Dot(m.RowAt(2), v);
+			result.Z = Vector3.Dot(m.RowAt(3), v);
+			return result;
+		}
+
+		public static Matrix3x3 operator* (Matrix3x3 lhs, Matrix3x3 rhs)
+		{
+			Matrix3x3 result = new Matrix3x3();
+			for (uint i = 1; i <= 3; i++)
+			{
+				for (uint j = 1; j <= 3; j++)
+				{
+					result.Set(i, j, Vector3.Dot(lhs.RowAt(i), rhs.ColumnAt(j)));
+				}
+			}
 			return result;
 		}
 
 		// Getters/setters
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public float at(uint i, uint j)
+		public float At(uint i, uint j)
 		{
 			switch (i)
 			{
@@ -82,17 +114,17 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 		}
 
-		public Vector3 rowAt(uint i)
+		public Vector3 RowAt(uint i)
 		{
-			return new Vector3(at(i, 1), at(i, 2), at(i, 3));
+			return new Vector3(At(i, 1), At(i, 2), At(i, 3));
 		}
 
-		public Vector3 columnAt(uint j)
+		public Vector3 ColumnAt(uint j)
 		{
-			return new Vector3(at(1, j), at(2, j), at(3, j));
+			return new Vector3(At(1, j), At(2, j), At(3, j));
 		}
 
-		public void set(uint i, uint j, float value)
+		public void Set(uint i, uint j, float value)
 		{
 			switch (i)
 			{
@@ -124,18 +156,18 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 		}
 
-		public void setRow(uint i, Vector3 row)
+		public void SetRow(uint i, Vector3 row)
 		{
-			set(i, 1, row.X);
-			set(i, 2, row.Y);
-			set(i, 3, row.Z);
+			Set(i, 1, row.X);
+			Set(i, 2, row.Y);
+			Set(i, 3, row.Z);
 		}
 
-		public void setColumn(uint j, Vector3 column)
+		public void SetColumn(uint j, Vector3 column)
 		{
-			set(1, j, column.X);
-			set(2, j, column.Y);
-			set(3, j, column.Z);
+			Set(1, j, column.X);
+			Set(2, j, column.Y);
+			Set(3, j, column.Z);
 		}
 	}
 }
