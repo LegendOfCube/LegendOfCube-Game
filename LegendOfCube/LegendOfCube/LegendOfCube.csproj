@@ -73,7 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
-    <Compile Include="Engine\BoundingVolumes\CollisionDetection.cs" />
+    <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
     <Compile Include="Engine\BoundingVolumes\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\PlayerCubeState.cs" />
