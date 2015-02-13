@@ -18,12 +18,9 @@ namespace LegendOfCube.Engine
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
 		private float stopTimeLeft;
-		private float baseJump;
+		private const float BASE_JUMP = 9f;
 		public void ProcessInputData(World world, float delta)
 		{
-			//INITS
-			baseJump = -0.43F*world.Gravity.Y;
-
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
 				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
@@ -80,14 +77,14 @@ namespace LegendOfCube.Engine
 					//If the jump button is pressed and the cube is on the ground initiate new jump
 					if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
 					{
-						world.Velocities[i].Y = baseJump;
+						world.Velocities[i].Y = BASE_JUMP;
 						jumpTimeLeft = JUMP_TIME;
 						world.PlayerCubeState.InAir = true;
 					}
 					//If the player is mid jump apply more jumpspeed
 					else if (world.InputData[i].IsJumping() && jumpTimeLeft > 0)
 					{
-						world.Velocities[i] -= (world.Gravity * 0.75f * delta);
+						world.Velocities[i].Y += 1.5f*BASE_JUMP*delta;
 						jumpTimeLeft -= delta;
 					}
 				}
