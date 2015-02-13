@@ -106,7 +106,7 @@ namespace LegendOfCube.Engine
 				// Normalize the vector to our needs, then set direction
 				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : gamePadState.ThumbSticks.Right;
 
-				inputData.SetDirection(cameraDirection);
+				inputData.SetCameraDirection(cameraDirection);
 
 			}
 
