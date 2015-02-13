@@ -9,15 +9,15 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-																				Properties.INPUT_FLAG
-																				| Properties.ACCELERATION
-																				| Properties.VELOCITY);
+		                                                                        Properties.INPUT_FLAG |
+		                                                                        Properties.ACCELERATION |
+		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
 		private static readonly float STOP_TIME = 1f;
 		private bool isStopping = false;
 		private float stopTimeLeft;
 
-		public void processInputData(World world, float delta)
+		public void ProcessInputData(World world, float delta)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
