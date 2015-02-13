@@ -38,6 +38,9 @@ namespace LegendOfCube.Engine
 		// Player state
 		public PlayerCubeState PlayerCubeState;
 
+		// World variables
+
+		public Vector3 Gravity;
 		public Vector3 LightPosition;
 
 		// Constructors
@@ -74,6 +77,7 @@ namespace LegendOfCube.Engine
 				StandardEffectParams[i] = null;
 			}
 			PlayerCubeState = new PlayerCubeState();
+			Gravity = new Vector3(0.0f, -20f, 0.0f);
 		}
 
 		// Public Methods

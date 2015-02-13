@@ -13,12 +13,17 @@ namespace LegendOfCube.Engine
 																				| Properties.ACCELERATION
 																				| Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
-		private static readonly float STOP_TIME = 1f;
+		private const float STOP_TIME = 1f;
+		private const float JUMP_TIME = 0.5f;
+		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
 		private float stopTimeLeft;
-
-		public void processInputData(World world, float delta)
+		private float baseJump;
+		public void ProcessInputData(World world, float delta)
 		{
+			//INITS
+			baseJump = -0.43F*world.Gravity.Y;
+
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
 				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
@@ -70,13 +75,20 @@ namespace LegendOfCube.Engine
 				}*/
 
 				// Jumping
-				if (world.InputData[i].NewJump())
+				if (world.InputData[i].IsJumping())
 				{
-					//Limitation: only the player can jump.
-					if (world.PlayerCubeState.CurrentJumps < PlayerCubeState.MAXJUMPS)
+					//If the jump button is pressed and the cube is on the ground initiate new jump
+					if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
 					{
-						world.Velocities[i].Y = 8.0f;
-						world.PlayerCubeState.CurrentJumps++;
+						world.Velocities[i].Y = baseJump;
+						jumpTimeLeft = JUMP_TIME;
+						world.PlayerCubeState.InAir = true;
+					}
+					//If the player is mid jump apply more jumpspeed
+					else if (world.InputData[i].IsJumping() && jumpTimeLeft > 0)
+					{
+						world.Velocities[i] -= (world.Gravity * 0.75f * delta);
+						jumpTimeLeft -= delta;
 					}
 				}
 				// For testing, set a light source right above the player

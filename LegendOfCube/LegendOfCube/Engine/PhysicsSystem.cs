@@ -25,8 +25,6 @@ namespace LegendOfCube.Engine
 		                                                 Properties.VELOCITY |
 		                                                 Properties.FRICTION_FLAG);
 
-		private static readonly Vector3 GRAVITY = new Vector3(0.0f, 1.5f*(-9.82f), 0.0f);
-
 		public void ApplyPhysics(float delta, World world)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
@@ -51,7 +49,7 @@ namespace LegendOfCube.Engine
 				// Apply gravity
 				if (properties.Satisfies(HAS_GRAVITY))
 				{
-					world.Velocities[i] += (GRAVITY * delta);
+					world.Velocities[i] += (world.Gravity * delta);
 				}
 
 				// Update position
@@ -65,8 +63,8 @@ namespace LegendOfCube.Engine
 						translation.Y = 0.0f;
 						world.Transforms[i].Translation = translation;
 						world.Velocities[i].Y = 0.0f;
-						//Reset # of jumps.
-						world.PlayerCubeState.CurrentJumps = 0;
+						//Reset air state
+						world.PlayerCubeState.InAir = false;
 					}
 				}
 			}

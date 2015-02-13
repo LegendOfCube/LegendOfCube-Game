@@ -10,8 +10,7 @@ namespace LegendOfCube.Engine
 	/// </summary>
 	public struct PlayerCubeState
 	{
-		public const int MAXJUMPS = 2;
-		public int CurrentJumps;
+		public bool InAir;
 		public bool OnWall;
 	}
 }
