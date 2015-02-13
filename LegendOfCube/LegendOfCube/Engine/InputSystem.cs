@@ -19,6 +19,7 @@ namespace LegendOfCube.Engine
 		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
 		private GamePadState oldGamePadState;
+		private GamePadState gamePadState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -37,7 +38,7 @@ namespace LegendOfCube.Engine
 		public void ApplyInput(GameTime gameTime, World world)
 		{
 			keyState = Keyboard.GetState();
-			GamePadState gamePadState = GamePad.GetState(PlayerIndex.One);
+			gamePadState = GamePad.GetState(PlayerIndex.One);
 			Vector2 directionInput = new Vector2(0, 0);
 
 
@@ -74,17 +75,27 @@ namespace LegendOfCube.Engine
 
 				inputData.SetDirection(directionInput);
 
-				if (keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
+				if ( keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed )
 				{
 					inputData.SetStateOfJumping(true);
+					if (!oldKeyState.IsKeyDown(Keys.Space) && !(oldGamePadState.Buttons.A == ButtonState.Pressed) )
+					{
+						inputData.SetNewJump(true);
+					}
+					else
+					{
+						inputData.SetNewJump(false);
+					}
 				}
 				else
 				{
 					inputData.SetStateOfJumping(false);
+					inputData.SetNewJump(false);
 				}
 			}
 
 			oldKeyState = keyState;
+			oldGamePadState = gamePadState;
 		}
 
 		private bool KeyWasPressed(Keys key)

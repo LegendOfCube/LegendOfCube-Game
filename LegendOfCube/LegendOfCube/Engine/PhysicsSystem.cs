@@ -20,18 +20,32 @@ namespace LegendOfCube.Engine
 		                                                         Properties.TRANSFORM |
 		                                                         Properties.VELOCITY);
 
-		private static readonly Vector3 GRAVITY = new Vector3(0.0f, -9.82f, 0.0f);
+		private static readonly Properties HAS_FRICTION = new Properties(
+		                                                 Properties.TRANSFORM |
+		                                                 Properties.VELOCITY |
+		                                                 Properties.FRICTION_FLAG);
+
+		private static readonly Vector3 GRAVITY = new Vector3(0.0f, 1.5f*(-9.82f), 0.0f);
 
 		public void ApplyPhysics(float delta, World world)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
 				Properties properties = world.EntityProperties[i];
-
 				// Check if velocity should be updated
 				if (properties.Satisfies(ACCELERATABLE))
 				{
 					world.Velocities[i] += (world.Accelerations[i] * delta);
+
+					// Clamp velocity in X and Y direction
+					Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+					if (groundVelocity.Length() > world.MaxSpeed[i])
+					{
+						groundVelocity.Normalize();
+						groundVelocity *= world.MaxSpeed[i];
+						world.Velocities[i].X = groundVelocity.X;
+						world.Velocities[i].Z = groundVelocity.Y;
+					}
 				}
 
 				// Apply gravity
@@ -44,7 +58,6 @@ namespace LegendOfCube.Engine
 				if (properties.Satisfies(MOVABLE))
 				{
 					world.Transforms[i].Translation += (world.Velocities[i] * delta);
-
 					// Hacky floor
 					if (world.Transforms[i].Translation.Y < 0)
 					{
@@ -52,6 +65,8 @@ namespace LegendOfCube.Engine
 						translation.Y = 0.0f;
 						world.Transforms[i].Translation = translation;
 						world.Velocities[i].Y = 0.0f;
+						//Reset # of jumps.
+						world.PlayerCubeState.CurrentJumps = 0;
 					}
 				}
 			}

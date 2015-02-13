@@ -16,7 +16,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		private Vector2 direction;
 		private Vector2 cameraDirection;
-		private bool isJumping;
+		private bool isJumping, newJump;
 
 		public Vector2 GetDirection()
 		{
@@ -45,12 +45,17 @@ namespace LegendOfCube.Engine
 
 		public bool NewJump()
 		{
-			return true;
+			return newJump;
 		}
 
 		public void SetStateOfJumping(bool isJumping)
 		{
 			this.isJumping = isJumping;
+		}
+
+		public void SetNewJump(bool isNewJump)
+		{
+			this.newJump = isNewJump;
 		}
 	}
 }
