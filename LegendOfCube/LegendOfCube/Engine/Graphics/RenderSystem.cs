@@ -42,8 +42,6 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			game.Window.AllowUserResizing = true;
 			graphics.PreferMultiSampling = true;
-			// TODO: Remove this. It's for unlocking frame rate temporarily.
-			graphics.SynchronizeWithVerticalRetrace = false;
 
 			game.GraphicsDevice.BlendState = BlendState.Opaque;
 			game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;

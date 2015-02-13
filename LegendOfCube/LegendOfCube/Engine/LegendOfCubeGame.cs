@@ -33,9 +33,6 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 			gameplaySystem = new GameplaySystem();
 			Content.RootDirectory = "Content";
-
-			// TODO: Remove this. It's for unlocking frame rate temporarily.
-			IsFixedTimeStep = false;
 		}
 
 		//Temp entityFactory with an empty prop.
@@ -140,7 +137,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-            float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, world);
 			gameplaySystem.processInputData(world, delta);
