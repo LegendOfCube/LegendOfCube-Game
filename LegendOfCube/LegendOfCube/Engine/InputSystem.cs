@@ -18,8 +18,9 @@ namespace LegendOfCube.Engine
 		private Game game;
 		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
-		private GamePadState oldGamePadState;
+
 		private GamePadState gamePadState;
+		private GamePadState oldGamePadState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -48,7 +49,7 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasPressed(Keys.Escape))
+			if (KeyWasJustPressed(Keys.Escape))
 			{
 				game.Exit();
 			}
@@ -98,19 +99,24 @@ namespace LegendOfCube.Engine
 			oldGamePadState = gamePadState;
 		}
 
-		private bool KeyWasPressed(Keys key)
+		private bool KeyWasJustPressed(Keys key)
 		{
-			return keyState.IsKeyDown(key) && !oldKeyState.IsKeyDown(key);
+			return keyState.IsKeyDown(key) && oldKeyState.IsKeyUp(key);
 		}
 
-		private bool KeyWasReleased(Keys key)
+		private bool KeyWasJustReleased(Keys key)
 		{
-			return keyState.IsKeyUp(key) && !oldKeyState.IsKeyUp(key);
+			return keyState.IsKeyUp(key) && oldKeyState.IsKeyDown(key);
 		}
 
-		private bool ButtonWasJustPressed(Keys key)
+		private bool ButtonWasJustPressed(Buttons button)
 		{
-			return keyState.IsKeyDown(key) && !oldKeyState.IsKeyDown(key);
+			return gamePadState.IsButtonDown(button) && oldGamePadState.IsButtonUp(button);
+		}
+
+		private bool ButtonWasJustReleased(Buttons button)
+		{
+			return gamePadState.IsButtonUp(button) && oldGamePadState.IsButtonDown(button);
 		}
 	}
 }
