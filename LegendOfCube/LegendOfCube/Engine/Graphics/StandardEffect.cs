@@ -37,7 +37,6 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectParameter emissiveTextureParam;
 		private readonly EffectParameter materialEmissiveColorParam;
 
-		private readonly EffectParameter useNormalTextureParam;
 		private readonly EffectParameter normalTextureParam;
 
 		private readonly EffectTechnique defaultTechnique;
@@ -80,7 +79,6 @@ namespace LegendOfCube.Engine.Graphics
 			this.emissiveTextureParam = effect.Parameters["EmissiveTexture"];
 			this.materialEmissiveColorParam = effect.Parameters["MaterialEmissiveColor"];
 
-			this.useNormalTextureParam = effect.Parameters["UseNormalTexture"];
 			this.normalTextureParam = effect.Parameters["NormalTexture"];
 
 			// Get handles to techniques
