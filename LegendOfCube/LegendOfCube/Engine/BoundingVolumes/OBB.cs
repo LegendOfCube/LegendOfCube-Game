@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	struct OBB {
+	public struct OBB {
 
 		// Private members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

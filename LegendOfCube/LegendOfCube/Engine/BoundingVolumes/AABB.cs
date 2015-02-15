@@ -9,7 +9,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 	/// <summary>
 	/// Specifies an Axis-Aligned Bounding-Box.
 	/// </summary>
-	struct AABB
+	public struct AABB
 	{
 		// Private members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	class IntersectionsTests
+	public class IntersectionsTests
 	{
 		private const float EPSILON = 0.0001f;
 
