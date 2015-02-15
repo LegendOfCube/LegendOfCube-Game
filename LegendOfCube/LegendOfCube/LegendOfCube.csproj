@@ -84,7 +84,6 @@
     <Compile Include="Engine\Entity.cs" />
     <Compile Include="Engine\InputSystem.cs" />
     <Compile Include="Engine\LegendOfCubeGame.cs" />
-    <Compile Include="Engine\OldLegendOfCubeGame.cs" />
     <Compile Include="Engine\PhysicsSystem.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\Graphics\RenderSystem.cs" />
