@@ -87,7 +87,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 		}
 
-		public Vector3 CenterPos
+		public Vector3 Position
 		{
 			get
 			{
@@ -96,6 +96,12 @@ namespace LegendOfCube.Engine.BoundingVolumes
 				pos.Y = pos.Y + (ExtentY / 2.0f);
 				pos.Z = pos.Z + (ExtentZ / 2.0f);
 				return pos;
+			}
+			set
+			{
+				var HalfExts = new Vector3(ExtentX/2.0f, ExtentY/2.0f, ExtentZ/2.0f);
+				this.box.Min = (value - HalfExts);
+				this.box.Max = (value + HalfExts);
 			}
 		}
 
