@@ -37,8 +37,10 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectParameter emissiveTextureParam;
 		private readonly EffectParameter materialEmissiveColorParam;
 
-		private readonly EffectParameter useNormalTextureParam;
 		private readonly EffectParameter normalTextureParam;
+
+		private readonly EffectTechnique defaultTechnique;
+		private readonly EffectTechnique normalMapTechnique;
 
 		// Cache this, for determining normal matrix (model to view) after
 		// world has been set
@@ -77,8 +79,12 @@ namespace LegendOfCube.Engine.Graphics
 			this.emissiveTextureParam = effect.Parameters["EmissiveTexture"];
 			this.materialEmissiveColorParam = effect.Parameters["MaterialEmissiveColor"];
 
-			this.useNormalTextureParam = effect.Parameters["UseNormalTexture"];
 			this.normalTextureParam = effect.Parameters["NormalTexture"];
+
+			// Get handles to techniques
+			this.defaultTechnique = Effect.Techniques["DefaultTechnique"];
+			this.normalMapTechnique = Effect.Techniques["NormalMapTechnique"];
+
 		}
 
 		public void SetViewProjection(ref Matrix view, ref Matrix projection)
@@ -86,7 +92,6 @@ namespace LegendOfCube.Engine.Graphics
 			this.view = view;
 			viewParam.SetValue(view);
 			projectionParam.SetValue(projection);
-
 		}
 
 		public void SetPointLight0Properties(ref Vector3 position, ref float strength, ref Vector4 lightColor)
@@ -106,7 +111,7 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			// Precalculate normal matrix used in effect
 			Matrix worldViewMatrix;
-			Matrix.Multiply(ref view, ref world, out worldViewMatrix);
+			Matrix.Multiply(ref world, ref view, out worldViewMatrix);
 			Matrix worldViewInverse;
 			Matrix.Invert(ref worldViewMatrix, out worldViewInverse);
 			Matrix normalMatrix;
@@ -182,7 +187,7 @@ namespace LegendOfCube.Engine.Graphics
 		/// <param name="texture">The texture, could be null</param>
 		public void SetNormalTexture(Texture texture)
 		{
-			useNormalTextureParam.SetValue(texture != null);
+			Effect.CurrentTechnique = texture != null ? normalMapTechnique : defaultTechnique;
 			normalTextureParam.SetValue(texture);
 		}
 	}
