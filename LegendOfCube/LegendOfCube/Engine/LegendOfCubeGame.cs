@@ -2,6 +2,7 @@
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -102,12 +103,35 @@ namespace LegendOfCube.Engine
 			Random rnd = new Random(0);
 			for (int i = 0; i < otherCubes.Length; i++)
 			{
+				bool noOverlap;
+				OBB bv;
+				do
+				{
+					noOverlap = true;
+					float scale = rnd.Next(1, 25);
+					bv = new OBB(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)),
+					             new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
+					             new Vector3(scale, scale, scale));
+
+					for (int j = 1; j < i; j++) // TODO: Hack. Starts at 1 to avoid player entity.
+					{
+						if (IntersectionsTests.Intersects(ref bv, ref world.BVs[j]))
+						{
+							noOverlap = false;
+							break;
+						}
+					}
+
+				} while (!noOverlap);
+
 				otherCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
-						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithTransform(Matrix.CreateScale(bv.ExtentX))
+						.WithPosition(bv.Position)
 						.WithStandardEffectParams(otherCubeEffect)
 						.AddToWorld(world);
+
+				world.BVs[i] = bv; // TODO: Hack, add properly to EntityBuilder
 			}
 
 			// This is definitely the most natural way to represent the ground
