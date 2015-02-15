@@ -99,6 +99,12 @@ namespace LegendOfCube.Engine
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
 					.AddToWorld(world);
 
+			// TODO: Ugly hack to add bv to cube.
+			world.EntityProperties[playerEntity.Id].Add(Properties.BOUNDING_VOLUME);
+			world.BVs[playerEntity.Id] = new OBB(world.Transforms[playerEntity.Id].Translation,
+												 new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
+												 new Vector3(1, 1, 1));
+
 			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
 			for (int i = 0; i < otherCubes.Length; i++)
@@ -132,6 +138,7 @@ namespace LegendOfCube.Engine
 						.AddToWorld(world);
 
 				world.BVs[i] = bv; // TODO: Hack, add properly to EntityBuilder
+				world.EntityProperties[i].Add(Properties.BOUNDING_VOLUME);
 			}
 
 			// This is definitely the most natural way to represent the ground

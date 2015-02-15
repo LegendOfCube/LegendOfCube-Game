@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -24,6 +25,8 @@ namespace LegendOfCube.Engine
 		                                                 Properties.TRANSFORM |
 		                                                 Properties.VELOCITY |
 		                                                 Properties.FRICTION_FLAG);
+
+		private static readonly Properties HAS_BV = new Properties(Properties.BOUNDING_VOLUME);
 
 		public void ApplyPhysics(float delta, World world)
 		{
@@ -55,16 +58,61 @@ namespace LegendOfCube.Engine
 				// Update position
 				if (properties.Satisfies(MOVABLE))
 				{
-					world.Transforms[i].Translation += (world.Velocities[i] * delta);
-					// Hacky floor
-					if (world.Transforms[i].Translation.Y < 0)
+					if (properties.Satisfies(HAS_BV))
 					{
-						Vector3 translation = world.Transforms[i].Translation;
-						translation.Y = 0.0f;
-						world.Transforms[i].Translation = translation;
-						world.Velocities[i].Y = 0.0f;
-						//Reset air state
-						world.PlayerCubeState.InAir = false;
+						Vector3 newPosition = world.Transforms[i].Translation + (world.Velocities[i] * delta);
+						OBB newBV = world.BVs[i];
+						newBV.Position = newPosition;
+
+						// Check if collision
+						UInt32 crashIndex = UInt32.MaxValue;
+						for (UInt32 bvIndex = 0; bvIndex < world.MaxNumEntities; bvIndex++)
+						{
+							if (!world.EntityProperties[bvIndex].Satisfies(HAS_BV)) continue;
+							if (IntersectionsTests.Intersects(ref newBV, ref world.BVs[bvIndex]))
+							{
+								crashIndex = bvIndex;
+								break;
+							}
+						}
+
+						// No collision
+						if (crashIndex == UInt32.MaxValue)
+						{
+							world.Transforms[i].Translation = newPosition;
+							world.BVs[i] = newBV;
+						}
+						else // collision
+						{
+							// Do nothing.
+						}
+
+						// Hacky floor
+						if (world.Transforms[i].Translation.Y < 0.5f)
+						{
+							Vector3 translation = world.Transforms[i].Translation;
+							translation.Y = 0.0f;
+							world.Transforms[i].Translation = translation;
+							world.Velocities[i].Y = 0.0f;
+							//Reset air state
+							world.PlayerCubeState.InAir = false;
+
+							world.BVs[i].Position = world.Transforms[i].Translation;
+						}
+					}
+					else
+					{
+						world.Transforms[i].Translation += (world.Velocities[i] * delta);
+						// Hacky floor
+						if (world.Transforms[i].Translation.Y < 0)
+						{
+							Vector3 translation = world.Transforms[i].Translation;
+							translation.Y = 0.0f;
+							world.Transforms[i].Translation = translation;
+							world.Velocities[i].Y = 0.0f;
+							//Reset air state
+							world.PlayerCubeState.InAir = false;
+						}
 					}
 				}
 			}
