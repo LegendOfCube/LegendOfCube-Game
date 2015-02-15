@@ -58,7 +58,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		// Public properties
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public Vector3 CenterPos
+		public Vector3 Position
 		{
 			get
 			{

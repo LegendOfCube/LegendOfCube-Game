@@ -40,7 +40,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 
 			// Computes translation vector between boxA and B and transforms it into A space
-			Vector3 translVecA = worldToA * (boxB.CenterPos - boxA.CenterPos);
+			Vector3 translVecA = worldToA * (boxB.Position - boxA.Position);
 
 			// Test all 15 axes in order of importance
 			float radiusA, radiusB;
