@@ -9,9 +9,9 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-																				Properties.INPUT_FLAG
-																				| Properties.ACCELERATION
-																				| Properties.VELOCITY);
+		                                                                        Properties.INPUT_FLAG |
+		                                                                        Properties.ACCELERATION |
+		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
 		private const float STOP_TIME = 1f;
 		private const float JUMP_TIME = 0.5f;
@@ -19,6 +19,7 @@ namespace LegendOfCube.Engine
 		private bool isStopping = false;
 		private float stopTimeLeft;
 		private const float BASE_JUMP = 9f;
+
 		public void ProcessInputData(World world, float delta)
 		{
 			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
@@ -61,15 +62,15 @@ namespace LegendOfCube.Engine
 						0, -world.InputData[i].GetDirection().Y * world.MaxAcceleration[i]);
 				}
 
-				
-				/*if (world.Accelerations[i].Length() > ACCELERATION)
+				Vector3 pos = world.Transforms[i].Translation;
+				Vector3 vel = world.Velocities[i];
+				if (vel.Length() > 0.5f)
 				{
-					Vector2 temp = new Vector2(world.Accelerations[i].X, world.Accelerations[i].Z);
-					temp.Normalize();
-					temp *= ACCELERATION;
-					world.Accelerations[i].X = temp.X;
-					world.Accelerations[i].Z = temp.Y;
-				}*/
+					vel.Normalize();
+					float angle = (float)Math.Atan2(vel.Z, -vel.X) + (float)(Math.PI / 2);
+					Matrix.CreateRotationY(angle, out world.Transforms[i]);
+					world.Transforms[i].Translation = pos;
+				}
 
 				// Jumping
 				if (world.InputData[i].IsJumping())

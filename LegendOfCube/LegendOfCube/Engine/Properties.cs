@@ -14,7 +14,7 @@ namespace LegendOfCube.Engine
 		// '1 << x' means that the bit at the x:th position is set.
 
 		public const UInt64 NO_PROPERTIES = 0;
-        public const UInt64 TRANSFORM = 1 << 0;
+		public const UInt64 TRANSFORM = 1 << 0;
 		public const UInt64 VELOCITY = 1 << 1;
 		public const UInt64 ACCELERATION = 1 << 2;
 		public const UInt64 GRAVITY_FLAG = 1 << 3;

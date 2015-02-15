@@ -9,7 +9,7 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
+		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
 		                                                                  Properties.INPUT_FLAG);
 
 		// Members
@@ -18,8 +18,9 @@ namespace LegendOfCube.Engine
 		private Game game;
 		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
-		private GamePadState oldGamePadState;
+
 		private GamePadState gamePadState;
+		private GamePadState oldGamePadState;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -48,7 +49,7 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasPressed(Keys.Escape))
+			if (KeyWasJustPressed(Keys.Escape))
 			{
 				game.Exit();
 			}
@@ -92,20 +93,46 @@ namespace LegendOfCube.Engine
 					inputData.SetStateOfJumping(false);
 					inputData.SetNewJump(false);
 				}
+
+				Vector2 cameraDirection = new Vector2(0,0);
+				// Camera movement
+				if (keyState.IsKeyDown(Keys.Up) ) cameraDirection.Y++;
+
+				if (keyState.IsKeyDown(Keys.Down)) cameraDirection.Y--;
+
+				if (keyState.IsKeyDown(Keys.Left)) cameraDirection.X--;
+
+				if (keyState.IsKeyDown(Keys.Right)) cameraDirection.X++;
+
+				// Normalize the vector to our needs, then set direction
+				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : gamePadState.ThumbSticks.Right;
+
+				inputData.SetCameraDirection(cameraDirection);
+
 			}
 
 			oldKeyState = keyState;
 			oldGamePadState = gamePadState;
 		}
 
-		private bool KeyWasPressed(Keys key)
+		private bool KeyWasJustPressed(Keys key)
 		{
-			return keyState.IsKeyDown(key) && !oldKeyState.IsKeyDown(key);
+			return keyState.IsKeyDown(key) && oldKeyState.IsKeyUp(key);
 		}
 
-		private bool KeyWasReleased(Keys key)
+		private bool KeyWasJustReleased(Keys key)
 		{
-			return keyState.IsKeyUp(key) && !oldKeyState.IsKeyUp(key);
+			return keyState.IsKeyUp(key) && oldKeyState.IsKeyDown(key);
+		}
+
+		private bool ButtonWasJustPressed(Buttons button)
+		{
+			return gamePadState.IsButtonDown(button) && oldGamePadState.IsButtonUp(button);
+		}
+
+		private bool ButtonWasJustReleased(Buttons button)
+		{
+			return gamePadState.IsButtonUp(button) && oldGamePadState.IsButtonDown(button);
 		}
 	}
 }
