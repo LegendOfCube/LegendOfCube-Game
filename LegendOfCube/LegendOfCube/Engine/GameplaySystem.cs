@@ -18,7 +18,7 @@ namespace LegendOfCube.Engine
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
 		private float stopTimeLeft;
-		private const float BASE_JUMP = 9f;
+		private const float BASE_JUMP = 12f;
 
 		public void ProcessInputData(World world, float delta)
 		{
