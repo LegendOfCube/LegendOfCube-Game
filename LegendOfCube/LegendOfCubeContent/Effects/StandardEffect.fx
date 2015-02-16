@@ -93,8 +93,8 @@ struct NormalTexVertexShaderInput
 {
 	float4 Position : POSITION0;
 	float4 Normal : NORMAL0;
-	float3 Tangent : TANGENT0;
-	float3 Binormal : BINORMAL0;
+	float4 Tangent : TANGENT0;
+	float4 Binormal : BINORMAL0;
 	float2 TextureCoordinate : TEXCOORD0;
 };
 
@@ -119,9 +119,9 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	float4 viewSpaceNormal = normalize(mul(input.Normal, NormalMatrix));
 
 	// Pass along to pixel shader
-	output.ViewSpacePos = viewPosition;
 	output.Position = projecPosition;
-	output.ViewSpaceNormal = viewSpaceNormal;
+	output.ViewSpacePos = viewPosition.xyz;
+	output.ViewSpaceNormal = viewSpaceNormal.xyz;
 	output.TextureCoordinate = input.TextureCoordinate;
 
 	return output;
@@ -138,13 +138,13 @@ NormalTexVertexShaderOutput NormalTexVertexShaderFunction(NormalTexVertexShaderI
 	float4 viewSpaceNormal = normalize(mul(input.Normal, NormalMatrix));
 
 	// Pass along to pixel shader
-	output.ViewSpacePos = viewPosition;
+	output.ViewSpacePos = viewPosition.xyz;
 	output.Position = projecPosition;
-	output.ViewSpaceNormal = viewSpaceNormal;
+	output.ViewSpaceNormal = viewSpaceNormal.xyz;
 	output.TextureCoordinate = input.TextureCoordinate;
 
-	output.ViewSpaceTangent = normalize(mul(input.Tangent, NormalMatrix));
-	output.ViewSpaceBinormal = normalize(mul(input.Binormal, NormalMatrix));
+	output.ViewSpaceTangent = normalize(mul(input.Tangent, NormalMatrix).xyz);
+	output.ViewSpaceBinormal = normalize(mul(input.Binormal, NormalMatrix).xyz);
 
 	return output;
 }
@@ -169,7 +169,8 @@ float4 MainPixelShading(float2 textureCoordinate, float3 viewSpacePos, float3 no
 
 	// Determine diffuse, specular and fresnel factor (0 to 1)
 	float diffuseFactor = lightDistanceFactor * max(0.0, dot(normal, directionToLight));
-	float specularFactor = lightDistanceFactor * max(pow(dot(h, normal), Shininess), 0.0);
+	float specularDot = dot(h, normal);
+	float specularFactor = specularDot <= 0.0 ? 0.0 : lightDistanceFactor * max(pow(specularDot, Shininess), 0.0);
 	float fresnelFactor = pow(clamp(1.0 - dot(directionToEye, normal), 0.0, 1.0), 5.0);
 
 	// Apply fresnel effect
@@ -200,7 +201,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 float4 NormalTexPixelShaderFunction(NormalTexVertexShaderOutput input) : COLOR0
 {
 	// Get normal from normal map
-	float3 normalTexVec = 2.0 * tex2D(normalTextureSampler, input.TextureCoordinate) - 1.0;
+	float4 normalTexVec = 2.0 * tex2D(normalTextureSampler, input.TextureCoordinate) - 1.0;
 
 	// Inverting green channel might be needed when exporing from some 3D programs
 	// normalTexVec.y = -normalTexVec.y;
