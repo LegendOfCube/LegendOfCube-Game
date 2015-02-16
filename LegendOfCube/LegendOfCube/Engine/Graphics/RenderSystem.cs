@@ -19,7 +19,7 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.TRANSFORM |
 		                                                                Properties.FULL_LIGHT_EFFECT);
 
-		public static readonly Vector4 LIGHT_COLOR = Color.Orange.ToVector4();
+		public static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -86,7 +86,7 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetAmbientIntensity(0.1f);
 
 			var lightColor = LIGHT_COLOR;
-			var lightStrength = 18.0f;
+			var lightStrength = 25.0f;
 			standardEffect.SetPointLight0Properties(ref world.LightPosition, ref lightStrength, ref lightColor);
 
 			var boundingFrustum = new BoundingFrustum(view * projection);
