@@ -46,13 +46,40 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			EnsureCorrectState();
 		}
 
-		// Public properties
+		// Public functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public bool Intersects(ref OBB other)
 		{
+			return IntersectionsTests.Intersects(ref this, ref other);
+		}
 
-			return true;
+		public static OBB TransformOBB(ref OBB obb, Matrix transform)
+		{
+			Vector3 obbX = obb.AxisX;
+			obbX.Normalize();
+			obbX *= obb.ExtentX;
+			Vector3 obbY = obb.AxisY;
+			obbY.Normalize();
+			obbY *= obb.ExtentY;
+			Vector3 obbZ = obb.AxisZ;
+			obbZ.Normalize();
+			obbZ *= obb.ExtentZ;
+
+			OBB result = new OBB();
+			result.center = Vector3.Transform(obb.center, transform);
+			
+			result.xAxis = Vector3.Transform(obbX, transform);
+			result.yAxis = Vector3.Transform(obbY, transform);
+			result.zAxis = Vector3.Transform(obbZ, transform);
+
+			result.halfExtents = new Vector3(result.xAxis.Length(), result.yAxis.Length(), result.zAxis.Length());
+
+			result.xAxis.Normalize();
+			result.yAxis.Normalize();
+			result.zAxis.Normalize();
+
+			return result;
 		}
 		
 		// Public properties
