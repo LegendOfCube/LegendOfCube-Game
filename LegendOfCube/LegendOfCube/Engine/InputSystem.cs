@@ -36,7 +36,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world)
+		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -52,6 +52,11 @@ namespace LegendOfCube.Engine
 			if (KeyWasJustPressed(Keys.Escape))
 			{
 				game.Exit();
+			}
+
+			if (KeyWasJustPressed(Keys.Tab))
+			{
+				switcher.Switch();	
 			}
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {

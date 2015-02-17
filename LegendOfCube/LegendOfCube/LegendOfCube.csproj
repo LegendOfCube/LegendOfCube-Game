@@ -92,6 +92,7 @@
     <Compile Include="Engine\Graphics\StandardEffect.cs" />
     <Compile Include="Engine\Graphics\StandardEffectParams.cs" />
     <Compile Include="Engine\Screen.cs" />
+    <Compile Include="Engine\SwitcherSystem.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

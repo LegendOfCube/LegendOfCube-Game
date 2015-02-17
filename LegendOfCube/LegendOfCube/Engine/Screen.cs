@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
 {
-	abstract class Screen
+	public abstract class Screen
 	{
 		protected Game Game;
 
@@ -16,7 +16,7 @@ namespace LegendOfCube.Engine
 			this.Game = game;
 		}
 
-		protected internal abstract void Update(GameTime gameTime, World world);
+		protected internal abstract void Update(GameTime gameTime, World world, SwitcherSystem switcher);
 		protected internal abstract void Draw(GameTime gameTime, RenderSystem renderSystem, World world);
 	}
 }

@@ -12,14 +12,16 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private World world;
-		private RenderSystem renderSystem;
-		private Screen[] screens;
+		private readonly World world;
+		private readonly RenderSystem renderSystem;
+		private readonly Screen[] screens;
 		private Screen currentScreen;
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
 		private Entity ground;
+
+		public SwitcherSystem SwitcherSystem;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -33,6 +35,8 @@ namespace LegendOfCube.Engine
 			screens[0] = new GameScreen(this);
 			screens[1] = new MenuScreen(this);
 			currentScreen = screens[0];
+
+			SwitcherSystem = new SwitcherSystem(this);
 		}
 
 		//Temp entityFactory with an empty prop.
@@ -135,7 +139,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			currentScreen.Update(gameTime, world);
+			currentScreen.Update(gameTime, world, SwitcherSystem);
 			base.Update(gameTime);
 		}
 
@@ -152,6 +156,16 @@ namespace LegendOfCube.Engine
 		// Helper methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
+		public void SwitchScreen()
+		{
+			if (currentScreen is GameScreen)
+			{
+				currentScreen = screens[1];
+			}
+			else if (currentScreen is MenuScreen)
+			{
+				currentScreen = screens[0];
+			}
+		}
 	}
 }

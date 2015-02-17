@@ -9,18 +9,25 @@ namespace LegendOfCube.Engine
 {
 	class MenuScreen : Screen
 	{
+		private readonly InputSystem inputSystem;
+
 		public MenuScreen(Game game) : base(game)
 		{
+			this.inputSystem = new InputSystem(game);
 		}
 
-		protected internal override void Update(GameTime gameTime, World world)
+		protected internal override void Update(GameTime gameTime, World world, SwitcherSystem switcher)
 		{
-			throw new NotImplementedException();
+			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+			inputSystem.ApplyInput(gameTime, world, switcher);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem, World world)
 		{
-			throw new NotImplementedException();
+			Game.GraphicsDevice.Clear(Color.Tomato);
+
+			renderSystem.RenderWorld(world);
 		}
 	}
 }

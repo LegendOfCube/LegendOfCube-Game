@@ -21,11 +21,11 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 		}
 
-		protected internal override void Update(GameTime gameTime, World world)
+		protected internal override void Update(GameTime gameTime, World world, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			inputSystem.ApplyInput(gameTime, world);
+			inputSystem.ApplyInput(gameTime, world, switcher);
 			gameplaySystem.ProcessInputData(world, delta);
 			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 		}
