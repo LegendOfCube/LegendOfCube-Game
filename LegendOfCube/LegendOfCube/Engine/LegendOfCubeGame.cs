@@ -13,15 +13,16 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private World world;
-		private InputSystem inputSystem;
-		private PhysicsSystem physicsSystem;
-		private RenderSystem renderSystem;
-		private GameplaySystem gameplaySystem;
+		private readonly World world;
+		private readonly RenderSystem renderSystem;
+		private readonly Screen[] screens;
+		private Screen currentScreen;
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
 		private Entity ground;
+
+		public SwitcherSystem SwitcherSystem;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -29,11 +30,14 @@ namespace LegendOfCube.Engine
 		public LegendOfCubeGame()
 		{
 			world = new World(1002);
-			inputSystem = new InputSystem(this);
-			renderSystem = new RenderSystem(this);
-			physicsSystem = new PhysicsSystem();
-			gameplaySystem = new GameplaySystem();
 			Content.RootDirectory = "Content";
+			renderSystem = new RenderSystem(this);
+			screens = new Screen[2];
+			screens[0] = new GameScreen(this);
+			screens[1] = new MenuScreen(this);
+			currentScreen = screens[0];
+
+			SwitcherSystem = new SwitcherSystem(this);
 		}
 
 		//Temp entityFactory with an empty prop.
@@ -138,12 +142,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-			inputSystem.ApplyInput(gameTime, world);
-			gameplaySystem.ProcessInputData(world, delta);
-			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
-
+			currentScreen.Update(gameTime, world, SwitcherSystem);
 			base.Update(gameTime);
 		}
 
@@ -153,17 +152,23 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
-			GraphicsDevice.BlendState = BlendState.Opaque;
-			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-			renderSystem.RenderWorld(world);
+			currentScreen.Draw(gameTime, renderSystem, world);
 			base.Draw(gameTime);
 		}
 
 		// Helper methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
+		public void SwitchScreen()
+		{
+			if (currentScreen is GameScreen)
+			{
+				currentScreen = screens[1];
+			}
+			else if (currentScreen is MenuScreen)
+			{
+				currentScreen = screens[0];
+			}
+		}
 	}
 }
