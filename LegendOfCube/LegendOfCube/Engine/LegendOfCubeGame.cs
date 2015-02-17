@@ -21,6 +21,9 @@ namespace LegendOfCube.Engine
 		private Entity playerEntity;
 		private Entity[] otherCubes;
 		private Entity ground;
+		private SpriteFont font;
+		private SpriteBatch spriteBatch;
+		private Vector2 fontPos;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -117,6 +120,13 @@ namespace LegendOfCube.Engine
 					.WithPosition(new Vector3(0, -1000.0f, 0))
 					.WithStandardEffectParams(groundEffect)
 					.AddToWorld(world);
+
+			spriteBatch = new SpriteBatch(GraphicsDevice);
+			font = Content.Load<SpriteFont>("Arial");
+			fontPos = new Vector2(0, 0);
+
+
+
 		}
 
 		/// <summary>
@@ -155,6 +165,12 @@ namespace LegendOfCube.Engine
 			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 			renderSystem.RenderWorld(world);
+			
+			spriteBatch.Begin();
+			string output = "Legend of Cube";
+			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
+			spriteBatch.End();
+
 			base.Draw(gameTime);
 		}
 
