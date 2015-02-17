@@ -54,7 +54,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			return IntersectionsTests.Intersects(ref this, ref other);
 		}
 
-		public static OBB TransformOBB(ref OBB obb, Matrix transform)
+		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
 		{
 			Vector3 obbX = obb.AxisX;
 			obbX.Normalize();
@@ -67,19 +67,28 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			obbZ *= obb.ExtentZ;
 
 			OBB result = new OBB();
-			result.center = Vector3.Transform(obb.center, transform);
-			
-			result.xAxis = Vector3.Transform(obbX, transform);
-			result.yAxis = Vector3.Transform(obbY, transform);
-			result.zAxis = Vector3.Transform(obbZ, transform);
+			result.center = transform.Translation + obb.center;//Vector3.Transform(obb.center, transform);
 
-			result.halfExtents = new Vector3(result.xAxis.Length(), result.yAxis.Length(), result.zAxis.Length());
+			result.xAxis = Transform(ref transform, ref obbX);
+			result.yAxis = Transform(ref transform, ref obbY);
+			result.zAxis = Transform(ref transform, ref obbZ);
+
+			result.halfExtents = new Vector3(result.xAxis.Length()/2.0f, result.yAxis.Length()/2.0f, result.zAxis.Length()/2.0f);
 
 			result.xAxis.Normalize();
 			result.yAxis.Normalize();
 			result.zAxis.Normalize();
 
 			return result;
+		}
+
+		private static Vector3 Transform(ref Matrix m, ref Vector3 v)
+		{
+			Vector3 res = new Vector3();
+			res.X = m.M11*v.X + m.M12*v.Y + m.M13*v.Z;
+			res.Y = m.M21*v.X + m.M22*v.Y + m.M23*v.Z;
+			res.Z = m.M31*v.X + m.M32*v.Y + m.M33*v.Z;
+			return res;
 		}
 		
 		// Public properties
