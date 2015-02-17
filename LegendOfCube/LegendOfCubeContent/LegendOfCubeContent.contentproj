@@ -37,7 +37,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube_plain.FBX">
+    <Compile Include="Models\Cube\cube_plain.FBX">
       <Name>cube_plain</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -45,7 +45,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube_diff.jpg">
+    <Compile Include="Models\Cube\cube_diff.jpg">
       <Name>cube_diff</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -60,13 +60,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube_emissive.jpg">
+    <Compile Include="Models\Cube\cube_emissive.jpg">
       <Name>cube_emissive</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
-    <Compile Include="Models\cube_specular.jpg">
+    <Compile Include="Models\Cube\cube_specular.jpg">
       <Name>cube_specular</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -74,7 +74,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube_normal.jpg">
+    <Compile Include="Models\Cube\cube_normal.jpg">
       <Name>cube_normal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

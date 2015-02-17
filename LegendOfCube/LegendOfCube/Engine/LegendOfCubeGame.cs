@@ -63,22 +63,22 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			var cubeModel = Content.Load<Model>("Models/cube_plain");
+			var cubeModel = Content.Load<Model>("Models/Cube/cube_plain");
 
 			var playerEffect = new StandardEffectParams
 			{
-				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),
-				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
+				DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),
+				EmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
 			};
 
 			var otherCubeEffect = new StandardEffectParams
 			{
-				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),
-				SpecularTexture = Content.Load<Texture>("Models/cube_specular"),
-				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
-				NormalTexture = Content.Load<Texture>("Models/cube_normal"),
+				DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),
+				SpecularTexture = Content.Load<Texture>("Models/Cube/cube_specular"),
+				EmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),
+				NormalTexture = Content.Load<Texture>("Models/Cube/cube_normal"),
 				SpecularColor = Color.White.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
 			};
