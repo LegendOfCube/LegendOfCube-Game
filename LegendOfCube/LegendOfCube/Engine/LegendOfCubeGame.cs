@@ -64,10 +64,11 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			var cubeModel = Content.Load<Model>("Models/Cube/cube_plain");
+			var newCubeModel = Content.Load<Model>("Models/Cube/cube_clean");
 
 			var playerEffect = new StandardEffectParams
 			{
-				DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),
+				//DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),
 				EmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
@@ -90,7 +91,7 @@ namespace LegendOfCube.Engine
 			};
 
 			playerEntity =
-				new EntityBuilder().WithModel(cubeModel)
+				new EntityBuilder().WithModel(newCubeModel)
 					.WithPosition(Vector3.Zero)
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
