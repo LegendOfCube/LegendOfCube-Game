@@ -2,6 +2,7 @@
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -95,7 +96,8 @@ namespace LegendOfCube.Engine
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
 					.WithStandardEffectParams(playerEffect)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
+					.WithBoundingVolume(new OBB(new Vector3(0,0.5f,0), new Vector3(1,0,0), new Vector3(0,1,0), new Vector3(0,0,1), new Vector3(1,1,1)))
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
 					.AddToWorld(world);
 
 			otherCubes = new Entity[1000];
@@ -107,6 +109,7 @@ namespace LegendOfCube.Engine
 						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(otherCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 						.AddToWorld(world);
 			}
 
