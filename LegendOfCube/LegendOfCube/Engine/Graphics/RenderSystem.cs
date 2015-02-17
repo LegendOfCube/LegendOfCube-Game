@@ -78,7 +78,6 @@ namespace LegendOfCube.Engine.Graphics
 			                        game.GraphicsDevice.Viewport.AspectRatio,
 			                        0.1f,
 			                        1000.0f);
-			oldCamPos = camPos;
 
 
 			standardEffect.SetViewProjection(ref view, ref projection);
