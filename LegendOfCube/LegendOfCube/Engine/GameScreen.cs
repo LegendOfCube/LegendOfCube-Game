@@ -9,8 +9,15 @@ namespace LegendOfCube.Engine
 {
 	class GameScreen : Screen
 	{
-		public GameScreen(RenderSystem renderSystem, Game game) : base(renderSystem, game)
+		private readonly InputSystem inputSystem;
+		private readonly GameplaySystem gameplaySystem;
+		private readonly PhysicsSystem physicsSystem;
+
+		public GameScreen(Game game) : base(game)
 		{
+			inputSystem = new InputSystem(game);
+			gameplaySystem = new GameplaySystem();
+			physicsSystem = new PhysicsSystem();
 		}
 
 		protected override void Update(GameTime gameTime)

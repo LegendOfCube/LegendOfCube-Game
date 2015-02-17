@@ -12,10 +12,10 @@ namespace LegendOfCube.Engine
 		private Game game;
 		private RenderSystem renderSystem;
 
-		protected Screen(RenderSystem renderSystem, Game game)
+		protected Screen(Game game)
 		{
-			this.renderSystem = renderSystem;
 			this.game = game;
+			this.renderSystem = new RenderSystem(game);
 		}
 
 		protected abstract void Update(GameTime gameTime);

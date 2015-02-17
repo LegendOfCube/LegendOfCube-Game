@@ -17,6 +17,7 @@ namespace LegendOfCube.Engine
 		private PhysicsSystem physicsSystem;
 		private RenderSystem renderSystem;
 		private GameplaySystem gameplaySystem;
+		private Screen[] screens;
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
@@ -33,6 +34,8 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 			gameplaySystem = new GameplaySystem();
 			Content.RootDirectory = "Content";
+			screens[0] = new GameScreen(new RenderSystem(this), this);
+			screens[1] = new MenuScreen(new RenderSystem(this), this);
 		}
 
 		//Temp entityFactory with an empty prop.
