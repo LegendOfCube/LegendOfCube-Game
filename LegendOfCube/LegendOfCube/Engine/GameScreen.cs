@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
 {
@@ -20,14 +21,22 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 		}
 
-		protected override void Update(GameTime gameTime)
+		protected internal override void Update(GameTime gameTime, World world)
 		{
-			throw new NotImplementedException();
+			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+			inputSystem.ApplyInput(gameTime, world);
+			gameplaySystem.ProcessInputData(world, delta);
+			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
 		}
 
-		protected override void Draw(GameTime gameTime)
+		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem, World world)
 		{
-			throw new NotImplementedException();
+			Game.GraphicsDevice.Clear(Color.CornflowerBlue);
+			Game.GraphicsDevice.BlendState = BlendState.Opaque;
+			Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+
+			renderSystem.RenderWorld(world);
 		}
 	}
 }

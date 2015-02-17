@@ -9,16 +9,16 @@ namespace LegendOfCube.Engine
 {
 	class MenuScreen : Screen
 	{
-		public MenuScreen(RenderSystem renderSystem, Game game) : base(renderSystem, game)
+		public MenuScreen(Game game) : base(game)
 		{
 		}
 
-		protected override void Update(GameTime gameTime)
+		protected internal override void Update(GameTime gameTime, World world)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected override void Draw(GameTime gameTime)
+		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem, World world)
 		{
 			throw new NotImplementedException();
 		}

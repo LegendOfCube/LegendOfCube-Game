@@ -9,17 +9,14 @@ namespace LegendOfCube.Engine
 {
 	abstract class Screen
 	{
-		private Game game;
-		private RenderSystem renderSystem;
+		protected Game Game;
 
 		protected Screen(Game game)
 		{
-			this.game = game;
-			this.renderSystem = new RenderSystem(game);
+			this.Game = game;
 		}
 
-		protected abstract void Update(GameTime gameTime);
-
-		protected abstract void Draw(GameTime gameTime);
+		protected internal abstract void Update(GameTime gameTime, World world);
+		protected internal abstract void Draw(GameTime gameTime, RenderSystem renderSystem, World world);
 	}
 }
