@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	class IntersectionsTests
+	public class IntersectionsTests
 	{
 		private const float EPSILON = 0.0001f;
 
@@ -40,13 +40,13 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 
 			// Computes translation vector between boxA and B and transforms it into A space
-			Vector3 translVecA = worldToA * (boxB.CenterPos - boxA.CenterPos);
+			Vector3 translVecA = worldToA * (boxB.Position - boxA.Position);
 
 			// Test all 15 axes in order of importance
 			float radiusA, radiusB;
 
 			// Axes Ax, Ay and Az
-			for (uint i = 0; i < 3; i++)
+			for (uint i = 1; i <= 3; i++)
 			{
 				radiusA = At(boxA.HalfExtents, i);
 				radiusB = Vector3.Dot(bToAAbs.RowAt(i), boxB.HalfExtents);
@@ -54,7 +54,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 
 			// Axes Bx, By and Bz
-			for (uint i = 0; i < 3; i++ )
+			for (uint i = 1; i <= 3; i++ )
 			{
 				radiusA = Vector3.Dot(aToBAbs.RowAt(i), boxA.HalfExtents);
 				radiusB = At(boxB.HalfExtents, i);

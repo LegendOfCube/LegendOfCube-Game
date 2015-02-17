@@ -21,7 +21,7 @@ namespace LegendOfCube.Engine
 		public const UInt64 INPUT_FLAG = 1 << 4;
 		public const UInt64 MODEL = 1 << 5;
 		public const UInt64 FULL_LIGHT_EFFECT = 1 << 6;
-		public const UInt64 FRICTION_FLAG = 1 << 7;
+		public const UInt64 MODEL_SPACE_BV = 1 << 7;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -46,7 +46,12 @@ namespace LegendOfCube.Engine
 		/// <returns>True if all requirements are fulfilled</returns>
 		public bool Satisfies(Properties requirements)
 		{
-			return ((this.mask & requirements.mask) == requirements.mask);
+			return Satisfies(requirements.mask);
+		}
+
+		public bool Satisfies(UInt64 requirements)
+		{
+			return ((this.mask & requirements) == requirements);
 		}
 
 		public void Add(UInt64 add)

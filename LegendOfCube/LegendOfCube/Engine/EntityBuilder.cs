@@ -1,4 +1,5 @@
-﻿using LegendOfCube.Engine.Graphics;
+﻿using LegendOfCube.Engine.BoundingVolumes;
+using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -17,6 +18,7 @@ namespace LegendOfCube.Engine
 		private float maxSpeed;
 		private Model model;
 		private StandardEffectParams sep;
+		private OBB modelSpaceOBB;
 
 		/// <summary>
 		/// Assign a model for the entity being built.
@@ -27,6 +29,18 @@ namespace LegendOfCube.Engine
 		{
 			properties.Add(Properties.MODEL);
 			this.model = model;
+			return this;
+		}
+
+		/// <summary>
+		/// Assigns a OBB BoundingVolume defined in model space for entity being built.
+		/// </summary>
+		/// <param name="modelSpaceOBB">The OBB defined in model space</param>
+		/// <returns>An instance of this, for chaining</returns>
+		public EntityBuilder WithBoundingVolume(OBB modelSpaceOBB)
+		{
+			properties.Add(Properties.MODEL_SPACE_BV);
+			this.modelSpaceOBB = modelSpaceOBB;
 			return this;
 		}
 
@@ -110,32 +124,37 @@ namespace LegendOfCube.Engine
 		{
 			Entity entity = world.CreateEntity(properties);
 
-			if (properties.Satisfies(new Properties(Properties.TRANSFORM)))
+			if (properties.Satisfies(Properties.TRANSFORM))
 			{
 				world.Transforms[entity.Id] = transform;
 			}
-			if (properties.Satisfies(new Properties(Properties.ACCELERATION)))
+			if (properties.Satisfies(Properties.ACCELERATION))
 			{
 				world.Accelerations[entity.Id] = acceleration;
 				world.MaxAcceleration[entity.Id] = maxAcceleration;
 			}
-			if (properties.Satisfies(new Properties(Properties.VELOCITY)))
+			if (properties.Satisfies(Properties.VELOCITY))
 			{
 				world.Velocities[entity.Id] = velocity;
 				world.MaxSpeed[entity.Id] = maxSpeed;
 			}
-			if (properties.Satisfies(new Properties(Properties.MODEL)))
+			if (properties.Satisfies(Properties.MODEL))
 			{
 				world.Models[entity.Id] = model;
 			}
-			if (properties.Satisfies(new Properties(Properties.FULL_LIGHT_EFFECT)))
+			if (properties.Satisfies(Properties.FULL_LIGHT_EFFECT))
 			{
 				world.StandardEffectParams[entity.Id] = sep;
 			}
-			if (properties.Satisfies(new Properties(Properties.INPUT_FLAG)))
+			if (properties.Satisfies(Properties.INPUT_FLAG))
 			{
 				// Not entirely sure if INPUT_FLAG implies having InputData
+				// TODO: Rename INPUT_FLAG to INPUT as it implies data.
 				world.InputData[entity.Id] = new InputDataImpl();
+			}
+			if (properties.Satisfies(Properties.MODEL_SPACE_BV))
+			{
+				world.ModelSpaceBVs[entity.Id] = this.modelSpaceOBB;
 			}
 			return entity;
 		}
