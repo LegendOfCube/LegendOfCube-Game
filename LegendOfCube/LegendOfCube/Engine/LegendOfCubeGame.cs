@@ -79,7 +79,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			song = Content.Load<Song>("Audio/ACBF");
+			song = Content.Load<Song>("Audio/simplicity");
 
 			Model cubeModel = Content.Load<Model>("Models/cube_plain");
 			Model wallModel = Content.Load<Model>("Models/wall");

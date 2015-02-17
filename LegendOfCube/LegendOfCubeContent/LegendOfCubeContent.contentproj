@@ -56,8 +56,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Audio\ACBF.mp3">
-      <Name>ACBF</Name>
+    <Compile Include="Audio\simplicity.mp3">
+      <Name>simplicity</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
     </Compile>
