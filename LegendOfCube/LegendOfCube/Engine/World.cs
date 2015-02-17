@@ -38,10 +38,14 @@ namespace LegendOfCube.Engine
 		// Player state
 		public PlayerCubeState PlayerCubeState;
 
+		// Shortcut to player entity which there will be one instance of
+		public Entity Player;
+
 		// World variables
 
 		public Vector3 Gravity;
 		public Vector3 LightPosition;
+		public Vector3 CameraPosition;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -79,6 +83,7 @@ namespace LegendOfCube.Engine
 			PlayerCubeState = new PlayerCubeState();
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 		}
+
 
 		// Public Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

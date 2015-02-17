@@ -72,7 +72,7 @@ namespace LegendOfCube.Engine.Graphics
 			Vector3 up = new Vector3(0, 1, 0);
 			float fov = 90;
 
-			Vector3 camPos = UpdateCamera(playerTransform, oldCamPos, playerPos, up, input);
+			Vector3 camPos = world.CameraPosition;
 			Matrix view = Matrix.CreateLookAt(camPos, camTarget, up);
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(
 			                        MathHelper.ToRadians(fov),
