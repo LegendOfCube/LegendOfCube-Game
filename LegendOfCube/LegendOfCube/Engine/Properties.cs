@@ -21,8 +21,7 @@ namespace LegendOfCube.Engine
 		public const UInt64 INPUT_FLAG = 1 << 4;
 		public const UInt64 MODEL = 1 << 5;
 		public const UInt64 FULL_LIGHT_EFFECT = 1 << 6;
-		public const UInt64 FRICTION_FLAG = 1 << 7;
-		public const UInt64 MODEL_SPACE_BV = 1 << 8;
+		public const UInt64 MODEL_SPACE_BV = 1 << 7;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
