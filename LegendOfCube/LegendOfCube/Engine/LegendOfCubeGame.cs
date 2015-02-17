@@ -12,14 +12,10 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private readonly World world;
 		private readonly RenderSystem renderSystem;
 		private readonly Screen[] screens;
 		private Screen currentScreen;
 
-		private Entity playerEntity;
-		private Entity[] otherCubes;
-		private Entity ground;
 
 		public SwitcherSystem SwitcherSystem;
 
@@ -28,7 +24,6 @@ namespace LegendOfCube.Engine
 
 		public LegendOfCubeGame()
 		{
-			world = new World(1002);
 			Content.RootDirectory = "Content";
 			renderSystem = new RenderSystem(this);
 			screens = new Screen[2];
@@ -37,12 +32,6 @@ namespace LegendOfCube.Engine
 			currentScreen = screens[0];
 
 			SwitcherSystem = new SwitcherSystem(this);
-		}
-
-		//Temp entityFactory with an empty prop.
-		public Entity CreateEntity(Properties props)
-		{
-			return world.CreateEntity(props);
 		}
 
 		// Overriden XNA methods
@@ -67,60 +56,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			var cubeModel = Content.Load<Model>("Models/cube_plain");
-
-			var playerEffect = new StandardEffectParams
-			{
-				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),
-				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
-				SpecularColor = Color.Gray.ToVector4(),
-				EmissiveColor = Color.White.ToVector4()
-			};
-
-			var otherCubeEffect = new StandardEffectParams
-			{
-				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),
-				SpecularTexture = Content.Load<Texture>("Models/cube_specular"),
-				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),
-				NormalTexture = Content.Load<Texture>("Models/cube_normal"),
-				SpecularColor = Color.White.ToVector4(),
-				EmissiveColor = Color.White.ToVector4()
-			};
-
-			var groundEffect = new StandardEffectParams
-			{
-				DiffuseColor = Color.Gray.ToVector4(),
-				SpecularColor = 0.5f * Color.White.ToVector4()
-			};
-
-			playerEntity =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(Vector3.Zero)
-					.WithVelocity(Vector3.Zero, 15)
-					.WithAcceleration(Vector3.Zero, 30)
-					.WithStandardEffectParams(playerEffect)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
-					.AddToWorld(world);
-
-			otherCubes = new Entity[1000];
-			Random rnd = new Random(0);
-			for (int i = 0; i < otherCubes.Length; i++)
-			{
-				otherCubes[i] =
-					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
-						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
-						.WithStandardEffectParams(otherCubeEffect)
-						.AddToWorld(world);
-			}
-
-			// This is definitely the most natural way to represent the ground
-			ground =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithTransform(Matrix.CreateScale(1000.0f))
-					.WithPosition(new Vector3(0, -1000.0f, 0))
-					.WithStandardEffectParams(groundEffect)
-					.AddToWorld(world);
+			currentScreen.LoadContent();
 		}
 
 		/// <summary>
@@ -139,7 +75,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			currentScreen.Update(gameTime, world, SwitcherSystem);
+			currentScreen.Update(gameTime, SwitcherSystem);
 			base.Update(gameTime);
 		}
 
@@ -149,7 +85,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			currentScreen.Draw(gameTime, renderSystem, world);
+			currentScreen.Draw(gameTime, renderSystem);
 			base.Draw(gameTime);
 		}
 

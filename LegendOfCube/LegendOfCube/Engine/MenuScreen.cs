@@ -13,21 +13,27 @@ namespace LegendOfCube.Engine
 
 		public MenuScreen(Game game) : base(game)
 		{
+			World = new World(1002);
 			this.inputSystem = new InputSystem(game);
 		}
 
-		protected internal override void Update(GameTime gameTime, World world, SwitcherSystem switcher)
+		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			inputSystem.ApplyInput(gameTime, world, switcher);
+			inputSystem.ApplyInput(gameTime, World, switcher);
 		}
 
-		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem, World world)
+		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
 		{
 			Game.GraphicsDevice.Clear(Color.Tomato);
 
-			renderSystem.RenderWorld(world);
+			renderSystem.RenderWorld(World);
+		}
+
+		internal override void LoadContent()
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
