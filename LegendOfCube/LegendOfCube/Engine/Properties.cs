@@ -47,7 +47,12 @@ namespace LegendOfCube.Engine
 		/// <returns>True if all requirements are fulfilled</returns>
 		public bool Satisfies(Properties requirements)
 		{
-			return ((this.mask & requirements.mask) == requirements.mask);
+			return Satisfies(requirements.mask);
+		}
+
+		public bool Satisfies(UInt64 requirements)
+		{
+			return ((this.mask & requirements) == requirements);
 		}
 
 		public void Add(UInt64 add)
