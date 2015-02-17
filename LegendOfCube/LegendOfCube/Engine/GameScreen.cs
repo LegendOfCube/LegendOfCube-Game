@@ -15,6 +15,7 @@ namespace LegendOfCube.Engine
 		private readonly InputSystem inputSystem;
 		private readonly GameplaySystem gameplaySystem;
 		private readonly PhysicsSystem physicsSystem;
+		private readonly CameraSystem cameraSystem;
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
@@ -26,6 +27,7 @@ namespace LegendOfCube.Engine
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem();
+			cameraSystem = new CameraSystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
@@ -34,6 +36,7 @@ namespace LegendOfCube.Engine
 			inputSystem.ApplyInput(gameTime, World, switcher);
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
+			cameraSystem.OnUpdate(World, delta);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)

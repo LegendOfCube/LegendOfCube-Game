@@ -47,7 +47,6 @@ namespace LegendOfCube.Engine
 		protected override void Initialize()
 		{
 			renderSystem.Initialize();
-
 			base.Initialize();
 		}
 
