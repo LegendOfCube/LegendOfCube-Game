@@ -91,7 +91,7 @@ namespace LegendOfCube.Engine
 						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
 						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
 
-						Debug.WriteLine("Axis: " + axis);
+						Debug.WriteLine("Axis: " + axis + "\n\n");
 
 						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 						world.Velocities[i] -= (collidingSum * axis);
@@ -113,19 +113,81 @@ namespace LegendOfCube.Engine
 						translation.Y = 0.0f;
 						world.Transforms[i].Translation = translation;
 						world.Velocities[i].Y = 0.0f;
-						//Reset air state
+						//Reset air state 
 						world.PlayerCubeState.InAir = false;
 					}
 				}
 			}
 		}
 
-		private static Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPre, ref OBB colliderPost)
-		{
-			Debug.Assert(!target.Intersects(ref colliderPre));
-			Debug.Assert(target.Intersects(ref colliderPost));
+		private const uint SIDE_X = 0;
+		private const uint SIDE_MIN_X = 1;
+		private const uint SIDE_Y = 2;
+		private const uint SIDE_MIN_Y = 3;
+		private const uint SIDE_Z = 4;
+		private const uint SIDE_MIN_Z = 5;
+		private OBB[] sideOBBs = new OBB[6];
+		private bool[] sideOBBsHit = new bool[6];
 
-			Vector3 movement = colliderPost.Position - colliderPre.Position;
+		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPre, ref OBB colliderPost)
+		{
+			//Debug.Assert(!target.Intersects(ref colliderPre));
+			//Debug.Assert(target.Intersects(ref colliderPost));
+
+			calculateSideOBBs(ref target);
+			//Debug.WriteLine("Target OBB:\n" + target);
+			uint hitCount = 0;
+			for (uint i = 0; i < 6; i++)
+			{
+				sideOBBsHit[i] = IntersectionsTests.Intersects(ref sideOBBs[i], ref colliderPost);
+				if (sideOBBsHit[i])
+				{
+					hitCount++;
+					Debug.WriteLine("Side OBB " + i + ", " + (sideOBBsHit[i] ? "HIT\n" : "NOT HIT\n") + sideOBBs[i] + "\n");
+				}
+			}
+
+			Debug.Assert(hitCount >= 1);
+			
+			/*if (hitCount > 1)
+			{
+				Vector3 colliderPostPos = colliderPost.Position;
+				hitCount = 0;
+				for (uint i = 0; i < 6; i++)
+				{
+					sideOBBsHit[i] = IntersectionsTests.Inside(ref colliderPostPos, ref sideOBBs[i]);
+					if (sideOBBsHit[i]) hitCount++;
+				}
+
+				Debug.Assert(hitCount == 1);
+			}*/
+
+			uint hitSide = 9;
+			for (uint i = 0; i < 6; i++)
+			{
+				if (sideOBBsHit[i])
+				{
+					hitSide = i;
+					break;
+				}
+			}
+
+			switch (hitSide)
+			{
+				case SIDE_X: return target.AxisX;
+				case SIDE_MIN_X: return -target.AxisX;
+				case SIDE_Y: return target.AxisY;
+				case SIDE_MIN_Y: return -target.AxisY;
+				case SIDE_Z: return target.AxisZ;
+				case SIDE_MIN_Z: return -target.AxisZ;
+				default:
+					Debug.Assert(false);
+					break;
+			}
+
+			return new Vector3(0, 0, 0); // Stupid C#.
+
+			/*Vector3 movement = colliderPost.Position - colliderPre.Position;
 			float xDot = Vector3.Dot(movement, target.AxisX);
 			float yDot = Vector3.Dot(movement, target.AxisY);
 			float zDot = Vector3.Dot(movement, target.AxisZ);
@@ -146,7 +208,22 @@ namespace LegendOfCube.Engine
 			Vector3 targetToCollider = colliderPre.Position - target.Position;
 			float sign = Vector3.Dot(targetToCollider, axis);
 
-			return Math.Sign(sign) * axis;
+			return Math.Sign(sign) * axis;*/
+		}
+
+		private void calculateSideOBBs(ref OBB target)
+		{
+			for (uint i = 0; i < 6; i++)
+			{
+				sideOBBs[i] = target;
+			}
+			
+			sideOBBs[SIDE_X].Position += (target.AxisX * target.ExtentX);
+			sideOBBs[SIDE_MIN_X].Position += ((-target.AxisX) * target.ExtentX);
+			sideOBBs[SIDE_Y].Position += (target.AxisY * target.ExtentY);
+			sideOBBs[SIDE_MIN_Y].Position += ((-target.AxisY) * target.ExtentY);
+			sideOBBs[SIDE_Z].Position += (target.AxisZ * target.ExtentZ);
+			sideOBBs[SIDE_MIN_Z].Position += ((-target.AxisZ) * target.ExtentZ);
 		}
 	}
 }
