@@ -76,6 +76,8 @@
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
     <Compile Include="Engine\BoundingVolumes\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
+    <Compile Include="Engine\GameScreen.cs" />
+    <Compile Include="Engine\MenuScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />
     <Compile Include="Engine\PlayerCubeState.cs" />
     <Compile Include="Engine\EntityBuilder.cs" />
@@ -90,6 +92,8 @@
     <Compile Include="Engine\Graphics\RenderSystem.cs" />
     <Compile Include="Engine\Graphics\StandardEffect.cs" />
     <Compile Include="Engine\Graphics\StandardEffectParams.cs" />
+    <Compile Include="Engine\Screen.cs" />
+    <Compile Include="Engine\SwitcherSystem.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
