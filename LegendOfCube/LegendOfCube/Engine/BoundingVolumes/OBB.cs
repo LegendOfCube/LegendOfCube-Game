@@ -67,7 +67,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			obbZ *= obb.ExtentZ;
 
 			OBB result = new OBB();
-			result.center = transform.Translation + obb.center;//Vector3.Transform(obb.center, transform);
+			result.center = transform.Translation + OBB.Transform(ref transform, ref obb.center);
 
 			result.xAxis = Transform(ref transform, ref obbX);
 			result.yAxis = Transform(ref transform, ref obbY);
