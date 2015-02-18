@@ -54,7 +54,7 @@ namespace LegendOfCube.Engine
 				game.Exit();
 			}
 
-			if (KeyWasJustPressed(Keys.Tab))
+			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
 				switcher.Switch();	
 			}
