@@ -67,9 +67,8 @@ namespace LegendOfCube.Engine
 					OBB worldSpaceOBB = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref newTransform);
 
 					// Searches for intersections
-					bool collisionOccured = false;
-					UInt32 collisionIndex = 0;
-					OBB collisionBox;
+					UInt32 collisionIndex = UInt32.MaxValue;
+					OBB collisionBox = new OBB();
 					for (UInt32 j = 0; j < world.HighestOccupiedId; j++)
 					{
 						if (i == j) continue;
@@ -78,20 +77,27 @@ namespace LegendOfCube.Engine
 
 						if (collisionBox.Intersects(ref worldSpaceOBB))
 						{
-							collisionOccured = true;
 							collisionIndex = j;
-							Debug.WriteLine("collision at" + collisionBox.Position + " with " + worldSpaceOBB.Position);
 							break;
 						}
 					}
 
-					if (!collisionOccured) // No collision occured
+					if (collisionIndex == UInt32.MaxValue) // No collision occured
 					{
 						world.Transforms[i] = newTransform;
 					}
 					else // Collision occured
 					{
-						// Do nothing for now
+						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
+
+						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+						world.Velocities[i] -= (collidingSum * axis);
+
+						newTranslation = world.Transforms[i].Translation + (world.Velocities[i] * delta);
+						world.Transforms[i].Translation = newTranslation;
+						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+
 					}
 
 				}
@@ -110,6 +116,11 @@ namespace LegendOfCube.Engine
 					}
 				}
 			}
+		}
+
+		private static Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPre, ref OBB colliderPost)
+		{
+			return new Vector3(0, 1, 0);
 		}
 	}
 }
