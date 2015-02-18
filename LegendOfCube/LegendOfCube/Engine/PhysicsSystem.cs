@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
 
 		public void ApplyPhysics(float delta, World world)
 		{
-			for (UInt32 i = 0; i < world.HighestOccupiedId; i++)
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
 				Properties properties = world.EntityProperties[i];
 				// Check if velocity should be updated
@@ -55,12 +55,6 @@ namespace LegendOfCube.Engine
 				{
 					// Calculate new transform
 					Vector3 newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
-					if (newTranslation.Y < 0) // UGLY FLOOR HACK
-					{
-						newTranslation.Y = 0;
-						world.Velocities[i].Y = 0.0f;
-						world.PlayerCubeState.InAir = false;
-					}
 					Matrix newTransform = world.Transforms[i];
 					newTransform.Translation = newTranslation;
 
@@ -69,7 +63,7 @@ namespace LegendOfCube.Engine
 					// Searches for intersections
 					UInt32 collisionIndex = UInt32.MaxValue;
 					OBB collisionBox = new OBB();
-					for (UInt32 j = 0; j < world.HighestOccupiedId; j++)
+					for (UInt32 j = 0; j <= world.HighestOccupiedId; j++)
 					{
 						if (i == j) continue;
 						if (!world.EntityProperties[j].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
@@ -105,16 +99,6 @@ namespace LegendOfCube.Engine
 				else if (properties.Satisfies(MOVABLE_NO_BV))
 				{
 					world.Transforms[i].Translation += (world.Velocities[i] * delta);
-					// Hacky floor
-					if (world.Transforms[i].Translation.Y < 0)
-					{
-						Vector3 translation = world.Transforms[i].Translation;
-						translation.Y = 0.0f;
-						world.Transforms[i].Translation = translation;
-						world.Velocities[i].Y = 0.0f;
-						//Reset air state 
-						world.PlayerCubeState.InAir = false;
-					}
 				}
 			}
 		}
