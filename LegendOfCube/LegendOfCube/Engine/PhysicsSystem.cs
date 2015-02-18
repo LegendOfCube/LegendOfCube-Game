@@ -99,7 +99,6 @@ namespace LegendOfCube.Engine
 						newTranslation = world.Transforms[i].Translation + (world.Velocities[i] * delta);
 						world.Transforms[i].Translation = newTranslation;
 						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
-
 					}
 
 				}
