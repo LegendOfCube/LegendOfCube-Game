@@ -91,6 +91,8 @@ namespace LegendOfCube.Engine
 						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
 						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
 
+						Debug.WriteLine("Axis: " + axis);
+
 						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 						world.Velocities[i] -= (collidingSum * axis);
 
@@ -120,7 +122,31 @@ namespace LegendOfCube.Engine
 
 		private static Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPre, ref OBB colliderPost)
 		{
-			return new Vector3(0, 1, 0);
+			Debug.Assert(!target.Intersects(ref colliderPre));
+			Debug.Assert(target.Intersects(ref colliderPost));
+
+			Vector3 movement = colliderPost.Position - colliderPre.Position;
+			float xDot = Vector3.Dot(movement, target.AxisX);
+			float yDot = Vector3.Dot(movement, target.AxisY);
+			float zDot = Vector3.Dot(movement, target.AxisZ);
+
+			// Making wild guess that the largest dot corresponds to the axis we're after.
+			// This is obviously not correct as I can make up scenarios in my mind where
+			// this will fail, but it might be good enough for our purposes.
+			float xDotAbs = Math.Abs(xDot);
+			float yDotAbs = Math.Abs(yDot);
+			float zDotAbs = Math.Abs(zDot);
+			Vector3 axis = new Vector3();
+			if (xDotAbs >= yDotAbs && xDotAbs >= zDotAbs) axis = target.AxisX;
+			else if (yDotAbs >= xDotAbs && yDotAbs >= zDotAbs) axis = target.AxisY;
+			else if (zDotAbs >= xDotAbs && zDotAbs >= yDotAbs) axis = target.AxisZ;
+			else Debug.Assert(false);
+
+			// Now that we have the axis we just want to know the sign.
+			Vector3 targetToCollider = colliderPre.Position - target.Position;
+			float sign = Vector3.Dot(targetToCollider, axis);
+
+			return Math.Sign(sign) * axis;
 		}
 	}
 }
