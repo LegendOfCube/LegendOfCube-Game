@@ -91,7 +91,15 @@ namespace LegendOfCube.Engine
 					}
 					else // Collision occured
 					{
-						// Do nothing for now
+						// Temporary collision response, more correct would be reflecting
+						// around normal vector (but we probably rather want sticking to the wall)
+						world.Velocities[i] = -world.Velocities[i];
+
+						// Visual effect for debugging
+						if (world.EntityProperties[i].Satisfies(Properties.FULL_LIGHT_EFFECT))
+						{
+							world.StandardEffectParams[i].EmissiveColor = Vector4.One - world.StandardEffectParams[i].EmissiveColor;
+						}
 					}
 
 				}
