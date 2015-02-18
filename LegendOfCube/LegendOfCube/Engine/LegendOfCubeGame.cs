@@ -30,6 +30,7 @@ namespace LegendOfCube.Engine
 			screens = new Screen[2];
 			screens[0] = new GameScreen(this);
 			screens[1] = new MenuScreen(this);
+			screens[1].SetWorld(screens[0].World);
 			currentScreen = screens[0];
 
 			SwitcherSystem = new SwitcherSystem(this);
