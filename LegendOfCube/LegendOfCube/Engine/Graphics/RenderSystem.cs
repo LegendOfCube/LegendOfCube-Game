@@ -27,7 +27,6 @@ namespace LegendOfCube.Engine.Graphics
 		private Game game;
 		private GraphicsDeviceManager graphics;
 		private StandardEffect standardEffect;
-		private Vector3 oldCamPos;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -72,14 +71,13 @@ namespace LegendOfCube.Engine.Graphics
 			Vector3 up = new Vector3(0, 1, 0);
 			float fov = 90;
 
-			Vector3 camPos = UpdateCamera(playerTransform, oldCamPos, playerPos, up, input);
+			Vector3 camPos = world.CameraPosition;
 			Matrix view = Matrix.CreateLookAt(camPos, camTarget, up);
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(
 			                        MathHelper.ToRadians(fov),
 			                        game.GraphicsDevice.Viewport.AspectRatio,
 			                        0.1f,
 			                        1000.0f);
-			oldCamPos = camPos;
 
 
 			standardEffect.SetViewProjection(ref view, ref projection);
@@ -207,59 +205,5 @@ namespace LegendOfCube.Engine.Graphics
 			}
 			return false;
 		}
-
-		private Vector3 UpdateCamera(Matrix playerTransform, Vector3 oldCamPos, Vector3 playerPos, Vector3 up, InputData input)
-		{
-
-			Vector3 defaultCameraPos = playerPos;
-			Vector3 newCamPos;
-			if (input == null || input.GetCameraDirection().Equals(new Vector2(0, 0)))
-			{ // If the user does not give any input about camera the camera position is calculated.
-				defaultCameraPos = playerPos + playerTransform.Backward * 3.0f + up * 2.5f;
-				Vector3 interpolatedCamPos = interpolate(oldCamPos, defaultCameraPos, 50);
-				interpolatedCamPos.Normalize();
-				newCamPos = playerPos - interpolatedCamPos * 3.0f + up * 2.5f;
-			}
-			else
-			{ // The user defines the cameras position
-			  // TODO: Change to camera rotating when right stick used
-				Vector3 userCamera = new Vector3(input.GetCameraDirection().X, 0, input.GetCameraDirection().Y);
-				userCamera.Normalize();
-				userCamera.X = -userCamera.X;
-				newCamPos = playerTransform.Translation - userCamera * 3.0f + up * 2.5f;
-			}
-
-			return newCamPos;
-		}
-
-
-		// TODO: FIX interpolation
-		private Vector3 interpolate(Vector3 oldVec, Vector3 newVec, float factor)
-		{
-
-			// Calculates the angle between the vectors (In 2D since we dont want to change the Y-coordinate)
-			Vector2 a = new Vector2(oldVec.X, oldVec.Z);
-			Vector2 b = new Vector2(newVec.X, newVec.Z);
-			a.Normalize();
-			b.Normalize();
-			double dot = Vector2.Dot(a, b);
-			if (dot >= 0.90 && dot <= 1.001f)
-			{
-				// Just returns the new vector if the angle between them is small enough
-				return newVec;
-			}
-
-			// Creates an angle to rotate around
-			double alpha = Math.Acos(dot);
-			float rotationAngle = (float)alpha * factor;
-
-			// Creates a matrix and rotates the input vector
-			Matrix rotate = Matrix.CreateRotationY(rotationAngle);
-			Vector3 interpolated = Vector3.Transform(oldVec, rotate);
-
-			return interpolated;
-		}
-
-
 	}
 }

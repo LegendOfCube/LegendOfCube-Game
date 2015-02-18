@@ -18,6 +18,7 @@ namespace LegendOfCube.Engine
 		private PhysicsSystem physicsSystem;
 		private RenderSystem renderSystem;
 		private GameplaySystem gameplaySystem;
+		private CameraSystem cameraSystem;
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
@@ -33,6 +34,7 @@ namespace LegendOfCube.Engine
 			renderSystem = new RenderSystem(this);
 			physicsSystem = new PhysicsSystem();
 			gameplaySystem = new GameplaySystem();
+			cameraSystem = new CameraSystem();
 			Content.RootDirectory = "Content";
 		}
 
@@ -54,7 +56,7 @@ namespace LegendOfCube.Engine
 		protected override void Initialize()
 		{
 			renderSystem.Initialize();
-
+			cameraSystem.Initialize(world);
 			base.Initialize();
 		}
 
@@ -99,6 +101,7 @@ namespace LegendOfCube.Engine
 					.WithBoundingVolume(new OBB(new Vector3(0,0.5f,0), new Vector3(1,0,0), new Vector3(0,1,0), new Vector3(0,0,1), new Vector3(1,1,1)))
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
 					.AddToWorld(world);
+			world.Player = playerEntity;
 
 			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
@@ -143,6 +146,7 @@ namespace LegendOfCube.Engine
 			inputSystem.ApplyInput(gameTime, world);
 			gameplaySystem.ProcessInputData(world, delta);
 			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
+			cameraSystem.OnUpdate(world, delta);
 
 			base.Update(gameTime);
 		}

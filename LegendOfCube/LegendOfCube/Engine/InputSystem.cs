@@ -49,7 +49,7 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape))
+			if (KeyWasJustPressed(Keys.Escape) || ButtonWasJustPressed(Buttons.Back))
 			{
 				game.Exit();
 			}
