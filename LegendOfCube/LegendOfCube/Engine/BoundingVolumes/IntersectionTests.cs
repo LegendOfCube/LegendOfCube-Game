@@ -10,6 +10,13 @@ namespace LegendOfCube.Engine.BoundingVolumes
 	{
 		private const float EPSILON = 0.0001f;
 
+		public static bool Inside(ref Vector3 point, ref OBB box)
+		{
+			// TODO: Currently really sad implementation. Please fix.
+			OBB pointObb = new OBB(point, new Vector3(0,0,1), new Vector3(0,1,0), new Vector3(1,0,0), 0.001f, 0.001f, 0.001f);
+			return Intersects(ref pointObb, ref box);
+		}
+
 		public static bool Intersects(ref AABB boxA, ref AABB boxB)
 		{
 			return boxA.Intersects(ref boxB);
