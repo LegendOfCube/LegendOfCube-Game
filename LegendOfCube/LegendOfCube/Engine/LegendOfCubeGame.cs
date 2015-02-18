@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,7 +15,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private readonly RenderSystem renderSystem;
-		private readonly Screen[] screens;
+		private readonly List<Screen> screens;
 		private Screen currentScreen;
 
 
@@ -27,9 +28,7 @@ namespace LegendOfCube.Engine
 		{
 			Content.RootDirectory = "Content";
 			renderSystem = new RenderSystem(this);
-			screens = new Screen[2];
-			screens[0] = new GameScreen(this);
-			screens[1] = new MenuScreen(this);
+			screens = new List<Screen> {new GameScreen(this), new MenuScreen(this)};
 			screens[1].SetWorld(screens[0].World);
 			currentScreen = screens[0];
 
