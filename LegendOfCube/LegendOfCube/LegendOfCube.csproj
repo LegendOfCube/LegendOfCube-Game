@@ -74,7 +74,7 @@
   <ItemGroup>
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
-    <Compile Include="Engine\BoundingVolumes\Matrix3x3.cs" />
+    <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\GameScreen.cs" />
     <Compile Include="Engine\MenuScreen.cs" />
