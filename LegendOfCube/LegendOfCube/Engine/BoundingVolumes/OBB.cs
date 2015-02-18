@@ -241,6 +241,15 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 		}
 
+		public override string ToString()
+		{
+			return "Pos: " + Position +
+			       "\nAxisX: " + AxisX +
+			       "\nAxisY: " + AxisY +
+			       "\nAxisZ: " + AxisZ +
+			       "\nExtents: " + Extents;
+		}
+
 		// Private functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
