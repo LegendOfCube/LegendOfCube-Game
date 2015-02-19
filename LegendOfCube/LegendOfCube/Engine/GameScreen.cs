@@ -21,7 +21,8 @@ namespace LegendOfCube.Engine
 		private Entity[] otherCubes;
 		private Entity ground;
 		private Entity DeathZone;
-		private Entity[] otherBouncyCubes;
+		private Entity[] BouncyCubes;
+		private Entity[] DeathCubes;
 
 		public GameScreen(Game game) : base(game)
 		{
@@ -73,7 +74,7 @@ namespace LegendOfCube.Engine
 				EmissiveColor = Color.White.ToVector4()
 			};
 
-			var otherBouncyCubeEffect = new StandardEffectParams
+			var bouncyCubeEffect = new StandardEffectParams
 			{
 				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
 				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
@@ -81,6 +82,17 @@ namespace LegendOfCube.Engine
 				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
 				SpecularColor = Color.Yellow.ToVector4(),
 				EmissiveColor = Color.Yellow.ToVector4()
+			};
+
+			var deathCubeEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
+				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
+				EmissiveTexture = Game.Content.Load<Texture>("Models/cube_emissive"),
+				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.Red.ToVector4(),
+				EmissiveColor = Color.White.ToVector4(),
+				DiffuseColor = Color.Red.ToVector4(),
 			};
 
 			var groundEffect = new StandardEffectParams
@@ -113,17 +125,31 @@ namespace LegendOfCube.Engine
 						.AddToWorld(World);
 			}
 
-			otherBouncyCubes = new Entity[100];
+			BouncyCubes = new Entity[100];
 			rnd = new Random(1);
-			for (int i = 0; i < otherBouncyCubes.Length; i++)
+			for (int i = 0; i < BouncyCubes.Length; i++)
 			{
-				otherCubes[i] =
+				BouncyCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
 						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
-						.WithStandardEffectParams(otherBouncyCubeEffect)
+						.WithStandardEffectParams(bouncyCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 						.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+						.AddToWorld(World);
+			}
+
+			DeathCubes = new Entity[100];
+			rnd = new Random(2);
+			for (int i = 0; i < DeathCubes.Length; i++)
+			{
+				DeathCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithStandardEffectParams(deathCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 						.AddToWorld(World);
 			}
 
