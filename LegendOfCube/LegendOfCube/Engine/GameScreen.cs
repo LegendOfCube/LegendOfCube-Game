@@ -51,7 +51,7 @@ namespace LegendOfCube.Engine
 		internal override void LoadContent()
 		{
 
-			var cubeModel = Game.Content.Load<Model>("Models/Cube/cube_plain");
+			var cubeModel = Game.Content.Load<Model>("Models/Cube/cube_clean");
 
 			var playerEffect = new StandardEffectParams
 			{
