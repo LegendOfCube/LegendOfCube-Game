@@ -95,6 +95,7 @@
     <Compile Include="Engine\Screen.cs" />
     <Compile Include="Engine\SwitcherSystem.cs" />
     <Compile Include="Engine\World.cs" />
+    <Compile Include="Level\ConceptLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

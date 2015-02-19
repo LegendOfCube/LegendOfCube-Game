@@ -6,6 +6,7 @@ using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Level;
 
 namespace LegendOfCube.Engine
 {
@@ -17,9 +18,8 @@ namespace LegendOfCube.Engine
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
 
+
 		private Entity playerEntity;
-		private Entity[] otherCubes;
-		private Entity platform;
 
 		public GameScreen(Game game) : base(game)
 		{
@@ -50,8 +50,7 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
-
-			var cubeModel = Game.Content.Load<Model>("Models/Cube/cube_clean");
+/*			var cubeModel = Game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = Game.Content.Load<Model>("Models/Platform/platform");
 
 			var playerEffect = new StandardEffectParams
@@ -62,38 +61,12 @@ namespace LegendOfCube.Engine
 				EmissiveColor = Color.White.ToVector4()
 			};
 
-			var otherCubeEffect = new StandardEffectParams
-			{
-				//DiffuseTexture = Game.Content.Load<Texture>("Models/Cube/cube_diff"),
-				//SpecularTexture = Game.Content.Load<Texture>("Models/Cube/cube_specular"),
-				//EmissiveTexture = Game.Content.Load<Texture>("Models/Cube/cube_emissive"),
-				//NormalTexture = Game.Content.Load<Texture>("Models/Cube/cube_normal"),
-				//SpecularColor = Color.White.ToVector4(),
-				//EmissiveColor = Color.White.ToVector4()
-			};
 
-			var groundEffect = new StandardEffectParams
-			{
-				//DiffuseColor = Color.Gray.ToVector4(),
-				//SpecularColor = 0.5f * Color.White.ToVector4()
-			};
+			*/
+			ConceptLevel.CreateLevel(World, Game);
 
-			playerEntity =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(new Vector3(0, 20.0f, 0))
-					.WithVelocity(Vector3.Zero, 15)
-					.WithAcceleration(Vector3.Zero, 30)
-					.WithStandardEffectParams(playerEffect)
-					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
-					.AddToWorld(World);
 
-			platform =
-				new EntityBuilder().WithModel(platformModel)
-					.WithTransform(Matrix.CreateScale(0.1f))
-					.WithPosition(new Vector3(0, -3, -3))
-					.AddToWorld(World);
-			/*
+/*
 			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
 			for (int i = 0; i < otherCubes.Length; i++)
@@ -106,17 +79,7 @@ namespace LegendOfCube.Engine
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 						.AddToWorld(World);
 			}
-			*/
-
-
-			// This is definitely the most natural way to represent the ground
-			//ground =
-			//	new EntityBuilder().WithModel(cubeModel)
-			//		.WithTransform(Matrix.CreateScale(1000.0f))
-			//		.WithPosition(new Vector3(0, -1000.0f, 0))
-			//		.WithStandardEffectParams(groundEffect)
-			//		.AddToWorld(World);
-
+*/
 		}
 	}
 }
