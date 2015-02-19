@@ -1,0 +1,82 @@
+[1mdiff --git a/LegendOfCube/LegendOfCube/Engine/LegendOfCubeGame.cs b/LegendOfCube/LegendOfCube/Engine/LegendOfCubeGame.cs[m
+[1mindex 70bf98f..c68fd8d 100644[m
+[1m--- a/LegendOfCube/LegendOfCube/Engine/LegendOfCubeGame.cs[m
+[1m+++ b/LegendOfCube/LegendOfCube/Engine/LegendOfCubeGame.cs[m
+[36m@@ -63,24 +63,26 @@[m [mnamespace LegendOfCube.Engine[m
+ 		/// </summary>[m
+ 		protected override void LoadContent()[m
+ 		{[m
+[31m-			var cubeModel = Content.Load<Model>("Models/cube_plain");[m
+[32m+[m			[32mvar cubeModel = Content.Load<Model>("Models/Cube/cube_clean");[m
+[32m+[m			[32mvar newCubeModel = Content.Load<Model>("Models/Cube/cube_clean");[m
+ [m
+ 			var playerEffect = new StandardEffectParams[m
+ 			{[m
+[31m-				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),[m
+[31m-				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),[m
+[31m-				SpecularColor = Color.Gray.ToVector4(),[m
+[31m-				EmissiveColor = Color.White.ToVector4()[m
+[32m+[m				[32m//DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),[m
+[32m+[m				[32mSpecularTexture = Content.Load<Texture>("Models/Cube/cube_specular"),[m
+[32m+[m				[32mEmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),[m
+[32m+[m				[32mSpecularColor = Color.White.ToVector4(),[m
+[32m+[m				[32mEmissiveColor = Color.Gray.ToVector4()[m
+ 			};[m
+ [m
+ 			var otherCubeEffect = new StandardEffectParams[m
+ 			{[m
+[31m-				DiffuseTexture = Content.Load<Texture>("Models/cube_diff"),[m
+[31m-				SpecularTexture = Content.Load<Texture>("Models/cube_specular"),[m
+[31m-				EmissiveTexture = Content.Load<Texture>("Models/cube_emissive"),[m
+[31m-				NormalTexture = Content.Load<Texture>("Models/cube_normal"),[m
+[32m+[m				[32m//DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),[m
+[32m+[m				[32mSpecularTexture = Content.Load<Texture>("Models/Cube/cube_specular"),[m
+[32m+[m				[32mEmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),[m
+[32m+[m				[32m//NormalTexture = Content.Load<Texture>("Models/Cube/cube_normal"),[m
+ 				SpecularColor = Color.White.ToVector4(),[m
+[31m-				EmissiveColor = Color.White.ToVector4()[m
+[32m+[m				[32mEmissiveColor = Color.Gray.ToVector4()[m
+ 			};[m
+ [m
+ 			var groundEffect = new StandardEffectParams[m
+[36m@@ -90,7 +92,7 @@[m [mnamespace LegendOfCube.Engine[m
+ 			};[m
+ [m
+ 			playerEntity =[m
+[31m-				new EntityBuilder().WithModel(cubeModel)[m
+[32m+[m				[32mnew EntityBuilder().WithModel(newCubeModel)[m
+ 					.WithPosition(Vector3.Zero)[m
+ 					.WithVelocity(Vector3.Zero, 15)[m
+ 					.WithAcceleration(Vector3.Zero, 30)[m
+[1mdiff --git a/LegendOfCube/LegendOfCubeContent/LegendOfCubeContent.contentproj b/LegendOfCube/LegendOfCubeContent/LegendOfCubeContent.contentproj[m
+[1mindex a939848..2fcdeba 100644[m
+[1m--- a/LegendOfCube/LegendOfCubeContent/LegendOfCubeContent.contentproj[m
+[1m+++ b/LegendOfCube/LegendOfCubeContent/LegendOfCubeContent.contentproj[m
+[36m@@ -37,7 +37,7 @@[m
+     </Compile>[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+[31m-    <Compile Include="Models\cube_plain.FBX">[m
+[32m+[m[32m    <Compile Include="Models\Cube\cube_plain.FBX">[m
+       <Name>cube_plain</Name>[m
+       <Importer>FbxImporter</Importer>[m
+       <Processor>ModelProcessor</Processor>[m
+[36m@@ -45,7 +45,7 @@[m
+     </Compile>[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+[31m-    <Compile Include="Models\cube_diff.jpg">[m
+[32m+[m[32m    <Compile Include="Models\Cube\cube_diff.jpg">[m
+       <Name>cube_diff</Name>[m
+       <Importer>TextureImporter</Importer>[m
+       <Processor>TextureProcessor</Processor>[m
+[36m@@ -60,13 +60,13 @@[m
+     </Compile>[m
+   </ItemGroup>[m
+   <ItemGroup>[m
+[31m-    <Compile Include="Models\cube_emissive.jpg">[m
+[32m+[m[32m    <Compile Include="Models\Cube\cube_emissive.jpg">[m
+       <Name>cube_emissive</Name>[m
+       <Importer>TextureImporter</Importer>[m
+       <Processor>TextureProcessor</Processor>[m
+       <ProcessorParameters_GenerateMipmaps>T
