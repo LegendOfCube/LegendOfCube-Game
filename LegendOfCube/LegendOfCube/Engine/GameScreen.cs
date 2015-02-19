@@ -79,7 +79,7 @@ namespace LegendOfCube.Engine
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(Vector3.Zero)
+					.WithPosition(new Vector3(0, 20.0f, 0))
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
 					.WithStandardEffectParams(playerEffect)
@@ -106,6 +106,7 @@ namespace LegendOfCube.Engine
 					.WithTransform(Matrix.CreateScale(1000.0f))
 					.WithPosition(new Vector3(0, -1000.0f, 0))
 					.WithStandardEffectParams(groundEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.AddToWorld(World);
 		}
 	}
