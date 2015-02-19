@@ -58,8 +58,28 @@ namespace LegendOfCube.Engine
 				else
 				{
 					isStopping = false;
-					world.Accelerations[i] = new Vector3(world.InputData[i].GetDirection().X * world.MaxAcceleration[i], 
-						0, -world.InputData[i].GetDirection().Y * world.MaxAcceleration[i]);
+
+					// Rotate input
+
+					Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
+
+					// Calculate angle formed along ground by the cameras position relative the player
+					float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);
+
+					Vector2 directionInput = world.InputData[i].GetDirection();
+
+					// Invert y input
+					directionInput.Y = -directionInput.Y;
+
+					// Rotate in 3D, since don't have 2x2 matrix class
+					Vector3 directionInput3D = new Vector3(directionInput.X, 0, directionInput.Y);
+					Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
+
+					world.Accelerations[i] = new Vector3(
+					    rotatedInput.X * world.MaxAcceleration[i],
+					    0,
+					    rotatedInput.Z * world.MaxAcceleration[i]
+					);
 				}
 
 				Vector3 pos = world.Transforms[i].Translation;

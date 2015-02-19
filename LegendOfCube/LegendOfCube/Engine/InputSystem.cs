@@ -36,7 +36,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world)
+		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -49,9 +49,14 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape))
+			if (KeyWasJustPressed(Keys.Escape) || ButtonWasJustPressed(Buttons.Back))
 			{
 				game.Exit();
+			}
+
+			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
+			{
+				switcher.Switch();	
 			}
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {

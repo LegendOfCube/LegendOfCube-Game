@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
-namespace LegendOfCube.Engine.BoundingVolumes
+namespace LegendOfCube.Engine.CubeMath
 {
 	public struct Matrix3x3
 	{
@@ -59,7 +56,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 		public static Vector3 operator* (Matrix3x3 m, Vector3 v)
 		{
-			Vector3 result = new Vector3();
+			Vector3 result;
 			result.X = Vector3.Dot(m.RowAt(1), v);
 			result.Y = Vector3.Dot(m.RowAt(2), v);
 			result.Z = Vector3.Dot(m.RowAt(3), v);

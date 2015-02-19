@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
 
 		public void ApplyPhysics(float delta, World world)
 		{
-			for (UInt32 i = 0; i < world.HighestOccupiedId; i++)
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
 				Properties properties = world.EntityProperties[i];
 				// Check if velocity should be updated
@@ -55,22 +55,15 @@ namespace LegendOfCube.Engine
 				{
 					// Calculate new transform
 					Vector3 newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
-					if (newTranslation.Y < 0) // UGLY FLOOR HACK
-					{
-						newTranslation.Y = 0;
-						world.Velocities[i].Y = 0.0f;
-						world.PlayerCubeState.InAir = false;
-					}
 					Matrix newTransform = world.Transforms[i];
 					newTransform.Translation = newTranslation;
 
 					OBB worldSpaceOBB = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref newTransform);
 
 					// Searches for intersections
-					bool collisionOccured = false;
-					UInt32 collisionIndex = 0;
-					OBB collisionBox;
-					for (UInt32 j = 0; j < world.HighestOccupiedId; j++)
+					UInt32 collisionIndex = UInt32.MaxValue;
+					OBB collisionBox = new OBB();
+					for (UInt32 j = 0; j <= world.HighestOccupiedId; j++)
 					{
 						if (i == j) continue;
 						if (!world.EntityProperties[j].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
@@ -78,38 +71,61 @@ namespace LegendOfCube.Engine
 
 						if (collisionBox.Intersects(ref worldSpaceOBB))
 						{
-							collisionOccured = true;
 							collisionIndex = j;
-							Debug.WriteLine("collision at" + collisionBox.Position + " with " + worldSpaceOBB.Position);
 							break;
 						}
 					}
 
-					if (!collisionOccured) // No collision occured
+					if (collisionIndex == UInt32.MaxValue) // No collision occured
 					{
 						world.Transforms[i] = newTransform;
 					}
 					else // Collision occured
 					{
-						// Do nothing for now
+						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
+
+						Debug.WriteLine("Axis: " + axis + "\n\n");
+
+						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+						world.Velocities[i] -= (collidingSum * axis);
+
+						newTranslation = world.Transforms[i].Translation + (world.Velocities[i] * delta);
+						world.Transforms[i].Translation = newTranslation;
+						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
 					}
 
 				}
 				else if (properties.Satisfies(MOVABLE_NO_BV))
 				{
 					world.Transforms[i].Translation += (world.Velocities[i] * delta);
-					// Hacky floor
-					if (world.Transforms[i].Translation.Y < 0)
-					{
-						Vector3 translation = world.Transforms[i].Translation;
-						translation.Y = 0.0f;
-						world.Transforms[i].Translation = translation;
-						world.Velocities[i].Y = 0.0f;
-						//Reset air state
-						world.PlayerCubeState.InAir = false;
-					}
 				}
 			}
 		}
+
+		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPre, ref OBB colliderPost)
+		{
+			//Debug.Assert(!target.Intersects(ref colliderPre));
+			//Debug.Assert(target.Intersects(ref colliderPost));
+
+			Vector3 diff = colliderPost.Position - target.Position;
+			// Okay, so this formula came to me in a dream. I don't actually know what it does, how it works,
+			// if it works, or if it's implemented correctly. It seems to work pretty well though.
+			float xThing = Math.Abs(Vector3.Dot(diff, target.AxisX * target.ExtentX)) / target.ExtentX;
+			float yThing = Math.Abs(Vector3.Dot(diff, target.AxisY * target.ExtentY)) / target.ExtentY;
+			float zThing = Math.Abs(Vector3.Dot(diff, target.AxisZ * target.ExtentZ)) / target.ExtentZ;
+
+			Vector3 axis = new Vector3();
+			if (xThing >= yThing && xThing >= zThing) axis = target.AxisX;
+			else if (yThing >= xThing && yThing >= zThing) axis = target.AxisY;
+			else if (zThing >= xThing && zThing >= yThing) axis = target.AxisZ;
+			else Debug.Assert(false);
+
+			// Now that we have the axis we just want to know the sign.
+			float sign = Vector3.Dot(diff, axis);
+
+			return Math.Sign(sign) * axis;
+		}
+
 	}
 }
