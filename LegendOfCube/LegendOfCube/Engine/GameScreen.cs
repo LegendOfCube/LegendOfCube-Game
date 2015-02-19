@@ -56,9 +56,9 @@ namespace LegendOfCube.Engine
 			var playerEffect = new StandardEffectParams
 			{
 				//DiffuseTexture = Game.Content.Load<Texture>("Models/Cube/cube_diff"),
-				//EmissiveTexture = Game.Content.Load<Texture>("Models/Cube/cube_emissive"),
-				//SpecularColor = Color.Gray.ToVector4(),
-				//EmissiveColor = Color.White.ToVector4()
+				EmissiveTexture = Game.Content.Load<Texture>("Models/Cube/cube_emissive"),
+				SpecularColor = Color.Gray.ToVector4(),
+				EmissiveColor = Color.White.ToVector4()
 			};
 
 			var otherCubeEffect = new StandardEffectParams
@@ -86,7 +86,7 @@ namespace LegendOfCube.Engine
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
 					.AddToWorld(World);
-
+			/*
 			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
 			for (int i = 0; i < otherCubes.Length; i++)
@@ -99,7 +99,7 @@ namespace LegendOfCube.Engine
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 						.AddToWorld(World);
 			}
-
+			*/
 			// This is definitely the most natural way to represent the ground
 			ground =
 				new EntityBuilder().WithModel(cubeModel)
