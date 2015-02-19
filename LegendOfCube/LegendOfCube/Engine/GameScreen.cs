@@ -20,10 +20,11 @@ namespace LegendOfCube.Engine
 		private Entity playerEntity;
 		private Entity[] otherCubes;
 		private Entity ground;
+		private Entity DeathZone;
 
 		public GameScreen(Game game) : base(game)
 		{
-			World = new World(1002);
+			World = new World(2002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem();
@@ -77,9 +78,10 @@ namespace LegendOfCube.Engine
 				SpecularColor = 0.5f * Color.White.ToVector4()
 			};
 
+			World.SpawnPoint = new Vector3(0,1,0);
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(new Vector3(0, 20.0f, 0))
+					.WithPosition(World.SpawnPoint)
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
 					.WithStandardEffectParams(playerEffect)
@@ -97,6 +99,7 @@ namespace LegendOfCube.Engine
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(otherCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 						.AddToWorld(World);
 			}
 
@@ -107,6 +110,13 @@ namespace LegendOfCube.Engine
 					.WithPosition(new Vector3(0, -1000.0f, 0))
 					.WithStandardEffectParams(groundEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+					.AddToWorld(World);
+
+			DeathZone =
+				new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
+					.WithPosition(new Vector3(0, -2000.0f, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(World);
 		}
 	}
