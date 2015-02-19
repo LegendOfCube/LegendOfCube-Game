@@ -241,6 +241,18 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 		}
 
+		public void Corners(Vector3[] corners)
+		{
+			corners[0] = Position - AxisX*HalfExtentX - AxisY*HalfExtentY - AxisZ*HalfExtentZ; // Back-bottom-left
+			corners[1] = Position - AxisX*HalfExtentX - AxisY*HalfExtentY + AxisZ*HalfExtentZ; // Front-bottom-left
+			corners[2] = Position - AxisX * HalfExtentX + AxisY * HalfExtentY - AxisZ * HalfExtentZ; // Back-top-left
+			corners[3] = Position - AxisX * HalfExtentX + AxisY * HalfExtentY + AxisZ * HalfExtentZ; // Front-top-left
+			corners[4] = Position + AxisX * HalfExtentX - AxisY * HalfExtentY - AxisZ * HalfExtentZ; // Back-bottom-right
+			corners[5] = Position + AxisX * HalfExtentX - AxisY * HalfExtentY + AxisZ * HalfExtentZ; // Front-bottom-right
+			corners[6] = Position + AxisX * HalfExtentX + AxisY * HalfExtentY - AxisZ * HalfExtentZ; // Back-top-right
+			corners[7] = Position + AxisX * HalfExtentX + AxisY * HalfExtentY + AxisZ * HalfExtentZ; // Front-top-right
+		}
+
 		public override string ToString()
 		{
 			return "Pos: " + Position +
