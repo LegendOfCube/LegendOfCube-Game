@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -31,6 +32,7 @@ namespace LegendOfCube.Engine
 		public readonly InputData[] InputData;
 		public readonly float[] MaxSpeed;
 		public readonly float[] MaxAcceleration;
+		public OBB[] ModelSpaceBVs;
 
 		public readonly Model[] Models;
 		public readonly StandardEffectParams[] StandardEffectParams;
@@ -38,10 +40,14 @@ namespace LegendOfCube.Engine
 		// Player state
 		public PlayerCubeState PlayerCubeState;
 
+		// Shortcut to player entity which there will be one instance of
+		public Entity Player;
+
 		// World variables
 
 		public Vector3 Gravity;
 		public Vector3 LightPosition;
+		public Vector3 CameraPosition;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -63,6 +69,7 @@ namespace LegendOfCube.Engine
 			InputData = new InputData[MaxNumEntities];
 			MaxSpeed = new float[MaxNumEntities];
 			MaxAcceleration = new float[MaxNumEntities];
+			ModelSpaceBVs = new OBB[MaxNumEntities];
 
 			Models = new Model[MaxNumEntities];
 			StandardEffectParams = new StandardEffectParams[MaxNumEntities];
@@ -75,10 +82,14 @@ namespace LegendOfCube.Engine
 				MaxAcceleration[i] = 0;
 				Models[i] = null;
 				StandardEffectParams[i] = null;
+				ModelSpaceBVs[i] = new OBB(new Vector3(0, 0, 0),
+				                   new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
+				                   new Vector3(1, 1, 1));
 			}
 			PlayerCubeState = new PlayerCubeState();
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 		}
+
 
 		// Public Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -170,6 +181,10 @@ namespace LegendOfCube.Engine
 
 			Models[entityToDestroy.Id] = null;
 			StandardEffectParams[entityToDestroy.Id] = null;
+
+			ModelSpaceBVs[entityToDestroy.Id] = new OBB(new Vector3(0, 0, 0),
+			                                    new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
+			                                    new Vector3(1, 1, 1));
 		}
 
 	}

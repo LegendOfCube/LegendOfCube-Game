@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -12,33 +14,25 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private World world;
-		private InputSystem inputSystem;
-		private PhysicsSystem physicsSystem;
-		private RenderSystem renderSystem;
-		private GameplaySystem gameplaySystem;
+		private readonly RenderSystem renderSystem;
+		private readonly List<Screen> screens;
+		private Screen currentScreen;
 
-		private Entity playerEntity;
-		private Entity[] otherCubes;
-		private Entity ground;
+
+		public SwitcherSystem SwitcherSystem;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public LegendOfCubeGame()
 		{
-			world = new World(1002);
-			inputSystem = new InputSystem(this);
-			renderSystem = new RenderSystem(this);
-			physicsSystem = new PhysicsSystem();
-			gameplaySystem = new GameplaySystem();
 			Content.RootDirectory = "Content";
-		}
+			renderSystem = new RenderSystem(this);
+			screens = new List<Screen> {new GameScreen(this), new MenuScreen(this)};
+			screens[1].SetWorld(screens[0].World);
+			currentScreen = screens[0];
 
-		//Temp entityFactory with an empty prop.
-		public Entity CreateEntity(Properties props)
-		{
-			return world.CreateEntity(props);
+			SwitcherSystem = new SwitcherSystem(this);
 		}
 
 		// Overriden XNA methods
@@ -53,7 +47,6 @@ namespace LegendOfCube.Engine
 		protected override void Initialize()
 		{
 			renderSystem.Initialize();
-
 			base.Initialize();
 		}
 
@@ -63,62 +56,8 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			var cubeModel = Content.Load<Model>("Models/Cube/cube_clean");
-			var newCubeModel = Content.Load<Model>("Models/Cube/cube_clean");
 
-			var playerEffect = new StandardEffectParams
-			{
-				//DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),
-				SpecularTexture = Content.Load<Texture>("Models/Cube/cube_specular"),
-				EmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),
-				SpecularColor = Color.White.ToVector4(),
-				EmissiveColor = Color.Gray.ToVector4()
-			};
-
-			var otherCubeEffect = new StandardEffectParams
-			{
-				//DiffuseTexture = Content.Load<Texture>("Models/Cube/cube_diff"),
-				SpecularTexture = Content.Load<Texture>("Models/Cube/cube_specular"),
-				EmissiveTexture = Content.Load<Texture>("Models/Cube/cube_emissive"),
-				//NormalTexture = Content.Load<Texture>("Models/Cube/cube_normal"),
-				SpecularColor = Color.White.ToVector4(),
-				EmissiveColor = Color.Gray.ToVector4()
-			};
-
-			var groundEffect = new StandardEffectParams
-			{
-				DiffuseColor = Color.Gray.ToVector4(),
-				SpecularColor = 0.5f * Color.White.ToVector4()
-			};
-
-			playerEntity =
-				new EntityBuilder().WithModel(newCubeModel)
-					.WithPosition(Vector3.Zero)
-					.WithVelocity(Vector3.Zero, 15)
-					.WithAcceleration(Vector3.Zero, 30)
-					.WithStandardEffectParams(playerEffect)
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.FRICTION_FLAG))
-					.AddToWorld(world);
-
-			otherCubes = new Entity[1000];
-			Random rnd = new Random(0);
-			for (int i = 0; i < otherCubes.Length; i++)
-			{
-				otherCubes[i] =
-					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
-						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
-						.WithStandardEffectParams(otherCubeEffect)
-						.AddToWorld(world);
-			}
-
-			// This is definitely the most natural way to represent the ground
-			ground =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithTransform(Matrix.CreateScale(1000.0f))
-					.WithPosition(new Vector3(0, -1000.0f, 0))
-					.WithStandardEffectParams(groundEffect)
-					.AddToWorld(world);
+			currentScreen.LoadContent();
 		}
 
 		/// <summary>
@@ -137,12 +76,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-			inputSystem.ApplyInput(gameTime, world);
-			gameplaySystem.ProcessInputData(world, delta);
-			physicsSystem.ApplyPhysics(delta, world); // Note, delta should be fixed time step.
-
+			currentScreen.Update(gameTime, SwitcherSystem);
 			base.Update(gameTime);
 		}
 
@@ -152,17 +86,23 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			GraphicsDevice.Clear(Color.CornflowerBlue);
-			GraphicsDevice.BlendState = BlendState.Opaque;
-			GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-
-			renderSystem.RenderWorld(world);
+			currentScreen.Draw(gameTime, renderSystem);
 			base.Draw(gameTime);
 		}
 
 		// Helper methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-
+		public void SwitchScreen()
+		{
+			if (currentScreen is GameScreen)
+			{
+				currentScreen = screens[1];
+			}
+			else if (currentScreen is MenuScreen)
+			{
+				currentScreen = screens[0];
+			}
+		}
 	}
 }
