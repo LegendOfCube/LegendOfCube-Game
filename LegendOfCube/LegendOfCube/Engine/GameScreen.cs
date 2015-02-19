@@ -21,10 +21,11 @@ namespace LegendOfCube.Engine
 		private Entity[] otherCubes;
 		private Entity ground;
 		private Entity DeathZone;
+		private Entity[] otherBouncyCubes;
 
 		public GameScreen(Game game) : base(game)
 		{
-			World = new World(2002);
+			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem();
@@ -72,6 +73,16 @@ namespace LegendOfCube.Engine
 				EmissiveColor = Color.White.ToVector4()
 			};
 
+			var otherBouncyCubeEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
+				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
+				EmissiveTexture = Game.Content.Load<Texture>("Models/cube_emissive"),
+				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.Yellow.ToVector4(),
+				EmissiveColor = Color.Yellow.ToVector4()
+			};
+
 			var groundEffect = new StandardEffectParams
 			{
 				DiffuseColor = Color.Gray.ToVector4(),
@@ -99,7 +110,20 @@ namespace LegendOfCube.Engine
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(otherCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
-						.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+						.AddToWorld(World);
+			}
+
+			otherBouncyCubes = new Entity[100];
+			rnd = new Random(1);
+			for (int i = 0; i < otherBouncyCubes.Length; i++)
+			{
+				otherCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithStandardEffectParams(otherBouncyCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
 						.AddToWorld(World);
 			}
 
