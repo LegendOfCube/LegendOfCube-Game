@@ -153,7 +153,7 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 			set
 			{
-				halfExtents = value * 2.0f;
+				halfExtents = value / 2.0f;
 			}
 		}
 
