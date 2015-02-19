@@ -88,6 +88,10 @@ namespace LegendOfCube.Engine
 							world.Transforms[i].Translation = world.SpawnPoint;
 							world.Velocities[i] = Vector3.Zero;
 						}
+						else if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
+						{
+							world.Velocities[i] *= -1;
+						}
 						else
 						{
 							OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
