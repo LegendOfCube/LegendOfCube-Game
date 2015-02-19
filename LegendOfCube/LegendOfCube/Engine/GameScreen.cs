@@ -19,7 +19,7 @@ namespace LegendOfCube.Engine
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
-		private Entity ground;
+		private Entity platform;
 
 		public GameScreen(Game game) : base(game)
 		{
@@ -52,6 +52,7 @@ namespace LegendOfCube.Engine
 		{
 
 			var cubeModel = Game.Content.Load<Model>("Models/Cube/cube_clean");
+			var platformModel = Game.Content.Load<Model>("Models/Platform/platform");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -86,6 +87,12 @@ namespace LegendOfCube.Engine
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
 					.AddToWorld(World);
+
+			platform =
+				new EntityBuilder().WithModel(platformModel)
+					.WithTransform(Matrix.CreateScale(0.1f))
+					.WithPosition(new Vector3(0, -3, -3))
+					.AddToWorld(World);
 			/*
 			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
@@ -100,13 +107,15 @@ namespace LegendOfCube.Engine
 						.AddToWorld(World);
 			}
 			*/
+
+
 			// This is definitely the most natural way to represent the ground
-			ground =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithTransform(Matrix.CreateScale(1000.0f))
-					.WithPosition(new Vector3(0, -1000.0f, 0))
-					.WithStandardEffectParams(groundEffect)
-					.AddToWorld(World);
+			//ground =
+			//	new EntityBuilder().WithModel(cubeModel)
+			//		.WithTransform(Matrix.CreateScale(1000.0f))
+			//		.WithPosition(new Vector3(0, -1000.0f, 0))
+			//		.WithStandardEffectParams(groundEffect)
+			//		.AddToWorld(World);
 		}
 	}
 }
