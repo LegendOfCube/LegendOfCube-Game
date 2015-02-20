@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine.BoundingVolumes;
 using System.Diagnostics;
+using LegendOfCube.Engine.Events;
 
 namespace LegendOfCube.Engine
 {
@@ -83,30 +84,21 @@ namespace LegendOfCube.Engine
 					}
 					else // Collision occured
 					{
-						if (world.EntityProperties[collisionIndex].Satisfies(new Properties(Properties.DEATH_ZONE_FLAG)))
-						{
-							world.Transforms[i].Translation = world.SpawnPoint;
-							world.Velocities[i] = Vector3.Zero;
-						}
-						else if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
-						{
-							world.Velocities[i] *= -1;
-							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
-						}
-						else
-						{
-							OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
-							Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
+						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(collisionIndex));
+						world.EventBuffer.AddEvent(ref ce);
 
-							Debug.WriteLine("Axis: " + axis + "\n\n");
+						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
 
-							float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-							world.Velocities[i] -= (collidingSum*axis);
+						Debug.WriteLine("Axis: " + axis + "\n\n");
 
-							newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
-							world.Transforms[i].Translation = newTranslation;
-							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
-						}
+						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+						world.Velocities[i] -= (collidingSum*axis);
+
+						newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
+						world.Transforms[i].Translation = newTranslation;
+						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+						
 					}
 
 				}

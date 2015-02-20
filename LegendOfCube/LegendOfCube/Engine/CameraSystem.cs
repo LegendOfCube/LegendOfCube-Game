@@ -32,12 +32,12 @@ namespace LegendOfCube.Engine
 			float distance = cameraPosRelTarget.Length();
 
 			// Translate to polar coordinates
-			float tiltAngle = MathHelper.Clamp((float)Math.Asin(cameraPosRelTarget.Y / distance), 0.0f, 1.3f);
+			float tiltAngle = (float)Math.Asin(cameraPosRelTarget.Y / distance);
 			float groundAngle = (float)Math.Atan2(cameraPosRelTarget.Z, cameraPosRelTarget.X);
 
 			// Modify angles depending on input
 			groundAngle -= (delta * X_SCALE * cameraModifierInput.X) % (2.0f * MathHelper.Pi);
-			tiltAngle = MathHelper.Clamp(tiltAngle + delta * Y_SCALE * cameraModifierInput.Y, 0.0f, 1.3f);
+			tiltAngle = MathHelper.Clamp(tiltAngle + delta * Y_SCALE * cameraModifierInput.Y, -MathHelper.PiOver2 + 0.1f, MathHelper.PiOver2 - 0.1f);
 
 			// Set distance from target constant at the moment
 			distance = CAMERA_DISTANCE;

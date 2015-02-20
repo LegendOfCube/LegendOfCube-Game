@@ -18,7 +18,6 @@ namespace LegendOfCube.Engine
 		private readonly List<Screen> screens;
 		private Screen currentScreen;
 
-
 		public SwitcherSystem SwitcherSystem;
 
 		// Constructors
