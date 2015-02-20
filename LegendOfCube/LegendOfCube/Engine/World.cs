@@ -49,6 +49,8 @@ namespace LegendOfCube.Engine
 		public Vector3 LightPosition;
 		public Vector3 CameraPosition;
 
+		public DebugState DebugState;
+
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		
