@@ -88,8 +88,14 @@ namespace LegendOfCube.Engine
 						world.EventBuffer.AddEvent(ref ce);
 						if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
 						{
-							world.Velocities[i] *= -1;
-							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+							if (world.InputData[i].NewJump())
+							{
+								world.Velocities[i] *= -1.5f;
+							}
+							else
+							{
+								world.Velocities[i] *= -1;	
+							}
 						}
 						else
 						{
