@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Engine.Graphics
 {
 	public class OBBRenderer
 	{

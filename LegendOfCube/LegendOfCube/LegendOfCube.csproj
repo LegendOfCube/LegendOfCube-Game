@@ -79,7 +79,7 @@
     <Compile Include="Engine\GameScreen.cs" />
     <Compile Include="Engine\MenuScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />
-    <Compile Include="Engine\OBBRenderer.cs" />
+    <Compile Include="Engine\Graphics\OBBRenderer.cs" />
     <Compile Include="Engine\PlayerCubeState.cs" />
     <Compile Include="Engine\EntityBuilder.cs" />
     <Compile Include="Engine\GameplaySystem.cs" />
