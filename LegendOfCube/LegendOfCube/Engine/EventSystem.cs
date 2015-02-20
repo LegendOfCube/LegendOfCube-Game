@@ -13,13 +13,17 @@ namespace LegendOfCube.Engine
 			EventBuffer eventBuffer = world.EventBuffer;
 			foreach (var collisionEvent in eventBuffer.CollisionEvents)
 			{
-				if (world.EntityProperties[collisionEvent.CollidedWith.Id].Satisfies(Properties.MODEL) && 
-					world.EntityProperties[collisionEvent.Collider.Id].Satisfies(Properties.ACCELERATION))
+				var collidedWith = collisionEvent.CollidedWith.Id;
+				var collider = collisionEvent.Collider.Id;
+				/* Example Collision handling
+				if (world.EntityProperties[collidedWith].Satisfies(Properties.MODEL) && 
+					world.EntityProperties[collider].Satisfies(Properties.ACCELERATION))
 				{
-					
+					world.Velocities[collider].Y += 100;
 				}
-
+				 */
 			}
+			world.EventBuffer.Flush();
 		}
 	}
 }
