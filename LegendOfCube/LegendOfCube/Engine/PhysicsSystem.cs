@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine.BoundingVolumes;
 using System.Diagnostics;
+using LegendOfCube.Engine.Events;
 
 namespace LegendOfCube.Engine
 {
@@ -82,6 +83,9 @@ namespace LegendOfCube.Engine
 					}
 					else // Collision occured
 					{
+						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(collisionIndex));
+						world.EventBuffer.AddEvent(ref ce);
+
 						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
 						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
 
