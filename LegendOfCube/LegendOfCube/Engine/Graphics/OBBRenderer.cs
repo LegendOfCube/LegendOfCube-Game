@@ -8,29 +8,27 @@ namespace LegendOfCube.Engine.Graphics
 	{
 		private readonly GraphicsDevice graphicsDevice;
 		private readonly BasicEffect basicEffect;
-		private DynamicIndexBuffer indicies;
+		private readonly DynamicIndexBuffer indicies;
+		private readonly DynamicVertexBuffer vertexBuffer;
+		private readonly VertexPositionColor[] vertData;
 
 		public OBBRenderer(GraphicsDevice graphicsDevice)
 		{
 			this.graphicsDevice = graphicsDevice;
 			this.basicEffect = new BasicEffect(graphicsDevice);
+			this.indicies = new DynamicIndexBuffer(graphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
+			this.vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(VertexPositionColor), 8, BufferUsage.None);
+			this.vertData = new VertexPositionColor[8];
 
 			basicEffect.LightingEnabled = false;
 			basicEffect.VertexColorEnabled = false;
+			basicEffect.PreferPerPixelLighting = false;
+
+			RefreshIndicies();
 		}
 
-		public void Render(OBB boundingBox, Matrix view, Matrix projection)
+		private void RefreshIndicies()
 		{
-			basicEffect.View = view;
-			basicEffect.Projection = projection;
-
-			// Let the OBB class do the transform, for testing
-			basicEffect.World = Matrix.Identity;
-
-			basicEffect.DiffuseColor = Color.White.ToVector3();
-
-			indicies = new DynamicIndexBuffer(graphicsDevice, typeof(ushort), 36, BufferUsage.WriteOnly);
-
 			// TODO: Make these match OBB.Corners(). This works well enough for debugging though.
 			indicies.SetData(new ushort[]
 			{
@@ -52,9 +50,22 @@ namespace LegendOfCube.Engine.Graphics
 				1,3,7, // +z
 				1,7,5,
 			});
+		}
 
-			var vertData = new VertexPositionColor[8];
-			var vertexBuffer = new DynamicVertexBuffer(graphicsDevice, typeof(VertexPositionColor), vertData.Length, BufferUsage.None);
+		public void Render(OBB boundingBox, Matrix view, Matrix projection)
+		{
+			basicEffect.View = view;
+			basicEffect.Projection = projection;
+
+			// Let the OBB class do the transform, for testing
+			basicEffect.World = Matrix.Identity;
+
+			basicEffect.DiffuseColor = Color.White.ToVector3();
+
+			if (indicies.IsContentLost)
+			{
+				RefreshIndicies();
+			}
 
 			Vector3[] corners = new Vector3[8];
 			boundingBox.Corners(corners);
@@ -71,9 +82,11 @@ namespace LegendOfCube.Engine.Graphics
 
 			var originalRasterizerState = graphicsDevice.RasterizerState;
 
-			var wireRasterizerState = new RasterizerState();
-			wireRasterizerState.FillMode = FillMode.WireFrame;
-			wireRasterizerState.CullMode = CullMode.None;
+			var wireRasterizerState = new RasterizerState
+			{
+				FillMode = FillMode.WireFrame,
+				CullMode = CullMode.None
+			};
 
 			graphicsDevice.RasterizerState = wireRasterizerState;
 
