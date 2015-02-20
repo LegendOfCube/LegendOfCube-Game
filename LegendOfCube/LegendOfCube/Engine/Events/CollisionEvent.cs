@@ -8,6 +8,6 @@ namespace LegendOfCube.Engine.Events
 	struct CollisionEvent
 	{
 		public Entity Collider;
-		public Entity Colided;
+		public Entity Collided;
 	}
 }
