@@ -112,11 +112,12 @@ namespace LegendOfCube.Engine.Graphics
 			}
 
 			// TODO: Control this with key press or something
-#if DEBUG
-			OBB obb = world.ModelSpaceBVs[entity.Id];
-			OBB transformed = OBB.TransformOBB(ref obb, ref worldTransform);
-			obbRenderer.Render(transformed, view, projection);
-#endif
+			if (world.DebugState.ShowOBBWireFrame)
+			{
+				OBB obb = world.ModelSpaceBVs[entity.Id];
+				OBB transformed = OBB.TransformOBB(ref obb, ref worldTransform);
+				obbRenderer.Render(transformed, view, projection);
+			}
 
 			// Not exactly sure about the reason for this, but seems to be the standard way to do it
 			var transforms = new Matrix[model.Bones.Count];
