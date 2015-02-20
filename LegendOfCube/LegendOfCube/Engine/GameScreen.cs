@@ -20,7 +20,7 @@ namespace LegendOfCube.Engine
 
 		public GameScreen(Game game) : base(game)
 		{
-			World = new World(1002);
+			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem();

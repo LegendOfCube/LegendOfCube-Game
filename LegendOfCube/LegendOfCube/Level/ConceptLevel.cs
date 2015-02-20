@@ -10,6 +10,8 @@ namespace LegendOfCube.Level
 	{
 		private static Entity playerEntity;
 		private static Entity platform;
+		private static Entity DeathZone;
+
 		
 
 		public static void CreateLevel(World world, Game game)
@@ -34,9 +36,12 @@ namespace LegendOfCube.Level
 				//SpecularColor = Color.White.ToVector4(),
 				//EmissiveColor = Color.White.ToVector4()
 			};
+
+			world.SpawnPoint = new Vector3(0, 25, 0);
+
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(new Vector3(0, 25.0f, 0))
+					.WithPosition(world.SpawnPoint)
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
 					.WithStandardEffectParams(playerEffect)
@@ -65,6 +70,12 @@ namespace LegendOfCube.Level
 					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(5, 5, 0.25f)))
 					.AddToWorld(world);
 
+			DeathZone =
+				new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
+					.WithPosition(new Vector3(0, -2000.0f, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
 
 
 		}

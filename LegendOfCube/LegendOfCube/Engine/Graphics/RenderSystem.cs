@@ -19,7 +19,9 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.TRANSFORM |
 		                                                                Properties.FULL_LIGHT_EFFECT);
 
-		public static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
+		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
+
+		private const float FOV = 70;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -69,12 +71,11 @@ namespace LegendOfCube.Engine.Graphics
 
 			Vector3 camTarget = playerPos;
 			Vector3 up = new Vector3(0, 1, 0);
-			float fov = 90;
 
 			Vector3 camPos = world.CameraPosition;
 			Matrix view = Matrix.CreateLookAt(camPos, camTarget, up);
 			Matrix projection = Matrix.CreatePerspectiveFieldOfView(
-			                        MathHelper.ToRadians(fov),
+			                        MathHelper.ToRadians(FOV),
 			                        game.GraphicsDevice.Viewport.AspectRatio,
 			                        0.1f,
 			                        1000.0f);

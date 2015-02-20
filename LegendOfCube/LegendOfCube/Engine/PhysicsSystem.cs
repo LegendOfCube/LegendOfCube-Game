@@ -50,6 +50,7 @@ namespace LegendOfCube.Engine
 					world.Velocities[i] += (world.Gravity * delta);
 				}
 
+
 				// Update position
 				if (properties.Satisfies(MOVABLE))
 				{
@@ -82,17 +83,30 @@ namespace LegendOfCube.Engine
 					}
 					else // Collision occured
 					{
-						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
-						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
+						if (world.EntityProperties[collisionIndex].Satisfies(new Properties(Properties.DEATH_ZONE_FLAG)))
+						{
+							world.Transforms[i].Translation = world.SpawnPoint;
+							world.Velocities[i] = Vector3.Zero;
+						}
+						else if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
+						{
+							world.Velocities[i] *= -1;
+							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+						}
+						else
+						{
+							OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+							Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
 
-						Debug.WriteLine("Axis: " + axis + "\n\n");
+							Debug.WriteLine("Axis: " + axis + "\n\n");
 
-						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-						world.Velocities[i] -= (collidingSum * axis);
+							float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+							world.Velocities[i] -= (collidingSum*axis);
 
-						newTranslation = world.Transforms[i].Translation + (world.Velocities[i] * delta);
-						world.Transforms[i].Translation = newTranslation;
-						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+							newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
+							world.Transforms[i].Translation = newTranslation;
+							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+						}
 					}
 
 				}
