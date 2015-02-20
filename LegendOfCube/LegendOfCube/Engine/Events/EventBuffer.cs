@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LegendOfCube.Engine.Events
 {
-	class EventBuffer
+	public class EventBuffer
 	{
 		public readonly List<CollisionEvent> CollisionEvents;
 

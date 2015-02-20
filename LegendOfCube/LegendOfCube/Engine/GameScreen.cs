@@ -21,6 +21,10 @@ namespace LegendOfCube.Engine
 		private Entity[] otherCubes;
 		private Entity ground;
 
+		private SpriteFont font;
+		private SpriteBatch spriteBatch;
+		private Vector2 fontPos;
+
 		public GameScreen(Game game) : base(game)
 		{
 			World = new World(1002);
@@ -46,6 +50,11 @@ namespace LegendOfCube.Engine
 			Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 			renderSystem.RenderWorld(World);
+
+			spriteBatch.Begin();
+			string output = "Legend of Cube";
+			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
+			spriteBatch.End();
 		}
 
 		internal override void LoadContent()
@@ -108,6 +117,10 @@ namespace LegendOfCube.Engine
 					.WithStandardEffectParams(groundEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.AddToWorld(World);
+
+			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+			font = Game.Content.Load<SpriteFont>("Arial");
+			fontPos = new Vector2(0, 0);
 		}
 	}
 }
