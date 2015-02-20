@@ -42,7 +42,7 @@ namespace LegendOfCube.Level
 				//EmissiveColor = Color.White.ToVector4()
 			};
 
-			world.SpawnPoint = new Vector3(0, 10, 0);
+			world.SpawnPoint = new Vector3(0, 5, 0);
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -60,7 +60,7 @@ namespace LegendOfCube.Level
 			platforms[0] =
 				new EntityBuilder().WithModel(platformModel)
 					.WithPosition(new Vector3(0, 0, 0))
-					.WithBoundingVolume(new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(5, 5, 0.25f)))
+					.WithBoundingVolume(new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(1,1,1)))
 					.AddToWorld(world);
 
 			// Walls and platform to test length gaining wall jumps
@@ -93,12 +93,18 @@ namespace LegendOfCube.Level
 			walls[2] =
 				new EntityBuilder().WithModel(wallModel)
 					.WithTransform(Matrix.CreateScale(0.5f))
-					.WithPosition(new Vector3(15, 5, 0))
+					.WithPosition(new Vector3(15, 1, 0))
 					.AddToWorld(world);
 
 			platforms[3] =
 				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(0, 15, 0))
+					.WithPosition(new Vector3(0, 12, 0))
+					.AddToWorld(world);
+
+			// TODO: Moving platforms
+			platforms[4] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(-45, 0, 0))
 					.AddToWorld(world);
 
 			DeathZone =
