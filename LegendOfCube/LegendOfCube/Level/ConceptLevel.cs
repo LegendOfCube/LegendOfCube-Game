@@ -37,9 +37,9 @@ namespace LegendOfCube.Level
 
 			platform =
 				new EntityBuilder().WithModel(platformModel)
-					.WithTransform(Matrix.CreateScale(0.1f))
+					//.WithTransform(Matrix.CreateScale(0.1f))
 					.WithPosition(new Vector3(0, 0, 0))
-					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(2, 1, 2)))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(5, 5, 0.25f)))
 					.AddToWorld(world);
 
 			playerEntity =
