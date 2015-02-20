@@ -34,14 +34,6 @@ namespace LegendOfCube.Level
 				//SpecularColor = Color.White.ToVector4(),
 				//EmissiveColor = Color.White.ToVector4()
 			};
-
-			platform =
-				new EntityBuilder().WithModel(platformModel)
-					//.WithTransform(Matrix.CreateScale(0.1f))
-					.WithPosition(new Vector3(0, 0, 0))
-					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(5, 5, 0.25f)))
-					.AddToWorld(world);
-
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(new Vector3(0, 25.0f, 0))
@@ -53,6 +45,28 @@ namespace LegendOfCube.Level
 					.AddToWorld(world);
 
 			world.Player = playerEntity;
+
+			platform =
+				new EntityBuilder()//.WithModel(platformModel)
+					.WithPosition(new Vector3(0, 0, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(5, 5, 0.25f)))
+					.AddToWorld(world);
+
+			platform =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(10, 0, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(5, 5, 0.25f)))
+					.AddToWorld(world);
+
+
+			platform =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(0, 0, -10))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(5, 5, 0.25f)))
+					.AddToWorld(world);
+
+
+
 		}
 	}
 }

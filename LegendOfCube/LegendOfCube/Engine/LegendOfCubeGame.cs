@@ -104,5 +104,10 @@ namespace LegendOfCube.Engine
 				currentScreen = screens[0];
 			}
 		}
+
+		public void ResetPlayer()
+		{
+			
+		}
 	}
 }
