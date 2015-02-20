@@ -24,6 +24,7 @@ namespace LegendOfCube.Engine
 		private Entity DeathZone;
 		private Entity[] BouncyCubes;
 		private Entity[] DeathCubes;
+		private Entity[] TeleportCubes;
 
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
@@ -107,6 +108,17 @@ namespace LegendOfCube.Engine
 				DiffuseColor = Color.Red.ToVector4(),
 			};
 
+			var teleportCubeEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
+				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
+				EmissiveTexture = Game.Content.Load<Texture>("Models/cube_emissive"),
+				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.Blue.ToVector4(),
+				EmissiveColor = Color.Blue.ToVector4(),
+				DiffuseColor = Color.Blue.ToVector4(),
+			};
+
 			var groundEffect = new StandardEffectParams
 			{
 				DiffuseColor = Color.Gray.ToVector4(),
@@ -162,6 +174,20 @@ namespace LegendOfCube.Engine
 						.WithStandardEffectParams(deathCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 						.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+						.AddToWorld(World);
+			}
+
+			TeleportCubes = new Entity[100];
+			rnd = new Random(3);
+			for (int i = 0; i < TeleportCubes.Length; i++)
+			{
+				TeleportCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithStandardEffectParams(teleportCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
 						.AddToWorld(World);
 			}
 
