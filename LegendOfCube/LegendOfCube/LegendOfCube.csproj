@@ -77,6 +77,8 @@
     <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\DebugState.cs" />
+    <Compile Include="Engine\Events\CollisionEvent.cs" />
+    <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
     <Compile Include="Engine\MenuScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />
