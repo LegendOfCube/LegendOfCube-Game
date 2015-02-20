@@ -59,6 +59,11 @@ namespace LegendOfCube.Engine
 				switcher.Switch();	
 			}
 
+			if (KeyWasJustPressed(Keys.F1))
+			{
+				world.DebugState.ShowOBBWireFrame = !world.DebugState.ShowOBBWireFrame;
+			}
+
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {
 
 				InputDataImpl inputData = (InputDataImpl)world.InputData[e.Id];

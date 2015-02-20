@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine.BoundingVolumes;
 using System.Diagnostics;
+using LegendOfCube.Engine.Events;
 
 namespace LegendOfCube.Engine
 {
@@ -83,6 +84,8 @@ namespace LegendOfCube.Engine
 					}
 					else // Collision occured
 					{
+						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(collisionIndex));
+						world.EventBuffer.AddEvent(ref ce);
 						if (world.EntityProperties[collisionIndex].Satisfies(new Properties(Properties.DEATH_ZONE_FLAG)))
 						{
 							world.Transforms[i].Translation = world.SpawnPoint;

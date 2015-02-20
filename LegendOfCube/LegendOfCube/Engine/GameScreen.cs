@@ -16,6 +16,7 @@ namespace LegendOfCube.Engine
 		private readonly GameplaySystem gameplaySystem;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
+		private readonly EventSystem EventSystem;
 
 		private Entity playerEntity;
 		private Entity[] otherCubes;
@@ -24,6 +25,10 @@ namespace LegendOfCube.Engine
 		private Entity[] BouncyCubes;
 		private Entity[] DeathCubes;
 
+		private SpriteFont font;
+		private SpriteBatch spriteBatch;
+		private Vector2 fontPos;
+
 		public GameScreen(Game game) : base(game)
 		{
 			World = new World(3002);
@@ -31,6 +36,7 @@ namespace LegendOfCube.Engine
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem();
 			cameraSystem = new CameraSystem();
+			EventSystem = new EventSystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
@@ -40,6 +46,7 @@ namespace LegendOfCube.Engine
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
 			cameraSystem.OnUpdate(World, delta);
+			EventSystem.HandleEvents(World);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
@@ -49,6 +56,11 @@ namespace LegendOfCube.Engine
 			Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
 			renderSystem.RenderWorld(World);
+
+			spriteBatch.Begin();
+			string output = "Legend of Cube";
+			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
+			spriteBatch.End();
 		}
 
 		internal override void LoadContent()
@@ -168,6 +180,10 @@ namespace LegendOfCube.Engine
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(World);
+
+			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+			font = Game.Content.Load<SpriteFont>("Arial");
+			fontPos = new Vector2(0, 0);
 		}
 	}
 }

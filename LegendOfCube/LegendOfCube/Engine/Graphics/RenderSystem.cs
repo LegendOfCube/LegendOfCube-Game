@@ -1,7 +1,7 @@
-﻿﻿using System;
-﻿using System.Diagnostics;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿﻿using System.Diagnostics;
+﻿using LegendOfCube.Engine.BoundingVolumes;
+﻿using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine.Graphics
 {
@@ -29,6 +29,7 @@ namespace LegendOfCube.Engine.Graphics
 		private Game game;
 		private GraphicsDeviceManager graphics;
 		private StandardEffect standardEffect;
+		private OBBRenderer obbRenderer;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -50,6 +51,8 @@ namespace LegendOfCube.Engine.Graphics
 			game.GraphicsDevice.BlendState = BlendState.Opaque;
 			game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 			graphics.ApplyChanges();
+
+			obbRenderer = new OBBRenderer(game.GraphicsDevice);
 
 			this.standardEffect = new StandardEffect(game.Content.Load<Effect>("Effects/standardEffect"));
 		}
@@ -93,6 +96,7 @@ namespace LegendOfCube.Engine.Graphics
 			foreach (var e in world.EnumerateEntities(MODEL_AND_TRANSFORM))
 			{
 				RenderEntity(e, world, boundingFrustum, ref view, ref projection);
+	
 			}
 		}
 
@@ -105,6 +109,14 @@ namespace LegendOfCube.Engine.Graphics
 			if (!ModelInFrustrum(model, boundingFrustum, ref worldTransform))
 			{
 				return;
+			}
+
+			// TODO: Control this with key press or something
+			if (world.DebugState.ShowOBBWireFrame)
+			{
+				OBB obb = world.ModelSpaceBVs[entity.Id];
+				OBB transformed = OBB.TransformOBB(ref obb, ref worldTransform);
+				obbRenderer.Render(transformed, view, projection);
 			}
 
 			// Not exactly sure about the reason for this, but seems to be the standard way to do it
