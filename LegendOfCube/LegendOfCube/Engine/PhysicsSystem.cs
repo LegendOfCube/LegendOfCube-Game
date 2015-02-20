@@ -86,12 +86,7 @@ namespace LegendOfCube.Engine
 					{
 						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(collisionIndex));
 						world.EventBuffer.AddEvent(ref ce);
-						if (world.EntityProperties[collisionIndex].Satisfies(new Properties(Properties.DEATH_ZONE_FLAG)))
-						{
-							world.Transforms[i].Translation = world.SpawnPoint;
-							world.Velocities[i] = Vector3.Zero;
-						}
-						else if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
+						if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
 						{
 							world.Velocities[i] *= -1;
 							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
