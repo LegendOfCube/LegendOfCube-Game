@@ -18,9 +18,6 @@ namespace LegendOfCube.Engine
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
 
-
-		private Entity playerEntity;
-
 		public GameScreen(Game game) : base(game)
 		{
 			World = new World(1002);
@@ -50,36 +47,7 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
-/*			var cubeModel = Game.Content.Load<Model>("Models/Cube/cube_clean");
-			var platformModel = Game.Content.Load<Model>("Models/Platform/platform");
-
-			var playerEffect = new StandardEffectParams
-			{
-				//DiffuseTexture = Game.Content.Load<Texture>("Models/Cube/cube_diff"),
-				EmissiveTexture = Game.Content.Load<Texture>("Models/Cube/cube_emissive"),
-				SpecularColor = Color.Gray.ToVector4(),
-				EmissiveColor = Color.White.ToVector4()
-			};
-
-
-			*/
 			ConceptLevel.CreateLevel(World, Game);
-
-
-/*
-			otherCubes = new Entity[1000];
-			Random rnd = new Random(0);
-			for (int i = 0; i < otherCubes.Length; i++)
-			{
-				otherCubes[i] =
-					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
-						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
-						.WithStandardEffectParams(otherCubeEffect)
-						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
-						.AddToWorld(World);
-			}
-*/
 		}
 	}
 }
