@@ -11,7 +11,7 @@ float3 PointLight0ViewSpacePos;
 float4 PointLight0Color = WHITE_COLOR;
 
 // Defines the the ambient look of an object (simulate that all surfaces are somewhat lit)
-float4 MaterialAmbientIntensity = 0.0;
+float MaterialAmbientIntensity = 0.0;
 
 // Defines the the diffuse look of an object (light spread in all directions)
 bool UseDiffuseTexture;
