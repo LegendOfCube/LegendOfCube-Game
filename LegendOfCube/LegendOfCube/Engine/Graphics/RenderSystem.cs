@@ -183,20 +183,6 @@ namespace LegendOfCube.Engine.Graphics
 			}
 		}
 
-		private void RenderWithStandardEffect(Entity entity, World world, Matrix view, Matrix projection)
-		{
-			var sep = world.StandardEffectParams[entity.Id];
-
-			standardEffect.SetDiffuseColor(sep.DiffuseColor);
-			standardEffect.SetSpecularColor(sep.SpecularColor);
-			standardEffect.SetEmissiveColor(sep.EmissiveColor);
-
-			standardEffect.SetDiffuseTexture(sep.DiffuseTexture);
-			standardEffect.SetEmissiveTexture(sep.EmissiveTexture);
-			standardEffect.SetSpecularTexture(sep.SpecularTexture);
-			standardEffect.SetNormalTexture(sep.NormalTexture);
-		}
-
 		private static bool ModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
 		{
 			// Go through all BoundingSpheres in Model and check if inside frustrums
