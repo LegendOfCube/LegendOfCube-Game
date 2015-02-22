@@ -31,6 +31,10 @@ namespace LegendOfCube.Engine.Graphics
 		private StandardEffect standardEffect;
 		private OBBRenderer obbRenderer;
 
+		// Store an array that's reused for each entity
+		// (very high allocation count when profiling otherwise)
+		private Matrix[] boneTransforms = new Matrix[5];
+
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -97,16 +101,18 @@ namespace LegendOfCube.Engine.Graphics
 				return;
 			}
 
-			// TODO: Control this with key press or something
 			if (world.DebugState.ShowOBBWireFrame)
 			{
 				OBB obb = world.ModelSpaceBVs[entity.Id];
 				OBB transformed = OBB.TransformOBB(ref obb, ref worldTransform);
-				obbRenderer.Render(transformed, view, projection);
+				obbRenderer.Render(ref transformed, ref view, ref projection);
 			}
 
+
+			int boneCount = model.Bones.Count;
+			// Reuse the same array if larger array isn't needed
+			Matrix[] transforms = boneCount <= boneTransforms.Length ? boneTransforms : new Matrix[boneCount];
 			// Not exactly sure about the reason for this, but seems to be the standard way to do it
-			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
 			if (world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
