@@ -59,20 +59,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		public void RenderWorld(World world)
 		{
-			Matrix playerTransform = new Matrix();
-			Vector3 playerPos = new Vector3();
-			InputData input = null;
-			//Find player
-			foreach (Entity e in world.EnumerateEntities(new Properties(Properties.INPUT_FLAG)))
-			{
-				playerTransform = world.Transforms[e.Id];
-				playerPos = playerTransform.Translation;
-				input = world.InputData[e.Id];
-				break;
-			}
-
-
-			Vector3 camTarget = playerPos;
+			Vector3 camTarget = world.Transforms[world.Player.Id].Translation;
 			Vector3 up = new Vector3(0, 1, 0);
 
 			Vector3 camPos = world.CameraPosition;
@@ -96,7 +83,6 @@ namespace LegendOfCube.Engine.Graphics
 			foreach (var e in world.EnumerateEntities(MODEL_AND_TRANSFORM))
 			{
 				RenderEntity(e, world, boundingFrustum, ref view, ref projection);
-	
 			}
 		}
 
