@@ -98,6 +98,7 @@ namespace LegendOfCube.Engine
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
 					.AddToWorld(World);
+			World.Player = playerEntity;
 
 			otherCubes = new Entity[1000];
 			Random rnd = new Random(0);
