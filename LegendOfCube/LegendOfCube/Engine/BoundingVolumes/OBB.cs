@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
@@ -24,10 +21,12 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			this.xAxis = xAxis;
 			this.yAxis = yAxis;
 			this.zAxis = zAxis;
-			this.halfExtents = new Vector3(0, 0, 0);
-			this.halfExtents.X = extents.X / 2.0f;
-			this.halfExtents.Y = extents.Y / 2.0f;
-			this.halfExtents.Z = extents.Z / 2.0f;
+			this.halfExtents = new Vector3
+			{
+				X = extents.X / 2.0f, 
+				Y = extents.Y / 2.0f, 
+				Z = extents.Z / 2.0f
+			};
 
 			EnsureCorrectState();
 		}
@@ -38,10 +37,11 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			this.xAxis = xAxis;
 			this.yAxis = yAxis;
 			this.zAxis = zAxis;
-			this.halfExtents = new Vector3(0, 0, 0);
-			this.halfExtents.X = xExtent / 2.0f;
-			this.halfExtents.Y = yExtent / 2.0f;
-			this.halfExtents.Z = zExtent / 2.0f;
+			this.halfExtents = new Vector3{
+				X = xExtent / 2.0f,
+				Y = yExtent / 2.0f,
+				Z = zExtent / 2.0f
+			};
 
 			EnsureCorrectState();
 		}
@@ -66,14 +66,19 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			obbZ.Normalize();
 			obbZ *= obb.ExtentZ;
 
-			OBB result = new OBB();
-			result.center = transform.Translation + OBB.Transform(ref transform, ref obb.center);
+			OBB result = new OBB
+			{
+				center = transform.Translation + Transform(ref transform, ref obb.center),
+				xAxis = Transform(ref transform, ref obbX),
+				yAxis = Transform(ref transform, ref obbY),
+				zAxis = Transform(ref transform, ref obbZ)
+			};
 
-			result.xAxis = Transform(ref transform, ref obbX);
-			result.yAxis = Transform(ref transform, ref obbY);
-			result.zAxis = Transform(ref transform, ref obbZ);
-
-			result.halfExtents = new Vector3(result.xAxis.Length()/2.0f, result.yAxis.Length()/2.0f, result.zAxis.Length()/2.0f);
+			result.halfExtents = new Vector3 {
+				X = result.xAxis.Length() / 2.0f,
+				Y = result.yAxis.Length() / 2.0f,
+				Z = result.zAxis.Length() / 2.0f
+			};
 
 			result.xAxis.Normalize();
 			result.yAxis.Normalize();
@@ -84,10 +89,12 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 		private static Vector3 Transform(ref Matrix m, ref Vector3 v)
 		{
-			Vector3 res = new Vector3();
-			res.X = m.M11*v.X + m.M12*v.Y + m.M13*v.Z;
-			res.Y = m.M21*v.X + m.M22*v.Y + m.M23*v.Z;
-			res.Z = m.M31*v.X + m.M32*v.Y + m.M33*v.Z;
+			Vector3 res = new Vector3
+			{
+				X = m.M11 * v.X + m.M12 * v.Y + m.M13 * v.Z,
+				Y = m.M21 * v.X + m.M22 * v.Y + m.M23 * v.Z,
+				Z = m.M31 * v.X + m.M32 * v.Y + m.M33 * v.Z
+			};
 			return res;
 		}
 		
