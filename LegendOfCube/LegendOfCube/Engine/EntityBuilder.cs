@@ -99,7 +99,7 @@ namespace LegendOfCube.Engine
 
 		public EntityBuilder WithStandardEffectParams(StandardEffectParams sep)
 		{
-			properties.Add(Properties.FULL_LIGHT_EFFECT);
+			properties.Add(Properties.STANDARD_EFFECT);
 			this.sep = sep;
 			return this;
 		}
@@ -142,7 +142,7 @@ namespace LegendOfCube.Engine
 			{
 				world.Models[entity.Id] = model;
 			}
-			if (properties.Satisfies(Properties.FULL_LIGHT_EFFECT))
+			if (properties.Satisfies(Properties.STANDARD_EFFECT))
 			{
 				world.StandardEffectParams[entity.Id] = sep;
 			}

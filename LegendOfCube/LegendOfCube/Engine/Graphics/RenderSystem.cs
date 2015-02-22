@@ -14,10 +14,10 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM);
 
-		private static readonly Properties FULL_LIGHT_EFFECT = new Properties(
+		private static readonly Properties STANDARD_EFFECT_COMPATIBLE = new Properties(
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM |
-		                                                                Properties.FULL_LIGHT_EFFECT);
+		                                                                Properties.STANDARD_EFFECT);
 
 		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 
@@ -109,7 +109,7 @@ namespace LegendOfCube.Engine.Graphics
 			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
-			if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
+			if (world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
 			{
 				RenderWithStandardEffect(entity, model, transforms, world, worldTransform, view, projection);
 			}
