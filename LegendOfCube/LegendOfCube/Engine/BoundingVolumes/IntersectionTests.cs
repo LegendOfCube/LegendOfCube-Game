@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
-	public class IntersectionsTests
+	public static class IntersectionsTests
 	{
 		private const float EPSILON = 0.0001f;
 
@@ -29,26 +26,26 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 			Matrix3x3 aToWorld = Matrix3x3.CreateChangeOfBasis(boxA.AxisX, boxA.AxisY, boxA.AxisZ);
 			Matrix3x3 bToWorld = Matrix3x3.CreateChangeOfBasis(boxB.AxisX, boxB.AxisY, boxB.AxisZ);
-			Matrix3x3 worldToA = aToWorld.Transpose(); // Transpose is equal to inverse since orthogonal matrix
-			Matrix3x3 worldToB = bToWorld.Transpose();
+			Matrix3x3 worldToA;
+			Matrix3x3.Transpose(ref aToWorld, out worldToA); // Transpose is equal to inverse since orthogonal matrix
+			Matrix3x3 worldToB;
+			Matrix3x3.Transpose(ref bToWorld, out worldToB);
 
-			Matrix3x3 bToA = worldToA * bToWorld;
-			Matrix3x3 aToB = worldToB * aToWorld;
+			Matrix3x3 bToA;
+			Matrix3x3.Multiply(ref worldToA, ref bToWorld, out bToA);
+			Matrix3x3 aToB;
+			Matrix3x3.Multiply(ref worldToB, ref aToWorld, out aToB);
 
 			// Epsilon term to counteract arithmetic errors when two edges are parallell
-			Matrix3x3 bToAAbs = new Matrix3x3();
-			Matrix3x3 aToBAbs = new Matrix3x3();
-			for (uint i = 1; i <= 3; i++)
-			{
-				for (uint j = 1; j <= 3; j++)
-				{
-					bToAAbs.Set(i, j, Math.Abs(bToA.At(i, j)) + EPSILON);
-					aToBAbs.Set(i, j, Math.Abs(aToB.At(i, j)) + EPSILON);
-				}
-			}
+			Matrix3x3 bToAAbs;
+			MakeAbsEpsilonMatrix(ref bToA, out bToAAbs);
+			Matrix3x3 aToBAbs;
+			MakeAbsEpsilonMatrix(ref aToB, out aToBAbs);
 
 			// Computes translation vector between boxA and B and transforms it into A space
-			Vector3 translVecA = worldToA * (boxB.Position - boxA.Position);
+			Vector3 translVec = boxB.Position - boxA.Position;
+			Vector3 translVecA;
+			Matrix3x3.Transform(ref worldToA, ref translVec, out translVecA);
 
 			// Test all 15 axes in order of importance
 			float radiusA, radiusB;
@@ -89,6 +86,19 @@ namespace LegendOfCube.Engine.BoundingVolumes
 				case 3: return v.Z;
 				default: throw new ArgumentException("Not fulfilled: 1 <= index <= 3");
 			}
+		}
+
+		private static void MakeAbsEpsilonMatrix(ref Matrix3x3 matrix, out Matrix3x3 result)
+		{
+			result.M11 = Math.Abs(matrix.M11) + EPSILON;
+			result.M12 = Math.Abs(matrix.M12) + EPSILON;
+			result.M13 = Math.Abs(matrix.M13) + EPSILON;
+			result.M21 = Math.Abs(matrix.M21) + EPSILON;
+			result.M22 = Math.Abs(matrix.M22) + EPSILON;
+			result.M23 = Math.Abs(matrix.M23) + EPSILON;
+			result.M31 = Math.Abs(matrix.M31) + EPSILON;
+			result.M32 = Math.Abs(matrix.M32) + EPSILON;
+			result.M33 = Math.Abs(matrix.M33) + EPSILON;
 		}
 	}
 }

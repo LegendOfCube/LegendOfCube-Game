@@ -36,7 +36,7 @@ namespace LegendOfCube.Engine
 			float groundAngle = (float)Math.Atan2(cameraPosRelTarget.Z, cameraPosRelTarget.X);
 
 			// Modify angles depending on input
-			groundAngle -= (delta * X_SCALE * cameraModifierInput.X) % (2.0f * MathHelper.Pi);
+			groundAngle += (delta * X_SCALE * cameraModifierInput.X) % (2.0f * MathHelper.Pi);
 			tiltAngle = MathHelper.Clamp(tiltAngle + delta * Y_SCALE * cameraModifierInput.Y, -MathHelper.PiOver2 + 0.1f, MathHelper.PiOver2 - 0.1f);
 
 			// Set distance from target constant at the moment
@@ -47,7 +47,7 @@ namespace LegendOfCube.Engine
 				(float)(distance * Math.Cos(tiltAngle) * Math.Cos(groundAngle)),
 				(float)(distance * Math.Sin(tiltAngle)),
 				(float)(distance * Math.Cos(tiltAngle) * Math.Sin(groundAngle))
-			);
+			);	
 
 			world.CameraPosition = cameraTarget + newCameraRelTarget;
 		}
