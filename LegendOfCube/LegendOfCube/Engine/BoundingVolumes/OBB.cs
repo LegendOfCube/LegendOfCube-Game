@@ -280,8 +280,14 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 		private void EnsureCorrectState()
 		{
-			// Axes are orthogonal
 			const float EPSILON = 0.001f;
+
+			// Axes are normalized
+			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) xAxis.Normalize();
+			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) yAxis.Normalize();
+			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) zAxis.Normalize();
+
+			// Axes are orthogonal
 			if (!ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 			if (!ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 			if (!ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
