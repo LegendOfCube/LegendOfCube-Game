@@ -55,7 +55,7 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			spriteBatch.Begin();
-			string output = "Legend of Cube";
+			string output = "CamPos: " + World.CameraPosition + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition) + "\nCubePos: " + World.Transforms[World.Player.Id].Translation;
 			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
 			spriteBatch.End();
 		}
