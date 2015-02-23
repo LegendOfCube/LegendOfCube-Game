@@ -66,15 +66,14 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			obbZ.Normalize();
 			obbZ *= obb.ExtentZ;
 
-			OBB result = new OBB
-			{
-				center = transform.Translation + Transform(ref transform, ref obb.center),
-				xAxis = Transform(ref transform, ref obbX),
-				yAxis = Transform(ref transform, ref obbY),
-				zAxis = Transform(ref transform, ref obbZ)
-			};
+			OBB result;
+			Vector3.Transform(ref obb.center, ref transform, out result.center);
+			Vector3.TransformNormal(ref obbX, ref transform, out result.xAxis);
+			Vector3.TransformNormal(ref obbY, ref transform, out result.yAxis);
+			Vector3.TransformNormal(ref obbZ, ref transform, out result.zAxis);
 
-			result.halfExtents = new Vector3 {
+			result.halfExtents = new Vector3
+			{
 				X = result.xAxis.Length() / 2.0f,
 				Y = result.yAxis.Length() / 2.0f,
 				Z = result.zAxis.Length() / 2.0f
