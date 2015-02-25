@@ -15,6 +15,7 @@ namespace LegendOfCube.Engine
 		private readonly CameraSystem cameraSystem;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
+		private Texture2D tex2D;
 
 		public MenuScreen(Game game) : base(game)
 		{
@@ -42,6 +43,10 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			spriteBatch.Begin();
+
+			//Ugly box
+			//spriteBatch.Draw(tex2D, new Rectangle(100, 20, 400, 200), Color.Black);
+
 			spriteBatch.DrawString(font, "Play", new Vector2(100, 20), Color.Maroon, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
 			//spriteBatch.DrawString(font, "Options", new Vector2(100, 200), Color.Crimson, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
 			spriteBatch.DrawString(font, "Exit", new Vector2(100, 380), Color.Goldenrod, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
@@ -52,6 +57,10 @@ namespace LegendOfCube.Engine
 		{
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
+
+			//Custom texture forugly box
+			tex2D = new Texture2D(Game.GraphicsDevice, 1, 1);
+			tex2D.SetData(new Color[] { Color.Black});
 		}
 	}
 }
