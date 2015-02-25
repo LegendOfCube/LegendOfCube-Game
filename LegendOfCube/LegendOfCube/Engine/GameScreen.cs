@@ -35,7 +35,7 @@ namespace LegendOfCube.Engine
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
-			physicsSystem = new PhysicsSystem();
+			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			EventSystem = new EventSystem();
 		}

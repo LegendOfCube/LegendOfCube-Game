@@ -24,11 +24,35 @@ namespace LegendOfCube.Engine
 		private static readonly Properties MOVABLE_NO_BV = new Properties(Properties.TRANSFORM |
 		                                                                  Properties.VELOCITY);
 
+		// Members
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private OBB[] worldSpaceOBBs;
+
+		// Constructors
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		public PhysicsSystem(uint maxNumEntities)
+		{
+			worldSpaceOBBs = new OBB[maxNumEntities];
+		}
+
+		// Public functions
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
 		public void ApplyPhysics(float delta, World world)
 		{
+			// Calculate all World Space OBBs
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+			{
+				if (!world.EntityProperties[i].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
+				worldSpaceOBBs[i] = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+			}
+
 			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
 				Properties properties = world.EntityProperties[i];
+
 				// Check if velocity should be updated
 				if (properties.Satisfies(ACCELERATABLE))
 				{
@@ -51,12 +75,35 @@ namespace LegendOfCube.Engine
 					world.Velocities[i] += (world.Gravity * delta);
 				}
 
-
 				// Update position
 				if (properties.Satisfies(MOVABLE))
 				{
+					Vector3 diff = (world.Velocities[i] * delta);
+					worldSpaceOBBs[i].Position += diff;
+
+					// Iterate until object no longer intersects with anything.
+					float timeLeft = delta;
+					UInt32 intersectionId = intersectionId = findIntersection(world, i);
+					while (intersectionId != UInt32.MaxValue)
+					{
+						worldSpaceOBBs[i].Position -= diff;
+						float timeUntilCol = findTimeUntilIntersection(intersectionId, i, world.Velocities[i], timeLeft);
+						diff = (world.Velocities[i]*timeUntilCol);
+						worldSpaceOBBs[i].Position += diff;
+						intersectionId = UInt32.MaxValue;
+						//timeLeft = findTimeUntilIntersection
+
+
+						//intersectionId = findIntersection(world, i);
+					}
+
+					// Update translation in transform
+					world.Transforms[i].Translation = worldSpaceOBBs[i].Position; 
+
+
+
 					// Calculate new transform
-					Vector3 newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
+					/*Vector3 newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
 					Matrix newTransform = world.Transforms[i];
 					newTransform.Translation = newTranslation;
 
@@ -112,7 +159,7 @@ namespace LegendOfCube.Engine
 							world.Transforms[i].Translation = newTranslation;
 							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
 						}
-					}
+					}*/
 
 				}
 				else if (properties.Satisfies(MOVABLE_NO_BV))
@@ -120,6 +167,43 @@ namespace LegendOfCube.Engine
 					world.Transforms[i].Translation += (world.Velocities[i] * delta);
 				}
 			}
+		}
+
+		// Private functions
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		// Precondition: param entity must satisfy MOVABLE
+		// Returns UInt32.MaxValue if no intersections are found, otherwise index of entity collided with.
+		private UInt32 findIntersection(World world, UInt32 entity)
+		{
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+			{
+				if (i == entity) continue;
+				if (!world.EntityProperties[i].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
+				if (worldSpaceOBBs[i].Intersects(ref worldSpaceOBBs[entity])) return i;
+			}
+
+			// No collisions found.
+			return UInt32.MaxValue;
+		}
+
+		// Returns an approximation of the maximum amount of time collider can move.
+		// Collider is guaranteed to not collide with target if moved the amount of time returned.
+		// Preconditions: timeSlice > 0, collider must hit target if moved entire timeSlice
+		private float findTimeUntilIntersection(UInt32 target, UInt32 collider, Vector3 colliderVelocity, float timeSlice)
+		{
+			float time = timeSlice / 2.0f;
+
+			for (int itr = 0; itr < 2; itr++)
+			{
+				Vector3 diff = colliderVelocity * time;
+				worldSpaceOBBs[collider].Position += diff;
+
+				// TODO: THIS FUNCTION IS NOT DONE!
+
+			}
+
+			return 0.0f;
 		}
 
 		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPre, ref OBB colliderPost)
