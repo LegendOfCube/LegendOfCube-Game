@@ -86,19 +86,32 @@ namespace LegendOfCube.Engine
 					{
 						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(collisionIndex));
 						world.EventBuffer.AddEvent(ref ce);
+						//Special physics related collision events
+						if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
+						{
+							if (world.InputData[i].NewJump())
+							{
+								world.Velocities[i] *= -1.5f;
+							}
+							else
+							{
+								world.Velocities[i] *= -1;
+							}
+						}
+						else
+						{
+							OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+							Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
 
-						OBB worldOBBPre = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
-						Vector3 axis = findCollisionAxis(ref collisionBox, ref worldOBBPre, ref worldSpaceOBB);
+							Debug.WriteLine("Axis: " + axis + "\n\n");
 
-						Debug.WriteLine("Axis: " + axis + "\n\n");
+							float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+							world.Velocities[i] -= (collidingSum * axis);
 
-						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-						world.Velocities[i] -= (collidingSum*axis);
-
-						newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
-						world.Transforms[i].Translation = newTranslation;
-						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
-						
+							newTranslation = world.Transforms[i].Translation + (world.Velocities[i] * delta);
+							world.Transforms[i].Translation = newTranslation;
+							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
+						}
 					}
 
 				}
@@ -114,24 +127,44 @@ namespace LegendOfCube.Engine
 			//Debug.Assert(!target.Intersects(ref colliderPre));
 			//Debug.Assert(target.Intersects(ref colliderPost));
 
-			Vector3 diff = colliderPost.Position - target.Position;
-			// Okay, so this formula came to me in a dream. I don't actually know what it does, how it works,
-			// if it works, or if it's implemented correctly. It seems to work pretty well though.
-			float xThing = Math.Abs(Vector3.Dot(diff, target.AxisX * target.ExtentX)) / target.ExtentX;
-			float yThing = Math.Abs(Vector3.Dot(diff, target.AxisY * target.ExtentY)) / target.ExtentY;
-			float zThing = Math.Abs(Vector3.Dot(diff, target.AxisZ * target.ExtentZ)) / target.ExtentZ;
+			// Note: This whole algorithm assumes that the collider is a cube.
+			// If collider is not a cube it will probably not work well at all.
 
-			Vector3 axis = new Vector3();
-			if (xThing >= yThing && xThing >= zThing) axis = target.AxisX;
-			else if (yThing >= xThing && yThing >= zThing) axis = target.AxisY;
-			else if (zThing >= xThing && zThing >= yThing) axis = target.AxisZ;
-			else Debug.Assert(false);
+			// Calculate distance vector from target to collider
+			Vector3 toCollider = colliderPost.Position - target.Position;
 
-			// Now that we have the axis we just want to know the sign.
-			float sign = Vector3.Dot(diff, axis);
+			// Projects distance vector on each of targets axes
+			float toColliderXProj = Vector3.Dot(toCollider, target.AxisX);
+			float toColliderYProj = Vector3.Dot(toCollider, target.AxisY);
+			float toColliderZProj = Vector3.Dot(toCollider, target.AxisZ);
 
-			return Math.Sign(sign) * axis;
+			// Abs value of projections
+			float toColliderXProjAbs = Math.Abs(toColliderXProj);
+			float toColliderYProjAbs = Math.Abs(toColliderYProj);
+			float toColliderZProjAbs = Math.Abs(toColliderZProj);
+
+			// Checks which axes collider is outside of
+			bool xOutside = toColliderXProjAbs > target.HalfExtentX;
+			bool yOutside = toColliderYProjAbs > target.HalfExtentY;
+			bool zOutside = toColliderZProjAbs > target.HalfExtentZ;
+
+			// Counts how many axes collider is outside of
+			int outsideCount = 0;
+			if (xOutside) outsideCount++;
+			if (yOutside) outsideCount++;
+			if (zOutside) outsideCount++;
+
+			// If outside of 2 or more axes we "don't have" (lol) a collision axis.
+			if (outsideCount >= 2) return Vector3.Zero;
+			
+			// Return collision axis.
+			if (yOutside) return Math.Sign(toColliderYProj) * target.AxisY;
+			if (xOutside) return Math.Sign(toColliderXProj) * target.AxisX;
+			if (zOutside) return Math.Sign(toColliderZProj) * target.AxisZ;
+
+			// If no collision axis it means we're inside an object. Default to not being able to move in world y-axis.
+			//Debug.Assert(false);
+			return Vector3.UnitY;
 		}
-
 	}
 }

@@ -52,7 +52,7 @@ namespace LegendOfCube.Engine.Graphics
 			});
 		}
 
-		public void Render(OBB boundingBox, Matrix view, Matrix projection)
+		public void Render(ref OBB boundingBox, ref Matrix view, ref Matrix projection)
 		{
 			basicEffect.View = view;
 			basicEffect.Projection = projection;

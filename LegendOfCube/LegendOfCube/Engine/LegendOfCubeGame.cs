@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -28,9 +25,7 @@ namespace LegendOfCube.Engine
 			Content.RootDirectory = "Content";
 			renderSystem = new RenderSystem(this);
 			screens = new List<Screen> {new GameScreen(this), new MenuScreen(this)};
-			screens[1].SetWorld(screens[0].World);
 			currentScreen = screens[0];
-
 			SwitcherSystem = new SwitcherSystem(this);
 		}
 
@@ -55,8 +50,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-
-			currentScreen.LoadContent();
+			screens[0].LoadContent();
 		}
 
 		/// <summary>
@@ -96,6 +90,7 @@ namespace LegendOfCube.Engine
 		{
 			if (currentScreen is GameScreen)
 			{
+				screens[1].SetWorld(currentScreen.World);
 				currentScreen = screens[1];
 			}
 			else if (currentScreen is MenuScreen)
