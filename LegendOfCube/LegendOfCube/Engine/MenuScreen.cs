@@ -11,6 +11,7 @@ namespace LegendOfCube.Engine
 	class MenuScreen : Screen
 	{
 		private readonly InputSystem inputSystem;
+		private readonly MenuInputSystem menuInputSystem;
 		private readonly CameraSystem cameraSystem;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
@@ -18,8 +19,9 @@ namespace LegendOfCube.Engine
 		public MenuScreen(Game game) : base(game)
 		{
 			World = new World(1002);
-			this.inputSystem = new InputSystem(game);
+			inputSystem = new InputSystem(game);
 			cameraSystem = new CameraSystem();
+			menuInputSystem = new MenuInputSystem(game);
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
@@ -27,6 +29,7 @@ namespace LegendOfCube.Engine
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, World, switcher);
+			menuInputSystem.ApplyInput(gameTime, World, switcher);
 			cameraSystem.OnUpdate(World, delta);
 		}
 
@@ -40,7 +43,7 @@ namespace LegendOfCube.Engine
 
 			spriteBatch.Begin();
 			spriteBatch.DrawString(font, "Play", new Vector2(100, 20), Color.Maroon, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
-			spriteBatch.DrawString(font, "Options", new Vector2(100, 200), Color.Crimson, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
+			//spriteBatch.DrawString(font, "Options", new Vector2(100, 200), Color.Crimson, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
 			spriteBatch.DrawString(font, "Exit", new Vector2(100, 380), Color.Goldenrod, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
 			spriteBatch.End();
 		}
