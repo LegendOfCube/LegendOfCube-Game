@@ -48,6 +48,7 @@ namespace LegendOfCube.Engine
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
 			mouseState = Mouse.GetState();
+			Vector2 directionInput = Vector2.Zero;
 
 			if (!gamePadState.IsConnected)
 			{
@@ -70,6 +71,13 @@ namespace LegendOfCube.Engine
 				game.Exit();
 			}
 
+			// Normalize the vector to our needs, then set direction
+			directionInput = !directionInput.Equals(Vector2.Zero) ? Vector2.Normalize(directionInput) : gamePadState.ThumbSticks.Left;
+
+			var xPos = mouseState.X + directionInput.X;
+			var yPos = mouseState.Y + directionInput.Y;
+			Mouse.SetPosition((int)xPos, (int)yPos);
+
 			oldMouseState = mouseState;	
 		}
 
@@ -90,7 +98,7 @@ namespace LegendOfCube.Engine
 
 		private bool MouseClickWithinRectangle(Rectangle rect)
 		{
-			return MouseWasJustPressed() && rect.Contains(mouseState.X, mouseState.Y);
+			return (MouseWasJustPressed() || ButtonWasJustPressed(Buttons.A)) && rect.Contains(mouseState.X, mouseState.Y);
 		}
 	}
 }
