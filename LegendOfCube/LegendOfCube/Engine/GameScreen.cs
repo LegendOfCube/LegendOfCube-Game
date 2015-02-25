@@ -6,7 +6,7 @@ using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Level;
+using LegendOfCube.Levels;
 
 namespace LegendOfCube.Engine
 {
@@ -18,6 +18,7 @@ namespace LegendOfCube.Engine
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
 		private readonly EventSystem EventSystem;
+		private readonly AISystem AI_system;
 
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
@@ -31,12 +32,14 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem();
 			cameraSystem = new CameraSystem();
 			EventSystem = new EventSystem();
+			AI_system = new AISystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			inputSystem.ApplyInput(gameTime, World, switcher);
+			AI_system.update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
 			cameraSystem.OnUpdate(World, delta);

@@ -34,6 +34,7 @@ namespace LegendOfCube.Engine
 		public readonly float[] MaxSpeed;
 		public readonly float[] MaxAcceleration;
 		public OBB[] ModelSpaceBVs;
+		public readonly AIComponent[] AIComponents;
 
 		public readonly Model[] Models;
 		public readonly StandardEffectParams[] StandardEffectParams;
@@ -76,6 +77,7 @@ namespace LegendOfCube.Engine
 			MaxSpeed = new float[MaxNumEntities];
 			MaxAcceleration = new float[MaxNumEntities];
 			ModelSpaceBVs = new OBB[MaxNumEntities];
+			AIComponents = new AIComponent[MaxNumEntities];
 
 			Models = new Model[MaxNumEntities];
 			StandardEffectParams = new StandardEffectParams[MaxNumEntities];
