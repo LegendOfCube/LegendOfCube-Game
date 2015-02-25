@@ -86,6 +86,7 @@ namespace LegendOfCube.Engine
 					{
 						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(collisionIndex));
 						world.EventBuffer.AddEvent(ref ce);
+						//Special physics related collision events
 						if (world.EntityProperties[collisionIndex].Satisfies((new Properties(Properties.BOUNCE_FLAG))))
 						{
 							if (world.InputData[i].NewJump())

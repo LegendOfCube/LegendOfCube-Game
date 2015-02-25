@@ -156,7 +156,7 @@ namespace LegendOfCube.Engine
 			{
 				BouncyCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(bouncyCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
@@ -170,7 +170,7 @@ namespace LegendOfCube.Engine
 			{
 				DeathCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(deathCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
@@ -184,7 +184,7 @@ namespace LegendOfCube.Engine
 			{
 				TeleportCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)))
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(teleportCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
