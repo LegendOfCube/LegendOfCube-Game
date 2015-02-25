@@ -21,6 +21,10 @@ namespace LegendOfCube.Engine
 		private Entity playerEntity;
 		private Entity[] otherCubes;
 		private Entity ground;
+		private Entity DeathZone;
+		private Entity[] BouncyCubes;
+		private Entity[] DeathCubes;
+		private Entity[] TeleportCubes;
 
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
@@ -28,7 +32,7 @@ namespace LegendOfCube.Engine
 
 		public GameScreen(Game game) : base(game)
 		{
-			World = new World(1002);
+			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem();
@@ -83,15 +87,48 @@ namespace LegendOfCube.Engine
 				EmissiveColor = Color.White.ToVector4()
 			};
 
+			var bouncyCubeEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
+				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
+				EmissiveTexture = Game.Content.Load<Texture>("Models/cube_emissive"),
+				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.Yellow.ToVector4(),
+				EmissiveColor = Color.Yellow.ToVector4()
+			};
+
+			var deathCubeEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
+				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
+				EmissiveTexture = Game.Content.Load<Texture>("Models/cube_emissive"),
+				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.Red.ToVector4(),
+				EmissiveColor = Color.White.ToVector4(),
+				DiffuseColor = Color.Red.ToVector4(),
+			};
+
+			var teleportCubeEffect = new StandardEffectParams
+			{
+				DiffuseTexture = Game.Content.Load<Texture>("Models/cube_diff"),
+				SpecularTexture = Game.Content.Load<Texture>("Models/cube_specular"),
+				EmissiveTexture = Game.Content.Load<Texture>("Models/cube_emissive"),
+				NormalTexture = Game.Content.Load<Texture>("Models/cube_normal"),
+				SpecularColor = Color.Blue.ToVector4(),
+				EmissiveColor = Color.Blue.ToVector4(),
+				DiffuseColor = Color.Blue.ToVector4(),
+			};
+
 			var groundEffect = new StandardEffectParams
 			{
 				DiffuseColor = Color.Gray.ToVector4(),
 				SpecularColor = 0.5f * Color.White.ToVector4()
 			};
 
+			World.SpawnPoint = new Vector3(0,1,0);
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(new Vector3(0, 20.0f, 0))
+					.WithPosition(World.SpawnPoint)
 					.WithVelocity(Vector3.Zero, 15)
 					.WithAcceleration(Vector3.Zero, 30)
 					.WithStandardEffectParams(playerEffect)
@@ -113,6 +150,48 @@ namespace LegendOfCube.Engine
 						.AddToWorld(World);
 			}
 
+			BouncyCubes = new Entity[100];
+			rnd = new Random(1);
+			for (int i = 0; i < BouncyCubes.Length; i++)
+			{
+				BouncyCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithStandardEffectParams(bouncyCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+						.AddToWorld(World);
+			}
+
+			DeathCubes = new Entity[100];
+			rnd = new Random(2);
+			for (int i = 0; i < DeathCubes.Length; i++)
+			{
+				DeathCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithStandardEffectParams(deathCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+						.AddToWorld(World);
+			}
+
+			TeleportCubes = new Entity[100];
+			rnd = new Random(3);
+			for (int i = 0; i < TeleportCubes.Length; i++)
+			{
+				TeleportCubes[i] =
+					new EntityBuilder().WithModel(cubeModel)
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
+						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
+						.WithStandardEffectParams(teleportCubeEffect)
+						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+						.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
+						.AddToWorld(World);
+			}
+
 			// This is definitely the most natural way to represent the ground
 			ground =
 				new EntityBuilder().WithModel(cubeModel)
@@ -120,6 +199,13 @@ namespace LegendOfCube.Engine
 					.WithPosition(new Vector3(0, -1000.0f, 0))
 					.WithStandardEffectParams(groundEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+					.AddToWorld(World);
+
+			DeathZone =
+				new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
+					.WithPosition(new Vector3(0, -2000.0f, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(World);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);

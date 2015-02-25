@@ -22,6 +22,9 @@ namespace LegendOfCube.Engine
 		public const UInt64 MODEL = 1 << 5;
 		public const UInt64 STANDARD_EFFECT = 1 << 6;
 		public const UInt64 MODEL_SPACE_BV = 1 << 7;
+		public const UInt64 DEATH_ZONE_FLAG = 1 << 8;
+		public const UInt64 BOUNCE_FLAG = 1 << 9;
+		public const UInt64 TELEPORT_FLAG = 1 << 10;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

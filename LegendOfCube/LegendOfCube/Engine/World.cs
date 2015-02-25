@@ -46,8 +46,8 @@ namespace LegendOfCube.Engine
 
 		// World variables
 
+		public Vector3 SpawnPoint;
 		public EventBuffer EventBuffer;
-
 		public Vector3 Gravity;
 		public Vector3 LightPosition;
 		public Vector3 CameraPosition;
@@ -93,6 +93,7 @@ namespace LegendOfCube.Engine
 			}
 			PlayerCubeState = new PlayerCubeState();
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
+			SpawnPoint = new Vector3(0, 25, 0);
 			EventBuffer = new EventBuffer();
 		}
 
