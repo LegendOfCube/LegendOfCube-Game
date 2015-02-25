@@ -66,15 +66,14 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			obbZ.Normalize();
 			obbZ *= obb.ExtentZ;
 
-			OBB result = new OBB
-			{
-				center = transform.Translation + Transform(ref transform, ref obb.center),
-				xAxis = Transform(ref transform, ref obbX),
-				yAxis = Transform(ref transform, ref obbY),
-				zAxis = Transform(ref transform, ref obbZ)
-			};
+			OBB result;
+			Vector3.Transform(ref obb.center, ref transform, out result.center);
+			Vector3.TransformNormal(ref obbX, ref transform, out result.xAxis);
+			Vector3.TransformNormal(ref obbY, ref transform, out result.yAxis);
+			Vector3.TransformNormal(ref obbZ, ref transform, out result.zAxis);
 
-			result.halfExtents = new Vector3 {
+			result.halfExtents = new Vector3
+			{
 				X = result.xAxis.Length() / 2.0f,
 				Y = result.yAxis.Length() / 2.0f,
 				Z = result.zAxis.Length() / 2.0f
@@ -287,8 +286,14 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 		private void EnsureCorrectState()
 		{
-			// Axes are orthogonal
 			const float EPSILON = 0.001f;
+
+			// Axes are normalized
+			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) xAxis.Normalize();
+			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) yAxis.Normalize();
+			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) zAxis.Normalize();
+
+			// Axes are orthogonal
 			if (!ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 			if (!ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 			if (!ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");

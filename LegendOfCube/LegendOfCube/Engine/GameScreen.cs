@@ -55,7 +55,7 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			spriteBatch.Begin();
-			string output = "Legend of Cube";
+			string output = "CamPos: " + World.CameraPosition + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition) + "\nCubePos: " + World.Transforms[World.Player.Id].Translation;
 			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
 			spriteBatch.End();
 		}
@@ -106,7 +106,7 @@ namespace LegendOfCube.Engine
 			{
 				otherCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
-						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25)) * Matrix.CreateRotationY(rnd.Next(0, 5)))
+						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25)) * Matrix.CreateRotationY(3.14f * (float)rnd.NextDouble()))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(otherCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
