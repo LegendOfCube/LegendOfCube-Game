@@ -14,10 +14,10 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM);
 
-		private static readonly Properties FULL_LIGHT_EFFECT = new Properties(
+		private static readonly Properties STANDARD_EFFECT_COMPATIBLE = new Properties(
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM |
-		                                                                Properties.FULL_LIGHT_EFFECT);
+		                                                                Properties.STANDARD_EFFECT);
 
 		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 
@@ -30,6 +30,10 @@ namespace LegendOfCube.Engine.Graphics
 		private GraphicsDeviceManager graphics;
 		private StandardEffect standardEffect;
 		private OBBRenderer obbRenderer;
+
+		// Store an array that's reused for each entity
+		// (very high allocation count when profiling otherwise)
+		private Matrix[] boneTransforms = new Matrix[5];
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -59,20 +63,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		public void RenderWorld(World world)
 		{
-			Matrix playerTransform = new Matrix();
-			Vector3 playerPos = new Vector3();
-			InputData input = null;
-			//Find player
-			foreach (Entity e in world.EnumerateEntities(new Properties(Properties.INPUT_FLAG)))
-			{
-				playerTransform = world.Transforms[e.Id];
-				playerPos = playerTransform.Translation;
-				input = world.InputData[e.Id];
-				break;
-			}
-
-
-			Vector3 camTarget = playerPos;
+			Vector3 camTarget = world.Transforms[world.Player.Id].Translation;
 			Vector3 up = new Vector3(0, 1, 0);
 
 			Vector3 camPos = world.CameraPosition;
@@ -96,7 +87,6 @@ namespace LegendOfCube.Engine.Graphics
 			foreach (var e in world.EnumerateEntities(MODEL_AND_TRANSFORM))
 			{
 				RenderEntity(e, world, boundingFrustum, ref view, ref projection);
-	
 			}
 		}
 
@@ -111,19 +101,21 @@ namespace LegendOfCube.Engine.Graphics
 				return;
 			}
 
-			// TODO: Control this with key press or something
 			if (world.DebugState.ShowOBBWireFrame)
 			{
 				OBB obb = world.ModelSpaceBVs[entity.Id];
 				OBB transformed = OBB.TransformOBB(ref obb, ref worldTransform);
-				obbRenderer.Render(transformed, view, projection);
+				obbRenderer.Render(ref transformed, ref view, ref projection);
 			}
 
+
+			int boneCount = model.Bones.Count;
+			// Reuse the same array if larger array isn't needed
+			Matrix[] transforms = boneCount <= boneTransforms.Length ? boneTransforms : new Matrix[boneCount];
 			// Not exactly sure about the reason for this, but seems to be the standard way to do it
-			var transforms = new Matrix[model.Bones.Count];
 			model.CopyAbsoluteBoneTransformsTo(transforms);
 
-			if (world.EntityProperties[entity.Id].Satisfies(FULL_LIGHT_EFFECT))
+			if (world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
 			{
 				RenderWithStandardEffect(entity, model, transforms, world, worldTransform, view, projection);
 			}
@@ -181,20 +173,6 @@ namespace LegendOfCube.Engine.Graphics
 				standardEffect.SetWorld(ref worldMatrix);
 				mesh.Draw();
 			}
-		}
-
-		private void RenderWithStandardEffect(Entity entity, World world, Matrix view, Matrix projection)
-		{
-			var sep = world.StandardEffectParams[entity.Id];
-
-			standardEffect.SetDiffuseColor(sep.DiffuseColor);
-			standardEffect.SetSpecularColor(sep.SpecularColor);
-			standardEffect.SetEmissiveColor(sep.EmissiveColor);
-
-			standardEffect.SetDiffuseTexture(sep.DiffuseTexture);
-			standardEffect.SetEmissiveTexture(sep.EmissiveTexture);
-			standardEffect.SetSpecularTexture(sep.SpecularTexture);
-			standardEffect.SetNormalTexture(sep.NormalTexture);
 		}
 
 		private static bool ModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)

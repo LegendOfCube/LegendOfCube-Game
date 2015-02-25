@@ -19,6 +19,22 @@ namespace LegendOfCubeTests
 			Assert.IsTrue(obb1.Intersects(ref obb2));
 			Assert.IsTrue(obb2.Intersects(ref obb3));
 			Assert.IsFalse(obb1.Intersects(ref obb3));
+
+
+			OBB obbSkew1 = new OBB(new Vector3(0,2,0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1, 10, 2);
+			OBB obbSkew2 = new OBB(new Vector3(0,8,0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1, 1, 2);
+			OBB obbSkew3 = new OBB(new Vector3(0,7,0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1, 2, 2);
+
+			Assert.IsFalse(obbSkew1.Intersects(ref obbSkew2));
+			Assert.IsTrue(obbSkew3.Intersects(ref obbSkew1));
+			Assert.IsTrue(obbSkew3.Intersects(ref obbSkew2));
+			Assert.IsTrue(IntersectionsTestsInside(new Vector3(0.0f, 6.9f, 0.0f), ref obbSkew1));
+			// TODO: Add moar.
+		}
+
+		private bool IntersectionsTestsInside(Vector3 v, ref OBB obb)
+		{
+			return IntersectionsTests.Inside(ref v, ref obb);
 		}
 
 		[TestMethod]
@@ -50,6 +66,17 @@ namespace LegendOfCubeTests
 			Assert.IsTrue(approxEqu(test3.ExtentX, 1.0f));
 			Assert.IsTrue(approxEqu(test3.ExtentY, 1.0f));
 			Assert.IsTrue(approxEqu(test3.ExtentZ, 1.0f));
+
+			OBB skewedObb = new OBB(new Vector3(0, 0, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1, 10, 1);
+			Matrix transl4 = Matrix.CreateScale(2, 3, 1);
+			OBB test4 = OBB.TransformOBB(ref skewedObb, ref transl4);
+			Assert.IsTrue(approxEqu(test4.Position, new Vector3(0,0,0)));
+			Assert.IsTrue(approxEqu(test4.AxisX, skewedObb.AxisX));
+			Assert.IsTrue(approxEqu(test4.AxisY, skewedObb.AxisY));
+			Assert.IsTrue(approxEqu(test4.AxisZ, skewedObb.AxisZ));
+			Assert.IsTrue(approxEqu(test4.ExtentX, 2));
+			Assert.IsTrue(approxEqu(test4.ExtentY, 30));
+			Assert.IsTrue(approxEqu(test4.ExtentZ, 1));
 		}
 
 		private const float EPSILON = 0.001f;

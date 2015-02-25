@@ -24,11 +24,19 @@ namespace LegendOfCube.Engine.CubeMath
 
 		public static Matrix3x3 CreateChangeOfBasis(Vector3 xAxis, Vector3 yAxis, Vector3 zAxis)
 		{
-			Matrix3x3 temp = new Matrix3x3();
-			temp.SetColumn(1, xAxis);
-			temp.SetColumn(2, yAxis);
-			temp.SetColumn(3, zAxis);
-			return temp;
+			Matrix3x3 result;
+			result.M11 = xAxis.X;
+			result.M21 = xAxis.Y;
+			result.M31 = xAxis.Z;
+
+			result.M12 = yAxis.X;
+			result.M22 = yAxis.Y;
+			result.M32 = yAxis.Z;
+
+			result.M13 = zAxis.X;
+			result.M23 = zAxis.Y;
+			result.M33 = zAxis.Z;
+			return result;
 		}
 
 		// Public functions
@@ -43,37 +51,79 @@ namespace LegendOfCube.Engine.CubeMath
 
 		public Matrix3x3 Transpose()
 		{
-			Matrix3x3 transp = this;
-			for (uint i = 1; i <= 3; i++)
-			{
-				for (uint j = 1; j <= 3; j++)
-				{
-					transp.Set(i, j, this.At(j, i));
-				}
-			}
-			return transp;
+			Matrix3x3 result;
+			result.M11 = M11;
+			result.M12 = M21;
+			result.M13 = M31;
+			result.M21 = M12;
+			result.M22 = M22;
+			result.M23 = M32;
+			result.M31 = M13;
+			result.M32 = M23;
+			result.M33 = M33;
+			return result;
+		}
+
+		public static void Transpose(ref Matrix3x3 matrix, out Matrix3x3 result)
+		{
+			result.M11 = matrix.M11;
+			result.M12 = matrix.M21;
+			result.M13 = matrix.M31;
+			result.M21 = matrix.M12;
+			result.M22 = matrix.M22;
+			result.M23 = matrix.M32;
+			result.M31 = matrix.M13;
+			result.M32 = matrix.M23;
+			result.M33 = matrix.M33;
 		}
 
 		public static Vector3 operator* (Matrix3x3 m, Vector3 v)
 		{
 			Vector3 result;
-			result.X = Vector3.Dot(m.RowAt(1), v);
-			result.Y = Vector3.Dot(m.RowAt(2), v);
-			result.Z = Vector3.Dot(m.RowAt(3), v);
+			result.X = v.X * m.M11 + v.Y * m.M12 + v.Z * m.M13;
+			result.Y = v.Y * m.M21 + v.Y * m.M22 + v.Z * m.M23;
+			result.Z = v.Z * m.M31 + v.Y * m.M32 + v.Z * m.M33;
 			return result;
 		}
 
 		public static Matrix3x3 operator* (Matrix3x3 lhs, Matrix3x3 rhs)
 		{
-			Matrix3x3 result = new Matrix3x3();
-			for (uint i = 1; i <= 3; i++)
-			{
-				for (uint j = 1; j <= 3; j++)
-				{
-					result.Set(i, j, Vector3.Dot(lhs.RowAt(i), rhs.ColumnAt(j)));
-				}
-			}
+			Matrix3x3 result;
+			result.M11 = lhs.M11 * rhs.M11 + lhs.M12 * rhs.M21 + lhs.M13 * rhs.M31;
+			result.M12 = lhs.M11 * rhs.M12 + lhs.M12 * rhs.M22 + lhs.M13 * rhs.M32;
+			result.M13 = lhs.M11 * rhs.M13 + lhs.M12 * rhs.M23 + lhs.M13 * rhs.M33;
+
+			result.M21 = lhs.M21 * rhs.M11 + lhs.M22 * rhs.M21 + lhs.M23 * rhs.M31;
+			result.M22 = lhs.M21 * rhs.M12 + lhs.M22 * rhs.M22 + lhs.M23 * rhs.M32;
+			result.M23 = lhs.M21 * rhs.M13 + lhs.M22 * rhs.M23 + lhs.M23 * rhs.M33;
+
+			result.M31 = lhs.M31 * rhs.M11 + lhs.M32 * rhs.M21 + lhs.M33 * rhs.M31;
+			result.M32 = lhs.M31 * rhs.M12 + lhs.M32 * rhs.M22 + lhs.M33 * rhs.M32;
+			result.M33 = lhs.M31 * rhs.M13 + lhs.M32 * rhs.M23 + lhs.M33 * rhs.M33;
+
 			return result;
+		}
+
+		public static void Transform(ref Matrix3x3 m, ref Vector3 v, out Vector3 result)
+		{
+			result.X = v.X * m.M11 + v.Y * m.M12 + v.Z * m.M13;
+			result.Y = v.X * m.M21 + v.Y * m.M22 + v.Z * m.M23;
+			result.Z = v.X * m.M31 + v.Y * m.M32 + v.Z * m.M33;
+		}
+
+		public static void Multiply(ref Matrix3x3 lhs, ref Matrix3x3 rhs, out Matrix3x3 result)
+		{
+			result.M11 = lhs.M11 * rhs.M11 + lhs.M12 * rhs.M21 + lhs.M13 * rhs.M31;
+			result.M12 = lhs.M11 * rhs.M12 + lhs.M12 * rhs.M22 + lhs.M13 * rhs.M32;
+			result.M13 = lhs.M11 * rhs.M13 + lhs.M12 * rhs.M23 + lhs.M13 * rhs.M33;
+
+			result.M21 = lhs.M21 * rhs.M11 + lhs.M22 * rhs.M21 + lhs.M23 * rhs.M31;
+			result.M22 = lhs.M21 * rhs.M12 + lhs.M22 * rhs.M22 + lhs.M23 * rhs.M32;
+			result.M23 = lhs.M21 * rhs.M13 + lhs.M22 * rhs.M23 + lhs.M23 * rhs.M33;
+
+			result.M31 = lhs.M31 * rhs.M11 + lhs.M32 * rhs.M21 + lhs.M33 * rhs.M31;
+			result.M32 = lhs.M31 * rhs.M12 + lhs.M32 * rhs.M22 + lhs.M33 * rhs.M32;
+			result.M33 = lhs.M31 * rhs.M13 + lhs.M32 * rhs.M23 + lhs.M33 * rhs.M33;
 		}
 
 		// Getters/setters
