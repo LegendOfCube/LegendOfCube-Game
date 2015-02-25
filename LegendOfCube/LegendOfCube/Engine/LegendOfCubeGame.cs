@@ -50,7 +50,10 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			screens[0].LoadContent();
+			foreach (var screen in screens)
+			{
+				screen.LoadContent();
+			}
 		}
 
 		/// <summary>
