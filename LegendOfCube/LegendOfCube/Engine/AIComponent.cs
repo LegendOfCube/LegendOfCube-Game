@@ -23,10 +23,41 @@ namespace LegendOfCube.Engine
 		}
 
 		public int getNextWayPoint() {
-			return (lastWaypoint == 0 ? 1 : 0);
+			if (waypoints.Length == 2)
+				return (lastWaypoint == 0 ? 1 : 0);
+
+			else if (PatrolDirection.BACK == dir)
+			{
+				if (lastWaypoint == 1)
+					return 1;
+				else
+					return ((lastWaypoint - 1) % waypoints.Length);
+			}
+			else 
+				return ((lastWaypoint + 1) % waypoints.Length);
 		}
 
-		private enum PatrolDirection
+		public void changeDirection()
+		{
+			dir = (dir == PatrolDirection.FORTH ? PatrolDirection.BACK : PatrolDirection.FORTH);
+		}
+
+		public void setDirection(PatrolDirection dir)
+		{
+			this.dir = dir;
+		}
+
+		public PatrolDirection getDirection()
+		{
+			return dir;
+		}
+
+		public bool isPatrolling()
+		{
+			return patrolling;
+		}
+
+		public enum PatrolDirection
 		{
 			BACK,
 			FORTH

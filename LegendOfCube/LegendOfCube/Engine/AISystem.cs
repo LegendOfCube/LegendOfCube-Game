@@ -13,13 +13,6 @@ namespace LegendOfCube.Engine
 																						Properties.AI_FLAG |
 																						Properties.VELOCITY);
 
-		private readonly Vector3 UP = Vector3.UnitY;
-		private readonly Vector3 DOWN = -Vector3.UnitY;
-		private readonly Vector3 NORTH = -Vector3.UnitZ;
-		private readonly Vector3 WEST = -Vector3.UnitX;
-		private readonly Vector3 SOUTH = Vector3.UnitZ;
-		private readonly Vector3 EAST = Vector3.UnitX;
-
 		public AISystem()
 		{
 
@@ -36,6 +29,17 @@ namespace LegendOfCube.Engine
 
 				if (Vector3.Dot((next - world.Transforms[i].Translation), world.Velocities[i]) <= 0)
 				{
+					
+					if (AI.isPatrolling())
+					{
+						if (AI.getDirection() == AIComponent.PatrolDirection.FORTH)
+							if (AI.lastWaypoint == AI.waypoints.Length - 2)
+								AI.changeDirection();
+						else
+							if (AI.lastWaypoint == 1)
+								AI.changeDirection();
+					}
+
 					world.Transforms[i].Translation = next;
 					AI.lastWaypoint = Array.IndexOf(AI.waypoints, next);
 					Vector3 newVel = AI.waypoints[AI.getNextWayPoint()] - next;
