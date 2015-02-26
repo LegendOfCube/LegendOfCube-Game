@@ -68,7 +68,7 @@ namespace LegendOfCube.Levels
 				new EntityBuilder().WithModel(wallModel)
 					.WithTransform(Matrix.CreateScale(0.5f))
 					.WithPosition(new Vector3(-5, 0, 20))
-				//	.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(1, 1, 1)))
+					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 5, .5f)))
 					.AddToWorld(world);
 
 			walls[1] =
@@ -80,13 +80,14 @@ namespace LegendOfCube.Levels
 			platforms[1] =
 				new EntityBuilder().WithModel(platformModel)
 					.WithPosition(new Vector3(0, 0, 60))
-					// .WithBoundingVolume(....
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10,0.5f,10)))
 					.AddToWorld(world);
 
 			// Platform to test normal jump
 			platforms[2] =
 				new EntityBuilder().WithModel(platformModel)
 					.WithPosition(new Vector3(0, 0, -25))
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10,0.5f,10)))
 					.AddToWorld(world);
 
 			// Wall and platform to test height gaining wall jumps
@@ -94,11 +95,13 @@ namespace LegendOfCube.Levels
 				new EntityBuilder().WithModel(wallModel)
 					.WithTransform(Matrix.CreateScale(0.5f))
 					.WithPosition(new Vector3(15, 1, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0,0,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(2,20,40)))
 					.AddToWorld(world);
 
 			platforms[3] =
 				new EntityBuilder().WithModel(platformModel)
 					.WithPosition(new Vector3(0, 12, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0,-.25f,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(10,.5f,10)))
 					.AddToWorld(world);
 
 			// TODO: Moving platforms
