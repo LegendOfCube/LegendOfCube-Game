@@ -66,20 +66,21 @@ namespace LegendOfCube.Levels
 			// Walls and platform to test length gaining wall jumps
 			walls[0] =
 				new EntityBuilder().WithModel(wallModel)
-					.WithTransform(Matrix.CreateScale(0.5f))
-					.WithPosition(new Vector3(-5, 0, 20))
-					.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 5, .5f)))
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-5, 3, 20))
+					.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 					.AddToWorld(world);
 
 			walls[1] =
 				new EntityBuilder().WithModel(wallModel)
-					.WithTransform(Matrix.CreateScale(0.5f))
-					.WithPosition(new Vector3(10, 0, 40))
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(10, 6, 40))
+					.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 					.AddToWorld(world);
 
 			platforms[1] =
 				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(0, 0, 60))
+					.WithPosition(new Vector3(0, 9, 60))
 					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10,0.5f,10)))
 					.AddToWorld(world);
 
@@ -93,9 +94,9 @@ namespace LegendOfCube.Levels
 			// Wall and platform to test height gaining wall jumps
 			walls[2] =
 				new EntityBuilder().WithModel(wallModel)
-					.WithTransform(Matrix.CreateScale(0.5f))
-					.WithPosition(new Vector3(15, 1, 0))
-					.WithBoundingVolume(new OBB(new Vector3(0,0,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(2,20,40)))
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(10, 3, 0))
+					.WithBoundingVolume(new OBB(new Vector3(0,1.25f,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(0.5f, 2.5f, 5)))
 					.AddToWorld(world);
 
 			platforms[3] =
@@ -118,9 +119,6 @@ namespace LegendOfCube.Levels
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(world);
-
-
-
 		}
 	}
 }

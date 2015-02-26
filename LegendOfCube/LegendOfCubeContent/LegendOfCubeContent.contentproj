@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{728B00A3-3B63-48FA-A5B7-73D28E7EBCD1}</ProjectGuid>
@@ -37,6 +37,31 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Brick_Wall\brick_d.jpg">
+      <Name>brick_d</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Brick_Wall\brick_n.jpg">
+      <Name>brick_n</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Brick_Wall\brick_normal_enhanced.jpg">
+      <Name>brick_normal_enhanced</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Brick_Wall\brick_n_sharp.jpg">
+      <Name>brick_n_sharp</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Brick_Wall\brick_wall.FBX">
+      <Name>brick_wall</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <Compile Include="Models\Cube\cube_plain.FBX">
       <Name>cube_plain</Name>
       <Importer>FbxImporter</Importer>
@@ -138,40 +163,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Brick_Wall\brick_d.jpg">
-      <Name>brick_d</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Brick_Wall\brick_n.jpg">
-      <Name>brick_n</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Brick_Wall\brick_normal_enhanced.jpg">
-      <Name>brick_normal_enhanced</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Brick_Wall\brick_n_sharp.jpg">
-      <Name>brick_n_sharp</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\Brick_Wall\brick_wall.FBX">
-      <Name>brick_wall</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Arial.spritefont">
       <Name>Arial</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
       <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Brick_Wall\Box001brick_d.jpg">
+      <Name>Box001brick_d</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Brick_Wall\wall.jpg">
+      <Name>wall</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
