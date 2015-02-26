@@ -34,17 +34,14 @@ namespace LegendOfCube.Engine
 				AIComponent AI = world.AIComponents[i];
 				Vector3 next = AI.waypoints[AI.getNextWayPoint()];
 
-				if (Vector3.Dot((next - world.Transforms[i].Translation), world.Velocities[i]) < 0)
+				if (Vector3.Dot((next - world.Transforms[i].Translation), world.Velocities[i]) <= 0)
 				{
-					
 					world.Transforms[i].Translation = next;
 					AI.lastWaypoint = Array.IndexOf(AI.waypoints, next);
 					Vector3 newVel = AI.waypoints[AI.getNextWayPoint()] - next;
-					Vector3.Normalize(newVel);
+					newVel = Vector3.Normalize(newVel);
 					world.Velocities[i] = world.Velocities[i].Length() * newVel;
 				}
-				
-
 			}
 		}
 	}
