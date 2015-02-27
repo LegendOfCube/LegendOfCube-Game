@@ -30,7 +30,6 @@ namespace LegendOfCube.Engine
 			{
 				if (lastWaypoint == 0)
 				{
-					changeDirection(); // Should not be here
 					return 1;
 				}
 				return (lastWaypoint - 1);

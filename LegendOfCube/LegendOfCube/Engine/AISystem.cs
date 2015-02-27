@@ -34,8 +34,15 @@ namespace LegendOfCube.Engine
 					if (AI.isPatrolling())
 					{
 						if (AI.getDirection() == AIComponent.PatrolDirection.FORTH)
+						{
 							if (AI.lastWaypoint == AI.waypoints.Length - 2)
 								AI.changeDirection();
+						}
+						else
+						{
+							if (AI.lastWaypoint == 0)
+								AI.changeDirection();
+						}
 					}
 
 					// Reposition and set new velocity towards the next waypoint.
