@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Engine.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Levels;
@@ -63,6 +64,8 @@ namespace LegendOfCube.Engine
 		internal override void LoadContent()
 		{
 			ConceptLevel.CreateLevel(World, Game);
+//			TestLevel1.CreateLevel(World, Game);
+
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
