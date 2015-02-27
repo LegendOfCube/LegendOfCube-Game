@@ -72,8 +72,10 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\AIComponent.cs" />
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
+    <Compile Include="Engine\AISystem.cs" />
     <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\DebugState.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Engine\Screen.cs" />
     <Compile Include="Engine\SwitcherSystem.cs" />
     <Compile Include="Engine\World.cs" />
+    <Compile Include="Levels\ConceptLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

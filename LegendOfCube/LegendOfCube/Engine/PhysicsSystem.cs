@@ -95,7 +95,7 @@ namespace LegendOfCube.Engine
 							}
 							else
 							{
-								world.Velocities[i] *= -1;	
+								world.Velocities[i] *= -1;
 							}
 						}
 						else
@@ -106,9 +106,9 @@ namespace LegendOfCube.Engine
 							Debug.WriteLine("Axis: " + axis + "\n\n");
 
 							float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-							world.Velocities[i] -= (collidingSum*axis);
+							world.Velocities[i] -= (collidingSum * axis);
 
-							newTranslation = world.Transforms[i].Translation + (world.Velocities[i]*delta);
+							newTranslation = world.Transforms[i].Translation + (world.Velocities[i] * delta);
 							world.Transforms[i].Translation = newTranslation;
 							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
 						}
