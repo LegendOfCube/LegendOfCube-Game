@@ -28,12 +28,12 @@ namespace LegendOfCube.Engine
 
 			if (PatrolDirection.BACK == dir)
 			{
-				if (lastWaypoint == 1)
-					return 1;
-				else
+				if (lastWaypoint == 0)
 				{
-					return (lastWaypoint - 1);
+					dir = PatrolDirection.FORTH; // HACK
+					return 1;
 				}
+				return (lastWaypoint - 1);
 
 			}
 			else
