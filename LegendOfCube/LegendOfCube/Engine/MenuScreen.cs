@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using LegendOfCube.Engine.Graphics;
@@ -17,12 +18,18 @@ namespace LegendOfCube.Engine
 		private SpriteFont font;
 		private Texture2D tex2D;
 
+		private Texture2D play;
+		private Texture2D exit;
+		private Texture2D select;
+		private int selection;
+
 		public MenuScreen(Game game) : base(game)
 		{
 			World = new World(1002);
 			inputSystem = new InputSystem(game);
 			cameraSystem = new CameraSystem();
 			menuInputSystem = new MenuInputSystem(game);
+			selection = 0;
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
@@ -30,7 +37,7 @@ namespace LegendOfCube.Engine
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, World, switcher);
-			menuInputSystem.ApplyInput(gameTime, World, switcher);
+			menuInputSystem.ApplyInput(gameTime, World, switcher, ref selection);
 			cameraSystem.OnUpdate(World, delta);
 		}
 
@@ -43,13 +50,10 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			spriteBatch.Begin();
+			spriteBatch.Draw(play, new Vector2(100, 20), Color.Red);
+			spriteBatch.Draw(exit, new Vector2(100, 200), Color.Red);
 
-			//Ugly box
-			//spriteBatch.Draw(tex2D, new Rectangle(100, 20, 400, 200), Color.Black);
-
-			spriteBatch.DrawString(font, "Play", new Vector2(100, 20), Color.Maroon, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
-			//spriteBatch.DrawString(font, "Options", new Vector2(100, 200), Color.Crimson, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
-			spriteBatch.DrawString(font, "Exit", new Vector2(100, 380), Color.Goldenrod, 0f, Vector2.Zero, new Vector2(10f), new SpriteEffects(), 1f);
+			spriteBatch.Draw(@select, selection == 0 ? new Vector2(35, 10) : new Vector2(35, 190), Color.Red);
 			spriteBatch.End();
 		}
 
@@ -58,9 +62,9 @@ namespace LegendOfCube.Engine
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
 
-			//Custom texture forugly box
-			tex2D = new Texture2D(Game.GraphicsDevice, 1, 1);
-			tex2D.SetData(new Color[] { Color.Black});
+			play = Game.Content.Load<Texture2D>("Menu/play");
+			exit = Game.Content.Load<Texture2D>("Menu/exit");
+			select = Game.Content.Load<Texture2D>("Menu/selector");
 		}
 	}
 }

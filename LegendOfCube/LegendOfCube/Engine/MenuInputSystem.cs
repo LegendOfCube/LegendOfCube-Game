@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		
-		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher)
+		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher, ref int selection)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -62,13 +62,42 @@ namespace LegendOfCube.Engine
 			}	
 
 			if (MouseClickWithinRectangle(new Rectangle(100, 20, 400, 200)))
-			{
+			{	
 				switcher.Switch();
 			}
 
-			if (MouseClickWithinRectangle(new Rectangle(100, 330, 400, 200)))
+			if (MouseClickWithinRectangle(new Rectangle(100, 200, 400, 200)))
 			{
 				game.Exit();
+			}
+
+			if (KeyWasJustPressed(Keys.W))
+			{
+				if (selection == 1)
+				{
+					selection = 0;
+				}
+			}
+
+			if (KeyWasJustPressed(Keys.S))
+			{
+				if (selection == 0)
+				{
+					selection = 1;
+				}
+			}
+
+			if (KeyWasJustPressed(Keys.Space))
+			{
+				switch (selection)
+				{
+					case 0:
+						switcher.Switch();
+						break;
+					case 1:
+						game.Exit();
+						break;
+				}
 			}
 
 			// Normalize the vector to our needs, then set direction
