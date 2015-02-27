@@ -19,6 +19,7 @@ namespace LegendOfCube.Engine
 		private Model model;
 		private StandardEffectParams sep;
 		private OBB modelSpaceOBB;
+		private AIComponent aiComponent;
 
 		/// <summary>
 		/// Assign a model for the entity being built.
@@ -103,6 +104,12 @@ namespace LegendOfCube.Engine
 			this.sep = sep;
 			return this;
 		}
+		public EntityBuilder WithAI(Vector3[] waypoints, bool patrolling)
+		{
+			properties.Add(Properties.AI_FLAG);
+			this.aiComponent = new AIComponent(waypoints, patrolling);
+			return this;
+		}
 
 		/// <summary>
 		/// Add any property flags to the entity being created.
@@ -156,7 +163,13 @@ namespace LegendOfCube.Engine
 			{
 				world.ModelSpaceBVs[entity.Id] = this.modelSpaceOBB;
 			}
+			if (properties.Satisfies(Properties.AI_FLAG))
+			{
+				world.AIComponents[entity.Id] = this.aiComponent;
+			}
 			return entity;
 		}
+
+
 	}
 }

@@ -58,7 +58,7 @@ namespace LegendOfCube.Engine.Graphics
 
 			obbRenderer = new OBBRenderer(game.GraphicsDevice);
 
-			this.standardEffect = new StandardEffect(game.Content.Load<Effect>("Effects/standardEffect"));
+			this.standardEffect = StandardEffect.LoadEffect(game.Content);
 		}
 
 		public void RenderWorld(World world)
@@ -161,14 +161,10 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetSpecularTexture(sep.SpecularTexture);
 			standardEffect.SetNormalTexture(sep.NormalTexture);
 
+			standardEffect.ApplyOnModel(model);
+
 			foreach (var mesh in model.Meshes)
 			{
-				foreach (var meshPart in mesh.MeshParts)
-				{
-					// TODO: Move from here. Ugly and unnecessary to do all the time.
-					// Replace with standard effect
-					meshPart.Effect = standardEffect.Effect;
-				}
 				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
 				standardEffect.SetWorld(ref worldMatrix);
 				mesh.Draw();

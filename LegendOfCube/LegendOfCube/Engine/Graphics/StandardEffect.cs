@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine.Graphics
@@ -9,7 +10,7 @@ namespace LegendOfCube.Engine.Graphics
 	/// </summary>
 	class StandardEffect
 	{
-		public Effect Effect { get; private set; }
+		private readonly Effect effect;
 
 		// Matrices
 		private readonly EffectParameter worldParam;
@@ -46,9 +47,9 @@ namespace LegendOfCube.Engine.Graphics
 		// world has been set
 		private Matrix view;
 
-		public StandardEffect(Effect effect)
+		private StandardEffect(Effect effect)
 		{
-			this.Effect = effect;
+			this.effect = effect;
 
 			// Cache handles to parameteres
 
@@ -82,8 +83,8 @@ namespace LegendOfCube.Engine.Graphics
 			this.normalTextureParam = effect.Parameters["NormalTexture"];
 
 			// Get handles to techniques
-			this.defaultTechnique = Effect.Techniques["DefaultTechnique"];
-			this.normalMapTechnique = Effect.Techniques["NormalMapTechnique"];
+			this.defaultTechnique = this.effect.Techniques["DefaultTechnique"];
+			this.normalMapTechnique = this.effect.Techniques["NormalMapTechnique"];
 
 		}
 
@@ -187,8 +188,24 @@ namespace LegendOfCube.Engine.Graphics
 		/// <param name="texture">The texture, could be null</param>
 		public void SetNormalTexture(Texture texture)
 		{
-			Effect.CurrentTechnique = texture != null ? normalMapTechnique : defaultTechnique;
+			effect.CurrentTechnique = texture != null ? normalMapTechnique : defaultTechnique;
 			normalTextureParam.SetValue(texture);
+		}
+
+		public void ApplyOnModel(Model model)
+		{
+			foreach (var mesh in model.Meshes)
+			{
+				foreach (var meshPart in mesh.MeshParts)
+				{
+					meshPart.Effect = effect;
+				}
+			}
+		}
+
+		public static StandardEffect LoadEffect(ContentManager contentManager)
+		{
+			return new StandardEffect(contentManager.Load<Effect>("Effects/standardEffect"));
 		}
 	}
 }

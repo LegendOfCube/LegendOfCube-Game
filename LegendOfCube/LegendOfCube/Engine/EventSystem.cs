@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LegendOfCube.Engine.Events;
+using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
 {
@@ -15,13 +16,26 @@ namespace LegendOfCube.Engine
 			{
 				var collidedWith = collisionEvent.CollidedWith.Id;
 				var collider = collisionEvent.Collider.Id;
-				/* Example Collision handling
-				if (world.EntityProperties[collidedWith].Satisfies(Properties.MODEL) && 
-					world.EntityProperties[collider].Satisfies(Properties.ACCELERATION))
+				if (world.EntityProperties[collidedWith].Satisfies((Properties.DEATH_ZONE_FLAG)))
 				{
-					world.Velocities[collider].Y += 100;
+					world.Transforms[collider].Translation = world.SpawnPoint;
+					world.Velocities[collider] = Vector3.Zero;
 				}
-				 */
+				else if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
+				{
+					while (true)
+					{
+						Random rnd = new Random();
+						int temp = rnd.Next((int)world.HighestOccupiedId);
+						if (world.EntityProperties[temp].Satisfies(Properties.TELEPORT_FLAG))
+						{
+							Vector3 temp2 = world.Transforms[temp].Translation;
+							temp2.Y += 25;
+							world.Transforms[collider].Translation = temp2;
+							break;
+						}
+					}
+				}
 			}
 			world.EventBuffer.Flush();
 		}

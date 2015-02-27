@@ -34,6 +34,7 @@ namespace LegendOfCube.Engine
 		public readonly float[] MaxSpeed;
 		public readonly float[] MaxAcceleration;
 		public OBB[] ModelSpaceBVs;
+		public readonly AIComponent[] AIComponents;
 
 		public readonly Model[] Models;
 		public readonly StandardEffectParams[] StandardEffectParams;
@@ -46,6 +47,7 @@ namespace LegendOfCube.Engine
 
 		// World variables
 
+		public Vector3 SpawnPoint;
 		public EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
@@ -75,6 +77,7 @@ namespace LegendOfCube.Engine
 			MaxSpeed = new float[MaxNumEntities];
 			MaxAcceleration = new float[MaxNumEntities];
 			ModelSpaceBVs = new OBB[MaxNumEntities];
+			AIComponents = new AIComponent[MaxNumEntities];
 
 			Models = new Model[MaxNumEntities];
 			StandardEffectParams = new StandardEffectParams[MaxNumEntities];
@@ -93,6 +96,8 @@ namespace LegendOfCube.Engine
 			}
 			PlayerCubeState = new PlayerCubeState();
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
+
+			SpawnPoint = new Vector3(0, 25, 0);
 			EventBuffer = new EventBuffer();
 		}
 
