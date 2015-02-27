@@ -26,14 +26,17 @@ namespace LegendOfCube.Engine
 			if (waypoints.Length == 2)
 				return (lastWaypoint == 0 ? 1 : 0);
 
-			else if (PatrolDirection.BACK == dir)
+			if (PatrolDirection.BACK == dir)
 			{
 				if (lastWaypoint == 1)
 					return 1;
 				else
-					return ((lastWaypoint - 1) % waypoints.Length);
+				{
+					return (lastWaypoint - 1);
+				}
+
 			}
-			else 
+			else
 				return ((lastWaypoint + 1) % waypoints.Length);
 		}
 

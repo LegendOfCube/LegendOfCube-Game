@@ -108,10 +108,10 @@ namespace LegendOfCube.Levels
 			// TODO: Moving platforms
 			platforms[4] =
 				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(-45, 15, 0))
+					.WithPosition(new Vector3(-45, 0, 0))
 					.WithVelocity(Vector3.UnitX*8, 0)
 					.WithBoundingVolume(new OBB(new Vector3(0,-.25f,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(10,.5f,10)))
-					.WithAI(new Vector3[] {new Vector3(-45,15,0),new Vector3(-45,0,0),new Vector3(-20,0,0)},false)
+					.WithAI(new Vector3[] { new Vector3(-45, 0, 0), new Vector3(-20, 0, 0), new Vector3(-45, 25, 0)}, true)
 					.AddToWorld(world);
 
 			DeathZone =
