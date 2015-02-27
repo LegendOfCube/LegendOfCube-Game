@@ -61,12 +61,12 @@ namespace LegendOfCube.Engine
 				game.Exit();
 			}	
 
-			if (MouseClickWithinRectangle(new Rectangle(100, 20, 400, 200)))
+			if (MouseClickWithinRectangle(new Rectangle(100, 20, 398, 59)))
 			{	
 				switcher.Switch();
 			}
 
-			if (MouseClickWithinRectangle(new Rectangle(100, 200, 400, 200)))
+			if (MouseClickWithinRectangle(new Rectangle(100, 200, 151, 59)))
 			{
 				game.Exit();
 			}
