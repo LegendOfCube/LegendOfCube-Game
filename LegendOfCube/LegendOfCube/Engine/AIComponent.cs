@@ -30,13 +30,12 @@ namespace LegendOfCube.Engine
 			{
 				if (lastWaypoint == 0)
 				{
-					dir = PatrolDirection.FORTH; // HACK
+					changeDirection(); // Should not be here
 					return 1;
 				}
 				return (lastWaypoint - 1);
-
 			}
-			else
+			else // Going forth
 				return ((lastWaypoint + 1) % waypoints.Length);
 		}
 

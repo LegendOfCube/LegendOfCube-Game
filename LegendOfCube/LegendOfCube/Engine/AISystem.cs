@@ -36,9 +36,6 @@ namespace LegendOfCube.Engine
 						if (AI.getDirection() == AIComponent.PatrolDirection.FORTH)
 							if (AI.lastWaypoint == AI.waypoints.Length - 2)
 								AI.changeDirection();
-						else
-							if (AI.lastWaypoint == 1)
-								AI.changeDirection();
 					}
 
 					// Reposition and set new velocity towards the next waypoint.
@@ -47,8 +44,6 @@ namespace LegendOfCube.Engine
 					Vector3 newVel = AI.waypoints[AI.getNextWayPoint()] - next;
 					newVel = Vector3.Normalize(newVel);
 					world.Velocities[i] = world.Velocities[i].Length() * newVel;
-
-					System.Diagnostics.Debug.Write(AI.getDirection());
 				}
 			}
 		}
