@@ -73,17 +73,27 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.W) || ButtonWasJustPressed(Buttons.DPadUp))
 			{
-				if (selection == 1)
+				switch (selection)
 				{
-					selection = 0;
+					case 2:
+						selection = 1;
+						break;
+					case 1:
+						selection = 0;
+						break;
 				}
 			}
 
 			if (KeyWasJustPressed(Keys.S) || ButtonWasJustPressed(Buttons.DPadDown))
 			{
-				if (selection == 0)
+				switch (selection)
 				{
-					selection = 1;
+					case 0:
+						selection = 1;
+						break;
+					case 1:
+						selection = 2;
+						break;
 				}
 			}
 
@@ -95,6 +105,9 @@ namespace LegendOfCube.Engine
 						switcher.Switch();
 						break;
 					case 1:
+						//TODO: Level selct screen
+						break;
+					case 2:
 						game.Exit();
 						break;
 				}
@@ -107,7 +120,9 @@ namespace LegendOfCube.Engine
 			var yPos = mouseState.Y + directionInput.Y;
 			Mouse.SetPosition((int)xPos, (int)yPos);
 
-			oldMouseState = mouseState;	
+			oldMouseState = mouseState;
+			oldKeyState = keyState;
+			oldGamePadState = gamePadState;
 		}
 
 		private bool ButtonWasJustPressed(Buttons button)

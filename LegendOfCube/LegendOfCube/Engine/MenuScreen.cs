@@ -20,6 +20,7 @@ namespace LegendOfCube.Engine
 
 		private Texture2D play;
 		private Texture2D exit;
+		private Texture2D levelSelect;
 		private Texture2D select;
 		private int selection;
 
@@ -51,9 +52,22 @@ namespace LegendOfCube.Engine
 
 			spriteBatch.Begin();
 			spriteBatch.Draw(play, new Vector2(100, 20), Color.Red);
+			spriteBatch.Draw(levelSelect, new Vector2(100, 110), Color.Red);
 			spriteBatch.Draw(exit, new Vector2(100, 200), Color.Red);
 
-			spriteBatch.Draw(@select, selection == 0 ? new Vector2(35, 10) : new Vector2(35, 190), Color.Red);
+			switch (selection)
+			{
+				case 0:
+					spriteBatch.Draw(select, new Vector2(35, 10), Color.Red);
+					break;
+				case 1:
+					spriteBatch.Draw(select, new Vector2(35, 100), Color.Red);
+					break;
+				case 2:
+					spriteBatch.Draw(select, new Vector2(35, 190), Color.Red);
+					break;
+
+			}
 			spriteBatch.End();
 		}
 
@@ -64,6 +78,7 @@ namespace LegendOfCube.Engine
 
 			play = Game.Content.Load<Texture2D>("Menu/play");
 			exit = Game.Content.Load<Texture2D>("Menu/exit");
+			levelSelect = Game.Content.Load<Texture2D>("Menu/level select");
 			select = Game.Content.Load<Texture2D>("Menu/selector");
 		}
 	}
