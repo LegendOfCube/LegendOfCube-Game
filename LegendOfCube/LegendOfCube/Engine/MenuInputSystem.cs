@@ -71,7 +71,7 @@ namespace LegendOfCube.Engine
 				game.Exit();
 			}
 
-			if (KeyWasJustPressed(Keys.W))
+			if (KeyWasJustPressed(Keys.W) || ButtonWasJustPressed(Buttons.DPadUp))
 			{
 				if (selection == 1)
 				{
@@ -79,7 +79,7 @@ namespace LegendOfCube.Engine
 				}
 			}
 
-			if (KeyWasJustPressed(Keys.S))
+			if (KeyWasJustPressed(Keys.S) || ButtonWasJustPressed(Buttons.DPadDown))
 			{
 				if (selection == 0)
 				{
@@ -87,7 +87,7 @@ namespace LegendOfCube.Engine
 				}
 			}
 
-			if (KeyWasJustPressed(Keys.Space))
+			if (KeyWasJustPressed(Keys.Space) || ButtonWasJustPressed(Buttons.A))
 			{
 				switch (selection)
 				{
