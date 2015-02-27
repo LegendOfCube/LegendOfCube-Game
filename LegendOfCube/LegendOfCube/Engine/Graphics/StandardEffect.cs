@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -42,6 +43,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		private readonly EffectTechnique defaultTechnique;
 		private readonly EffectTechnique normalMapTechnique;
+		private readonly EffectTechnique shadowMapTechnique;
 
 		// Cache this, for determining normal matrix (model to view) after
 		// world has been set
@@ -85,7 +87,7 @@ namespace LegendOfCube.Engine.Graphics
 			// Get handles to techniques
 			this.defaultTechnique = this.effect.Techniques["DefaultTechnique"];
 			this.normalMapTechnique = this.effect.Techniques["NormalMapTechnique"];
-
+			this.shadowMapTechnique = this.effect.Techniques["ShadowMapTechnique"];
 		}
 
 		public void SetViewProjection(ref Matrix view, ref Matrix projection)
@@ -191,6 +193,12 @@ namespace LegendOfCube.Engine.Graphics
 			effect.CurrentTechnique = texture != null ? normalMapTechnique : defaultTechnique;
 			normalTextureParam.SetValue(texture);
 		}
+
+		public void SetShadowMapRendering(bool shadowMapRender)
+		{
+			effect.CurrentTechnique = shadowMapRender ? shadowMapTechnique : defaultTechnique;
+		}
+
 
 		public void ApplyOnModel(Model model)
 		{

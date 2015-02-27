@@ -162,6 +162,7 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetNormalTexture(sep.NormalTexture);
 
 			standardEffect.ApplyOnModel(model);
+			standardEffect.SetShadowMapRendering(true);
 
 			foreach (var mesh in model.Meshes)
 			{

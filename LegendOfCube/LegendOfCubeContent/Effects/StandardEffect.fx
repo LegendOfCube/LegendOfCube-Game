@@ -108,6 +108,16 @@ struct NormalTexVertexShaderOutput
 	float3 ViewSpaceBinormal : TEXCOORD4;
 };
 
+struct ShadowVertexShaderInput
+{
+	float4 Position : POSITION0;
+};
+
+struct ShadowVertexShaderOutput
+{
+	float4 Position : POSITION0;
+};
+
 VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 {
 	VertexShaderOutput output;
@@ -215,6 +225,26 @@ float4 NormalTexPixelShaderFunction(NormalTexVertexShaderOutput input) : COLOR0
 	return MainPixelShading(input.TextureCoordinate, input.ViewSpacePos, normal);
 }
 
+ShadowVertexShaderOutput ShadowMapVertexShaderFunction(VertexShaderInput input)
+{
+	ShadowVertexShaderOutput output;
+
+	// Perform space transforms
+	float4 worldPosition = mul(input.Position, World);
+	float4 viewPosition = mul(worldPosition, View);
+	float4 projecPosition = mul(viewPosition, Projection);
+
+	// Pass along to pixel shader
+	output.Position = projecPosition;
+
+	return output;
+}
+
+float4 ShadowMapPixelShaderFunction(ShadowVertexShaderOutput input) : COLOR0
+{
+	return float4(0.0, 0.0, 0.0, 1.0);
+}
+
 technique DefaultTechnique
 {
 	pass Pass1
@@ -230,5 +260,14 @@ technique NormalMapTechnique
 	{
 		VertexShader = compile vs_3_0 NormalTexVertexShaderFunction();
 		PixelShader = compile ps_3_0 NormalTexPixelShaderFunction();
+	}
+}
+
+technique ShadowMapTechnique
+{
+	pass Pass1
+	{
+		VertexShader = compile vs_3_0 ShadowMapVertexShaderFunction();
+		PixelShader = compile ps_3_0 ShadowMapPixelShaderFunction();
 	}
 }
