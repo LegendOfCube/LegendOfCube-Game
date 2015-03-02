@@ -109,9 +109,6 @@ namespace LegendOfCube.Engine
 						jumpTimeLeft -= delta;
 					}
 				}
-				// For testing, set a light source right above the player
-				// TODO: Remove at some point
-				world.LightPosition = world.Transforms[i].Translation + 1.5f * Vector3.Up;
 			}
 		}
 	}

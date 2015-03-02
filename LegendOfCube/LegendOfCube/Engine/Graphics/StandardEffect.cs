@@ -23,6 +23,8 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectParameter pointLight0ViewSpacePosParam;
 		private readonly EffectParameter pointLight0StrengthParam;
 		private readonly EffectParameter pointLight0ColorParam;
+		private readonly EffectParameter pointLight0ShadowMapParam;
+		private readonly EffectParameter pointLight0ShadowMatrixParam;
 
 		// Material properties
 		private readonly EffectParameter materialAmbientIntensity;
@@ -65,6 +67,8 @@ namespace LegendOfCube.Engine.Graphics
 			this.pointLight0ViewSpacePosParam = effect.Parameters["PointLight0ViewSpacePos"];
 			this.pointLight0ColorParam = effect.Parameters["PointLight0Color"];
 			this.pointLight0StrengthParam = effect.Parameters["PointLight0Strength"];
+			this.pointLight0ShadowMapParam = effect.Parameters["PointLight0ShadowMap"];
+			this.pointLight0ShadowMatrixParam = effect.Parameters["PointLight0ShadowMatrix"];
 
 			// Material properties
 
@@ -102,6 +106,16 @@ namespace LegendOfCube.Engine.Graphics
 			pointLight0ViewSpacePosParam.SetValue(Vector3.Transform(position, view));
 			pointLight0ColorParam.SetValue(lightColor);
 			pointLight0StrengthParam.SetValue(strength);
+		}
+
+		public void SetPointLight0ShadowMap(Texture shadowMap)
+		{
+			pointLight0ShadowMapParam.SetValue(shadowMap);
+		}
+
+		public void SetPointLight0ShadowMatrix(ref Matrix shadowMatrix)
+		{
+			pointLight0ShadowMatrixParam.SetValue(shadowMatrix);
 		}
 
 		public void SetWorld(ref Matrix world)
@@ -198,7 +212,6 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			effect.CurrentTechnique = shadowMapRender ? shadowMapTechnique : defaultTechnique;
 		}
-
 
 		public void ApplyOnModel(Model model)
 		{

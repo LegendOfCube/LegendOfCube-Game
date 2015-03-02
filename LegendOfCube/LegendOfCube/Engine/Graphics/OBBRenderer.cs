@@ -74,7 +74,6 @@ namespace LegendOfCube.Engine.Graphics
 			{
 				vertData[i] = new VertexPositionColor(corners[i], Color.White);
 			}
-
 			vertexBuffer.SetData(vertData);
 
 			graphicsDevice.SetVertexBuffer(vertexBuffer);
@@ -95,6 +94,8 @@ namespace LegendOfCube.Engine.Graphics
 				pass.Apply();
 				graphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, 8, 0, 12);
 			}
+			graphicsDevice.SetVertexBuffer(null);
+
 			graphicsDevice.RasterizerState = originalRasterizerState;
 		}
 	}

@@ -23,17 +23,19 @@ namespace LegendOfCube.Engine.Levels
 
 			var playerEffect = new StandardEffectParams
 			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/cube/cube_diff"),
-				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive"),
-				SpecularColor = Color.Gray.ToVector4(),
+				DiffuseColor = Color.Gray.ToVector4(),
+				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
+				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
+				SpecularColor = Color.White.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
 			};
 
 			var otherCubeEffect = new StandardEffectParams
 			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/cube/cube_diff"),
+				DiffuseColor = Color.Gray.ToVector4(),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
-				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
 				SpecularColor = Color.White.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
@@ -41,9 +43,9 @@ namespace LegendOfCube.Engine.Levels
 
 			var bouncyCubeEffect = new StandardEffectParams
 			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/cube/cube_diff"),
+				DiffuseColor = Color.Gray.ToVector4(),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
-				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
 				SpecularColor = Color.Yellow.ToVector4(),
 				EmissiveColor = Color.Yellow.ToVector4()
@@ -51,9 +53,8 @@ namespace LegendOfCube.Engine.Levels
 
 			var deathCubeEffect = new StandardEffectParams
 			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/cube/cube_diff"),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
-				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
 				SpecularColor = Color.Red.ToVector4(),
 				EmissiveColor = Color.White.ToVector4(),
@@ -62,9 +63,8 @@ namespace LegendOfCube.Engine.Levels
 
 			var teleportCubeEffect = new StandardEffectParams
 			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/cube/cube_diff"),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
-				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
 				SpecularColor = Color.Blue.ToVector4(),
 				EmissiveColor = Color.Blue.ToVector4(),
@@ -170,6 +170,8 @@ namespace LegendOfCube.Engine.Levels
 						new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(world);
+
+			world.LightPosition = new Vector3 {X = 0, Y = 800, Z = 100};
 		}
 	}
 }
