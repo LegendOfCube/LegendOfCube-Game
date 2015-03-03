@@ -12,25 +12,34 @@ namespace LegendOfCube.Levels.Assets
 	class Platform : Asset
 	{
 
-		public void AddToWorld(Vector3 position)
+		protected override void loadAssets()
 		{
-			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
-			var obb = new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, 
+			model = game.Content.Load<Model>("Models/Platform/platform");
+			obb = new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY,
 				Vector3.UnitZ, new Vector3(10, .5f, 10));
-
-			var scale = Matrix.CreateScale(1);
-
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(scale)
+		}
+		public void Add(Vector3 position)
+		{
+			new EntityBuilder().WithModel(model)
 				.WithPosition(position)
 				.WithBoundingVolume(obb)
+				.AddToWorld(world);
+		}
+
+		public void AddMoving(Vector3[] waypoints, float speed)
+		{
+			new EntityBuilder().WithModel(model)
+				.WithPosition(waypoints[0])
+				.WithVelocity(Vector3.UnitX * speed,0)
+				.WithBoundingVolume(obb)
+				.WithAI(waypoints, true)
 				.AddToWorld(world);
 		}
 
 		public Platform(World world, Game game) :
 			base(world, game)
 		{
-
+			loadAssets();
 		}
 	}
 }

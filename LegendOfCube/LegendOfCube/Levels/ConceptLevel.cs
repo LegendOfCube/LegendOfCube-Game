@@ -33,16 +33,6 @@ namespace LegendOfCube.Levels
 				EmissiveColor = Color.White.ToVector4()
 			};
 
-			var otherCubeEffect = new StandardEffectParams
-			{
-				//DiffuseTexture = Game.Content.Load<Texture>("Models/Cube/cube_diff"),
-				//SpecularTexture = Game.Content.Load<Texture>("Models/Cube/cube_specular"),
-				//EmissiveTexture = Game.Content.Load<Texture>("Models/Cube/cube_emissive"),
-				//NormalTexture = Game.Content.Load<Texture>("Models/Cube/cube_normal"),
-				//SpecularColor = Color.White.ToVector4(),
-				//EmissiveColor = Color.White.ToVector4()
-			};
-
 			world.SpawnPoint = new Vector3(0, 5, 0);
 
 			playerEntity =
@@ -58,55 +48,28 @@ namespace LegendOfCube.Levels
 			world.Player = playerEntity;
 
 			Platform platform = new Assets.Platform(world, game);
+			Wall wall = new Assets.Wall(world, game);
 			// Starting platform
-			platform.AddToWorld(Vector3.Zero);
+			platform.Add(Vector3.Zero);
 
 			// Walls and platform to test length gaining wall jumps
-			walls[0] =
-				new EntityBuilder().WithModel(wallModel)
-					.WithTransform(Matrix.CreateScale(2))
-					.WithPosition(new Vector3(-5, 3, 20))
-					.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-					.AddToWorld(world);
+			wall.Add(new Vector3(-5, 3, 20));
 
-			walls[1] =
-				new EntityBuilder().WithModel(wallModel)
-					.WithTransform(Matrix.CreateScale(2))
-					.WithPosition(new Vector3(10, 6, 40))
-					.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-					.AddToWorld(world);
+			wall.Add(new Vector3(10, 6, 40));
 
-			platforms[1] =
-				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(0, 9, 60))
-					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10,0.5f,10)))
-					.AddToWorld(world);
+			platform.Add(new Vector3(0, 9, 60));
 
 			// Platform to test normal jump
-			platform.AddToWorld(new Vector3(0, 0, -25));
+			platform.Add(new Vector3(0, 0, -25));
 
 			// Wall and platform to test height gaining wall jumps
-			walls[2] =
-				new EntityBuilder().WithModel(wallModel)
-					.WithTransform(Matrix.CreateScale(2))
-					.WithPosition(new Vector3(10, 3, 0))
-					.WithBoundingVolume(new OBB(new Vector3(0,1.25f,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(0.5f, 2.5f, 5)))
-					.AddToWorld(world);
+			wall.Add(new Vector3(10, 3, 0));
 
-			platforms[3] =
-				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(0, 12, 0))
-					.WithBoundingVolume(new OBB(new Vector3(0,-.25f,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(10,.5f,10)))
-					.AddToWorld(world);
+			platform.Add(new Vector3(0, 12, 0));
 
 			// TODO: Moving platforms
-			platforms[4] =
-				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(-45, 0, 0))
-					.WithVelocity(Vector3.UnitX*8, 0)
-					.WithBoundingVolume(new OBB(new Vector3(0,-.25f,0),Vector3.UnitX,Vector3.UnitY,Vector3.UnitZ,new Vector3(10,.5f,10)))
-					.WithAI(new Vector3[] { new Vector3(-45, 0, 0), new Vector3(-20, 0, 0), new Vector3(-45, 25, 0)}, true)
-					.AddToWorld(world);
+			platform.AddMoving(new Vector3[] { new Vector3(-45, 0, 0), 
+				new Vector3(-20, 0, 0), new Vector3(-45, 25, 0) }, 8);
 
 			DeathZone =
 				new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
