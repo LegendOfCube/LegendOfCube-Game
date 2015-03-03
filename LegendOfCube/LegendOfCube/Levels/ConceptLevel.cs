@@ -1,6 +1,7 @@
 ﻿using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Levels.Assets;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -56,12 +57,9 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerEntity;
 
+			Platform platform = new Assets.Platform(world, game);
 			// Starting platform
-			platforms[0] =
-				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(0, 0, 0))
-					.WithBoundingVolume(new OBB(new Vector3(0,-0.25f,0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10,0.5f,10)))
-					.AddToWorld(world);
+			platform.AddToWorld(Vector3.Zero);
 
 			// Walls and platform to test length gaining wall jumps
 			walls[0] =
@@ -85,11 +83,7 @@ namespace LegendOfCube.Levels
 					.AddToWorld(world);
 
 			// Platform to test normal jump
-			platforms[2] =
-				new EntityBuilder().WithModel(platformModel)
-					.WithPosition(new Vector3(0, 0, -25))
-					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10,0.5f,10)))
-					.AddToWorld(world);
+			platform.AddToWorld(new Vector3(0, 0, -25));
 
 			// Wall and platform to test height gaining wall jumps
 			walls[2] =
