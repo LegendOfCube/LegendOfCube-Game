@@ -36,8 +36,6 @@ namespace LegendOfCube.Engine
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
 			// that could be disposed and reused
 			Window.AllowUserResizing = true;
-			graphicsManager.PreferredBackBufferWidth = 1280;
-			graphicsManager.PreferredBackBufferHeight = 720;
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 

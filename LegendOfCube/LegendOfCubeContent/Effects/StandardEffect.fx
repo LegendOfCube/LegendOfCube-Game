@@ -39,6 +39,19 @@ float4 MaterialEmissiveColor = WHITE_COLOR;
 // Defines the normals for an object
 texture NormalTexture;
 
+// This sampler has been moved to the top as a way to fix a problem with the
+// shadow map no longer being sampled with Point as filter, after the window
+// has been resized. Why this actually happened is unresolved, this is not a
+// proper fix.
+sampler2D ShadowMapSampler = sampler_state {
+	Texture = (PointLight0ShadowMap);
+	MipFilter = none;
+	MagFilter = Point;
+	MinFilter = Point;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
 sampler2D diffuseTextureSampler = sampler_state {
 	Texture = (DiffuseTexture);
 	MipFilter = linear;
@@ -75,15 +88,6 @@ sampler2D normalTextureSampler = sampler_state {
 	MagFilter = linear;
 	MinFilter = anisotropic;
 	MaxAnisotropy = 16;
-	AddressU = Clamp;
-	AddressV = Clamp;
-};
-
-sampler2D ShadowMapSampler = sampler_state {
-	Texture = (PointLight0ShadowMap);
-	MipFilter = none;
-	MagFilter = Point;
-	MinFilter = Point;
 	AddressU = Clamp;
 	AddressV = Clamp;
 };
@@ -205,6 +209,7 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 v
 	// (setting border color on sampler seems to be deprecated)
 	float shadowLookupMin = PCF_SPACING;
 	float shadowLookupMax = 1.0 - PCF_SPACING;
+
 	if (shadowMapCoord.x >= shadowLookupMin && shadowMapCoord.x <= shadowLookupMax &&
 	    shadowMapCoord.y >= shadowLookupMin && shadowMapCoord.y <= shadowLookupMax)
 	{
