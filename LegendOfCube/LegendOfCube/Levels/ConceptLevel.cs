@@ -34,7 +34,7 @@ namespace LegendOfCube.Levels
 			};
 
 			world.SpawnPoint = new Vector3(0, 5, 0);
-			world.CameraPosition = new Vector3(0,7,-1);
+			world.CameraPosition = new Vector3(0, 7, -1);
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
