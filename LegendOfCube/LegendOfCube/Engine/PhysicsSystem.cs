@@ -97,7 +97,8 @@ namespace LegendOfCube.Engine
 
 						// Move OBB to collision point
 						worldSpaceOBBs[i].Position -= diff;
-						float timeUntilCol = findTimeUntilIntersection(intersectionId, i, world.Velocities[i], timeLeft);
+						float timeUntilCol = findTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
+						                     ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
 						diff = world.Velocities[i] * timeUntilCol;
 						worldSpaceOBBs[i].Position += diff;
 
@@ -156,25 +157,27 @@ namespace LegendOfCube.Engine
 		// Returns an approximation of the maximum amount of time collider can move.
 		// Collider is guaranteed to not collide with target if moved the amount of time returned.
 		// Preconditions: timeSlice > 0, collider must hit target if moved entire timeSlice
-		private float findTimeUntilIntersection(UInt32 target, UInt32 collider, Vector3 colliderVelocity, float timeSlice)
+		private float findTimeUntilIntersection(ref OBB target, ref OBB collider, Vector3 colliderVelocity, float timeSlice, int maxIterations)
 		{
+			Vector3 originalPosition = target.Position;
 			float currentTimeSlice = timeSlice;
 			float time = 0.0f;
 
-			for (int itr = 0; itr < 3; itr++)
+			for (int itr = 0; itr < maxIterations; itr++)
 			{
 				currentTimeSlice = currentTimeSlice / 2.0f;
 				time += currentTimeSlice;
 				Vector3 diff = colliderVelocity * time;
-				worldSpaceOBBs[collider].Position += diff;
+				collider.Position += diff;
 
-				if (worldSpaceOBBs[collider].Intersects(ref worldSpaceOBBs[target]))
+				if (collider.Intersects(ref target))
 				{
 					time -= currentTimeSlice;
 				}
-				worldSpaceOBBs[collider].Position -= diff;
+				collider.Position -= diff;
 			}
 
+			target.Position = originalPosition;
 			return time;
 		}
 
