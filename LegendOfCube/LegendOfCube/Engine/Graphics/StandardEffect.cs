@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -19,12 +20,14 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectParameter normalMatrixParam;
 
 		// Lights
-		private readonly EffectParameter pointLight0ViewSpacePosParam;
-		private readonly EffectParameter pointLight0StrengthParam;
-		private readonly EffectParameter pointLight0ColorParam;
+		private readonly EffectParameter dirLight0ViewSpaceDirParam;
+		private readonly EffectParameter dirLight0ColorParam;
+		private readonly EffectParameter dirLight0ShadowMapParam;
+		private readonly EffectParameter dirLight0ShadowMatrixParam;
+
+		private readonly EffectParameter ambientIntensity;
 
 		// Material properties
-		private readonly EffectParameter materialAmbientIntensity;
 
 		private readonly EffectParameter useDiffuseTextureParam;
 		private readonly EffectParameter diffuseTextureParam;
@@ -42,6 +45,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		private readonly EffectTechnique defaultTechnique;
 		private readonly EffectTechnique normalMapTechnique;
+		private readonly EffectTechnique shadowMapTechnique;
 
 		// Cache this, for determining normal matrix (model to view) after
 		// world has been set
@@ -60,14 +64,15 @@ namespace LegendOfCube.Engine.Graphics
 			this.normalMatrixParam = effect.Parameters["NormalMatrix"];
 	
 			// Lights
-			this.pointLight0ViewSpacePosParam = effect.Parameters["PointLight0ViewSpacePos"];
-			this.pointLight0ColorParam = effect.Parameters["PointLight0Color"];
-			this.pointLight0StrengthParam = effect.Parameters["PointLight0Strength"];
+			this.dirLight0ViewSpaceDirParam = effect.Parameters["DirLight0ViewSpaceDir"];
+			this.dirLight0ColorParam = effect.Parameters["DirLight0Color"];
+			this.dirLight0ShadowMapParam = effect.Parameters["DirLight0ShadowMap"];
+			this.dirLight0ShadowMatrixParam = effect.Parameters["DirLight0ShadowMatrix"];
+
+			this.ambientIntensity = effect.Parameters["AmbientIntensity"];
 
 			// Material properties
-
-			this.materialAmbientIntensity = effect.Parameters["MaterialAmbientIntensity"];
-
+			
 			this.useDiffuseTextureParam = effect.Parameters["UseDiffuseTexture"];
 			this.diffuseTextureParam = effect.Parameters["DiffuseTexture"];
 			this.materialDiffuseColorParam = effect.Parameters["MaterialDiffuseColor"];
@@ -85,7 +90,7 @@ namespace LegendOfCube.Engine.Graphics
 			// Get handles to techniques
 			this.defaultTechnique = this.effect.Techniques["DefaultTechnique"];
 			this.normalMapTechnique = this.effect.Techniques["NormalMapTechnique"];
-
+			this.shadowMapTechnique = this.effect.Techniques["ShadowMapTechnique"];
 		}
 
 		public void SetViewProjection(ref Matrix view, ref Matrix projection)
@@ -95,11 +100,20 @@ namespace LegendOfCube.Engine.Graphics
 			projectionParam.SetValue(projection);
 		}
 
-		public void SetPointLight0Properties(ref Vector3 position, ref float strength, ref Vector4 lightColor)
+		public void SetDirLight0Properties(ref Vector3 direction, ref Vector4 lightColor)
 		{
-			pointLight0ViewSpacePosParam.SetValue(Vector3.Transform(position, view));
-			pointLight0ColorParam.SetValue(lightColor);
-			pointLight0StrengthParam.SetValue(strength);
+			dirLight0ViewSpaceDirParam.SetValue(Vector3.TransformNormal(direction, view));
+			dirLight0ColorParam.SetValue(lightColor);
+		}
+
+		public void SetDirLight0ShadowMap(Texture shadowMap)
+		{
+			dirLight0ShadowMapParam.SetValue(shadowMap);
+		}
+
+		public void SetDirLight0ShadowMatrix(ref Matrix shadowMatrix)
+		{
+			dirLight0ShadowMatrixParam.SetValue(shadowMatrix);
 		}
 
 		public void SetWorld(ref Matrix world)
@@ -130,7 +144,7 @@ namespace LegendOfCube.Engine.Graphics
 		/// <param name="intensity">The intensity, should be in range [0, 1]</param>
 		public void SetAmbientIntensity(float intensity)
 		{
-			materialAmbientIntensity.SetValue(intensity);
+			ambientIntensity.SetValue(intensity);
 		}
  
 		public void SetDiffuseColor(Vector4 color)
@@ -190,6 +204,11 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			effect.CurrentTechnique = texture != null ? normalMapTechnique : defaultTechnique;
 			normalTextureParam.SetValue(texture);
+		}
+
+		public void SetShadowMapRendering(bool shadowMapRender)
+		{
+			effect.CurrentTechnique = shadowMapRender ? shadowMapTechnique : defaultTechnique;
 		}
 
 		public void ApplyOnModel(Model model)
