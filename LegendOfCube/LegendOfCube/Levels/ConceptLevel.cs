@@ -9,8 +9,6 @@ namespace LegendOfCube.Levels
 	{
 		private static Entity DeathZone;
 
-		
-
 		public static void CreateLevel(World world, Game game)
 		{
 			// Initialize assets.
@@ -50,6 +48,15 @@ namespace LegendOfCube.Levels
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(world);
+
+			world.LightDirection = Vector3.Normalize(new Vector3
+			{
+				X = 3,
+				Y = -1,
+				Z = 0
+			});
+
+			world.AmbientIntensity = 0.45f;
 		}
 	}
 }

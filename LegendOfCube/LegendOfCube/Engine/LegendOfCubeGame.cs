@@ -12,6 +12,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private readonly RenderSystem renderSystem;
+		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly List<Screen> screens;
 		private Screen currentScreen;
 
@@ -23,10 +24,20 @@ namespace LegendOfCube.Engine
 		public LegendOfCubeGame()
 		{
 			Content.RootDirectory = "Content";
-			renderSystem = new RenderSystem(this);
+
+			graphicsManager = new GraphicsDeviceManager(this);
+			renderSystem = new RenderSystem(this, graphicsManager);
+
+			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
+			// that could be disposed and reused
+			Window.AllowUserResizing = true;
+			graphicsManager.PreferMultiSampling = true;
+			graphicsManager.ApplyChanges();
+
 			screens = new List<Screen> {new GameScreen(this), new MenuScreen(this)};
 			currentScreen = screens[0];
 			SwitcherSystem = new SwitcherSystem(this);
+
 		}
 
 		// Overriden XNA methods
@@ -41,6 +52,7 @@ namespace LegendOfCube.Engine
 		protected override void Initialize()
 		{
 			renderSystem.Initialize();
+
 			base.Initialize();
 		}
 
@@ -50,6 +62,8 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
+			renderSystem.LoadContent();
+
 			foreach (var screen in screens)
 			{
 				screen.LoadContent();

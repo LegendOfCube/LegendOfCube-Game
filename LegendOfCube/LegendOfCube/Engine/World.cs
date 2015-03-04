@@ -51,8 +51,10 @@ namespace LegendOfCube.Engine
 		public EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
-		public Vector3 LightPosition;
 		public Vector3 CameraPosition;
+
+		public Vector3 LightDirection;
+		public float AmbientIntensity;
 
 		public DebugState DebugState;
 
