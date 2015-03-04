@@ -44,5 +44,14 @@ namespace LegendOfCube.Levels.Assets
 		{
 			loadAssets();
 		}
+
+		internal void AddWithProp(Vector3 pos, Properties props)
+		{
+			new EntityBuilder().WithModel(model)
+					.WithPosition(pos)
+					.WithBoundingVolume(obb)
+					.WithAdditionalProperties(props)
+					.AddToWorld(world);
+		}
 	}
 }

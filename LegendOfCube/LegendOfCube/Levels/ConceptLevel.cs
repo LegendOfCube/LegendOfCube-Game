@@ -41,6 +41,11 @@ namespace LegendOfCube.Levels
 			platform.AddMoving(new Vector3[] { new Vector3(-45, 0, 0), 
 				new Vector3(-20, 0, 0), new Vector3(-45, 25, 0) }, 8);
 
+			// Bounce test jump
+			platform.Add(new Vector3(0, 0, -75));
+			platform.AddWithProp(new Vector3(0, -50, -50), new Properties(Properties.BOUNCE_FLAG));
+
+			//Falling death
 			DeathZone =
 				new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
 					.WithPosition(new Vector3(0, -2000.0f, 0))
