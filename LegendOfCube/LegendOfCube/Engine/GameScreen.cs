@@ -59,7 +59,11 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			spriteBatch.Begin();
-			string output = "CamPos: " + World.CameraPosition + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition) + "\nCubePos: " + World.Transforms[World.Player.Id].Translation;
+			string output = "CamPos: " + World.CameraPosition
+			              + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition)
+			              + "\nCubePos: " + World.Transforms[World.Player.Id].Translation
+			              + "\nCubeVel: " + World.Velocities[World.Player.Id]
+			              + "\nCubeAcc: " + World.Accelerations[World.Player.Id];
 			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
 			spriteBatch.End();
 		}
