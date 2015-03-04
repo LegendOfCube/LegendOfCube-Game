@@ -9,47 +9,19 @@ namespace LegendOfCube.Levels
 {
 	class ConceptLevel
 	{
-		private static Entity playerEntity;
-		private static Entity[] platforms;
-		private static Entity[] walls;
 		private static Entity DeathZone;
 
 		
 
 		public static void CreateLevel(World world, Game game)
 		{
-			platforms = new Entity[10];
-			walls = new Entity[10];
-
-			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
-			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
-			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
-	
-			var playerEffect = new StandardEffectParams
-			{
-				//DiffuseTexture = Game.Content.Load<Texture>("Models/Cube/cube_diff"),
-				EmissiveTexture = game.Content.Load<Texture>("Models/Cube/cube_emissive"),
-				SpecularColor = Color.Gray.ToVector4(),
-				EmissiveColor = Color.White.ToVector4()
-			};
-
-			world.SpawnPoint = new Vector3(0, 5, 0);
-			world.CameraPosition = new Vector3(0, 7, -1);
-
-			playerEntity =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(world.SpawnPoint)
-					.WithVelocity(Vector3.Zero, 15)
-					.WithAcceleration(Vector3.Zero, 30)
-					.WithStandardEffectParams(playerEffect)
-					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
-					.AddToWorld(world);
-
-			world.Player = playerEntity;
-
+			// Initialize assets.
+			Player player = new Assets.Player(world, game);
 			Platform platform = new Assets.Platform(world, game);
 			Wall wall = new Assets.Wall(world, game);
+
+			player.Add(new Vector3(0, 5, 0));
+
 			// Starting platform
 			platform.Add(Vector3.Zero);
 
@@ -65,7 +37,7 @@ namespace LegendOfCube.Levels
 			wall.Add(new Vector3(10, 3, 0));
 			platform.Add(new Vector3(0, 12, 0));
 
-			// TODO: Moving platforms
+			// Moving platform
 			platform.AddMoving(new Vector3[] { new Vector3(-45, 0, 0), 
 				new Vector3(-20, 0, 0), new Vector3(-45, 25, 0) }, 8);
 
