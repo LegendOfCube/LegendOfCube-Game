@@ -124,7 +124,8 @@ namespace LegendOfCube.Engine
 						//intersectionId = UInt32.MaxValue;
 						intersectionId = findIntersection(world, i);*/
 
-						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId]);
+						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
 						world.PlayerCubeState.InAir = false;
 
 						intersectionId = findIntersection(world, i);
@@ -202,11 +203,10 @@ namespace LegendOfCube.Engine
 
 		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPost)
 		{
-			Vector3 colliderPos = colliderPost.Position;
-			return findCollisionAxis(ref target, ref colliderPos);
+			return Vector3.UnitY;
 		}
 
-		private Vector3 findCollisionAxis(ref OBB target, ref Vector3 colliderPos)
+		/*private Vector3 findCollisionAxis(ref OBB target, ref Vector3 colliderPos)
 		{
 			// Note: This whole algorithm assumes that the collider is a cube.
 			// If collider is not a cube it will probably not work well at all.
@@ -246,7 +246,7 @@ namespace LegendOfCube.Engine
 			// If no collision axis it means we're inside an object. Default to not being able to move in world y-axis.
 			//Debug.Assert(false);
 			return Vector3.UnitY;
-		}
+		}*/
 
 		private Vector3 findClosestOBBAxis(ref OBB obb, ref Vector3 direction)
 		{
@@ -274,18 +274,18 @@ namespace LegendOfCube.Engine
 			return Vector3.Zero;
 		}
 
-		private void pushOut(ref OBB collider, ref OBB target)
+		/*private void pushOut(ref OBB collider, ref OBB target)
 		{
 			Vector3 colliderPos = collider.Position;
 			Vector3 axisOut = findCollisionAxis(ref target, ref colliderPos);
-			/*if (axisOut == Vector3.Zero)
+			if (axisOut == Vector3.Zero)
 			{
 				Vector3 toCollider = collider.Position - target.Position;
 				axisOut = findClosestOBBAxis(ref target, ref toCollider);
-			}*/
+			}
 
 			pushOut(ref collider, ref target, ref axisOut);
-		}
+		}*/
 
 		private void pushOut(ref OBB collider, ref OBB target, ref Vector3 axisOut)
 		{
