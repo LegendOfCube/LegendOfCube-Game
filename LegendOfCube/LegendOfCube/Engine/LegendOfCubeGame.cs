@@ -28,11 +28,6 @@ namespace LegendOfCube.Engine
 			graphicsManager = new GraphicsDeviceManager(this);
 			renderSystem = new RenderSystem(this, graphicsManager);
 
-			// Unlocked framerate for testing
-			// TODO: Remove
-			IsFixedTimeStep = false;
-			graphicsManager.SynchronizeWithVerticalRetrace = false;
-
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
 			// that could be disposed and reused
 			Window.AllowUserResizing = true;
