@@ -16,7 +16,6 @@ namespace LegendOfCube.Engine
 		private readonly CameraSystem cameraSystem;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
-		private Texture2D tex2D;
 
 		private Texture2D play;
 		private Texture2D exit;
