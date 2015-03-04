@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using LegendOfCube.Engine.CubeMath;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
@@ -271,32 +272,19 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		// Private functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private bool ApproxEqu(float lhs, float rhs, float epsilon)
-		{
-			return (lhs - epsilon) <= rhs && (lhs + epsilon) >= rhs; 
-		}
-
-		private bool ApproxEqu(Vector3 lhs, Vector3 rhs, float epsilon)
-		{
-			if (!ApproxEqu(lhs.X, rhs.X, epsilon)) return false;
-			if (!ApproxEqu(lhs.Y, rhs.Y, epsilon)) return false;
-			if (!ApproxEqu(lhs.Z, rhs.Z, epsilon)) return false;
-			return true;
-		}
-
 		private void EnsureCorrectState()
 		{
 			const float EPSILON = 0.001f;
 
 			// Axes are normalized
-			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) xAxis.Normalize();
-			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) yAxis.Normalize();
-			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) zAxis.Normalize();
+			if (!MathUtils.ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) xAxis.Normalize();
+			if (!MathUtils.ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) yAxis.Normalize();
+			if (!MathUtils.ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) zAxis.Normalize();
 
 			// Axes are orthogonal
-			if (!ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
-			if (!ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
-			if (!ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!MathUtils.ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!MathUtils.ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!MathUtils.ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 
 			// Extents
 			if (halfExtents.X <= 0) throw new ArgumentException("halfExtents.X <= 0");
