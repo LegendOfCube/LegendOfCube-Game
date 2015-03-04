@@ -1,9 +1,7 @@
 ﻿using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
-using LegendOfCube.Engine.Graphics;
 using LegendOfCube.Levels.Assets;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
