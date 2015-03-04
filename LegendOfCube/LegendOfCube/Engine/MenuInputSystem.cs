@@ -116,8 +116,8 @@ namespace LegendOfCube.Engine
 			// Normalize the vector to our needs, then set direction
 			directionInput = !directionInput.Equals(Vector2.Zero) ? Vector2.Normalize(directionInput) : gamePadState.ThumbSticks.Left;
 
-			var xPos = mouseState.X + 5*directionInput.X;
-			var yPos = mouseState.Y - 5*directionInput.Y;
+			var xPos = mouseState.X + 10*directionInput.X;
+			var yPos = mouseState.Y - 10*directionInput.Y;
 			Mouse.SetPosition((int)xPos, (int)yPos);
 
 			oldMouseState = mouseState;
