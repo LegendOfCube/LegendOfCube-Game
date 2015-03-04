@@ -102,7 +102,7 @@ namespace LegendOfCube.Engine
 						worldSpaceOBBs[i].Position += diff;
 
 						// Add Collision Event to EventBuffer
-						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId));
+						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), axis);
 						world.EventBuffer.AddEvent(ref ce);
 
 						// Update timeLeft
