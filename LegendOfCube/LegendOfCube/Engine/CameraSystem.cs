@@ -10,11 +10,6 @@ namespace LegendOfCube.Engine
 		private const float X_SCALE = 4.0f;
 		private const float Y_SCALE = 4.0f;
 
-		public void Initialize(World world)
-		{
-			world.CameraPosition = new Vector3(1.0f, 1.0f, 0.0f);
-		}
-
 		public void OnUpdate(World world, float delta)
 		{
 			var inputData = world.InputData[world.Player.Id];
