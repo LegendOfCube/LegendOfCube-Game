@@ -44,6 +44,13 @@ namespace LegendOfCube.Levels
 				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 			};
 
+			var bounceEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
+				DiffuseColor = Color.Yellow.ToVector4()
+			};
+
 			world.SpawnPoint = new Vector3(0, 5, 0);
 
 			playerEntity =
@@ -124,6 +131,23 @@ namespace LegendOfCube.Levels
 					.WithAI(new Vector3[] { new Vector3(-45, 0, 0), new Vector3(-20, 0, 0), new Vector3(-45, 25, 0)}, true)
 					.AddToWorld(world);
 
+			// Bounce test jump
+			platforms[5] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(0, 0, -75))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.AddToWorld(world);
+
+			platforms[6] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(0, -50, -50))
+					.WithStandardEffectParams(bounceEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+					.AddToWorld(world);
+
+			//Falling death
 			DeathZone =
 				new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
 					.WithPosition(new Vector3(0, -2000.0f, 0))

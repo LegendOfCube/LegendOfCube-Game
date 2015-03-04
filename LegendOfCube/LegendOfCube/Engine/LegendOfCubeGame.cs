@@ -68,7 +68,11 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			renderSystem.LoadContent();
-			screens[0].LoadContent();
+
+			foreach (var screen in screens)
+			{
+				screen.LoadContent();
+			}
 		}
 
 		/// <summary>
@@ -108,11 +112,14 @@ namespace LegendOfCube.Engine
 		{
 			if (currentScreen is GameScreen)
 			{
+				this.IsMouseVisible = true;
 				screens[1].SetWorld(currentScreen.World);
 				currentScreen = screens[1];
 			}
 			else if (currentScreen is MenuScreen)
 			{
+
+				this.IsMouseVisible = false;
 				currentScreen = screens[0];
 			}
 		}
