@@ -28,9 +28,12 @@ namespace LegendOfCube.Levels.Assets
 
 		public void AddMoving(Vector3[] waypoints, float speed)
 		{
+			Vector3 startDir = waypoints[0] - waypoints[1];
+			startDir = Vector3.Normalize(startDir);
+
 			new EntityBuilder().WithModel(model)
 				.WithPosition(waypoints[0])
-				.WithVelocity(Vector3.UnitX * speed,0)
+				.WithVelocity(startDir * speed, 0)
 				.WithBoundingVolume(obb)
 				.WithAI(waypoints, true)
 				.AddToWorld(world);
