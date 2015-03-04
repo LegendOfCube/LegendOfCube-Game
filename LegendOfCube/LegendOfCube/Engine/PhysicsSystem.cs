@@ -125,6 +125,12 @@ namespace LegendOfCube.Engine
 						intersectionId = findIntersection(world, i);
 					}
 
+					// Small hack, basically we rather want the cube to stop completely than to intersect for now.
+					if (findIntersection(world, i) != UInt32.MaxValue)
+					{
+						worldSpaceOBBs[i].Position = oldPosition;
+					}
+
 					// Update translation in transform
 					Vector3 obbDiff = worldSpaceOBBs[i].Position - oldPosition;
 					world.Transforms[i].Translation += obbDiff;
