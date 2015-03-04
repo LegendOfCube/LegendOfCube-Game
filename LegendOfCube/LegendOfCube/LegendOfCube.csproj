@@ -72,8 +72,10 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine\AIComponent.cs" />
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
+    <Compile Include="Engine\AISystem.cs" />
     <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\DebugState.cs" />
@@ -81,6 +83,8 @@
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
+    <Compile Include="Engine\MenuInputSystem.cs" />
+    <Compile Include="Levels\TestLevel1.cs" />
     <Compile Include="Engine\MenuScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />
     <Compile Include="Engine\Graphics\OBBRenderer.cs" />
@@ -100,6 +104,7 @@
     <Compile Include="Engine\Screen.cs" />
     <Compile Include="Engine\SwitcherSystem.cs" />
     <Compile Include="Engine\World.cs" />
+    <Compile Include="Levels\ConceptLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
