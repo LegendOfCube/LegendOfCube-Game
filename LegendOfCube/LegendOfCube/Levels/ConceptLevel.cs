@@ -55,9 +55,7 @@ namespace LegendOfCube.Levels
 
 			// Walls and platform to test length gaining wall jumps
 			wall.Add(new Vector3(-5, 3, 20));
-
 			wall.Add(new Vector3(10, 6, 40));
-
 			platform.Add(new Vector3(0, 9, 60));
 
 			// Platform to test normal jump
@@ -65,7 +63,6 @@ namespace LegendOfCube.Levels
 
 			// Wall and platform to test height gaining wall jumps
 			wall.Add(new Vector3(10, 3, 0));
-
 			platform.Add(new Vector3(0, 12, 0));
 
 			// TODO: Moving platforms

@@ -20,6 +20,7 @@ namespace LegendOfCube.Engine
 				{
 					world.Transforms[collider].Translation = world.SpawnPoint;
 					world.Velocities[collider] = Vector3.Zero;
+					world.CameraPosition = world.Velocities[collider] + new Vector3(0, 7, -1);
 				}
 				else if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
 				{
