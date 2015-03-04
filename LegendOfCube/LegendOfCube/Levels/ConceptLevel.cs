@@ -24,7 +24,7 @@ namespace LegendOfCube.Levels
 
 			var playerEffect = new StandardEffectParams
 			{
-				DiffuseColor = Color.Gray.ToVector4(),
+				DiffuseColor = new Vector4(new Vector3(0.3f), 1.0f),
 				EmissiveTexture = game.Content.Load<Texture>("Models/Cube/cube_emissive"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
@@ -40,7 +40,8 @@ namespace LegendOfCube.Levels
 			var wallEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp")
+				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 			};
 
 			world.SpawnPoint = new Vector3(0, 5, 0);
@@ -129,12 +130,13 @@ namespace LegendOfCube.Levels
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(world);
-			world.LightPosition = new Vector3
+			world.LightDirection = Vector3.Normalize(new Vector3
 			{
-				X = -300,
-				Y = 100,
+				X = 3,
+				Y = -1,
 				Z = 0
-			};
+			});
+			world.AmbientIntensity = 0.45f;
 		}
 	}
 }

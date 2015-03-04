@@ -23,7 +23,7 @@ namespace LegendOfCube.Engine.Levels
 
 			var playerEffect = new StandardEffectParams
 			{
-				DiffuseColor = Color.Gray.ToVector4(),
+				DiffuseColor = new Vector4(new Vector3(0.45f), 1.0f),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
 				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
@@ -33,7 +33,7 @@ namespace LegendOfCube.Engine.Levels
 
 			var otherCubeEffect = new StandardEffectParams
 			{
-				DiffuseColor = Color.Gray.ToVector4(),
+				DiffuseColor = new Vector4(new Vector3(0.45f), 1.0f),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
 				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine.Levels
 
 			var bouncyCubeEffect = new StandardEffectParams
 			{
-				DiffuseColor = Color.Gray.ToVector4(),
+				DiffuseColor = new Vector4(new Vector3(0.45f), 1.0f),
 				SpecularTexture = game.Content.Load<Texture>("Models/cube/cube_specular"),
 				EmissiveTexture = game.Content.Load<Texture>("Models/cube/cube_emissive_plain"),
 				NormalTexture = game.Content.Load<Texture>("Models/cube/cube_normal"),
@@ -73,8 +73,8 @@ namespace LegendOfCube.Engine.Levels
 
 			var groundEffect = new StandardEffectParams
 			{
-				DiffuseColor = Color.Gray.ToVector4(),
-				SpecularColor = 0.5f*Color.White.ToVector4()
+				DiffuseColor = new Vector4(new Vector3(0.55f), 1.0f),
+				SpecularColor = new Vector4(new Vector3( 0.5f), 1.0f)
 			};
 
 			world.SpawnPoint = new Vector3(0, 1, 0);
@@ -171,7 +171,8 @@ namespace LegendOfCube.Engine.Levels
 					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 					.AddToWorld(world);
 
-			world.LightPosition = new Vector3 {X = 0, Y = 800, Z = 100};
+			world.LightDirection = Vector3.Normalize(-new Vector3 {X = 0, Y = 1.5f, Z = 1});
+			world.AmbientIntensity = 0.3f;
 		}
 	}
 }

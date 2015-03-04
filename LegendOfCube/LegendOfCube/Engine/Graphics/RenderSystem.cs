@@ -1,4 +1,5 @@
-﻿﻿using System.Collections.Generic;
+﻿﻿using System;
+﻿using System.Collections.Generic;
 ﻿using System.Diagnostics;
 ﻿using LegendOfCube.Engine.BoundingVolumes;
 ﻿using Microsoft.Xna.Framework;
@@ -127,16 +128,15 @@ namespace LegendOfCube.Engine.Graphics
 			game.GraphicsDevice.GetRenderTargets().CopyTo(origRenderTargets, 0);
 			game.GraphicsDevice.SetRenderTarget(shadowRenderTarget);
 			game.GraphicsDevice.Clear(Color.Black);
-
 			standardEffect.SetShadowMapRendering(true);
 
-			// Simplified way of handling the light view. For now, the light sort 
-			// of aimed at the player
+			// The shadow map is based on an orthographic projection that could
+			// be thought of as a plane with a center that's a fixed distance
+			// from the player with its normal parallel to the light direction
+			// and pointed toward the player
 			Vector3 lightTarget = world.Transforms[world.Player.Id].Translation;
-			Matrix lightView = Matrix.CreateLookAt(world.LightPosition, lightTarget, Vector3.Forward);
-			// Orthographic projection used to avoid biasing issues at different distances from light source
-			// Difference from a projection perspective isn't very noticable when point light is far away
-			Matrix lightProjection = Matrix.CreateOrthographic(80, 80, 10.0f, 1000.0f);
+			Matrix lightView = Matrix.CreateLookAt(lightTarget - 300 * world.LightDirection, lightTarget, Vector3.Forward);
+			Matrix lightProjection = Matrix.CreateOrthographic(80.0f, 80.0f, 100.0f, 1000.0f);
 
 			standardEffect.SetViewProjection(ref lightView, ref lightProjection);
 			var boundingFrustum = new BoundingFrustum(lightView * lightProjection);
@@ -180,13 +180,12 @@ namespace LegendOfCube.Engine.Graphics
 		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection, ref Matrix shadowMatrix)
 		{
 			standardEffect.SetViewProjection(ref view, ref projection);
-			standardEffect.SetAmbientIntensity(0.1f);
+			standardEffect.SetAmbientIntensity(world.AmbientIntensity);
 
 			var lightColor = LIGHT_COLOR;
-			var lightStrength = 10000.0f;
-			standardEffect.SetPointLight0Properties(ref world.LightPosition, ref lightStrength, ref lightColor);
-			standardEffect.SetPointLight0ShadowMap(shadowRenderTarget);
-			standardEffect.SetPointLight0ShadowMatrix(ref shadowMatrix);
+			standardEffect.SetDirLight0Properties(ref world.LightDirection, ref lightColor);
+			standardEffect.SetDirLight0ShadowMap(shadowRenderTarget);
+			standardEffect.SetDirLight0ShadowMatrix(ref shadowMatrix);
 
 			foreach (var entity in entities)
 			{
