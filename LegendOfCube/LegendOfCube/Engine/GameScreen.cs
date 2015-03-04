@@ -34,7 +34,7 @@ namespace LegendOfCube.Engine
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			inputSystem.ApplyInput(gameTime, World, switcher);
-			AI_system.update(World, delta);
+			AI_system.Update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
 			cameraSystem.OnUpdate(World, delta);

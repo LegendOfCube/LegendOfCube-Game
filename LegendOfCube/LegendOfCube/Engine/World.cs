@@ -33,7 +33,7 @@ namespace LegendOfCube.Engine
 		public readonly InputData[] InputData;
 		public readonly float[] MaxSpeed;
 		public readonly float[] MaxAcceleration;
-		public OBB[] ModelSpaceBVs;
+		public readonly OBB[] ModelSpaceBVs;
 		public readonly AIComponent[] AIComponents;
 
 		public readonly Model[] Models;
@@ -48,7 +48,7 @@ namespace LegendOfCube.Engine
 		// World variables
 
 		public Vector3 SpawnPoint;
-		public EventBuffer EventBuffer;
+		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
 		public Vector3 CameraPosition;
