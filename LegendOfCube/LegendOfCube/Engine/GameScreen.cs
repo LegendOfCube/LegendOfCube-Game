@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine.BoundingVolumes;
-using LegendOfCube.Engine.Graphics;
-using LegendOfCube.Engine.Levels;
+﻿using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Levels;
 
 namespace LegendOfCube.Engine
 {

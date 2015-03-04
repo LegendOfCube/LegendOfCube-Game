@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 namespace LegendOfCube.Engine
 {
 
-	public class LegendOfCubeGame : Microsoft.Xna.Framework.Game
+	public class LegendOfCubeGame : Game
 	{
 
 		// Members
