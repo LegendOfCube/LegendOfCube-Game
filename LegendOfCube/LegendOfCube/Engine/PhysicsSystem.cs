@@ -97,6 +97,7 @@ namespace LegendOfCube.Engine
 							{
 								world.Velocities[i] *= -1;
 							}
+							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
 						}
 						else
 						{

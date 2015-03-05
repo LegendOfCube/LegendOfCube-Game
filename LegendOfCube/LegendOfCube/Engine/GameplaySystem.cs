@@ -28,7 +28,7 @@ namespace LegendOfCube.Engine
 				// Updates velocities according to input
 				//TODO: Make it better
 				// Movement
-				if(world.InputData[i].GetDirection().Length() <= 0.01)
+				if(world.InputData[i].GetDirection().Length() <= 0.01 && !world.PlayerCubeState.InAir)
 				{
 					if (!isStopping)
 					{
