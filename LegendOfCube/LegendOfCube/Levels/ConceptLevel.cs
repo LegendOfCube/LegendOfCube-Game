@@ -229,11 +229,11 @@ namespace LegendOfCube.Levels
 
 			//Crush trap#1
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(0, 20, -85))
+				.WithPosition(new Vector3(0, 15, -85))
 				.WithVelocity(Vector3.UnitY * 20, 0)
 				.WithStandardEffectParams(platformDeathEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAI(new[] {new Vector3(0, 20, -85), new Vector3(0, 1, -85)}, true )
+				.WithAI(new[] {new Vector3(0, 15, -85), new Vector3(0, 1, -85)}, true )
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 

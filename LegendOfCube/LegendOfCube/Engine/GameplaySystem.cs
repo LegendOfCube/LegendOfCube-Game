@@ -13,12 +13,10 @@ namespace LegendOfCube.Engine
 		                                                                        Properties.ACCELERATION |
 		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
-		private const float STOP_TIME = 0.05f;
 		private const float JUMP_TIME = 0.5f;
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
 		private float stopTimeLeft;
-		private const float BASE_JUMP = 12f;
 
 		public void ProcessInputData(World world, float delta)
 		{
@@ -32,7 +30,7 @@ namespace LegendOfCube.Engine
 				{
 					if (!isStopping)
 					{
-						stopTimeLeft = STOP_TIME;
+						stopTimeLeft = world.StopTime;
 					}
 					else
 					{
@@ -78,9 +76,9 @@ namespace LegendOfCube.Engine
 					if (world.PlayerCubeState.InAir)
 					{
 						world.Accelerations[i] = new Vector3(
-							rotatedInput.X*world.MaxAcceleration[i]*0.2f,
+							rotatedInput.X*world.MaxAcceleration[i]*world.AirMovement,
 							0,
-							rotatedInput.Z*world.MaxAcceleration[i]*0.2f
+							rotatedInput.Z*world.MaxAcceleration[i]*world.AirMovement
 							);
 
 					}
@@ -110,14 +108,14 @@ namespace LegendOfCube.Engine
 					//If the jump button is pressed and the cube is on the ground initiate new jump
 					if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
 					{
-						world.Velocities[i].Y = BASE_JUMP;
+						world.Velocities[i].Y = world.BaseJump;
 						jumpTimeLeft = JUMP_TIME;
 						world.PlayerCubeState.InAir = true;
 					}
 					//If the player is mid jump apply more jumpspeed
 					else if (world.InputData[i].IsJumping() && jumpTimeLeft > 0)
 					{
-						world.Velocities[i].Y += 1.5f*BASE_JUMP*delta;
+						world.Velocities[i].Y += 1.5f*world.BaseJump*delta;
 						jumpTimeLeft -= delta;
 					}
 				}
