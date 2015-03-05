@@ -1,3 +1,9 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework;
+
 ﻿namespace LegendOfCube.Engine
 {
 	/// <summary>
@@ -5,7 +11,7 @@
 	/// </summary>
 	public struct PlayerCubeState
 	{
-		public bool InAir;
-		public bool OnWall;
+		public bool InAir, OnWall, OnGround;
+		public Vector3 WallAxis, GroundAxis;
 	}
 }
