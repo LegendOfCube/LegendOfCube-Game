@@ -28,7 +28,7 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private OBB[] worldSpaceOBBs;
+		private readonly OBB[] worldSpaceOBBs;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -91,30 +91,16 @@ namespace LegendOfCube.Engine
 					worldSpaceOBBs[i].Position += diff;
 
 					// Player specific collision response part 1: Reading PlayerCubeState
-					bool playerInAir = false;
-					bool playerOnWall = false;
-					bool playerOnGround = false;
-					Vector3 playerWallAxis = Vector3.Zero;
-					Vector3 playerGroundAxis = Vector3.Zero;
+					PlayerCubeState tempCubeState = world.PlayerCubeState;
 					if (i == world.Player.Id)
 					{
-						playerInAir = world.PlayerCubeState.InAir;
-						playerOnWall = world.PlayerCubeState.OnWall;
-						playerOnGround = world.PlayerCubeState.OnGround;
-						playerWallAxis = world.PlayerCubeState.WallAxis;
-						playerGroundAxis = world.PlayerCubeState.GroundAxis;
-
-						if (Vector3.Dot(diff, -Vector3.UnitY) > 0.015f)
-						{
-							playerOnGround = false;
-							playerGroundAxis = Vector3.Zero;
-							playerInAir = true;
-						}
+						tempCubeState.OnGround = false;
+						tempCubeState.GroundAxis = Vector3.Zero;
 					}
 
 					// Iterate until object no longer intersects with anything.
 					float timeLeft = delta;
-					UInt32 intersectionId = findIntersection(world, i);
+					UInt32 intersectionId = FindIntersection(world, i);
 					int iterations = 0;
 					while (intersectionId != UInt32.MaxValue)
 					{
@@ -123,7 +109,7 @@ namespace LegendOfCube.Engine
 						Debug.Assert(intersectionId != i);
 
 						// Collision axis
-						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
+						Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
 						Debug.Assert(!float.IsNaN(axis.X));
 
 						// Add Collision Event to EventBuffer
@@ -132,7 +118,7 @@ namespace LegendOfCube.Engine
 
 						// Move OBB to collision point
 						worldSpaceOBBs[i].Position -= diff;
-						float timeUntilCol = findTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
+						float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
 						                     ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
 						diff = world.Velocities[i] * timeUntilCol;
 						worldSpaceOBBs[i].Position += diff;
@@ -148,26 +134,21 @@ namespace LegendOfCube.Engine
 						// Player specific collision response part 2
 						if (i == world.Player.Id)
 						{
-							float wallDotX = Math.Abs(Vector3.Dot(axis, Vector3.UnitX));
-							float wallDotZ = Math.Abs(Vector3.Dot(axis, Vector3.UnitZ));
-							float wallDot = wallDotX + wallDotZ;
+							float wallDot = Math.Abs(axis.X) + Math.Abs(axis.Z);
 							if (wallDot > 0.9f)
 							{
-								playerOnWall = true;
-								playerWallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
+								tempCubeState.OnWall = true;
+								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
 							}
 
 							float groundDot = Vector3.Dot(axis, Vector3.UnitY);
-							if (groundDot > 0.75f)
+							if (groundDot > 0.8f)
 							{
-								playerOnGround = true;
-								playerInAir = false;
-								playerGroundAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
-
-								playerOnWall = false;
-								playerWallAxis = Vector3.Zero;
+								tempCubeState.OnGround = true;
+								tempCubeState.OnWall = false;
+								tempCubeState.GroundAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
+								tempCubeState.WallAxis = Vector3.Zero;
 							}
-							world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
 						}
 
 						// Attempt to move for remaining time
@@ -176,7 +157,7 @@ namespace LegendOfCube.Engine
 
 						// Do it all again
 						//intersectionId = UInt32.MaxValue;
-						intersectionId = findIntersection(world, i);
+						intersectionId = FindIntersection(world, i);
 					}
 
 					// Attempt to resolve remaining intersections
@@ -185,9 +166,9 @@ namespace LegendOfCube.Engine
 					{
 						if (iterations > 15) break;
 						iterations++;
-						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
-						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
-						intersectionId = findIntersection(world, i);
+						Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+						PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
+						intersectionId = FindIntersection(world, i);
 					}
 
 					// Emergency step. If we haven't resolved collisions until now we just move collider to the top.
@@ -197,18 +178,14 @@ namespace LegendOfCube.Engine
 						if (iterations > 100) break;
 						iterations++;
 						Vector3 emergencyAxis = Vector3.UnitY;
-						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref emergencyAxis);
-						intersectionId = findIntersection(world, i);
+						PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref emergencyAxis);
+						intersectionId = FindIntersection(world, i);
 					}
 
 					// Player specific collision response part 3: Setting PlayerCubeState
 					if (i == world.Player.Id)
 					{
-						world.PlayerCubeState.InAir = playerInAir;
-						world.PlayerCubeState.OnWall = playerOnWall;
-						world.PlayerCubeState.OnGround = playerOnGround;
-						world.PlayerCubeState.WallAxis = playerWallAxis;
-						world.PlayerCubeState.GroundAxis = playerGroundAxis;
+						world.PlayerCubeState = tempCubeState;
 					}
 
 					// Update translation in transform
@@ -227,7 +204,7 @@ namespace LegendOfCube.Engine
 
 		// Precondition: param entity must satisfy MOVABLE
 		// Returns UInt32.MaxValue if no intersections are found, otherwise index of entity collided with.
-		private UInt32 findIntersection(World world, UInt32 entity)
+		private UInt32 FindIntersection(World world, UInt32 entity)
 		{
 			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
@@ -243,7 +220,7 @@ namespace LegendOfCube.Engine
 		// Returns an approximation of the maximum amount of time collider can move.
 		// Collider is guaranteed to not collide with target if moved the amount of time returned.
 		// Preconditions: timeSlice > 0, collider must hit target if moved entire timeSlice
-		private float findTimeUntilIntersection(ref OBB target, ref OBB collider, Vector3 colliderVelocity, float timeSlice, int maxIterations)
+		private static float FindTimeUntilIntersection(ref OBB target, ref OBB collider, Vector3 colliderVelocity, float timeSlice, int maxIterations)
 		{
 			Vector3 originalPosition = collider.Position;
 			float currentTimeSlice = timeSlice;
@@ -267,7 +244,7 @@ namespace LegendOfCube.Engine
 			return time;
 		}
 
-		private void gatherPoints(ref OBB obb, Vector3[] pointsOut)
+		private static void GatherPoints(ref OBB obb, Vector3[] pointsOut)
 		{
 			obb.Corners(pointsOut);
 			pointsOut[8] = obb.Position + (obb.HalfExtentX * obb.AxisX);
@@ -279,12 +256,12 @@ namespace LegendOfCube.Engine
 			pointsOut[14] = obb.Position;
 		}
 
-		Vector3[] obbPointsCollider = new Vector3[15];
+		private readonly Vector3[] obbPointsCollider = new Vector3[15];
 
-		private Vector3 findCollisionAxis(ref OBB target, ref OBB collider)
+		private Vector3 FindCollisionAxis(ref OBB target, ref OBB collider)
 		{
 			// Calculate points for the collider to test against target.
-			gatherPoints(ref collider, obbPointsCollider);
+			GatherPoints(ref collider, obbPointsCollider);
 
 			// Finds the closest point on the target OBB and which point on the
 			// collider that was closest.
@@ -327,7 +304,7 @@ namespace LegendOfCube.Engine
 			pushOut(ref collider, ref target, ref axisOut);
 		}*/
 
-		private void pushOut(ref OBB collider, ref OBB target, ref Vector3 axisOut)
+		private void PushOut(ref OBB collider, ref OBB target, ref Vector3 axisOut)
 		{
 			float averageHalfExtent = (collider.HalfExtentX + collider.HalfExtentY + collider.HalfExtentZ) / 3.0f;
 			float stepSize = averageHalfExtent / 2.0f;
@@ -339,7 +316,7 @@ namespace LegendOfCube.Engine
 				accumulatedStep += stepSize;
 			}
 
-			float timeUntilCol = findTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 4);
+			float timeUntilCol = FindTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 4);
 			collider.Position += (timeUntilCol * accumulatedStep * -axisOut);
 		}
 	}

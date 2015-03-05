@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework;
 	/// </summary>
 	public struct PlayerCubeState
 	{
-		public bool InAir, OnWall, OnGround;
+		public bool OnWall, OnGround;
 		public Vector3 WallAxis, GroundAxis;
 	}
 }

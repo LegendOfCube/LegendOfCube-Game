@@ -26,7 +26,7 @@ namespace LegendOfCube.Engine
 				// Updates velocities according to input
 				//TODO: Make it better
 				// Movement
-				if(world.InputData[i].GetDirection().Length() <= 0.01 && !world.PlayerCubeState.InAir)
+				if(world.InputData[i].GetDirection().Length() <= 0.01 && world.PlayerCubeState.OnGround)
 				{
 					if (!isStopping)
 					{
@@ -73,7 +73,7 @@ namespace LegendOfCube.Engine
 					Vector3 directionInput3D = new Vector3(directionInput.X, 0, directionInput.Y);
 					Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
 
-					if (world.PlayerCubeState.InAir)
+					if (!world.PlayerCubeState.OnGround)
 					{
 						world.Accelerations[i] = new Vector3(
 							rotatedInput.X*world.MaxAcceleration[i]*world.AirMovement,
@@ -117,14 +117,14 @@ namespace LegendOfCube.Engine
 						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
 						world.Velocities[i].Y += 1f*world.BaseJump;
 						world.PlayerCubeState.OnWall = false;
-						world.PlayerCubeState.InAir = true;
+						world.PlayerCubeState.OnGround = false;
 					}
 					//If the jump button is pressed and the cube is on the ground initiate new jump
-					else if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
+					else if (world.InputData[i].NewJump() && world.PlayerCubeState.OnGround)
 					{
 						world.Velocities[i].Y = world.BaseJump;
 						jumpTimeLeft = JUMP_TIME;
-						world.PlayerCubeState.InAir = true;
+						world.PlayerCubeState.OnGround = false;
 					}
 					//If the player is mid jump apply more jumpspeed
 					else if (world.InputData[i].IsJumping() && jumpTimeLeft > 0)

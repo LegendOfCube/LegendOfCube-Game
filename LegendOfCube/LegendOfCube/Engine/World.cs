@@ -101,7 +101,6 @@ namespace LegendOfCube.Engine
 			}
 			
 			PlayerCubeState = new PlayerCubeState();
-			PlayerCubeState.InAir = false;
 			PlayerCubeState.OnWall = false;
 			PlayerCubeState.OnGround = false;
 			PlayerCubeState.WallAxis = Vector3.Zero;
