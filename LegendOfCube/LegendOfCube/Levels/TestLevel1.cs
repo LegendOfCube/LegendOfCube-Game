@@ -1,10 +1,11 @@
 ﻿using System;
+using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace LegendOfCube.Engine.Levels
+namespace LegendOfCube.Levels
 {
 	public class TestLevel1
 	{

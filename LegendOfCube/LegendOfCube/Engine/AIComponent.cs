@@ -1,8 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace LegendOfCube.Engine
 {
@@ -22,7 +18,7 @@ namespace LegendOfCube.Engine
 			dir = PatrolDirection.FORTH;
 		}
 
-		public int getNextWayPoint() {
+		public int GetNextWayPoint() {
 			if (waypoints.Length == 2)
 				return (lastWaypoint == 0 ? 1 : 0);
 
@@ -38,22 +34,22 @@ namespace LegendOfCube.Engine
 				return ((lastWaypoint + 1) % waypoints.Length);
 		}
 
-		public void changeDirection()
+		public void ChangeDirection()
 		{
 			dir = (dir == PatrolDirection.FORTH ? PatrolDirection.BACK : PatrolDirection.FORTH);
 		}
 
-		public void setDirection(PatrolDirection dir)
+		public void SetDirection(PatrolDirection dir)
 		{
 			this.dir = dir;
 		}
 
-		public PatrolDirection getDirection()
+		public PatrolDirection GetDirection()
 		{
 			return dir;
 		}
 
-		public bool isPatrolling()
+		public bool IsPatrolling()
 		{
 			return patrolling;
 		}

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine.BoundingVolumes;
-using LegendOfCube.Engine.Graphics;
-using LegendOfCube.Engine.Levels;
+﻿using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Levels;
 
 namespace LegendOfCube.Engine
 {
@@ -30,7 +24,7 @@ namespace LegendOfCube.Engine
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
-			physicsSystem = new PhysicsSystem();
+			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			EventSystem = new EventSystem();
 			AI_system = new AISystem();
@@ -40,7 +34,7 @@ namespace LegendOfCube.Engine
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			inputSystem.ApplyInput(gameTime, World, switcher);
-			AI_system.update(World, delta);
+			AI_system.Update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
 			cameraSystem.OnUpdate(World, delta);
@@ -56,7 +50,11 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			spriteBatch.Begin();
-			string output = "CamPos: " + World.CameraPosition + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition) + "\nCubePos: " + World.Transforms[World.Player.Id].Translation;
+			string output = "CamPos: " + World.CameraPosition
+			              + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition)
+			              + "\nCubePos: " + World.Transforms[World.Player.Id].Translation
+			              + "\nCubeVel: " + World.Velocities[World.Player.Id]
+			              + "\nCubeAcc: " + World.Accelerations[World.Player.Id];
 			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
 			spriteBatch.End();
 		}

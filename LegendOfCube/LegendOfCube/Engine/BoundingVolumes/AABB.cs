@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.BoundingVolumes
@@ -99,9 +96,9 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 			set
 			{
-				var HalfExts = new Vector3(ExtentX/2.0f, ExtentY/2.0f, ExtentZ/2.0f);
-				this.box.Min = (value - HalfExts);
-				this.box.Max = (value + HalfExts);
+				var halfExts = new Vector3(ExtentX/2.0f, ExtentY/2.0f, ExtentZ/2.0f);
+				this.box.Min = (value - halfExts);
+				this.box.Max = (value + halfExts);
 			}
 		}
 

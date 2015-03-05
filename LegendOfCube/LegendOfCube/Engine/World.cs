@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Events;
+using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -33,7 +33,7 @@ namespace LegendOfCube.Engine
 		public readonly InputData[] InputData;
 		public readonly float[] MaxSpeed;
 		public readonly float[] MaxAcceleration;
-		public OBB[] ModelSpaceBVs;
+		public readonly OBB[] ModelSpaceBVs;
 		public readonly AIComponent[] AIComponents;
 
 		public readonly Model[] Models;
@@ -48,7 +48,7 @@ namespace LegendOfCube.Engine
 		// World variables
 
 		public Vector3 SpawnPoint;
-		public EventBuffer EventBuffer;
+		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
 		public Vector3 CameraPosition;
@@ -96,7 +96,14 @@ namespace LegendOfCube.Engine
 				                   new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
 				                   new Vector3(1, 1, 1));
 			}
+			
 			PlayerCubeState = new PlayerCubeState();
+			PlayerCubeState.InAir = false;
+			PlayerCubeState.OnWall = false;
+			PlayerCubeState.OnGround = false;
+			PlayerCubeState.WallAxis = Vector3.Zero;
+			PlayerCubeState.GroundAxis = Vector3.Zero;
+
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 
 			SpawnPoint = new Vector3(0, 25, 0);
