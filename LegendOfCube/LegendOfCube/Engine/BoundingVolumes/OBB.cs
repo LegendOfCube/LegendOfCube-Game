@@ -354,5 +354,10 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			if (halfExtents.Y <= 0) throw new ArgumentException("halfExtents.Y <= 0");
 			if (halfExtents.Z <= 0) throw new ArgumentException("halfExtents.Z <= 0");
 		}
+
+		public static OBB CreateAxisAligned(Vector3 centerPos, float xLength, float yLength , float zLength)
+		{
+			return new OBB(centerPos, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, xLength, yLength, zLength);
+		}
 	}
 }
