@@ -40,12 +40,12 @@ namespace LegendOfCube.Engine
 			}
 
 			//Magic LINQ from resharper
-			var playerAffected = eventBuffer.CollisionEvents.Any(collisionEvent => collisionEvent.Collider.Id == world.Player.Id);
+			//var playerAffected = eventBuffer.CollisionEvents.Any(collisionEvent => collisionEvent.Collider.Id == world.Player.Id);
 
-			if (!playerAffected)
-			{
-				world.PlayerCubeState.InAir = true;
-			}
+			//if (!playerAffected)
+			//{
+			//	world.PlayerCubeState.InAir = true;
+			//
 			world.EventBuffer.Flush();
 		}
 	}

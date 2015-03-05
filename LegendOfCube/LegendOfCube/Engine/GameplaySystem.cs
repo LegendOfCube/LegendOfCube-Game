@@ -107,8 +107,9 @@ namespace LegendOfCube.Engine
 				{
 					if (world.InputData[i].NewJump() && world.PlayerCubeState.OnWall)
 					{
-						world.Velocities[i] = world.PlayerCubeState.WallAxis * 15;
-						world.Velocities[i].Y = world.BaseJump;
+						world.Velocities[i].Y = 0;
+						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
+						world.Velocities[i].Y += 1.5f*world.BaseJump;
 						world.PlayerCubeState.OnWall = false;
 					}
 					//If the jump button is pressed and the cube is on the ground initiate new jump
