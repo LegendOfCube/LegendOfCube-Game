@@ -35,7 +35,7 @@ namespace LegendOfCube.Levels.Assets
 			obb = new OBB(new Vector3(0, .5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(1, 1, 1));
 			effect = new StandardEffectParams
 			{
-				//DiffuseTexture = Game.Content.Load<Texture>("Models/Cube/cube_diff"),
+				DiffuseColor = new Vector4(new Vector3(0.3f), 1.0f),
 				EmissiveTexture = game.Content.Load<Texture>("Models/Cube/cube_emissive"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
