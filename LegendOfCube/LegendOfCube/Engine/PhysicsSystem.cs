@@ -134,7 +134,7 @@ namespace LegendOfCube.Engine
 								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
 							}
 
-							float groundDot = Vector3.Dot(axis, Vector3.UnitY);
+							float groundDot = axis.Y;
 							if (groundDot > 0.8f)
 							{
 								tempCubeState.OnGround = true;
