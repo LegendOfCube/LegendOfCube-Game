@@ -13,7 +13,7 @@ namespace LegendOfCube.Engine
 		                                                                        Properties.ACCELERATION |
 		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
-		private const float STOP_TIME = 0.1f;
+		private const float STOP_TIME = 0.05f;
 		private const float JUMP_TIME = 0.5f;
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
@@ -75,11 +75,23 @@ namespace LegendOfCube.Engine
 					Vector3 directionInput3D = new Vector3(directionInput.X, 0, directionInput.Y);
 					Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
 
-					world.Accelerations[i] = new Vector3(
-					    rotatedInput.X * world.MaxAcceleration[i],
-					    0,
-					    rotatedInput.Z * world.MaxAcceleration[i]
-					);
+					if (world.PlayerCubeState.InAir)
+					{
+						world.Accelerations[i] = new Vector3(
+							rotatedInput.X*world.MaxAcceleration[i]*0.2f,
+							0,
+							rotatedInput.Z*world.MaxAcceleration[i]*0.2f
+							);
+
+					}
+					else
+					{
+						world.Accelerations[i] = new Vector3(
+							rotatedInput.X*world.MaxAcceleration[i],
+							0,
+							rotatedInput.Z*world.MaxAcceleration[i]
+							);
+					}
 				}
 
 				Vector3 pos = world.Transforms[i].Translation;

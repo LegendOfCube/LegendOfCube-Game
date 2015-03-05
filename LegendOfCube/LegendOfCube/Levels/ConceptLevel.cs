@@ -15,7 +15,7 @@ namespace LegendOfCube.Levels
 
 		public static void CreateLevel(World world, Game game)
 		{
-			platforms = new Entity[10];
+			platforms = new Entity[100];
 			walls = new Entity[10];
 
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
@@ -145,6 +145,49 @@ namespace LegendOfCube.Levels
 					.WithStandardEffectParams(bounceEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 					.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+					.AddToWorld(world);
+
+			//MOAR Platforms
+			platforms[7] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(25, 0, -25))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.AddToWorld(world);
+
+			platforms[8] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(63, 0, -25))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.AddToWorld(world);
+			platforms[9] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithTransform(Matrix.CreateScale(0.2f))
+					.WithPosition(new Vector3(40, 0, -35))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.AddToWorld(world);
+
+			platforms[10] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(0, 0, -25))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.AddToWorld(world);
+
+			platforms[11] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(0, 0, -25))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+					.AddToWorld(world);
+
+			platforms[12] =
+				new EntityBuilder().WithModel(platformModel)
+					.WithPosition(new Vector3(0, 0, -25))
+					.WithStandardEffectParams(platformEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 					.AddToWorld(world);
 
 			//Falling death
