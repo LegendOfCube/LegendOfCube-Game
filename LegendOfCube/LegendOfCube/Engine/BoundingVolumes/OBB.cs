@@ -83,6 +83,41 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			return result;
 		}
 
+		/// <summary>
+		/// Finds the axis in this OBB that is closest to specified direction.
+		/// This function does NOT care about extents or lengths of vectors in this calculation,
+		/// only the directions.
+		/// </summary>
+		/// <param name="direction"></param>
+		/// <returns>closest axis</returns>
+		public Vector3 ClosestAxis(ref Vector3 direction)
+		{
+			Vector3 dir = direction;
+			dir.Normalize();
+
+			float xDot = Vector3.Dot(dir, xAxis);
+			float yDot = Vector3.Dot(dir, yAxis);
+			float zDot = Vector3.Dot(dir, zAxis);
+			float xDotAbs = Math.Abs(xDot);
+			float yDotAbs = Math.Abs(yDot);
+			float zDotAbs = Math.Abs(zDot);
+
+			if (yDotAbs >= xDotAbs && yDotAbs >= zDotAbs)
+			{
+				return ((float)Math.Sign(yDot)) * yAxis;
+			}
+			else if (xDotAbs >= yDotAbs && xDotAbs >= zDotAbs)
+			{
+				return ((float)Math.Sign(xDot)) * xAxis;
+			}
+			else if (zDotAbs >= xDotAbs && zDotAbs >= yDotAbs)
+			{
+				return ((float)Math.Sign(zDot)) * zAxis;
+			}
+
+			return Vector3.Zero;
+		}
+
 		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
 		{
 			Vector3 obbX = obb.AxisX;
