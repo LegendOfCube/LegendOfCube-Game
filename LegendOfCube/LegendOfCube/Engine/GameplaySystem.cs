@@ -90,6 +90,12 @@ namespace LegendOfCube.Engine
 							rotatedInput.Z*world.MaxAcceleration[i]
 							);
 					}
+
+					if (world.PlayerCubeState.OnWall)
+					{
+						float wallAxisAcc = Vector3.Dot(world.Accelerations[i], world.PlayerCubeState.WallAxis);
+						world.Accelerations[i] -= wallAxisAcc*world.PlayerCubeState.WallAxis;
+					}
 				}
 
 				Vector3 pos = world.Transforms[i].Translation;
@@ -109,8 +115,9 @@ namespace LegendOfCube.Engine
 					{
 						world.Velocities[i].Y = 0;
 						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
-						world.Velocities[i].Y += 1.5f*world.BaseJump;
+						world.Velocities[i].Y += 1f*world.BaseJump;
 						world.PlayerCubeState.OnWall = false;
+						world.PlayerCubeState.InAir = true;
 					}
 					//If the jump button is pressed and the cube is on the ground initiate new jump
 					else if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
