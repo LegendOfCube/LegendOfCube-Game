@@ -140,10 +140,17 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(0, -50, -50))
+				.WithPosition(new Vector3(0, -25, -50))
 				.WithStandardEffectParams(bounceEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+				.AddToWorld(world);
+
+			//Help bounce platform
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-10, 0, -50))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
 			//Long jump
@@ -220,24 +227,57 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
-			//Death trap
+			//Crush trap#1
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(0, 12, -90))
+				.WithPosition(new Vector3(0, 20, -85))
 				.WithVelocity(Vector3.UnitY * 20, 0)
 				.WithStandardEffectParams(platformDeathEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAI(new[] {new Vector3(0, 12, -90), new Vector3(0,1,-90)}, true )
+				.WithAI(new[] {new Vector3(0, 20, -85), new Vector3(0, 1, -85)}, true )
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(0, 0, -90))
+				.WithPosition(new Vector3(0, 0, -85))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(0, 0, -95))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			//Crush trap#2
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(2))
+				.WithPosition(new Vector3(-7, 1, -105))
+				.WithVelocity(Vector3.UnitX * 10, 0)
+				.WithStandardEffectParams(wallDeathEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithAI(new [] {new Vector3(-7, 0.4f, -105), new Vector3(-0.7f, 0.4f, -105)}, true)
+				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(2))
+				.WithPosition(new Vector3(7, 1, -105))
+				.WithVelocity(Vector3.UnitX * -10, 0)
+				.WithStandardEffectParams(wallDeathEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithAI(new[] { new Vector3(7, 0.4f, -105), new Vector3(0.7f, 0.4f, -105) }, true)
+				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
 				.WithPosition(new Vector3(0, 0, -105))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(0, 0, -115))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
@@ -248,6 +288,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
+
 			world.LightDirection = Vector3.Normalize(new Vector3
 			{
 				X = 3,
