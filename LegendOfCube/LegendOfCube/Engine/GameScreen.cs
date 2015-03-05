@@ -61,8 +61,8 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
-			//ConceptLevel.CreateLevel(World, Game);
-			TestLevel1.CreateLevel(World, Game);
+			ConceptLevel.CreateLevel(World, Game);
+			//TestLevel1.CreateLevel(World, Game);
 
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
