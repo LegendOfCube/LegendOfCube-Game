@@ -284,19 +284,6 @@ namespace LegendOfCube.Engine
 			return target.ClosestAxis(ref resultDir);
 		}
 
-		/*private void pushOut(ref OBB collider, ref OBB target)
-		{
-			Vector3 colliderPos = collider.Position;
-			Vector3 axisOut = findCollisionAxis(ref target, ref colliderPos);
-			if (axisOut == Vector3.Zero)
-			{
-				Vector3 toCollider = collider.Position - target.Position;
-				axisOut = findClosestOBBAxis(ref target, ref toCollider);
-			}
-
-			pushOut(ref collider, ref target, ref axisOut);
-		}*/
-
 		private void PushOut(ref OBB collider, ref OBB target, ref Vector3 axisOut)
 		{
 			float averageHalfExtent = (collider.HalfExtentX + collider.HalfExtentY + collider.HalfExtentZ) / 3.0f;
