@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine.Graphics;
+﻿using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -16,7 +11,6 @@ namespace LegendOfCube.Engine
 		private readonly CameraSystem cameraSystem;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
-		private Texture2D tex2D;
 
 		private Texture2D play;
 		private Texture2D exit;

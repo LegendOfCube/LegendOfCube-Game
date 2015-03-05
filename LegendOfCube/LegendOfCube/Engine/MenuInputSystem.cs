@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
@@ -50,6 +47,10 @@ namespace LegendOfCube.Engine
 			mouseState = Mouse.GetState();
 			Vector2 directionInput = Vector2.Zero;
 
+			Rectangle playRect = new Rectangle(100, 20, 398, 59);
+			Rectangle levelSelectRect = new Rectangle(100, 110, 462, 59);
+			Rectangle exitRect = new Rectangle(100, 200, 151, 59);
+
 			if (!gamePadState.IsConnected)
 			{
 				//Only writes message once when controller was disconnected
@@ -61,12 +62,12 @@ namespace LegendOfCube.Engine
 				game.Exit();
 			}	
 
-			if (MouseClickWithinRectangle(new Rectangle(100, 20, 398, 59)))
+			if (MouseClickWithinRectangle(playRect))
 			{	
 				switcher.Switch();
 			}
 
-			if (MouseClickWithinRectangle(new Rectangle(100, 200, 151, 59)))
+			if (MouseClickWithinRectangle(exitRect))
 			{
 				game.Exit();
 			}
@@ -119,6 +120,21 @@ namespace LegendOfCube.Engine
 			var xPos = mouseState.X + 10*directionInput.X;
 			var yPos = mouseState.Y - 10*directionInput.Y;
 			Mouse.SetPosition((int)xPos, (int)yPos);
+			if (oldMouseState.X != mouseState.X || oldMouseState.Y != mouseState.Y)
+			{
+				if (playRect.Contains(mouseState.X, mouseState.Y))
+				{
+					selection = 0;
+				} 
+				else if (levelSelectRect.Contains(mouseState.X, mouseState.Y))
+				{
+					selection = 1;
+				} 
+				else if (exitRect.Contains(mouseState.X, mouseState.Y))
+				{
+					selection = 2;
+				}
+			}
 
 			oldMouseState = mouseState;
 			oldKeyState = keyState;

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine.BoundingVolumes;
-using LegendOfCube.Engine.Graphics;
-using LegendOfCube.Engine.Levels;
+﻿using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Levels;
 
 namespace LegendOfCube.Engine
 {
@@ -40,7 +34,7 @@ namespace LegendOfCube.Engine
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			inputSystem.ApplyInput(gameTime, World, switcher);
-			AI_system.update(World, delta);
+			AI_system.Update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
 			cameraSystem.OnUpdate(World, delta);
@@ -68,7 +62,7 @@ namespace LegendOfCube.Engine
 		internal override void LoadContent()
 		{
 			ConceptLevel.CreateLevel(World, Game);
-	//		TestLevel1.CreateLevel(World, Game);
+			//TestLevel1.CreateLevel(World, Game);
 
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);

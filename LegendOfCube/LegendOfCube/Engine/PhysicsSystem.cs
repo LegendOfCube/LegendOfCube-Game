@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
-using LegendOfCube.Engine.BoundingVolumes;
 using System.Diagnostics;
+using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Events;
 using LegendOfCube.Engine.CubeMath;
+using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
 {
