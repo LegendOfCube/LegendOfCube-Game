@@ -64,6 +64,13 @@ namespace LegendOfCube.Engine
 				world.DebugState.ShowOBBWireFrame = !world.DebugState.ShowOBBWireFrame;
 			}
 
+			if (KeyWasJustPressed(Keys.R))
+			{
+				world.Accelerations[world.Player.Id] = Vector3.Zero;
+				world.Velocities[world.Player.Id] = Vector3.Zero;
+				world.Transforms[world.Player.Id] = Matrix.CreateTranslation(world.SpawnPoint);
+			}
+
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {
 
 				InputDataImpl inputData = (InputDataImpl)world.InputData[e.Id];
