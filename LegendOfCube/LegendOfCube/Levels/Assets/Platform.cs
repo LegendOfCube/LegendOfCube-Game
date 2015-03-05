@@ -57,6 +57,7 @@ namespace LegendOfCube.Levels.Assets
 					.WithPosition(pos)
 					.WithBoundingVolume(obb)
 					.WithAdditionalProperties(props)
+					.WithStandardEffectParams(effectParams)
 					.AddToWorld(world);
 		}
 	}
