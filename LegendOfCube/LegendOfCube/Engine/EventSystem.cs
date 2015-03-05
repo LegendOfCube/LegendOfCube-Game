@@ -37,6 +37,12 @@ namespace LegendOfCube.Engine
 						}
 					}
 				}
+				if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
+				{
+					world.Velocities[collider] = Vector3.Reflect(collisionEvent.ColliderVelocity, collisionEvent.Axis);
+					world.PlayerCubeState.OnGround = false;
+					world.PlayerCubeState.OnWall = false;
+				}
 			}
 
 			//Magic LINQ from resharper
