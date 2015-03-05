@@ -55,6 +55,34 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			return IntersectionsTests.Intersects(ref this, ref other);
 		}
 
+		public Vector3 ClosestPointOnOBB(ref Vector3 point)
+		{
+			// Algorithm from Real-Time Collision Detection
+
+			Vector3 distToPoint = point - center;
+			Vector3 result = center; // Start at center of Cube.
+
+			// C# is crap so I have to manually unroll this loop.
+			float dist;
+
+			dist = Vector3.Dot(distToPoint, xAxis);
+			if (dist > halfExtents.X) dist = halfExtents.X;
+			if (dist < (-halfExtents.X)) dist = -halfExtents.X;
+			result += (dist * xAxis);
+
+			dist = Vector3.Dot(distToPoint, yAxis);
+			if (dist > halfExtents.Y) dist = halfExtents.Y;
+			if (dist < (-halfExtents.Y)) dist = -halfExtents.Y;
+			result += (dist * yAxis);
+
+			dist = Vector3.Dot(distToPoint, zAxis);
+			if (dist > halfExtents.Z) dist = halfExtents.Z;
+			if (dist < (-halfExtents.Z)) dist = -halfExtents.Z;
+			result += (dist * zAxis);
+
+			return result;
+		}
+
 		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
 		{
 			Vector3 obbX = obb.AxisX;
