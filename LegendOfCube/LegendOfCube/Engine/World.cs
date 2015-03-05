@@ -96,7 +96,14 @@ namespace LegendOfCube.Engine
 				                   new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
 				                   new Vector3(1, 1, 1));
 			}
+			
 			PlayerCubeState = new PlayerCubeState();
+			PlayerCubeState.InAir = false;
+			PlayerCubeState.OnWall = false;
+			PlayerCubeState.OnGround = false;
+			PlayerCubeState.WallAxis = Vector3.Zero;
+			PlayerCubeState.GroundAxis = Vector3.Zero;
+
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 
 			SpawnPoint = new Vector3(0, 25, 0);
