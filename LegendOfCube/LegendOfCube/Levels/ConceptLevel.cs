@@ -83,15 +83,15 @@ namespace LegendOfCube.Levels
 
 			// Walls and platform to test length gaining wall jumps
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2))
-				.WithPosition(new Vector3(-5, 3, 20))
+				.WithTransform(Matrix.CreateScale(2, 10, 8))
+				.WithPosition(new Vector3(-5, 0, 30))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2))
-				.WithPosition(new Vector3(10, 6, 40))
+				.WithTransform(Matrix.CreateScale(2, 10, 8))
+				.WithPosition(new Vector3(5, 0, 30))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
