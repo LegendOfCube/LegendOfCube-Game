@@ -84,25 +84,11 @@ namespace LegendOfCube.Engine
 					worldSpaceOBBs[i].Position += diff;
 
 					// Player specific collision response part 1: Reading PlayerCubeState
-					bool playerInAir = false;
-					bool playerOnWall = false;
-					bool playerOnGround = false;
-					Vector3 playerWallAxis = Vector3.Zero;
-					Vector3 playerGroundAxis = Vector3.Zero;
+					PlayerCubeState tempCubeState = world.PlayerCubeState;
 					if (i == world.Player.Id)
 					{
-						playerInAir = world.PlayerCubeState.InAir;
-						playerOnWall = world.PlayerCubeState.OnWall;
-						playerOnGround = world.PlayerCubeState.OnGround;
-						playerWallAxis = world.PlayerCubeState.WallAxis;
-						playerGroundAxis = world.PlayerCubeState.GroundAxis;
-
-						if (Vector3.Dot(diff, -Vector3.UnitY) > 0.015f)
-						{
-							playerOnGround = false;
-							playerGroundAxis = Vector3.Zero;
-							playerInAir = true;
-						}
+						tempCubeState.OnGround = false;
+						tempCubeState.GroundAxis = Vector3.Zero;
 					}
 
 					// Iterate until object no longer intersects with anything.
@@ -141,24 +127,20 @@ namespace LegendOfCube.Engine
 						// Player specific collision response part 2
 						if (i == world.Player.Id)
 						{
-							float wallX = axis.X;
-							float wallZ = axis.Z;
-							float wallDot = wallX + wallZ;
+							float wallDot = Math.Abs(axis.X) + Math.Abs(axis.Z);
 							if (wallDot > 0.9f)
 							{
-								playerOnWall = true;
-								playerWallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
+								tempCubeState.OnWall = true;
+								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
 							}
 
 							float groundDot = Vector3.Dot(axis, Vector3.UnitY);
-							if (groundDot > 0.75f)
+							if (groundDot > 0.8f)
 							{
-								playerOnGround = true;
-								playerInAir = false;
-								playerGroundAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
-
-								playerOnWall = false;
-								playerWallAxis = Vector3.Zero;
+								tempCubeState.OnGround = true;
+								tempCubeState.OnWall = false;
+								tempCubeState.GroundAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
+								tempCubeState.WallAxis = Vector3.Zero;
 							}
 						}
 
@@ -196,11 +178,7 @@ namespace LegendOfCube.Engine
 					// Player specific collision response part 3: Setting PlayerCubeState
 					if (i == world.Player.Id)
 					{
-						world.PlayerCubeState.InAir = playerInAir;
-						world.PlayerCubeState.OnWall = playerOnWall;
-						world.PlayerCubeState.OnGround = playerOnGround;
-						world.PlayerCubeState.WallAxis = playerWallAxis;
-						world.PlayerCubeState.GroundAxis = playerGroundAxis;
+						world.PlayerCubeState = tempCubeState;
 					}
 
 					// Update translation in transform

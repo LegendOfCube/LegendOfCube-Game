@@ -96,11 +96,11 @@ namespace LegendOfCube.Engine
 				if (world.InputData[i].IsJumping())
 				{
 					//If the jump button is pressed and the cube is on the ground initiate new jump
-					if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
+					if (world.InputData[i].NewJump() && world.PlayerCubeState.OnGround)
 					{
 						world.Velocities[i].Y = BASE_JUMP;
 						jumpTimeLeft = JUMP_TIME;
-						world.PlayerCubeState.InAir = true;
+						world.PlayerCubeState.OnGround = false;
 					}
 					//If the player is mid jump apply more jumpspeed
 					else if (world.InputData[i].IsJumping() && jumpTimeLeft > 0)
