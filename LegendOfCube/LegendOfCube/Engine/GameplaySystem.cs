@@ -13,7 +13,7 @@ namespace LegendOfCube.Engine
 		                                                                        Properties.ACCELERATION |
 		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
-		private const float STOP_TIME = 0.3f;
+		private const float STOP_TIME = 0.1f;
 		private const float JUMP_TIME = 0.5f;
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
