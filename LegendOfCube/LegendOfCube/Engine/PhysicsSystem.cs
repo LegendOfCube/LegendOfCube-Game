@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using LegendOfCube.Engine.BoundingVolumes;
 using System.Diagnostics;
 using LegendOfCube.Engine.Events;
+using LegendOfCube.Engine.CubeMath;
 
 namespace LegendOfCube.Engine
 {
@@ -59,14 +60,14 @@ namespace LegendOfCube.Engine
 					world.Velocities[i] += (world.Accelerations[i] * delta);
 
 					// Clamp velocity in X and Y direction
-					/*Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+					Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
 					if (groundVelocity.Length() > world.MaxSpeed[i])
 					{
 						groundVelocity.Normalize();
 						groundVelocity *= world.MaxSpeed[i];
 						world.Velocities[i].X = groundVelocity.X;
 						world.Velocities[i].Z = groundVelocity.Y;
-					}*/
+					}
 				}
 
 				// Apply gravity
@@ -78,7 +79,7 @@ namespace LegendOfCube.Engine
 				// Update position
 				if (properties.Satisfies(MOVABLE))
 				{
-					Vector3 oldPosition = worldSpaceOBBs[i].Position;
+					OBB oldObb = worldSpaceOBBs[i];
 					Vector3 diff = (world.Velocities[i] * delta);
 					worldSpaceOBBs[i].Position += diff;
 
@@ -88,12 +89,13 @@ namespace LegendOfCube.Engine
 					int iterations = 0;
 					while (intersectionId != UInt32.MaxValue)
 					{
-						/*if (iterations >= 10) break;
+						if (iterations >= 10) break;
 						iterations++;
 						Debug.Assert(intersectionId != i);
 
 						// Collision axis
-						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
+						Debug.Assert(!float.IsNaN(axis.X));
 
 						// Move OBB to collision point
 						worldSpaceOBBs[i].Position -= diff;
@@ -108,13 +110,13 @@ namespace LegendOfCube.Engine
 
 						// Update timeLeft
 						timeLeft -= timeUntilCol;
-						if (timeLeft < 0.0f) break;
+						if (timeLeft <= 0.0f) break;
 
 						// Collision response
 						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 						world.Velocities[i] -= (collidingSum * axis);
 						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
-						//Debug.Assert(!worldSpaceOBBs[i].Intersects(ref worldSpaceOBBs[intersectionId]));
+						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis); // Somewhat hack.
 
 						// Attempt to move for remaining time
 						diff = world.Velocities[i] * timeLeft;
@@ -122,31 +124,19 @@ namespace LegendOfCube.Engine
 
 						// Do it all again
 						//intersectionId = UInt32.MaxValue;
-						intersectionId = findIntersection(world, i);*/
-
-						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
-						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
-						world.PlayerCubeState.InAir = false;
-
 						intersectionId = findIntersection(world, i);
 					}
 
-					/*while (intersectionId != UInt32.MaxValue)
+					// Emergency step. If we haven't resolved collisions until now we just move collider to the top.
+					while (intersectionId != UInt32.MaxValue)
 					{
-						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId]);
-
+						Vector3 emergencyAxis = Vector3.UnitY;
+						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref emergencyAxis);
 						intersectionId = findIntersection(world, i);
 					}
-
-
-					// Small hack, basically we rather want the cube to stop completely than to intersect for now.
-					if (findIntersection(world, i) != UInt32.MaxValue)
-					{
-						//worldSpaceOBBs[i].Position = oldPosition;
-					}*/
 
 					// Update translation in transform
-					Vector3 obbDiff = worldSpaceOBBs[i].Position - oldPosition;
+					Vector3 obbDiff = worldSpaceOBBs[i].Position - oldObb.Position;
 					world.Transforms[i].Translation += obbDiff;
 				}
 				else if (properties.Satisfies(MOVABLE_NO_BV))
@@ -201,77 +191,50 @@ namespace LegendOfCube.Engine
 			return time;
 		}
 
-		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPost)
+		private void gatherPoints(ref OBB obb, Vector3[] pointsOut)
 		{
-			return Vector3.UnitY;
+			obb.Corners(pointsOut);
+			pointsOut[8] = obb.Position + (obb.HalfExtentX * obb.AxisX);
+			pointsOut[9] = obb.Position - (obb.HalfExtentX * obb.AxisX);
+			pointsOut[10] = obb.Position + (obb.HalfExtentY * obb.AxisY);
+			pointsOut[11] = obb.Position - (obb.HalfExtentY * obb.AxisY);
+			pointsOut[12] = obb.Position + (obb.HalfExtentZ * obb.AxisZ);
+			pointsOut[13] = obb.Position - (obb.HalfExtentZ * obb.AxisZ);
+			pointsOut[14] = obb.Position;
 		}
 
-		/*private Vector3 findCollisionAxis(ref OBB target, ref Vector3 colliderPos)
+		Vector3[] obbPointsCollider = new Vector3[15];
+
+		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPost)
 		{
-			// Note: This whole algorithm assumes that the collider is a cube.
-			// If collider is not a cube it will probably not work well at all.
+			// Calculate points for the collider to test against target.
+			gatherPoints(ref colliderPost, obbPointsCollider);
 
-			// Calculate distance vector from target to collider
-			Vector3 toCollider = colliderPos - target.Position;
-
-			// Projects distance vector on each of targets axes
-			float toColliderXProj = Vector3.Dot(toCollider, target.AxisX);
-			float toColliderYProj = Vector3.Dot(toCollider, target.AxisY);
-			float toColliderZProj = Vector3.Dot(toCollider, target.AxisZ);
-
-			// Abs value of projections
-			float toColliderXProjAbs = Math.Abs(toColliderXProj);
-			float toColliderYProjAbs = Math.Abs(toColliderYProj);
-			float toColliderZProjAbs = Math.Abs(toColliderZProj);
-
-			// Checks which axes collider is outside of
-			bool xOutside = toColliderXProjAbs > target.HalfExtentX;
-			bool yOutside = toColliderYProjAbs > target.HalfExtentY;
-			bool zOutside = toColliderZProjAbs > target.HalfExtentZ;
-
-			// Counts how many axes collider is outside of
-			int outsideCount = 0;
-			if (xOutside) outsideCount++;
-			if (yOutside) outsideCount++;
-			if (zOutside) outsideCount++;
-
-			// If outside of 2 or more axes we "don't have" (lol) a collision axis.
-			if (outsideCount >= 2) return Vector3.Zero;
-
-			// Return collision axis.
-			if (yOutside) return Math.Sign(toColliderYProj) * target.AxisY;
-			if (xOutside) return Math.Sign(toColliderXProj) * target.AxisX;
-			if (zOutside) return Math.Sign(toColliderZProj) * target.AxisZ;
-
-			// If no collision axis it means we're inside an object. Default to not being able to move in world y-axis.
-			//Debug.Assert(false);
-			return Vector3.UnitY;
-		}*/
-
-		private Vector3 findClosestOBBAxis(ref OBB obb, ref Vector3 direction)
-		{
-			float xDot = Vector3.Dot(direction, obb.AxisX);
-			float yDot = Vector3.Dot(direction, obb.AxisY);
-			float zDot = Vector3.Dot(direction, obb.AxisZ);
-			float xDotAbs = Math.Abs(xDot);
-			float yDotAbs = Math.Abs(yDot);
-			float zDotAbs = Math.Abs(zDot);
-
-			if (yDotAbs >= xDotAbs && yDotAbs >= zDotAbs)
+			// Finds the closest point on the target OBB and which point on the
+			// collider that was closest.
+			Vector3 closestTargetPoint = Vector3.Zero;
+			int colliderPointIndex = -1;
+			float shortestDist = float.MaxValue;
+			for (int iCol = 0; iCol < 15; iCol++)
 			{
-				return ((float)Math.Sign(yDot)) * obb.AxisY;
-			}
-			else if (xDotAbs >= yDotAbs && xDotAbs >= zDotAbs)
-			{
-				return ((float)Math.Sign(xDot)) * obb.AxisX;
-			}
-			else if (zDotAbs >= xDotAbs && zDotAbs >= yDotAbs)
-			{
-				return ((float)Math.Sign(zDot)) * obb.AxisZ;
+				Vector3 temp = target.ClosestPointOnOBB(ref obbPointsCollider[iCol]);
+				float dist = (obbPointsCollider[iCol] - temp).Length();
+				if (0.001f < dist && dist <= shortestDist)
+				{
+					shortestDist = dist;
+					colliderPointIndex = iCol;
+					closestTargetPoint = temp;
+				}
 			}
 
-			Debug.Assert(false);
-			return Vector3.Zero;
+			// This happens if collider is completely inside target, will probably result in
+			// the resulting axis being filled with NaN's.
+			//Debug.Assert(colliderPointIndex != -1);
+			if (colliderPointIndex == -1) return Vector3.UnitY;
+
+			Vector3 result = obbPointsCollider[colliderPointIndex] - closestTargetPoint;
+			result.Normalize();
+			return result;
 		}
 
 		/*private void pushOut(ref OBB collider, ref OBB target)
@@ -299,7 +262,7 @@ namespace LegendOfCube.Engine
 				accumulatedStep += stepSize;
 			}
 
-			float timeUntilCol = findTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 5);
+			float timeUntilCol = findTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 4);
 			collider.Position += (timeUntilCol * accumulatedStep * -axisOut);
 		}
 	}
