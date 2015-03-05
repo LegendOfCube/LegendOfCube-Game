@@ -95,6 +95,7 @@ namespace LegendOfCube.Engine
 					{
 						float wallAxisAcc = Vector3.Dot(world.Accelerations[i], world.PlayerCubeState.WallAxis);
 						world.Accelerations[i] -= wallAxisAcc*world.PlayerCubeState.WallAxis;
+						world.Velocities[i] -= 5.0f*world.PlayerCubeState.WallAxis;
 					}
 				}
 

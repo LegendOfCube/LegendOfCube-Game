@@ -96,6 +96,10 @@ namespace LegendOfCube.Engine
 					{
 						tempCubeState.OnGround = false;
 						tempCubeState.GroundAxis = Vector3.Zero;
+
+
+						tempCubeState.OnWall = false;
+						tempCubeState.WallAxis = Vector3.Zero;
 					}
 
 					// Iterate until object no longer intersects with anything.
