@@ -4,6 +4,11 @@ using LegendOfCube.Engine.CubeMath;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
+	public enum OBBAxis
+	{
+		X_PLUS, X_MINUS, Y_PLUS, Y_MINUS, Z_PLUS, Z_MINUS
+	}
+
 	public struct OBB {
 
 		// Private members
@@ -116,6 +121,37 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 
 			return Vector3.Zero;
+		}
+
+		public OBBAxis ClosestAxisEnum(ref Vector3 direction)
+		{
+			Vector3 dir = direction;
+			dir.Normalize();
+
+			float xDot = Vector3.Dot(dir, xAxis);
+			float yDot = Vector3.Dot(dir, yAxis);
+			float zDot = Vector3.Dot(dir, zAxis);
+			float xDotAbs = Math.Abs(xDot);
+			float yDotAbs = Math.Abs(yDot);
+			float zDotAbs = Math.Abs(zDot);
+
+			if (yDotAbs >= xDotAbs && yDotAbs >= zDotAbs)
+			{
+				if (((float)Math.Sign(yDot)) >= 0.0f) return OBBAxis.Y_PLUS;
+				else return OBBAxis.Y_MINUS;
+			}
+			else if (xDotAbs >= yDotAbs && xDotAbs >= zDotAbs)
+			{
+				if (((float)Math.Sign(xDot)) >= 0.0f) return OBBAxis.X_PLUS;
+				else return OBBAxis.X_MINUS;
+			}
+			else if (zDotAbs >= xDotAbs && zDotAbs >= yDotAbs)
+			{
+				if (((float)Math.Sign(zDot)) >= 0.0f) return OBBAxis.Z_PLUS;
+				else return OBBAxis.Z_MINUS;
+			}
+
+			throw new ArgumentException("direction must be a direction");
 		}
 
 		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
@@ -309,6 +345,20 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			{
 				halfExtents.Z = value;
 			}
+		}
+
+		public Vector3 GetAxis(OBBAxis axis)
+		{
+			switch (axis)
+			{
+				case OBBAxis.X_PLUS: return xAxis;
+				case OBBAxis.X_MINUS: return -xAxis;
+				case OBBAxis.Y_PLUS: return yAxis;
+				case OBBAxis.Y_MINUS: return -yAxis;
+				case OBBAxis.Z_PLUS: return zAxis;
+				case OBBAxis.Z_MINUS: return -zAxis;
+			}
+			throw new ArgumentException("Should never happen.");
 		}
 
 		public void Corners(Vector3[] corners)
