@@ -116,7 +116,11 @@ namespace LegendOfCube.Engine
 						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 						world.Velocities[i] -= (collidingSum * axis);
 						world.PlayerCubeState.InAir = false; // Super ugly hack, but neat.
-						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis); // Somewhat hack.
+
+						// Somewhat hack
+						//Vector3 otherAxis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+						//pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref otherAxis);
+						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
 
 						// Attempt to move for remaining time
 						diff = world.Velocities[i] * timeLeft;
@@ -127,9 +131,23 @@ namespace LegendOfCube.Engine
 						intersectionId = findIntersection(world, i);
 					}
 
-					// Emergency step. If we haven't resolved collisions until now we just move collider to the top.
+					// Attempt to resolve remaining intersections
+					iterations = 0;
 					while (intersectionId != UInt32.MaxValue)
 					{
+						if (iterations > 15) break;
+						iterations++;
+						Vector3 axis = findCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
+						intersectionId = findIntersection(world, i);
+					}
+
+					// Emergency step. If we haven't resolved collisions until now we just move collider to the top.
+					iterations = 0;
+					while (intersectionId != UInt32.MaxValue)
+					{
+						if (iterations > 100) break;
+						iterations++;
 						Vector3 emergencyAxis = Vector3.UnitY;
 						pushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref emergencyAxis);
 						intersectionId = findIntersection(world, i);
@@ -205,10 +223,10 @@ namespace LegendOfCube.Engine
 
 		Vector3[] obbPointsCollider = new Vector3[15];
 
-		private Vector3 findCollisionAxis(ref OBB target, ref OBB colliderPost)
+		private Vector3 findCollisionAxis(ref OBB target, ref OBB collider)
 		{
 			// Calculate points for the collider to test against target.
-			gatherPoints(ref colliderPost, obbPointsCollider);
+			gatherPoints(ref collider, obbPointsCollider);
 
 			// Finds the closest point on the target OBB and which point on the
 			// collider that was closest.
