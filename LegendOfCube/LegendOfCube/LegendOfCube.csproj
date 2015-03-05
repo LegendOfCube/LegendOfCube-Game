@@ -84,6 +84,10 @@
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />
+    <Compile Include="Engine\GameObjectTemplates.cs" />
+    <Compile Include="Levels\BeanStalkLevelFactory.cs" />
+    <Compile Include="Engine\GameObjectTemplate.cs" />
+    <Compile Include="Levels\ILevelFactory.cs" />
     <Compile Include="Levels\TestLevel1.cs" />
     <Compile Include="Engine\MenuScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />

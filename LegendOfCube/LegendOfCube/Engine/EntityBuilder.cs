@@ -122,6 +122,13 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		public EntityBuilder WithTemplate(GameObjectTemplate template)
+		{
+			return WithModel(template.Model)
+			      .WithBoundingVolume(template.Obb)
+			      .WithStandardEffectParams(template.EffectParams);
+		}
+
 		/// <summary>
 		/// Adds an Entity to the world, with the properties given to the builder.
 		/// </summary>
@@ -169,7 +176,5 @@ namespace LegendOfCube.Engine
 			}
 			return entity;
 		}
-
-
 	}
 }

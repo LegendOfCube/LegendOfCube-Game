@@ -18,9 +18,12 @@ namespace LegendOfCube.Engine
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
+		private GameObjectTemplates gameObjectTemplates;
 
-		public GameScreen(Game game) : base(game)
+		public GameScreen(Game game, GameObjectTemplates gameObjectTemplates) : base(game)
 		{
+			this.gameObjectTemplates = gameObjectTemplates;
+
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
@@ -57,9 +60,9 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
-			ConceptLevel.CreateLevel(World, Game);
+			//ConceptLevel.CreateLevel(World, Game);
 			//TestLevel1.CreateLevel(World, Game);
-
+			World = new BeanStalkLevelFactory().CreateWorld(Game, gameObjectTemplates);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
