@@ -116,7 +116,7 @@ namespace LegendOfCube.Engine
 					if (world.InputData[i].NewJump() && world.PlayerCubeState.OnWall)
 					{
 						world.Velocities[i].Y = 0;
-						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
+						world.Velocities[i] += world.PlayerCubeState.WallAxis * 20;
 						world.Velocities[i].Y += 1f*world.BaseJump;
 						world.PlayerCubeState.OnWall = false;
 						world.PlayerCubeState.OnGround = false;
