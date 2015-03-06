@@ -10,6 +10,56 @@ namespace LegendOfCube.Engine
 {
 	class EventSystem
 	{
+		private const float ON_GROUND_LIMIT = 0.70f;
+		private const float ON_WALL_LIMIT = 0.90f;
+
+		public static void CalculateCubeState(World world)
+		{
+			// Defaults to not being on the ground or on the wall
+			world.PlayerCubeState.OnGround = false;
+			world.PlayerCubeState.OnWall = false;
+			world.PlayerCubeState.GroundAxis = Vector3.Zero;
+			world.PlayerCubeState.WallAxis = Vector3.Zero;
+
+			// Check if player cube collided with any walls or grounds
+			foreach (var e in world.EventBuffer.CollisionEvents)
+			{
+				if (e.Collider.Id == world.Player.Id)
+				{
+					if (Math.Abs(e.Axis.Y) > ON_GROUND_LIMIT)
+					{
+						world.PlayerCubeState.OnGround = true;
+						world.PlayerCubeState.GroundAxis = e.Axis;
+					}
+					else if ((Math.Abs(e.Axis.X) + Math.Abs(e.Axis.Z)) > ON_WALL_LIMIT)
+					{
+						world.PlayerCubeState.OnWall = true;
+						world.PlayerCubeState.WallAxis = e.Axis;
+					}
+				}
+				else if (e.CollidedWith.Id == world.Player.Id)
+				{
+					if (Math.Abs(e.Axis.Y) > ON_GROUND_LIMIT)
+					{
+						world.PlayerCubeState.OnGround = true;
+						world.PlayerCubeState.GroundAxis = -e.Axis;
+					}
+					else if ((Math.Abs(e.Axis.X) + Math.Abs(e.Axis.Z)) > ON_WALL_LIMIT)
+					{
+						world.PlayerCubeState.OnWall = true;
+						world.PlayerCubeState.WallAxis = -e.Axis;
+					}
+				}
+			}
+
+			// If Cube is on the ground it can't be on a wall.
+			if (world.PlayerCubeState.OnGround)
+			{
+				world.PlayerCubeState.OnWall = false;
+				world.PlayerCubeState.WallAxis = Vector3.Zero;
+			}
+		}
+
 		public static void HandleEvents(World world)
 		{
 			EventBuffer eventBuffer = world.EventBuffer;
@@ -63,7 +113,6 @@ namespace LegendOfCube.Engine
 			//{
 			//	world.PlayerCubeState.InAir = true;
 			//
-			world.EventBuffer.Flush();
 		}
 	}
 }

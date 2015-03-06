@@ -27,6 +27,9 @@ namespace LegendOfCube.Engine
 
 		public void ApplyPhysics(float delta, World world)
 		{
+			// Flush away old CollisionEvents
+			world.EventBuffer.Flush();
+
 			// Updating OBBs
 			UpdateWorldSpaceOBBs(world);
 
@@ -121,18 +124,6 @@ namespace LegendOfCube.Engine
 			Vector3 diff = (world.Velocities[i] * delta);
 			worldSpaceOBBs[i].Position += diff;
 
-			// Player specific collision response part 1: Reading PlayerCubeState
-			PlayerCubeState tempCubeState = world.PlayerCubeState;
-			if (i == world.Player.Id)
-			{
-				tempCubeState.OnGround = false;
-				tempCubeState.GroundAxis = Vector3.Zero;
-
-
-				tempCubeState.OnWall = false;
-				tempCubeState.WallAxis = Vector3.Zero;
-			}
-
 			// Iterate until object no longer intersects with anything.
 			float timeLeft = delta;
 			UInt32 intersectionId = FindIntersection(world, i);
@@ -169,26 +160,6 @@ namespace LegendOfCube.Engine
 				float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 				world.Velocities[i] -= (collidingSum * axis);
 
-				// Player specific collision response part 2
-				if (i == world.Player.Id)
-				{
-					float wallDot = Math.Abs(axis.X) + Math.Abs(axis.Z);
-					if (wallDot > 0.90f)
-					{
-						tempCubeState.OnWall = true;
-						tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
-					}
-
-					float groundDot = axis.Y;
-					if (groundDot > 0.70f)
-					{
-						tempCubeState.OnGround = true;
-						tempCubeState.OnWall = false;
-						tempCubeState.GroundAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
-						tempCubeState.WallAxis = Vector3.Zero;
-					}
-				}
-
 				// Attempt to move for remaining time
 				diff = world.Velocities[i] * timeLeft;
 				worldSpaceOBBs[i].Position += diff;
@@ -202,9 +173,7 @@ namespace LegendOfCube.Engine
 			PushOutEntityCollisionAxis(world, i, 15);
 			PushOutEntityFixedAxis(world, i, Vector3.UnitY, 25);
 
-
 			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
-			if (i == world.Player.Id) world.PlayerCubeState = tempCubeState;
 		}
 
 		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)

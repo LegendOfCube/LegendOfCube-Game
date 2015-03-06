@@ -40,8 +40,9 @@ namespace LegendOfCube.Engine
 			AI_system.Update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
-			cameraSystem.OnUpdate(World, delta);
+			EventSystem.CalculateCubeState(World);
 			EventSystem.HandleEvents(World);
+			cameraSystem.OnUpdate(World, delta);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
