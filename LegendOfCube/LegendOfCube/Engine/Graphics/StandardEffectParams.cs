@@ -1,9 +1,10 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine.Graphics
 {
-	public class StandardEffectParams
+	public class StandardEffectParams : ICloneable
 	{
 		public StandardEffectParams()
 		{
@@ -19,5 +20,23 @@ namespace LegendOfCube.Engine.Graphics
 		public Vector4 EmissiveColor { get; set; }
 		public Texture EmissiveTexture { get; set; }
 		public Texture NormalTexture { get; set; }
+		
+		/// <summary>
+		/// Create a shallow copy of the instance.
+		/// </summary>
+		/// <returns>a copy of the object</returns>
+		public object Clone()
+		{
+			return new StandardEffectParams
+			{
+				DiffuseColor = DiffuseColor,
+				DiffuseTexture = DiffuseTexture,
+				SpecularColor = SpecularColor,
+				SpecularTexture = SpecularTexture,
+				EmissiveColor = EmissiveColor,
+				EmissiveTexture = EmissiveTexture,
+				NormalTexture = NormalTexture
+			};
+		}
 	}
 }
