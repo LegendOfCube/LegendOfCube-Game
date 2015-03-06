@@ -248,50 +248,12 @@ namespace LegendOfCube.Engine
 			return time;
 		}
 
-		private static void GatherPoints(ref OBB obb, Vector3[] pointsOut)
-		{
-			obb.Corners(pointsOut);
-			pointsOut[8] = obb.Position + (obb.HalfExtentX * obb.AxisX);
-			pointsOut[9] = obb.Position - (obb.HalfExtentX * obb.AxisX);
-			pointsOut[10] = obb.Position + (obb.HalfExtentY * obb.AxisY);
-			pointsOut[11] = obb.Position - (obb.HalfExtentY * obb.AxisY);
-			pointsOut[12] = obb.Position + (obb.HalfExtentZ * obb.AxisZ);
-			pointsOut[13] = obb.Position - (obb.HalfExtentZ * obb.AxisZ);
-			pointsOut[14] = obb.Position;
-		}
-
-		private readonly Vector3[] obbPointsCollider = new Vector3[15];
-
 		private Vector3 FindCollisionAxis(ref OBB target, ref OBB collider)
 		{
-			// Calculate points for the collider to test against target.
-			GatherPoints(ref collider, obbPointsCollider);
-
-			// Finds the closest point on the target OBB and which point on the
-			// collider that was closest.
-			Vector3 closestTargetPoint = Vector3.Zero;
-			int colliderPointIndex = -1;
-			float shortestDist = float.MaxValue;
-			for (int iCol = 0; iCol < 15; iCol++)
-			{
-				Vector3 temp = target.ClosestPointOnOBB(ref obbPointsCollider[iCol]);
-				float dist = (obbPointsCollider[iCol] - temp).Length();
-				if (0.001f < dist && dist <= shortestDist)
-				{
-					shortestDist = dist;
-					colliderPointIndex = iCol;
-					closestTargetPoint = temp;
-				}
-			}
-
-			// This happens if collider is completely inside target, will probably result in
-			// the resulting axis being filled with NaN's.
-			//Debug.Assert(colliderPointIndex != -1);
-			if (colliderPointIndex == -1) return Vector3.UnitY;
-
-			Vector3 resultDir = obbPointsCollider[colliderPointIndex] - closestTargetPoint;
-			//resultDir.Normalize();
-			//return resultDir;
+			Vector3 colliderPos = collider.Position;
+			Vector3 closestTargetPoint = target.ClosestPointOnOBB(ref colliderPos);
+			if (MathUtils.ApproxEqu(colliderPos, closestTargetPoint, 0.001f)) return Vector3.UnitY;
+			Vector3 resultDir = colliderPos - closestTargetPoint;
 			return target.ClosestAxis(ref resultDir);
 		}
 
