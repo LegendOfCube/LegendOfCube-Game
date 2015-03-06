@@ -9,6 +9,30 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		X_PLUS, X_MINUS, Y_PLUS, Y_MINUS, Z_PLUS, Z_MINUS
 	}
 
+	static class OBBAxisMethods
+	{
+		public static bool IsNegative(this OBBAxis axis)
+		{
+			switch(axis)
+			{
+				case OBBAxis.X_PLUS:
+				case OBBAxis.Y_PLUS:
+				case OBBAxis.Z_PLUS:
+					return false;
+				case OBBAxis.X_MINUS:
+				case OBBAxis.Y_MINUS:
+				case OBBAxis.Z_MINUS:
+					return true;
+			}
+			throw new ArgumentException();
+		}
+
+		public static float Sign(this OBBAxis axis)
+		{
+			return axis.IsNegative() ? -1.0f : 1.0f;
+		}
+	}
+
 	public struct OBB {
 
 		// Private members
