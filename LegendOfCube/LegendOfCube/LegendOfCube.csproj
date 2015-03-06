@@ -84,6 +84,10 @@
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
+    <Compile Include="Levels\Assets\Asset.cs" />
+    <Compile Include="Levels\Assets\Player.cs" />
+    <Compile Include="Levels\Assets\Wall.cs" />
+    <Compile Include="Levels\Assets\Platform.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />
     <Compile Include="Levels\TestLevel1.cs" />
     <Compile Include="Engine\MenuScreen.cs" />
