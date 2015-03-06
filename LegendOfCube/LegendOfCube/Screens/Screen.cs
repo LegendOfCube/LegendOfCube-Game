@@ -9,6 +9,10 @@ namespace LegendOfCube.Screens
 		protected Game Game;
 		public World World;
 
+		protected Screen()
+		{
+
+		}
 		protected Screen(Game game)
 		{
 			this.Game = game;
