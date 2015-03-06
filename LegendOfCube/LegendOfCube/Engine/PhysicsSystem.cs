@@ -158,7 +158,6 @@ namespace LegendOfCube.Engine
 						// Collision response part 2: remove colliding velocity.
 						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 						world.Velocities[i] -= (collidingSum * axis);
-						PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
 
 						// Player specific collision response part 2
 						if (i == world.Player.Id)
