@@ -99,7 +99,7 @@ namespace LegendOfCube.Levels
 
 			//First wallslide
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2,6,10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithTransform(Matrix.CreateScale(2,7,10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(60, 0, -5))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
@@ -123,8 +123,9 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 4, 2))
 				.WithPosition(new Vector3(125, 0, 0))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallDeathEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
