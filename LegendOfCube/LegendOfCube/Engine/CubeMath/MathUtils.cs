@@ -20,5 +20,10 @@ namespace LegendOfCube.Engine.CubeMath
 			if (!ApproxEqu(lhs.Z, rhs.Z, epsilon)) return false;
 			return true;
 		}
+
+		public static float ClampLerp(float value, float minOut, float maxOut, float minIn, float maxIn)
+		{
+			return MathHelper.Clamp(MathHelper.Lerp(minOut, maxOut, minIn + value / (maxIn - minIn)), minOut, maxOut);
+		}
 	}
 }
