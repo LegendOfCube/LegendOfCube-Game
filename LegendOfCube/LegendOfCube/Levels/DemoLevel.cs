@@ -1,4 +1,6 @@
-﻿using LegendOfCube.Engine;
+﻿using System;
+using System.Linq;
+using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
@@ -23,6 +25,14 @@ namespace LegendOfCube.Levels
 				EmissiveTexture = game.Content.Load<Texture>("Models/Cube/cube_emissive"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
+			};
+
+			var deathCubeEffect = new StandardEffectParams
+			{
+				DiffuseColor = new Vector4(new Vector3(0.3f), 1.0f),
+				EmissiveTexture = game.Content.Load<Texture>("Models/Cube/cube_emissive"),
+				SpecularColor = Color.Gray.ToVector4(),
+				EmissiveColor = Color.Red.ToVector4()
 			};
 
 			var platformEffect = new StandardEffectParams
@@ -78,8 +88,8 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
-			world.SpawnPoint = new Vector3(0, 5, 0);
-			//world.SpawnPoint = new Vector3(-190, 0, 50);
+			//world.SpawnPoint = new Vector3(0, 5, 0);
+			world.SpawnPoint = new Vector3(-190, 0, 50);
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -96,7 +106,7 @@ namespace LegendOfCube.Levels
 
 			// Starting platform
 			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2,1,1))
+				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(0, 0, 0))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
@@ -118,7 +128,7 @@ namespace LegendOfCube.Levels
 
 			//First wallslide
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2,7,10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithTransform(Matrix.CreateScale(2, 7, 10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(60, 0, -5))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
@@ -153,7 +163,7 @@ namespace LegendOfCube.Levels
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
-			
+
 			//Checkpoint
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.5f))
@@ -476,6 +486,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
+			//First wall
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 4, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(-187, 0, 41.6f))
@@ -497,6 +508,115 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
+			//Second wall
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-193, 0, 33.6f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-185, 0, 33.59f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 1, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-185, 7.5f, 33.59f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			//Deathcubes
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-190, 3.5f, 38))
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-189, 0, 38))
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-193, 0, 40))
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-191, 0, 36))
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-185, 4f, 36))
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(2))
+					.WithPosition(new Vector3(-185, 0, 38))
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			//Third wall
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 3.5f, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-190, 0, 8.5f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			//Boss 
+			Vector3[] list =
+			{
+				new Vector3(-185, 6, 13), new Vector3(-195, 6, 13), new Vector3(-195, 6, 29),
+				new Vector3(-185, 6, 29), new Vector3(-190, 6, 21), new Vector3(-185, 0.5f, 13),
+				new Vector3(-195, 0.5f, 13), new Vector3(-195, 0.5f, 29), new Vector3(-185, 0.5f, 29),
+				new Vector3(-190, 0.5f, 21)
+			};
+			Random rnd = new Random();
+			list = list.OrderBy(x => rnd.Next()).ToArray();
+
+
+			new EntityBuilder().WithModel(cubeModel)
+					.WithTransform(Matrix.CreateScale(3.5f))
+					.WithPosition(new Vector3(-184, 0, 12))
+					.WithVelocity(Vector3.UnitX * 45, 15)
+					.WithStandardEffectParams(deathCubeEffect)
+					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
+						new Vector3(1, 1, 1)))
+					.WithAI(list, false)
+					.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+					.AddToWorld(world);
+
+			//Finish
 			new EntityBuilder().WithModel(platformModel)
 				.WithPosition(new Vector3(-190, 0, 0))
 				.WithStandardEffectParams(platformEffect)
