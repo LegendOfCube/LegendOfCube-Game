@@ -185,9 +185,22 @@ NormalTexVertexShaderOutput NormalTexVertexShaderFunction(NormalTexVertexShaderI
 
 float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 viewSpacePos, float3 normal)
 {
-	float4 diffuseTextureColor = UseDiffuseTexture ? tex2D(diffuseTextureSampler, textureCoordinate) : WHITE_COLOR;
-	float4 specularTextureColor = UseSpecularTexture ? tex2D(specularTextureSampler, textureCoordinate) : WHITE_COLOR;
-	float4 emissiveTextureColor = UseEmissiveTexture ? tex2D(emissiveTextureSampler, textureCoordinate) : WHITE_COLOR;
+	// Determine material color, from texture if available
+	float4 diffuseColor = MaterialDiffuseColor;
+	if (UseDiffuseTexture)
+	{
+		diffuseColor *= tex2D(diffuseTextureSampler, textureCoordinate);
+	}
+	float4 specularColor = MaterialSpecularColor;
+	if (UseSpecularTexture);
+	{
+		specularColor *= tex2D(specularTextureSampler, textureCoordinate);
+	}
+	float4 emissiveColor = MaterialEmissiveColor;
+	if (UseEmissiveTexture)
+	{
+		emissiveColor *= tex2D(emissiveTextureSampler, textureCoordinate);
+	}
 
 	// Calculate some interesting direction vectors
 	float3 directionToLight = normalize(-DirLight0ViewSpaceDir);
@@ -231,21 +244,20 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 v
 	float fresnelFactor = pow(clamp(1.0 - dot(directionToEye, normal), 0.0, 1.0), 5.0);
 
 	// Apply fresnel effect
-	float4 specularCombined = MaterialSpecularColor * specularTextureColor;
-	float4 fresnelSpecular = specularCombined + (WHITE_COLOR - specularCombined) * fresnelFactor;
+	float4 fresnelSpecular = specularColor + (WHITE_COLOR - specularColor) * fresnelFactor;
 
 	// Determine final colors of different lighting component
-	float4 ambient = AmbientIntensity * MaterialDiffuseColor * diffuseTextureColor; // Currently locked to diffuse color
-	float4 diffuse = visibility * diffuseFactor * DirLight0Color * MaterialDiffuseColor * diffuseTextureColor;
-	float4 specular = visibility * specularFactor * DirLight0Color * fresnelSpecular;
-	float4 emissive = MaterialEmissiveColor * emissiveTextureColor;
+	float4 ambientFinal = AmbientIntensity * diffuseColor; // Currently locked to diffuse color
+	float4 diffuseFinal = visibility * diffuseFactor * DirLight0Color * diffuseColor;
+	float4 specularFinal = visibility * specularFactor * DirLight0Color * fresnelSpecular;
+	float4 emissiveFinal = emissiveColor;
 
 	//return float4(visibility.xxx, 1.0);
 	return saturate(
-		ambient +
-		diffuse +
-		specular +
-		emissive
+		ambientFinal +
+		diffuseFinal +
+		specularFinal +
+		emissiveFinal
 	);
 }
 
