@@ -6,23 +6,28 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
 {
-	public class GameObjectTemplates
+	public class GameObjectTemplateCollection
 	{
 		public GameObjectTemplate PlayerCube { get; private set; }
 		public GameObjectTemplate PlayerCubePlain { get; private set; }
 		public GameObjectTemplate RustPlatform { get; private set; }
 		public GameObjectTemplate BrickWall { get; private set; }
 
+		public Model CubeModel { get; private set; }
+		public Model PlainCubeModel { get; private set; }
+		public Model PlatformModel { get; private set; }
+		public Model BrickWallModel { get; private set; }
+
 		public void LoadContent(ContentManager cm)
 		{
-			var cubeModel = cm.Load<Model>("Models/Cube/cube_clean");
-			var plainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
-			var platformModel = cm.Load<Model>("Models/Platform/platform");
-			var brickWallModel = cm.Load<Model>("Models/Brick_Wall/brick_wall");
+			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
+			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
+			PlatformModel = cm.Load<Model>("Models/Platform/platform");
+			BrickWallModel = cm.Load<Model>("Models/Brick_Wall/brick_wall");
 
 			PlayerCube = new GameObjectTemplate
 			{
-				Model = cubeModel,
+				Model = CubeModel,
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
 				EffectParams = new StandardEffectParams
 				{
@@ -35,8 +40,8 @@ namespace LegendOfCube.Engine
 
 			PlayerCubePlain = new GameObjectTemplate
 			{
-				Model = plainCubeModel,
-				Obb = OBB.CreateAxisAligned(new Vector3(0.5f), 1, 1, 1),
+				Model = PlainCubeModel,
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseColor = new Vector4(new Vector3(0.45f), 1.0f),
@@ -50,7 +55,7 @@ namespace LegendOfCube.Engine
 
 			RustPlatform = new GameObjectTemplate
 			{
-				Model = platformModel,
+				Model = PlatformModel,
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Platform/rusted metal-d"),
@@ -59,10 +64,10 @@ namespace LegendOfCube.Engine
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 10.0f, 0.5f, 10.0f)
 			};
-			
+
 			BrickWall = new GameObjectTemplate
 			{
-				Model = brickWallModel,
+				Model = BrickWallModel,
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),

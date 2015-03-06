@@ -87,7 +87,7 @@ namespace LegendOfCube.Engine.Graphics
 			                              MathHelper.ToRadians(FOV),
 			                              game.GraphicsDevice.Viewport.AspectRatio,
 			                              0.1f,
-			                              1000.0f);
+			                              5000.0f);
 
 			var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
 

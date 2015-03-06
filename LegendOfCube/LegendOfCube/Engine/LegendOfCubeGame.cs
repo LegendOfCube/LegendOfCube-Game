@@ -13,7 +13,7 @@ namespace LegendOfCube.Engine
 
 		private readonly RenderSystem renderSystem;
 		private readonly GraphicsDeviceManager graphicsManager;
-		private GameObjectTemplates gameObjectTemplates;
+		private readonly GameObjectTemplateCollection gameObjectTemplates;
 		private readonly List<Screen> screens;
 		private Screen currentScreen;
 
@@ -26,7 +26,7 @@ namespace LegendOfCube.Engine
 		{
 			Content.RootDirectory = "Content";
 
-			gameObjectTemplates = new GameObjectTemplates();
+			gameObjectTemplates = new GameObjectTemplateCollection();
 
 			graphicsManager = new GraphicsDeviceManager(this);
 			renderSystem = new RenderSystem(this, graphicsManager);

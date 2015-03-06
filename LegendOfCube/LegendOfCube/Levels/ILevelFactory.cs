@@ -9,6 +9,6 @@ namespace LegendOfCube.Levels
 {
 	interface ILevelFactory
 	{
-		World CreateWorld(Game game, GameObjectTemplates gameObjectTemplates);
+		World CreateWorld(Game game, GameObjectTemplateCollection gameObjectTemplateCollection);
 	}
 }

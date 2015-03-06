@@ -17,13 +17,13 @@ namespace LegendOfCube.Engine
 		private readonly CameraSystem cameraSystem;
 		private readonly EventSystem EventSystem;
 		private readonly AISystem AI_system;
+		private readonly GameObjectTemplateCollection gameObjectTemplates;
 
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
-		private GameObjectTemplates gameObjectTemplates;
 
-		public GameScreen(Game game, GameObjectTemplates gameObjectTemplates) : base(game)
+		public GameScreen(Game game, GameObjectTemplateCollection gameObjectTemplates) : base(game)
 		{
 			this.gameObjectTemplates = gameObjectTemplates;
 
