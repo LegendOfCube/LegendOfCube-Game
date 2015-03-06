@@ -27,17 +27,38 @@ namespace LegendOfCube.Engine
 
 		public void ApplyPhysics(float delta, World world)
 		{
+			// Updating OBBs
 			UpdateWorldSpaceOBBs(world);
 
 			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
-				Accelerate(world, i, delta);
-
-				ApplyGravity(world, i, delta);
-
-				if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV))
+				// Acceleration
+				if (world.EntityProperties[i].Satisfies(Properties.VELOCITY | Properties.ACCELERATION))
 				{
-					MoveWithCollisionChecking(world, i, delta);
+					Accelerate(world, i, delta);
+				}
+
+				// Gravity
+				if (world.EntityProperties[i].Satisfies(Properties.VELOCITY | Properties.GRAVITY_FLAG))
+				{
+					ApplyGravity(world, i, delta);
+				}
+
+				// Moving
+				if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV | Properties.DYNAMIC_VELOCITY_FLAG))
+				{
+					if (i == world.Player.Id)
+					{
+						MovePlayerCube(world, i, delta);
+					}
+					else
+					{
+						MoveDynamicWithCollisionChecking(world, i, delta);
+					}	
+				}
+				else if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV))
+				{
+					MoveStaticWithCollisionChecking(world, i, delta);
 				}
 				else if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY))
 				{
@@ -60,38 +81,40 @@ namespace LegendOfCube.Engine
 
 		private void Accelerate(World world, UInt32 i, float delta)
 		{
-			if (world.EntityProperties[i].Satisfies(Properties.VELOCITY | Properties.ACCELERATION))
-			{
-				world.Velocities[i] += (world.Accelerations[i] * delta);
+			world.Velocities[i] += (world.Accelerations[i] * delta);
 
-				// Clamp velocity in X and Y direction
-				Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
-				if (groundVelocity.Length() > world.MaxSpeed[i])
-				{
-					groundVelocity.Normalize();
-					groundVelocity *= world.MaxSpeed[i];
-					world.Velocities[i].X = groundVelocity.X;
-					world.Velocities[i].Z = groundVelocity.Y;
-				}
+			// Clamp velocity in X and Y direction
+			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM. Besides, current implementation too naive.
+			Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+			if (groundVelocity.Length() > world.MaxSpeed[i])
+			{
+				groundVelocity.Normalize();
+				groundVelocity *= world.MaxSpeed[i];
+				world.Velocities[i].X = groundVelocity.X;
+				world.Velocities[i].Z = groundVelocity.Y;
 			}
 		}
 
 		private void ApplyGravity(World world, UInt32 i, float delta)
 		{
-			if (world.EntityProperties[i].Satisfies(Properties.VELOCITY | Properties.GRAVITY_FLAG))
+			// Player moves slower when on wall.
+			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM.
+			if (world.PlayerCubeState.OnWall)
 			{
-				if (world.PlayerCubeState.OnWall)
-				{
-					world.Velocities[i] += (world.Gravity * delta * 0.5f);
-				}
-				else
-				{
-					world.Velocities[i] += (world.Gravity * delta);
-				}
+				world.Velocities[i] += (world.Gravity * delta * 0.5f);
+			}
+			else
+			{
+				world.Velocities[i] += (world.Gravity * delta);
 			}
 		}
+
+		private void MovePlayerCube(World world, UInt32 i, float delta)
+		{
+			MoveDynamicWithCollisionChecking(world, i, delta);
+		}
 		
-		private void MoveWithCollisionChecking(World world, UInt32 i, float delta)
+		private void MoveDynamicWithCollisionChecking(World world, UInt32 i, float delta)
 		{
 			Properties properties = world.EntityProperties[i];
 			OBB oldObb = worldSpaceOBBs[i];
@@ -231,6 +254,11 @@ namespace LegendOfCube.Engine
 			world.Transforms[i].Forward = worldSpaceOBBs[i].AxisZ * world.Transforms[i].Forward.Length();
 			world.Transforms[i].Left = worldSpaceOBBs[i].AxisX * world.Transforms[i].Left.Length();
 			world.Transforms[i].Up = worldSpaceOBBs[i].AxisY * world.Transforms[i].Up.Length();
+		}
+
+		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
+		{
+			MoveDynamicWithCollisionChecking(world, i, delta);
 		}
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
