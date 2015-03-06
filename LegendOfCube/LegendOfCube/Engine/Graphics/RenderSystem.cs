@@ -19,6 +19,8 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM |
 		                                                                Properties.STANDARD_EFFECT);
+	
+		private static readonly Properties HAS_OBB = new Properties(Properties.MODEL_SPACE_BV);
 
 		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 		private const int SHADOW_MAP_SIZE = 2048;
@@ -117,7 +119,7 @@ namespace LegendOfCube.Engine.Graphics
 			// Render OBB wireframes
 			if (world.DebugState.ShowOBBWireFrame)
 			{
-				RenderOBBs(world, visibleEntities, ref cameraView, ref cameraProjection);
+				RenderOBBs(world, ref cameraView, ref cameraProjection);
 			}
 		}
 
@@ -263,9 +265,9 @@ namespace LegendOfCube.Engine.Graphics
 			}
 		}
 
-		private void RenderOBBs(World world, List<Entity> entities, ref Matrix view, ref Matrix projection)
+		private void RenderOBBs(World world, ref Matrix view, ref Matrix projection)
 		{
-			foreach (var entity in entities)
+			foreach (var entity in world.EnumerateEntities(HAS_OBB))
 			{
 				OBB obb = world.ModelSpaceBVs[entity.Id];
 				OBB transformed = OBB.TransformOBB(ref obb, ref world.Transforms[entity.Id]);
