@@ -51,6 +51,9 @@ namespace LegendOfCube.Engine
 		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
+		public readonly float AirMovement;
+		public readonly float StopTime;
+		public readonly float BaseJump;
 		public Vector3 CameraPosition;
 
 		public Vector3 LightDirection;
@@ -96,9 +99,17 @@ namespace LegendOfCube.Engine
 				                   new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
 				                   new Vector3(1, 1, 1));
 			}
+			
 			PlayerCubeState = new PlayerCubeState();
-			Gravity = new Vector3(0.0f, -20f, 0.0f);
+			PlayerCubeState.OnWall = false;
+			PlayerCubeState.OnGround = false;
+			PlayerCubeState.WallAxis = Vector3.Zero;
+			PlayerCubeState.GroundAxis = Vector3.Zero;
 
+			Gravity = new Vector3(0.0f, -20f, 0.0f);
+			AirMovement = 0.4f;
+			StopTime = 0.05f;
+			BaseJump = 12f;
 			SpawnPoint = new Vector3(0, 25, 0);
 			EventBuffer = new EventBuffer();
 		}

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Policy;
+using System.Text;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework;
 
@@ -6,7 +10,7 @@ namespace LegendOfCube.Engine
 {
 	class EventSystem
 	{
-		public void HandleEvents(World world)
+		public static void HandleEvents(World world)
 		{
 			EventBuffer eventBuffer = world.EventBuffer;
 			foreach (var collisionEvent in eventBuffer.CollisionEvents)
@@ -18,7 +22,7 @@ namespace LegendOfCube.Engine
 					world.Transforms[collider].Translation = world.SpawnPoint;
 					world.Velocities[collider] = Vector3.Zero;
 				}
-				else if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
+				if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
 				{
 					while (true)
 					{
@@ -33,7 +37,21 @@ namespace LegendOfCube.Engine
 						}
 					}
 				}
+				if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
+				{
+					world.Velocities[collider] = Vector3.Reflect(collisionEvent.ColliderVelocity, collisionEvent.Axis);
+					world.PlayerCubeState.OnGround = false;
+					world.PlayerCubeState.OnWall = false;
+				}
 			}
+
+			//Magic LINQ from resharper
+			//var playerAffected = eventBuffer.CollisionEvents.Any(collisionEvent => collisionEvent.Collider.Id == world.Player.Id);
+
+			//if (!playerAffected)
+			//{
+			//	world.PlayerCubeState.InAir = true;
+			//
 			world.EventBuffer.Flush();
 		}
 	}

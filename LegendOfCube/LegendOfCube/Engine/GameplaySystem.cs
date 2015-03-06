@@ -13,12 +13,10 @@ namespace LegendOfCube.Engine
 		                                                                        Properties.ACCELERATION |
 		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
-		private const float STOP_TIME = 0.3f;
 		private const float JUMP_TIME = 0.5f;
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
 		private float stopTimeLeft;
-		private const float BASE_JUMP = 12f;
 
 		public void ProcessInputData(World world, float delta)
 		{
@@ -28,11 +26,11 @@ namespace LegendOfCube.Engine
 				// Updates velocities according to input
 				//TODO: Make it better
 				// Movement
-				if(world.InputData[i].GetDirection().Length() <= 0.01)
+				if(world.InputData[i].GetDirection().Length() <= 0.01 && world.PlayerCubeState.OnGround)
 				{
 					if (!isStopping)
 					{
-						stopTimeLeft = STOP_TIME;
+						stopTimeLeft = world.StopTime;
 					}
 					else
 					{
@@ -75,11 +73,30 @@ namespace LegendOfCube.Engine
 					Vector3 directionInput3D = new Vector3(directionInput.X, 0, directionInput.Y);
 					Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
 
-					world.Accelerations[i] = new Vector3(
-					    rotatedInput.X * world.MaxAcceleration[i],
-					    0,
-					    rotatedInput.Z * world.MaxAcceleration[i]
-					);
+					if (!world.PlayerCubeState.OnGround)
+					{
+						world.Accelerations[i] = new Vector3(
+							rotatedInput.X*world.MaxAcceleration[i]*world.AirMovement,
+							0,
+							rotatedInput.Z*world.MaxAcceleration[i]*world.AirMovement
+							);
+
+					}
+					else
+					{
+						world.Accelerations[i] = new Vector3(
+							rotatedInput.X*world.MaxAcceleration[i],
+							0,
+							rotatedInput.Z*world.MaxAcceleration[i]
+							);
+					}
+
+					if (world.PlayerCubeState.OnWall)
+					{
+						float wallAxisAcc = Vector3.Dot(world.Accelerations[i], world.PlayerCubeState.WallAxis);
+						world.Accelerations[i] -= wallAxisAcc*world.PlayerCubeState.WallAxis;
+						world.Velocities[i] -= 5.0f*world.PlayerCubeState.WallAxis;
+					}
 				}
 
 				Vector3 pos = world.Transforms[i].Translation;
@@ -95,17 +112,25 @@ namespace LegendOfCube.Engine
 				// Jumping
 				if (world.InputData[i].IsJumping())
 				{
-					//If the jump button is pressed and the cube is on the ground initiate new jump
-					if (world.InputData[i].NewJump() && !world.PlayerCubeState.InAir)
+					if (world.InputData[i].NewJump() && world.PlayerCubeState.OnWall)
 					{
-						world.Velocities[i].Y = BASE_JUMP;
+						world.Velocities[i].Y = 0;
+						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
+						world.Velocities[i].Y += 1f*world.BaseJump;
+						world.PlayerCubeState.OnWall = false;
+						world.PlayerCubeState.OnGround = false;
+					}
+					//If the jump button is pressed and the cube is on the ground initiate new jump
+					else if (world.InputData[i].NewJump() && world.PlayerCubeState.OnGround)
+					{
+						world.Velocities[i].Y = world.BaseJump;
 						jumpTimeLeft = JUMP_TIME;
-						world.PlayerCubeState.InAir = true;
+						world.PlayerCubeState.OnGround = false;
 					}
 					//If the player is mid jump apply more jumpspeed
 					else if (world.InputData[i].IsJumping() && jumpTimeLeft > 0)
 					{
-						world.Velocities[i].Y += 1.5f*BASE_JUMP*delta;
+						world.Velocities[i].Y += 1.5f*world.BaseJump*delta;
 						jumpTimeLeft -= delta;
 					}
 				}

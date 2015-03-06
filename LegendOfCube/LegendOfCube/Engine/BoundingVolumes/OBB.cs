@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using LegendOfCube.Engine.CubeMath;
 
 namespace LegendOfCube.Engine.BoundingVolumes
 {
@@ -52,6 +53,69 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		public bool Intersects(ref OBB other)
 		{
 			return IntersectionsTests.Intersects(ref this, ref other);
+		}
+
+		public Vector3 ClosestPointOnOBB(ref Vector3 point)
+		{
+			// Algorithm from Real-Time Collision Detection
+
+			Vector3 distToPoint = point - center;
+			Vector3 result = center; // Start at center of Cube.
+
+			// C# is crap so I have to manually unroll this loop.
+			float dist;
+
+			dist = Vector3.Dot(distToPoint, xAxis);
+			if (dist > halfExtents.X) dist = halfExtents.X;
+			if (dist < (-halfExtents.X)) dist = -halfExtents.X;
+			result += (dist * xAxis);
+
+			dist = Vector3.Dot(distToPoint, yAxis);
+			if (dist > halfExtents.Y) dist = halfExtents.Y;
+			if (dist < (-halfExtents.Y)) dist = -halfExtents.Y;
+			result += (dist * yAxis);
+
+			dist = Vector3.Dot(distToPoint, zAxis);
+			if (dist > halfExtents.Z) dist = halfExtents.Z;
+			if (dist < (-halfExtents.Z)) dist = -halfExtents.Z;
+			result += (dist * zAxis);
+
+			return result;
+		}
+
+		/// <summary>
+		/// Finds the axis in this OBB that is closest to specified direction.
+		/// This function does NOT care about extents or lengths of vectors in this calculation,
+		/// only the directions.
+		/// </summary>
+		/// <param name="direction"></param>
+		/// <returns>closest axis</returns>
+		public Vector3 ClosestAxis(ref Vector3 direction)
+		{
+			Vector3 dir = direction;
+			dir.Normalize();
+
+			float xDot = Vector3.Dot(dir, xAxis);
+			float yDot = Vector3.Dot(dir, yAxis);
+			float zDot = Vector3.Dot(dir, zAxis);
+			float xDotAbs = Math.Abs(xDot);
+			float yDotAbs = Math.Abs(yDot);
+			float zDotAbs = Math.Abs(zDot);
+
+			if (yDotAbs >= xDotAbs && yDotAbs >= zDotAbs)
+			{
+				return ((float)Math.Sign(yDot)) * yAxis;
+			}
+			else if (xDotAbs >= yDotAbs && xDotAbs >= zDotAbs)
+			{
+				return ((float)Math.Sign(xDot)) * xAxis;
+			}
+			else if (zDotAbs >= xDotAbs && zDotAbs >= yDotAbs)
+			{
+				return ((float)Math.Sign(zDot)) * zAxis;
+			}
+
+			return Vector3.Zero;
 		}
 
 		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
@@ -271,32 +335,19 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		// Private functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private bool ApproxEqu(float lhs, float rhs, float epsilon)
-		{
-			return (lhs - epsilon) <= rhs && (lhs + epsilon) >= rhs; 
-		}
-
-		private bool ApproxEqu(Vector3 lhs, Vector3 rhs, float epsilon)
-		{
-			if (!ApproxEqu(lhs.X, rhs.X, epsilon)) return false;
-			if (!ApproxEqu(lhs.Y, rhs.Y, epsilon)) return false;
-			if (!ApproxEqu(lhs.Z, rhs.Z, epsilon)) return false;
-			return true;
-		}
-
 		private void EnsureCorrectState()
 		{
 			const float EPSILON = 0.001f;
 
 			// Axes are normalized
-			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) xAxis.Normalize();
-			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) yAxis.Normalize();
-			if (!ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) zAxis.Normalize();
+			if (!MathUtils.ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) xAxis.Normalize();
+			if (!MathUtils.ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) yAxis.Normalize();
+			if (!MathUtils.ApproxEqu(xAxis.Length(), 1.0f, EPSILON)) zAxis.Normalize();
 
 			// Axes are orthogonal
-			if (!ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
-			if (!ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
-			if (!ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!MathUtils.ApproxEqu(Vector3.Dot(xAxis, yAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!MathUtils.ApproxEqu(Vector3.Dot(xAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
+			if (!MathUtils.ApproxEqu(Vector3.Dot(yAxis, zAxis), 0.0f, EPSILON)) throw new ArgumentException("Invalid axis.");
 
 			// Extents
 			if (halfExtents.X <= 0) throw new ArgumentException("halfExtents.X <= 0");

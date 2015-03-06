@@ -142,6 +142,10 @@ namespace LegendOfCube.Engine.Graphics
 
 			foreach (var entity in entities)
 			{
+				if (!world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
+				{
+					continue;
+				}
 				var model = world.Models[entity.Id];
 				var worldTransform = world.Transforms[entity.Id];
 

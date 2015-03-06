@@ -1,4 +1,7 @@
-﻿using LegendOfCube.Engine.Graphics;
+﻿using System;
+using System.Globalization;
+using System.Text;
+using LegendOfCube.Engine.Graphics;
 using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -27,7 +30,7 @@ namespace LegendOfCube.Engine
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
-			physicsSystem = new PhysicsSystem();
+			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			EventSystem = new EventSystem();
 			AI_system = new AISystem();
@@ -52,9 +55,24 @@ namespace LegendOfCube.Engine
 
 			renderSystem.RenderWorld(World);
 
+			StringBuilder text = new StringBuilder();
+			text.Append("CamPos: ");
+			text.AppendLine(UIFormat(World.CameraPosition));
+			text.Append("CamDir: ");
+			text.AppendLine(UIFormat(Vector3.Normalize(World.Transforms[World.Player.Id].Translation - World.CameraPosition)));
+			text.Append("CubePos: ");
+			text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
+			text.Append("CubeVel: ");
+			text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
+			text.Append("CubeAcc: ");
+			text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
+			text.Append("OnGround: ");
+			text.AppendLine(World.PlayerCubeState.OnGround.ToString());
+			text.Append("OnWall: ");
+			text.AppendLine(World.PlayerCubeState.OnWall.ToString());
+
 			spriteBatch.Begin();
-			string output = "CamPos: " + World.CameraPosition + "\nCamDir: " + (World.Transforms[World.Player.Id].Translation - World.CameraPosition) + "\nCubePos: " + World.Transforms[World.Player.Id].Translation;
-			spriteBatch.DrawString(font, output, fontPos, Color.BlueViolet);
+			spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
 			spriteBatch.End();
 		}
 
@@ -67,6 +85,16 @@ namespace LegendOfCube.Engine
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
 			fontPos = new Vector2(0, 0);
+		}
+
+		private static string UIFormat(Vector3 value)
+		{
+			return String.Format("(X: {0}, Y: {1}, Z: {2})", UIFormat(value.X), UIFormat(value.Y), UIFormat(value.Z));
+		}
+
+		private static string UIFormat(float value)
+		{
+			return String.Format(NumberFormatInfo.InvariantInfo, "{0:0.00}", value);
 		}
 	}
 }
