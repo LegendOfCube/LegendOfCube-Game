@@ -343,7 +343,7 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-100, 0, 90))
+				.WithPosition(new Vector3(-100, 0, 85))
 				.WithStandardEffectParams(bounceEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
@@ -370,6 +370,10 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			//Hidden shortcut
+			new EntityBuilder()
+				.WithPosition(new Vector3(-60, 0, 0))
+				.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(50, 1, 10)))
+				.AddToWorld(world);
 
 			//Falling death
 			new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
