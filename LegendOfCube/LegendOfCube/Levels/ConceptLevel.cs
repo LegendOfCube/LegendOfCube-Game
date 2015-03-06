@@ -123,13 +123,21 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, .5f, 10)))
 				.AddToWorld(world);
 
-			// TODO: Moving platforms
+			//Petor request
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-45, 0, 0))
-				.WithVelocity(Vector3.UnitX * 8, 0)
+				.WithTransform(Matrix.CreateScale(4, 1, 1))
+				.WithPosition(new Vector3(-35, 0, 0))
 				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, .5f, 10)))
-				.WithAI(new Vector3[] { new Vector3(-45, 0, 0), new Vector3(-20, 0, 0), new Vector3(-45, 25, 0) }, true)
+				.WithBoundingVolume(new OBB(new Vector3(0, -.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(2))
+				.WithVelocity(Vector3.UnitX * -7, 0)
+				.WithPosition(new Vector3(-55, 0, 0))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithAI(new []{new Vector3(-55, 0, 0), new Vector3(-15, 0, 0)}, true)
 				.AddToWorld(world);
 
 			// Bounce test jump
