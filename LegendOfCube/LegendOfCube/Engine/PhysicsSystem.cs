@@ -152,28 +152,7 @@ namespace LegendOfCube.Engine
 				world.EventBuffer.AddEvent(ref ce);
 
 				// Collision response part 1: Rotate OBB.
-				OBBAxis colAxisEnum = worldSpaceOBBs[i].ClosestAxisEnum(ref axis);
-				switch (colAxisEnum)
-				{
-					case OBBAxis.X_PLUS:
-					case OBBAxis.X_MINUS:
-						worldSpaceOBBs[i].AxisX = colAxisEnum.Sign() * axis;
-						worldSpaceOBBs[i].AxisY = Vector3.Cross(worldSpaceOBBs[i].AxisZ, worldSpaceOBBs[i].AxisX);
-						worldSpaceOBBs[i].AxisZ = Vector3.Cross(worldSpaceOBBs[i].AxisX, worldSpaceOBBs[i].AxisY);
-						break;
-					case OBBAxis.Y_PLUS:
-					case OBBAxis.Y_MINUS:
-						worldSpaceOBBs[i].AxisY = colAxisEnum.Sign() * axis;
-						worldSpaceOBBs[i].AxisX = Vector3.Cross(worldSpaceOBBs[i].AxisY, worldSpaceOBBs[i].AxisZ);
-						worldSpaceOBBs[i].AxisZ = Vector3.Cross(worldSpaceOBBs[i].AxisX, worldSpaceOBBs[i].AxisY);
-						break;
-					case OBBAxis.Z_PLUS:
-					case OBBAxis.Z_MINUS:
-						worldSpaceOBBs[i].AxisZ = colAxisEnum.Sign() * axis;
-						worldSpaceOBBs[i].AxisX = Vector3.Cross(worldSpaceOBBs[i].AxisY, worldSpaceOBBs[i].AxisZ);
-						worldSpaceOBBs[i].AxisY = Vector3.Cross(worldSpaceOBBs[i].AxisZ, worldSpaceOBBs[i].AxisX);
-						break;
-				}
+				RotateOBB(ref worldSpaceOBBs[i], ref axis);
 
 				// Move OBB to collision point
 				worldSpaceOBBs[i].Position -= diff;
@@ -247,18 +226,12 @@ namespace LegendOfCube.Engine
 				world.PlayerCubeState = tempCubeState;
 			}
 
-			// Update translation in transform
-			Vector3 obbDiff = worldSpaceOBBs[i].Position - oldObb.Position;
-			world.Transforms[i].Translation += obbDiff;
-			// Update rotation: This is probably a really stupid way.
-			world.Transforms[i].Forward = worldSpaceOBBs[i].AxisZ * world.Transforms[i].Forward.Length();
-			world.Transforms[i].Left = worldSpaceOBBs[i].AxisX * world.Transforms[i].Left.Length();
-			world.Transforms[i].Up = worldSpaceOBBs[i].AxisY * world.Transforms[i].Up.Length();
+			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
 		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
 		{
-			MoveDynamicWithCollisionChecking(world, i, delta);
+			
 		}
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
@@ -334,6 +307,43 @@ namespace LegendOfCube.Engine
 
 			float timeUntilCol = FindTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 4);
 			collider.Position += (timeUntilCol * accumulatedStep * -axisOut);
+		}
+
+		private void RotateOBB(ref OBB obbOut, ref Vector3 axis)
+		{
+			OBBAxis colAxisEnum = obbOut.ClosestAxisEnum(ref axis);
+			switch (colAxisEnum)
+			{
+				case OBBAxis.X_PLUS:
+				case OBBAxis.X_MINUS:
+					obbOut.AxisX = colAxisEnum.Sign() * axis;
+					obbOut.AxisY = Vector3.Cross(obbOut.AxisZ, obbOut.AxisX);
+					obbOut.AxisZ = Vector3.Cross(obbOut.AxisX, obbOut.AxisY);
+					break;
+				case OBBAxis.Y_PLUS:
+				case OBBAxis.Y_MINUS:
+					obbOut.AxisY = colAxisEnum.Sign() * axis;
+					obbOut.AxisX = Vector3.Cross(obbOut.AxisY, obbOut.AxisZ);
+					obbOut.AxisZ = Vector3.Cross(obbOut.AxisX, obbOut.AxisY);
+					break;
+				case OBBAxis.Z_PLUS:
+				case OBBAxis.Z_MINUS:
+					obbOut.AxisZ = colAxisEnum.Sign() * axis;
+					obbOut.AxisX = Vector3.Cross(obbOut.AxisY, obbOut.AxisZ);
+					obbOut.AxisY = Vector3.Cross(obbOut.AxisZ, obbOut.AxisX);
+					break;
+			}
+		}
+
+		private void TransformFromOBBs(ref OBB oldOBB, ref OBB newOBB, ref Matrix transformOut)
+		{
+			// Update translation in transform
+			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
+			transformOut.Translation += obbDiff;
+			// Update rotation: This is probably a really stupid way.
+			transformOut.Forward = newOBB.AxisZ * transformOut.Forward.Length();
+			transformOut.Left = newOBB.AxisX * transformOut.Left.Length();
+			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
 		}
 	}
 }
