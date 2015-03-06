@@ -53,6 +53,8 @@ namespace LegendOfCube.Engine
 			renderSystem.RenderWorld(World);
 
 			StringBuilder text = new StringBuilder();
+			text.Append("FPS: ");
+			text.AppendLine(UIFormat(1.0f/(float)gameTime.ElapsedGameTime.TotalSeconds));
 			text.Append("CamPos: ");
 			text.AppendLine(UIFormat(World.CameraPosition));
 			text.Append("CamDir: ");
