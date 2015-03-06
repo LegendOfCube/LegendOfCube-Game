@@ -73,7 +73,14 @@ namespace LegendOfCube.Engine
 				// Apply gravity
 				if (properties.Satisfies(HAS_GRAVITY))
 				{
-					world.Velocities[i] += (world.Gravity * delta);
+					if (world.PlayerCubeState.OnWall)
+					{
+						world.Velocities[i] += (world.Gravity*delta*0.5f);
+					}
+					else
+					{
+						world.Velocities[i] += (world.Gravity*delta);
+					}
 				}
 
 				// Update position
@@ -89,6 +96,10 @@ namespace LegendOfCube.Engine
 					{
 						tempCubeState.OnGround = false;
 						tempCubeState.GroundAxis = Vector3.Zero;
+
+
+						tempCubeState.OnWall = false;
+						tempCubeState.WallAxis = Vector3.Zero;
 					}
 
 					// Iterate until object no longer intersects with anything.
