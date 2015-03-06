@@ -120,20 +120,7 @@ namespace LegendOfCube.Engine
 						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), axis, world.Velocities[i]);
 						world.EventBuffer.AddEvent(ref ce);
 
-						// Move OBB to collision point
-						worldSpaceOBBs[i].Position -= diff;
-						float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
-						                     ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
-						diff = world.Velocities[i] * timeUntilCol;
-						worldSpaceOBBs[i].Position += diff;
-
-						// Update timeLeft
-						timeLeft -= timeUntilCol;
-						if (timeLeft <= 0.0f) break;
-
-						// Collision response
-						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-						world.Velocities[i] -= (collidingSum * axis);
+						// Collision response part 1: Rotate OBB.
 						OBBAxis colAxisEnum = worldSpaceOBBs[i].ClosestAxisEnum(ref axis);
 						switch (colAxisEnum)
 						{
@@ -156,6 +143,22 @@ namespace LegendOfCube.Engine
 								worldSpaceOBBs[i].AxisY = Vector3.Cross(worldSpaceOBBs[i].AxisZ, worldSpaceOBBs[i].AxisX);
 								break;
 						}
+
+						// Move OBB to collision point
+						worldSpaceOBBs[i].Position -= diff;
+						float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
+						                     ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
+						diff = world.Velocities[i] * timeUntilCol;
+						worldSpaceOBBs[i].Position += diff;
+
+						// Update timeLeft
+						timeLeft -= timeUntilCol;
+						if (timeLeft <= 0.0f) break;
+
+						// Collision response part 2: remove colliding velocity.
+						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+						world.Velocities[i] -= (collidingSum * axis);
+						PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
 
 						// Player specific collision response part 2
 						if (i == world.Player.Id)
