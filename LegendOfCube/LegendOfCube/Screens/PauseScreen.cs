@@ -5,7 +5,7 @@ using LegendOfCube.Engine;
 
 namespace LegendOfCube.Screens
 {
-	class MenuScreen : Screen
+	class PauseScreen : Screen
 	{
 		private readonly InputSystem inputSystem;
 		private readonly MenuInputSystem menuInputSystem;
@@ -19,7 +19,7 @@ namespace LegendOfCube.Screens
 		private Texture2D select;
 		private int selection;
 
-		public MenuScreen(Game game) : base(game)
+		public PauseScreen(Game game) : base(game)
 		{
 			World = new World(1002);
 			inputSystem = new InputSystem(game);

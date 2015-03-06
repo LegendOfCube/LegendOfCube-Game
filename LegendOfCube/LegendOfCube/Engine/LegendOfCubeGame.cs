@@ -35,7 +35,7 @@ namespace LegendOfCube.Engine
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
-			screens = new List<Screen> {new GameScreen(this), new MenuScreen(this)};
+			screens = new List<Screen> {new GameScreen(this), new PauseScreen(this)};
 			currentScreen = screens[0];
 			SwitcherSystem = new SwitcherSystem(this);
 
@@ -112,7 +112,7 @@ namespace LegendOfCube.Engine
 				screens[1].SetWorld(currentScreen.World);
 				currentScreen = screens[1];
 			}
-			else if (currentScreen is MenuScreen)
+			else if (currentScreen is PauseScreen)
 			{
 
 				this.IsMouseVisible = false;
