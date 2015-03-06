@@ -120,6 +120,30 @@ namespace LegendOfCube.Engine
 						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), axis, world.Velocities[i]);
 						world.EventBuffer.AddEvent(ref ce);
 
+						// Collision response part 1: Rotate OBB.
+						OBBAxis colAxisEnum = worldSpaceOBBs[i].ClosestAxisEnum(ref axis);
+						switch (colAxisEnum)
+						{
+							case OBBAxis.X_PLUS:
+							case OBBAxis.X_MINUS:
+								worldSpaceOBBs[i].AxisX = colAxisEnum.Sign() * axis;
+								worldSpaceOBBs[i].AxisY = Vector3.Cross(worldSpaceOBBs[i].AxisZ, worldSpaceOBBs[i].AxisX);
+								worldSpaceOBBs[i].AxisZ = Vector3.Cross(worldSpaceOBBs[i].AxisX, worldSpaceOBBs[i].AxisY);
+								break;
+							case OBBAxis.Y_PLUS:
+							case OBBAxis.Y_MINUS:
+								worldSpaceOBBs[i].AxisY = colAxisEnum.Sign() * axis;
+								worldSpaceOBBs[i].AxisX = Vector3.Cross(worldSpaceOBBs[i].AxisY, worldSpaceOBBs[i].AxisZ);
+								worldSpaceOBBs[i].AxisZ = Vector3.Cross(worldSpaceOBBs[i].AxisX, worldSpaceOBBs[i].AxisY);
+								break;
+							case OBBAxis.Z_PLUS:
+							case OBBAxis.Z_MINUS:
+								worldSpaceOBBs[i].AxisZ = colAxisEnum.Sign() * axis;
+								worldSpaceOBBs[i].AxisX = Vector3.Cross(worldSpaceOBBs[i].AxisY, worldSpaceOBBs[i].AxisZ);
+								worldSpaceOBBs[i].AxisY = Vector3.Cross(worldSpaceOBBs[i].AxisZ, worldSpaceOBBs[i].AxisX);
+								break;
+						}
+
 						// Move OBB to collision point
 						worldSpaceOBBs[i].Position -= diff;
 						float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
@@ -131,7 +155,7 @@ namespace LegendOfCube.Engine
 						timeLeft -= timeUntilCol;
 						if (timeLeft <= 0.0f) break;
 
-						// Collision response
+						// Collision response part 2: remove colliding velocity.
 						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
 						world.Velocities[i] -= (collidingSum * axis);
 
@@ -139,14 +163,14 @@ namespace LegendOfCube.Engine
 						if (i == world.Player.Id)
 						{
 							float wallDot = Math.Abs(axis.X) + Math.Abs(axis.Z);
-							if (wallDot > 0.95f)
+							if (wallDot > 0.90f)
 							{
 								tempCubeState.OnWall = true;
 								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
 							}
 
 							float groundDot = axis.Y;
-							if (groundDot > 0.75f)
+							if (groundDot > 0.70f)
 							{
 								tempCubeState.OnGround = true;
 								tempCubeState.OnWall = false;
@@ -195,6 +219,10 @@ namespace LegendOfCube.Engine
 					// Update translation in transform
 					Vector3 obbDiff = worldSpaceOBBs[i].Position - oldObb.Position;
 					world.Transforms[i].Translation += obbDiff;
+					// Update rotation: This is probably a really stupid way.
+					world.Transforms[i].Forward = worldSpaceOBBs[i].AxisZ * world.Transforms[i].Forward.Length();
+					world.Transforms[i].Left = worldSpaceOBBs[i].AxisX * world.Transforms[i].Left.Length();
+					world.Transforms[i].Up = worldSpaceOBBs[i].AxisY * world.Transforms[i].Up.Length();
 				}
 				else if (properties.Satisfies(MOVABLE_NO_BV))
 				{
