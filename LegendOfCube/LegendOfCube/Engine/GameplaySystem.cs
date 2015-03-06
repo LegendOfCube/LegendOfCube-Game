@@ -1,4 +1,5 @@
 ﻿using System;
+using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
@@ -115,7 +116,7 @@ namespace LegendOfCube.Engine
 					if (world.InputData[i].NewJump() && world.PlayerCubeState.OnWall)
 					{
 						world.Velocities[i].Y = 0;
-						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
+						world.Velocities[i] += world.PlayerCubeState.WallAxis * 20;
 						world.Velocities[i].Y += 1f*world.BaseJump;
 						world.PlayerCubeState.OnWall = false;
 						world.PlayerCubeState.OnGround = false;
@@ -135,6 +136,16 @@ namespace LegendOfCube.Engine
 					}
 				}
 			}
+
+			// Color cube sides if on wall
+			var playerEffect = world.StandardEffectParams[world.Player.Id];
+			var cubeState = world.PlayerCubeState;
+			var newColor = cubeState.OnWall ? Color.Red : Color.Cyan;
+
+			float speed = world.Velocities[world.Player.Id].Length();
+			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[world.Player.Id]);
+
+			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
 		}
 	}
 }

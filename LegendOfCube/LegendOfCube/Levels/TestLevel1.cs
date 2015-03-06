@@ -98,7 +98,8 @@ namespace LegendOfCube.Levels
 				otherCubes[i] =
 					new EntityBuilder().WithModel(cubeModel)
 						.WithTransform(Matrix.CreateScale(rnd.Next(1, 25), rnd.Next(1, 25), rnd.Next(1, 25))*
-						               Matrix.CreateRotationY(MathHelper.TwoPi * (float) rnd.NextDouble()))
+						               Matrix.CreateRotationY(MathHelper.TwoPi * (float)rnd.NextDouble()) *
+						               Matrix.CreateRotationX(MathHelper.TwoPi * (float)rnd.NextDouble()))
 						.WithPosition(new Vector3(rnd.Next(-500, 500), rnd.Next(0, 1), rnd.Next(-500, 500)))
 						.WithStandardEffectParams(otherCubeEffect)
 						.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0),
