@@ -43,39 +43,42 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
-				SpecularColor = Color.DarkRed.ToVector4()
+				DiffuseColor = Color.DarkRed.ToVector4()
 			};
 
 			var bounceEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
-				DiffuseColor = Color.Yellow.ToVector4()
+				DiffuseColor = Color.Yellow.ToVector4(),
+				SpecularColor = Color.Gray.ToVector4()
 			};
 
 			var platformCheckpointEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
-				DiffuseColor = Color.DarkTurquoise.ToVector4()
+				DiffuseColor = Color.DarkTurquoise.ToVector4(),
+				SpecularColor = Color.Gray.ToVector4()
 			};
 
 			var platformDeathEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
-				DiffuseColor = Color.Red.ToVector4()
+				DiffuseColor = Color.Red.ToVector4(),
+				SpecularColor = Color.Gray.ToVector4()
 			};
 
 			var platformTeleportEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
-				DiffuseColor = Color.LightBlue.ToVector4()
+				DiffuseColor = Color.LightBlue.ToVector4(),
+				SpecularColor = Color.Gray.ToVector4()
 			};
 
 			world.SpawnPoint = new Vector3(0, 5, 0);
-			//world.SpawnPoint = new Vector3(-100, 0, 20);
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -305,16 +308,15 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(0.5f))
 				.WithPosition(new Vector3(265, 0, 30))
-				.WithStandardEffectParams(platformCheckpointEffect)
+				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
 				.AddToWorld(world);
 
 			//Teleport!!
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(265, 10, 45))
-				.WithStandardEffectParams(platformCheckpointEffect)
+				.WithStandardEffectParams(platformTeleportEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
 				.AddToWorld(world);
@@ -322,7 +324,7 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(-100, 10, 0))
-				.WithStandardEffectParams(platformCheckpointEffect)
+				.WithStandardEffectParams(platformTeleportEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
 				.AddToWorld(world);
@@ -330,8 +332,9 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2))
 				.WithPosition(new Vector3(-100, 0, 20))
-				.WithStandardEffectParams(platformEffect)
+				.WithStandardEffectParams(platformCheckpointEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
 				.AddToWorld(world);
 
 			//Bounce puzzle
@@ -375,10 +378,92 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(50, 1, 10)))
 				.AddToWorld(world);
 
+			new EntityBuilder()
+				.WithPosition(new Vector3(-150, 0, 0))
+				.WithBoundingVolume(new OBB(new Vector3(0, 0, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(40, 1, 10)))
+				.AddToWorld(world);
+
+			//First labyrinth
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 7f))
+				.WithPosition(new Vector3(-180, 0, 75))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-187, 0, 91.6f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-193, 0, 83.5f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-187, 0, 75))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-193, 0, 66.5f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-187, 0, 58.4f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 7f))
+				.WithPosition(new Vector3(-200, 0, 75))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithTransform(Matrix.CreateScale(2.4f, 2, 3.9f))
+				.WithPosition(new Vector3(-190, 11, 75))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-190, 0, 50))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 7f))
+				.WithPosition(new Vector3(-200, 0, 25))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-190, 0, 0))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
 			//Falling death
-			new EntityBuilder().WithTransform(Matrix.CreateScale(1900))
-				.WithPosition(new Vector3(0, -2000.0f, 0))
-				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+			new EntityBuilder()
+				.WithPosition(new Vector3(0, -100.0f, 0))
+				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1000, 1, 1000)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
