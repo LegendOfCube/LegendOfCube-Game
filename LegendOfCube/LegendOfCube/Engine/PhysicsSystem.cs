@@ -199,34 +199,12 @@ namespace LegendOfCube.Engine
 			}
 
 			// Attempt to resolve remaining intersections
-			iterations = 0;
-			while (intersectionId != UInt32.MaxValue)
-			{
-				if (iterations > 15) break;
-				iterations++;
-				Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
-				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
-				intersectionId = FindIntersection(world, i);
-			}
+			PushOutEntityCollisionAxis(world, i, 15);
+			PushOutEntityFixedAxis(world, i, Vector3.UnitY, 25);
 
-			// Emergency step. If we haven't resolved collisions until now we just move collider to the top.
-			iterations = 0;
-			while (intersectionId != UInt32.MaxValue)
-			{
-				if (iterations > 100) break;
-				iterations++;
-				Vector3 emergencyAxis = Vector3.UnitY;
-				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref emergencyAxis);
-				intersectionId = FindIntersection(world, i);
-			}
-
-			// Player specific collision response part 3: Setting PlayerCubeState
-			if (i == world.Player.Id)
-			{
-				world.PlayerCubeState = tempCubeState;
-			}
 
 			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+			if (i == world.Player.Id) world.PlayerCubeState = tempCubeState;
 		}
 
 		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
@@ -307,6 +285,33 @@ namespace LegendOfCube.Engine
 
 			float timeUntilCol = FindTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 4);
 			collider.Position += (timeUntilCol * accumulatedStep * -axisOut);
+		}
+
+		private void PushOutEntityCollisionAxis(World world, UInt32 i, int maxNumIterations)
+		{
+			int iterations = 0;
+			UInt32 intersectionId = FindIntersection(world, i);
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations > maxNumIterations) break;
+				iterations++;
+				Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
+				intersectionId = FindIntersection(world, i);
+			}
+		}
+
+		private void PushOutEntityFixedAxis(World world, UInt32 i, Vector3 axis, int maxNumIterations)
+		{
+			int iterations = 0;
+			UInt32 intersectionId = FindIntersection(world, i);
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations > maxNumIterations) break;
+				iterations++;
+				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
+				intersectionId = FindIntersection(world, i);
+			}
 		}
 
 		private void RotateOBB(ref OBB obbOut, ref Vector3 axis)
