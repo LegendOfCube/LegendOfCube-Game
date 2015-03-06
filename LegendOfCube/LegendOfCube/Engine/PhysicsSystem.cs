@@ -145,7 +145,7 @@ namespace LegendOfCube.Engine
 								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
 							}
 
-							float groundDot = Vector3.Dot(axis, Vector3.UnitY);
+							float groundDot = axis.Y;
 							if (groundDot > 0.8f)
 							{
 								tempCubeState.OnGround = true;
@@ -294,19 +294,6 @@ namespace LegendOfCube.Engine
 			//return resultDir;
 			return target.ClosestAxis(ref resultDir);
 		}
-
-		/*private void pushOut(ref OBB collider, ref OBB target)
-		{
-			Vector3 colliderPos = collider.Position;
-			Vector3 axisOut = findCollisionAxis(ref target, ref colliderPos);
-			if (axisOut == Vector3.Zero)
-			{
-				Vector3 toCollider = collider.Position - target.Position;
-				axisOut = findClosestOBBAxis(ref target, ref toCollider);
-			}
-
-			pushOut(ref collider, ref target, ref axisOut);
-		}*/
 
 		private void PushOut(ref OBB collider, ref OBB target, ref Vector3 axisOut)
 		{
