@@ -79,6 +79,7 @@ namespace LegendOfCube.Levels
 			};
 
 			world.SpawnPoint = new Vector3(0, 5, 0);
+			//world.SpawnPoint = new Vector3(-190, 0, 50);
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -384,7 +385,6 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			//First labyrinth
-
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 4f, 7f))
 				.WithPosition(new Vector3(-180, 0, 75))
@@ -441,6 +441,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
+			//Labyrinth #2
 			new EntityBuilder().WithModel(platformModel)
 				.WithPosition(new Vector3(-190, 0, 50))
 				.WithStandardEffectParams(platformEffect)
@@ -450,6 +451,48 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 4f, 7f))
 				.WithPosition(new Vector3(-200, 0, 25))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4f, 7f))
+				.WithPosition(new Vector3(-180, 0, 25))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithTransform(Matrix.CreateScale(2.2f, 2, 3.5f))
+				.WithPosition(new Vector3(-190, 0, 25))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithTransform(Matrix.CreateScale(2.4f, 2, 3.9f))
+				.WithPosition(new Vector3(-190, 11, 25))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 4, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-187, 0, 41.6f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-195, 0, 41.59f))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(3.5f, 1, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-195, 7.5f, 41.59f))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
