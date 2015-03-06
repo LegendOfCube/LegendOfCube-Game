@@ -1,7 +1,8 @@
 ﻿using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
+using LegendOfCube.Engine;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Screens
 {
 	public abstract class Screen
 	{

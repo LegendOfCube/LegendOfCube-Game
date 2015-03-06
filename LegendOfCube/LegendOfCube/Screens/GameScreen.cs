@@ -5,8 +5,9 @@ using LegendOfCube.Engine.Graphics;
 using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
