@@ -50,14 +50,7 @@ namespace LegendOfCube.Engine
 				// Moving
 				if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV | Properties.DYNAMIC_VELOCITY_FLAG))
 				{
-					if (i == world.Player.Id)
-					{
-						MovePlayerCube(world, i, delta);
-					}
-					else
-					{
-						MoveDynamicWithCollisionChecking(world, i, delta);
-					}	
+					MoveDynamicWithCollisionChecking(world, i, delta);
 				}
 				else if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV))
 				{
@@ -110,11 +103,6 @@ namespace LegendOfCube.Engine
 			{
 				world.Velocities[i] += (world.Gravity * delta);
 			}
-		}
-
-		private void MovePlayerCube(World world, UInt32 i, float delta)
-		{
-			MoveDynamicWithCollisionChecking(world, i, delta);
 		}
 		
 		private void MoveDynamicWithCollisionChecking(World world, UInt32 i, float delta)
