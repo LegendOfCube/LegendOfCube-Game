@@ -139,14 +139,14 @@ namespace LegendOfCube.Engine
 						if (i == world.Player.Id)
 						{
 							float wallDot = Math.Abs(axis.X) + Math.Abs(axis.Z);
-							if (wallDot > 0.9f)
+							if (wallDot > 0.95f)
 							{
 								tempCubeState.OnWall = true;
 								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
 							}
 
 							float groundDot = axis.Y;
-							if (groundDot > 0.8f)
+							if (groundDot > 0.75f)
 							{
 								tempCubeState.OnGround = true;
 								tempCubeState.OnWall = false;
