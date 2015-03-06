@@ -19,8 +19,19 @@ namespace LegendOfCube.Engine
 				var collider = collisionEvent.Collider.Id;
 				if (world.EntityProperties[collidedWith].Satisfies((Properties.DEATH_ZONE_FLAG)))
 				{
-					world.Transforms[collider].Translation = world.SpawnPoint;
-					world.Velocities[collider] = Vector3.Zero;
+					if (collider == world.Player.Id)
+					{
+						world.Transforms[collider].Translation = world.SpawnPoint;
+						world.Velocities[collider] = Vector3.Zero;
+					}
+				}
+				else if (world.EntityProperties[collider].Satisfies(((Properties.DEATH_ZONE_FLAG))))
+				{
+					if (collidedWith == world.Player.Id)
+					{
+						world.Transforms[collidedWith].Translation = world.SpawnPoint;
+						world.Velocities[collidedWith] = Vector3.Zero;
+					}
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
 				{
