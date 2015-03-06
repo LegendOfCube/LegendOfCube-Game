@@ -107,7 +107,6 @@ namespace LegendOfCube.Engine
 		
 		private void MoveDynamicWithCollisionChecking(World world, UInt32 i, float delta)
 		{
-			Properties properties = world.EntityProperties[i];
 			OBB oldObb = worldSpaceOBBs[i];
 			Vector3 diff = (world.Velocities[i] * delta);
 			worldSpaceOBBs[i].Position += diff;
@@ -120,18 +119,14 @@ namespace LegendOfCube.Engine
 			{
 				if (iterations >= 10) break;
 				iterations++;
-				Debug.Assert(intersectionId != i);
 
-				// Collision axis
-				Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
-				Debug.Assert(!float.IsNaN(axis.X));
+				// Calculate collision axis and rotate collider
+				Vector3 collisionAxis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
+				RotateOBB(ref worldSpaceOBBs[i], ref collisionAxis);
 
 				// Add Collision Event to EventBuffer
-				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), axis, world.Velocities[i]);
+				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxis, world.Velocities[i]);
 				world.EventBuffer.AddEvent(ref ce);
-
-				// Collision response part 1: Rotate OBB.
-				RotateOBB(ref worldSpaceOBBs[i], ref axis);
 
 				// Move OBB to collision point
 				worldSpaceOBBs[i].Position -= diff;
@@ -144,16 +139,13 @@ namespace LegendOfCube.Engine
 				timeLeft -= timeUntilCol;
 				if (timeLeft <= 0.0f) break;
 
-				// Collision response part 2: remove colliding velocity.
-				float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-				world.Velocities[i] -= (collidingSum * axis);
+				// Remove velocity in colliding axis
+				float collidingSum = Vector3.Dot(world.Velocities[i], collisionAxis);
+				world.Velocities[i] -= (collidingSum * collisionAxis);
 
-				// Attempt to move for remaining time
+				// Move in remaining velocity for the remaining time and then check for more intersections
 				diff = world.Velocities[i] * timeLeft;
 				worldSpaceOBBs[i].Position += diff;
-
-				// Do it all again
-				//intersectionId = UInt32.MaxValue;
 				intersectionId = FindIntersection(world, i);
 			}
 
