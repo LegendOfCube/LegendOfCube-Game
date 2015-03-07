@@ -54,7 +54,9 @@ namespace LegendOfCube.Engine
 		public readonly float AirMovement;
 		public readonly float StopTime;
 		public readonly float BaseJump;
+
 		public Vector3 CameraPosition;
+		public Vector3 CameraTarget;
 
 		public Vector3 LightDirection;
 		public float AmbientIntensity;

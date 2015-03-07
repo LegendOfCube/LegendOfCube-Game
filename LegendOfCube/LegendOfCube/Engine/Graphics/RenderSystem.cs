@@ -81,7 +81,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		public void RenderWorld(World world)
 		{
-			Vector3 cameraTarget = world.Transforms[world.Player.Id].Translation;
+			Vector3 cameraTarget = world.CameraTarget;
 			Matrix cameraView = Matrix.CreateLookAt(world.CameraPosition, cameraTarget, Vector3.Up);
 			Matrix cameraProjection = Matrix.CreatePerspectiveFieldOfView(
 			                              MathHelper.ToRadians(FOV),

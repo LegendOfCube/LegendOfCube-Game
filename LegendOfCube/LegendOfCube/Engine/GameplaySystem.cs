@@ -60,7 +60,7 @@ namespace LegendOfCube.Engine
 
 					// Rotate input
 
-					Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
+					Vector3 cameraDiff = world.CameraPosition - world.CameraTarget;
 
 					// Calculate angle formed along ground by the cameras position relative the player
 					float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);

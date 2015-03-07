@@ -58,7 +58,7 @@ namespace LegendOfCube.Engine
 			text.Append("CamPos: ");
 			text.AppendLine(UIFormat(World.CameraPosition));
 			text.Append("CamDir: ");
-			text.AppendLine(UIFormat(Vector3.Normalize(World.Transforms[World.Player.Id].Translation - World.CameraPosition)));
+			text.AppendLine(UIFormat(Vector3.Normalize(World.CameraTarget - World.CameraPosition)));
 			text.Append("CubePos: ");
 			text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
 			text.Append("CubeVel: ");
