@@ -1,0 +1,72 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using LegendOfCube.Engine;
+using LegendOfCube.Engine.BoundingVolumes;
+using LegendOfCube.Engine.Graphics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
+namespace LegendOfCube.Levels
+{
+	class WallClimbLevelFactory : ILevelFactory
+	{
+		public World CreateWorld(Game game, GameObjectTemplateCollection gameObjectTemplates)
+		{
+			World world = new World(1000);
+			world.SpawnPoint = new Vector3(-30.0f, 5.0f, 0.0f);
+			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
+
+			world.Player = new EntityBuilder().WithTemplate(gameObjectTemplates.PlayerCube)
+				.WithPosition(world.SpawnPoint)
+				.WithVelocity(Vector3.Zero, 15)
+				.WithAcceleration(Vector3.Zero, 30)
+				.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
+				.AddToWorld(world);
+
+			var groundEffect = new StandardEffectParams
+			{
+				DiffuseColor = Color.GreenYellow.ToVector4()
+			};
+			var massiveWallEffect = new StandardEffectParams
+			{
+				DiffuseColor = Color.BlueViolet.ToVector4()
+			};
+			var platformEffect = new StandardEffectParams
+			{
+				DiffuseColor = Color.LightBlue.ToVector4()
+			};
+
+			new EntityBuilder()
+				.WithTemplate(gameObjectTemplates.PlayerCubePlain)
+				.WithStandardEffectParams(groundEffect)
+				.WithTransform(Matrix.CreateScale(5000.0f, 1.0f, 5000.0f))
+				.AddToWorld(world);
+
+			new EntityBuilder()
+				.WithTemplate(gameObjectTemplates.PlayerCubePlain)
+				.WithStandardEffectParams(massiveWallEffect)
+				.WithTransform(Matrix.CreateScale(10.0f, 600.0f, 200.0f))
+				.WithPosition(new Vector3(5.0f, 0.0f, 0.0f))
+				.AddToWorld(world);
+
+			var platformBuilder = new EntityBuilder()
+				.WithTemplate(gameObjectTemplates.RustPlatform)
+				.WithStandardEffectParams(platformEffect);
+
+			world.LightDirection = Vector3.Normalize(new Vector3(1.0f, -1.0f, -1.0f));
+			world.AmbientIntensity = 0.3f;
+			var rnd = new Random(0);
+
+			for (int i = 0; i < 600; i++)
+			{
+				platformBuilder
+					.WithPosition(new Vector3(-5.0f, rnd.Next(5, 600), rnd.Next(-100, 100)))
+					.AddToWorld(world);
+			}
+
+			return world;
+		}
+	}
+}
