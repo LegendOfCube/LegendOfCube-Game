@@ -158,7 +158,32 @@ namespace LegendOfCube.Engine
 
 		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
 		{
-			
+			OBB oldObb = worldSpaceOBBs[i];
+			worldSpaceOBBs[i].Position += (world.Velocities[i] * delta);
+
+			// Iterate until object no longer intersects with anything.
+			UInt32 intersectionId = FindIntersection(world, i);
+			int iterations = 0;
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations >= 10) break;
+				iterations++;
+
+				// Push out target
+				Vector3 collisionAxisInv = -FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
+				if (world.EntityProperties[intersectionId].Satisfies(Properties.DYNAMIC_VELOCITY_FLAG))
+				{
+					PushOutEntityFixedAxis(world, intersectionId, collisionAxisInv, 10);
+				}
+
+				// Add Collision Event to EventBuffer
+				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxisInv, world.Velocities[i]);
+				world.EventBuffer.AddEvent(ref ce);
+
+				intersectionId = FindIntersection(world, i);
+			}
+
+			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
