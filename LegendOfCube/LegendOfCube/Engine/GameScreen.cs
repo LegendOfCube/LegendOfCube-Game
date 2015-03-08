@@ -66,6 +66,10 @@ namespace LegendOfCube.Engine
 			text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
 			text.Append("CubeAcc: ");
 			text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
+			text.Append("CubeInputVel: ");
+			text.AppendLine(UIFormat(World.InputVelocities[World.Player.Id]));
+			text.Append("CubeInputAcc: ");
+			text.AppendLine(UIFormat(World.InputAccelerations[World.Player.Id]));
 			text.Append("OnGround: ");
 			text.AppendLine(World.PlayerCubeState.OnGround.ToString());
 			text.Append("OnWall: ");

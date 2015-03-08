@@ -1,6 +1,7 @@
 ﻿using System;
 using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace LegendOfCube.Engine
 {
@@ -21,18 +22,23 @@ namespace LegendOfCube.Engine
 
 		public void ProcessInputData(World world, float delta)
 		{
-			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+			UInt32 i = world.Player.Id;
+			if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT))
 			{
-				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
-				if (i != world.Player.Id) continue; // Hack for now.
-
-				// Apply movement input
-				if (world.InputData[i].GetDirection().Length() > 0.01f)
-				{
-					Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
-					world.Velocities[i] = rotatedInputDir * world.MaxSpeed[i];
-				}
+				Debug.Assert(false);
 			}
+
+			// Clean previous input data
+			world.InputVelocities[i] = Vector3.Zero;
+			world.InputAccelerations[i] = Vector3.Zero;
+
+			// Apply movement input
+			if (world.InputData[i].GetDirection().Length() > 0.01f)
+			{
+				Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
+				world.InputVelocities[i] = rotatedInputDir * world.MaxSpeed[i];
+			}
+
 
 			/*for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{

@@ -78,11 +78,15 @@ namespace LegendOfCube.Engine
 		private void Accelerate(World world, UInt32 i, float delta)
 		{
 			world.Velocities[i] += (world.Accelerations[i] * delta);
+			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
+			{
+				world.Velocities[i] += (world.InputAccelerations[i] * delta);
+			}
 
 			// Clamp velocity in X and Y direction
 			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM. Besides, current implementation too naive.
-			Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
-			/*if (groundVelocity.Length() > world.MaxSpeed[i])
+			/*Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+			if (groundVelocity.Length() > world.MaxSpeed[i])
 			{
 				groundVelocity.Normalize();
 				groundVelocity *= world.MaxSpeed[i];
@@ -108,7 +112,7 @@ namespace LegendOfCube.Engine
 		private void MoveDynamicWithCollisionChecking(World world, UInt32 i, float delta)
 		{
 			OBB oldObb = worldSpaceOBBs[i];
-			Vector3 diff = (world.Velocities[i] * delta);
+			Vector3 diff = Velocity(world, i) * delta;
 			worldSpaceOBBs[i].Position += diff;
 
 			// Iterate until object no longer intersects with anything.
@@ -125,14 +129,14 @@ namespace LegendOfCube.Engine
 				RotateOBB(ref worldSpaceOBBs[i], ref collisionAxis);
 
 				// Add Collision Event to EventBuffer
-				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxis, world.Velocities[i]);
+				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxis, Velocity(world, i));
 				world.EventBuffer.AddEvent(ref ce);
 
 				// Move OBB to collision point
 				worldSpaceOBBs[i].Position -= diff;
 				float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
-									 ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
-				diff = world.Velocities[i] * timeUntilCol;
+									 ref worldSpaceOBBs[i], Velocity(world, i), timeLeft, 2);
+				diff = Velocity(world, i) * timeUntilCol;
 				worldSpaceOBBs[i].Position += diff;
 
 				// Update timeLeft
@@ -140,11 +144,10 @@ namespace LegendOfCube.Engine
 				if (timeLeft <= 0.0f) break;
 
 				// Remove velocity in colliding axis
-				float collidingSum = Vector3.Dot(world.Velocities[i], collisionAxis);
-				world.Velocities[i] -= (collidingSum * collisionAxis);
+				RemoveVelocityInAxis(world, i, ref collisionAxis);
 
 				// Move in remaining velocity for the remaining time and then check for more intersections
-				diff = world.Velocities[i] * timeLeft;
+				diff = Velocity(world, i) * timeLeft;
 				worldSpaceOBBs[i].Position += diff;
 				intersectionId = FindIntersection(world, i);
 			}
@@ -159,7 +162,7 @@ namespace LegendOfCube.Engine
 		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
 		{
 			OBB oldObb = worldSpaceOBBs[i];
-			worldSpaceOBBs[i].Position += (world.Velocities[i] * delta);
+			worldSpaceOBBs[i].Position += (Velocity(world, i) * delta);
 
 			// Iterate until object no longer intersects with anything.
 			UInt32 intersectionId = FindIntersection(world, i);
@@ -177,7 +180,7 @@ namespace LegendOfCube.Engine
 				}
 
 				// Add Collision Event to EventBuffer
-				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxisInv, world.Velocities[i]);
+				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxisInv, Velocity(world, i));
 				world.EventBuffer.AddEvent(ref ce);
 
 				intersectionId = FindIntersection(world, i);
@@ -188,7 +191,7 @@ namespace LegendOfCube.Engine
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
 		{
-			world.Transforms[i].Translation += (world.Velocities[i] * delta);
+			world.Transforms[i].Translation += (Velocity(world, i) * delta);
 		}
 
 		// Private functions: Helpers
@@ -323,6 +326,27 @@ namespace LegendOfCube.Engine
 			transformOut.Forward = newOBB.AxisZ * transformOut.Forward.Length();
 			transformOut.Left = newOBB.AxisX * transformOut.Left.Length();
 			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
+		}
+
+		private Vector3 Velocity(World world, UInt32 i)
+		{
+			Vector3 vel = world.Velocities[i];
+			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
+			{
+				vel += world.InputVelocities[i];
+			}
+			return vel;
+		}
+
+		private void RemoveVelocityInAxis(World world, UInt32 i, ref Vector3 axis)
+		{
+			float collidingSum = Vector3.Dot(world.Velocities[i], axis);
+			world.Velocities[i] -= (collidingSum * axis);
+			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
+			{
+				collidingSum = Vector3.Dot(world.InputVelocities[i], axis);
+				world.InputVelocities[i] -= (collidingSum * axis);
+			}
 		}
 	}
 }
