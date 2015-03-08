@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                   Properties.INPUT_FLAG |
+		                                                                   Properties.INPUT |
 		                                                                   Properties.ACCELERATION |
 		                                                                   Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity

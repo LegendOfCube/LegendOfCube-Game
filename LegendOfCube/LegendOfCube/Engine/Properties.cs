@@ -18,7 +18,7 @@ namespace LegendOfCube.Engine
 		public const UInt64 VELOCITY = 1 << 1;
 		public const UInt64 ACCELERATION = 1 << 2;
 		public const UInt64 GRAVITY_FLAG = 1 << 3;
-		public const UInt64 INPUT_FLAG = 1 << 4;
+		public const UInt64 INPUT = 1 << 4;
 		public const UInt64 MODEL = 1 << 5;
 		public const UInt64 STANDARD_EFFECT = 1 << 6;
 		public const UInt64 MODEL_SPACE_BV = 1 << 7;
