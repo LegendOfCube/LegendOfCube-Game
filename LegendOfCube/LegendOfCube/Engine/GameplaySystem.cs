@@ -20,6 +20,12 @@ namespace LegendOfCube.Engine
 		private bool isStopping = false;
 		private float stopTimeLeft;*/
 
+		private const float MAX_JUMP_HEIGHT = 8.0f;
+		private const float MIN_JUMP_HEIGHT = 2.0f;
+		private const float JUMP_BASE_SPEED = 25.0f;
+
+		private float jumpTime = 0.0f;
+
 		public void ProcessInputData(World world, float delta)
 		{
 			UInt32 i = world.Player.Id;
@@ -28,15 +34,50 @@ namespace LegendOfCube.Engine
 				Debug.Assert(false);
 			}
 
+			float MIN_JUMP_TIME = CalculateJumpTime(MIN_JUMP_HEIGHT, world.Gravity.Y);
+			float MAX_JUMP_TIME = CalculateJumpTime(MAX_JUMP_HEIGHT, world.Gravity.Y);
+
 			// Clean previous input data
 			world.InputVelocities[i] = Vector3.Zero;
 			world.InputAccelerations[i] = Vector3.Zero;
+
+			// Hack: Clean previous velocity and acceleration
+			// TODO: Implement this properly with friction (or some sort of general decay) in PhysicsSystem
+			world.Velocities[i].X = 0.0f;
+			world.Velocities[i].Z = 0.0f;
+			world.Accelerations[i] = Vector3.Zero;
 
 			// Apply movement input
 			if (world.InputData[i].GetDirection().Length() > 0.01f)
 			{
 				Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
 				world.InputVelocities[i] = rotatedInputDir * world.MaxSpeed[i];
+			}
+
+			// New jump
+			if (world.InputData[i].NewJump())
+			{
+				if (world.PlayerCubeState.OnGround)
+				{
+					world.Velocities[i].Y = 0.0f;
+					world.InputVelocities[i].Y = JUMP_BASE_SPEED;
+					jumpTime += delta;
+				}
+			}
+
+			// Continuing jump
+			else if (jumpTime > 0.0f)
+			{
+				jumpTime += delta;
+				world.InputVelocities[i].Y = JUMP_BASE_SPEED;
+				if (jumpTime > MAX_JUMP_TIME)
+				{
+					jumpTime = 0.0f;
+				}
+				else if (jumpTime > MIN_JUMP_TIME && !world.InputData[i].IsJumping())
+				{
+					jumpTime = 0.0f;
+				}
 			}
 
 
@@ -169,6 +210,16 @@ namespace LegendOfCube.Engine
 
 		// Private functions: Helpers
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		float CalculateJumpTime(float height, float gravity)
+		{
+			float a = (2.0f * JUMP_BASE_SPEED) / gravity;
+			float b = (-2.0f * height) / gravity;
+			float sqrt = (float)Math.Sqrt(((a*a)/4.0f) - b);
+			//float t1 = -(a / 2.0f) + sqrt; // Time point when going back down
+			float t2 = -(a / 2.0f) - sqrt; // Time point when going up
+			return t2;
+		}
 
 		Vector3 RotateInputDirectionRelativeCamera(World world, UInt32 i)
 		{
