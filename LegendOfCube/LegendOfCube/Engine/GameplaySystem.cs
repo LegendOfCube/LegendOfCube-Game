@@ -10,18 +10,31 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                        Properties.INPUT_FLAG |
-		                                                                        Properties.ACCELERATION |
-		                                                                        Properties.VELOCITY);
+		                                                                   Properties.INPUT_FLAG |
+		                                                                   Properties.ACCELERATION |
+		                                                                   Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
-		private const float JUMP_TIME = 0.5f;
+		/*private const float JUMP_TIME = 0.5f;
 		private float jumpTimeLeft = 1f;
 		private bool isStopping = false;
-		private float stopTimeLeft;
+		private float stopTimeLeft;*/
 
 		public void ProcessInputData(World world, float delta)
 		{
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+			{
+				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
+				if (i != world.Player.Id) continue; // Hack for now.
+
+				// Apply movement input
+				if (world.InputData[i].GetDirection().Length() > 0.01f)
+				{
+					Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
+					world.Velocities[i] = rotatedInputDir * world.MaxSpeed[i];
+				}
+			}
+
+			/*for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
 				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
 				// Updates velocities according to input
@@ -145,7 +158,28 @@ namespace LegendOfCube.Engine
 			float speed = world.Velocities[world.Player.Id].Length();
 			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[world.Player.Id]);
 
-			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
+			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();*/
+		}
+
+		// Private functions: Helpers
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		Vector3 RotateInputDirectionRelativeCamera(World world, UInt32 i)
+		{
+			Vector2 direction = world.InputData[i].GetDirection();
+			Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
+
+			// Calculate angle formed along ground by the cameras position relative the player
+			float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);
+
+			// Invert y input
+			direction.Y = -direction.Y;
+
+			// Rotate in 3D, since don't have 2x2 matrix class
+			Vector3 directionInput3D = new Vector3(direction.X, 0, direction.Y);
+			Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
+
+			return rotatedInput;
 		}
 	}
 }
