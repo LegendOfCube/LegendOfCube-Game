@@ -26,18 +26,19 @@ namespace LegendOfCube.Engine
 		public UInt32 HighestOccupiedId;
 
 		// Describe what components an entity has
-		public readonly Properties[] EntityProperties ;
-		public readonly Matrix[] Transforms;
-		public readonly Vector3[] Velocities;
-		public readonly Vector3[] Accelerations;
-		public readonly InputData[] InputData;
-		public readonly float[] MaxSpeed;
-		public readonly float[] MaxAcceleration;
-		public readonly OBB[] ModelSpaceBVs;
-		public readonly AIComponent[] AIComponents;
-
-		public readonly Model[] Models;
-		public readonly StandardEffectParams[] StandardEffectParams;
+		public readonly Properties[] EntityProperties;
+		public readonly Matrix[] Transforms; // TRANSFORM
+		public readonly Vector3[] Velocities; // VELOCITY
+		public readonly Vector3[] Accelerations; // ACCELERATION
+		public readonly InputData[] InputData; // INPUT
+		public readonly Vector3[] InputVelocities; // INPUT
+		public readonly Vector3[] InputAccelerations; // INPUT
+		public readonly float[] MaxSpeed; // VELOCITY
+		public readonly float[] MaxAcceleration; // ACCELERATION
+		public readonly OBB[] ModelSpaceBVs; // MODEL_SPACE_BV
+		public readonly AIComponent[] AIComponents; // AI_FLAG
+		public readonly Model[] Models; // MODEL
+		public readonly StandardEffectParams[] StandardEffectParams; // STANDARD_EFFECT
 
 		// Player state
 		public PlayerCubeState PlayerCubeState;
@@ -79,6 +80,8 @@ namespace LegendOfCube.Engine
 			Accelerations = new Vector3[MaxNumEntities];
 			Transforms = new Matrix[MaxNumEntities];
 			InputData = new InputData[MaxNumEntities];
+			InputVelocities = new Vector3[MaxNumEntities];
+			InputAccelerations = new Vector3[MaxNumEntities];
 			MaxSpeed = new float[MaxNumEntities];
 			MaxAcceleration = new float[MaxNumEntities];
 			ModelSpaceBVs = new OBB[MaxNumEntities];
@@ -87,17 +90,17 @@ namespace LegendOfCube.Engine
 			Models = new Model[MaxNumEntities];
 			StandardEffectParams = new StandardEffectParams[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
-				Velocities[i] = new Vector3(0, 0, 0);
-				Accelerations[i] = new Vector3(0, 0, 0);
+				Velocities[i] = Vector3.Zero;
+				Accelerations[i] = Vector3.Zero;
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
+				InputVelocities[i] = Vector3.Zero;
+				InputAccelerations[i] = Vector3.Zero;
 				MaxSpeed[i] = 0;
 				MaxAcceleration[i] = 0;
 				Models[i] = null;
 				StandardEffectParams[i] = null;
-				ModelSpaceBVs[i] = new OBB(new Vector3(0, 0, 0),
-				                   new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
-				                   new Vector3(1, 1, 1));
+				ModelSpaceBVs[i] = new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, Vector3.One);
 			}
 			
 			PlayerCubeState = new PlayerCubeState();
@@ -199,17 +202,17 @@ namespace LegendOfCube.Engine
 			NumEntities--;
 
 			// Clean-up components
-			Velocities[entityToDestroy.Id] = new Vector3(0, 0, 0);
-			Accelerations[entityToDestroy.Id] = new Vector3(0, 0, 0);
+			Velocities[entityToDestroy.Id] = Vector3.Zero;
+			Accelerations[entityToDestroy.Id] = Vector3.Zero;
 			Transforms[entityToDestroy.Id] = Matrix.Identity;
-
+			InputData[entityToDestroy.Id] = null;
+			InputVelocities[entityToDestroy.Id] = Vector3.Zero;
+			InputAccelerations[entityToDestroy.Id] = Vector3.Zero;
+			MaxSpeed[entityToDestroy.Id] = 0;
+			MaxAcceleration[entityToDestroy.Id] = 0;
 			Models[entityToDestroy.Id] = null;
 			StandardEffectParams[entityToDestroy.Id] = null;
-
-			ModelSpaceBVs[entityToDestroy.Id] = new OBB(new Vector3(0, 0, 0),
-			                                    new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1),
-			                                    new Vector3(1, 1, 1));
+			ModelSpaceBVs[entityToDestroy.Id] = new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, Vector3.One);
 		}
-
 	}
 }
