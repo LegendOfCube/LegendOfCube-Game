@@ -22,55 +22,118 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 		public static bool Intersects(ref OBB boxA, ref OBB boxB)
 		{
-			// We're using SAT (Separating Axis Theorem). There are 15 axes we need to test to determine if intersection occurred.
+			// SAT (Separating Axis Theorem) from Real-Time Collision Detection (chapter 4.4.1 OBB-OBB Intersection)
 
-			Matrix3x3 aToWorld = Matrix3x3.CreateChangeOfBasis(boxA.AxisX, boxA.AxisY, boxA.AxisZ);
-			Matrix3x3 bToWorld = Matrix3x3.CreateChangeOfBasis(boxB.AxisX, boxB.AxisY, boxB.AxisZ);
-			Matrix3x3 worldToA;
-			Matrix3x3.Transpose(ref aToWorld, out worldToA); // Transpose is equal to inverse since orthogonal matrix
-			Matrix3x3 worldToB;
-			Matrix3x3.Transpose(ref bToWorld, out worldToB);
+			// Compute rotation matrix expressing boxB in boxA's coordinate frame
+			Matrix3x3 R;
+			R.M11 = Vector3.Dot(boxA.AxisX, boxB.AxisX);
+			R.M12 = Vector3.Dot(boxA.AxisX, boxB.AxisY);
+			R.M13 = Vector3.Dot(boxA.AxisX, boxB.AxisZ);
+			R.M21 = Vector3.Dot(boxA.AxisY, boxB.AxisX);
+			R.M22 = Vector3.Dot(boxA.AxisY, boxB.AxisY);
+			R.M23 = Vector3.Dot(boxA.AxisY, boxB.AxisZ);
+			R.M31 = Vector3.Dot(boxA.AxisZ, boxB.AxisX);
+			R.M32 = Vector3.Dot(boxA.AxisZ, boxB.AxisY);
+			R.M33 = Vector3.Dot(boxA.AxisZ, boxB.AxisZ);
 
-			Matrix3x3 bToA;
-			Matrix3x3.Multiply(ref worldToA, ref bToWorld, out bToA);
-			Matrix3x3 aToB;
-			Matrix3x3.Multiply(ref worldToB, ref aToWorld, out aToB);
+			// Compute translation vector t
+			Vector3 t = boxB.Position - boxA.Position;
+			// Bring translation into boxA's coordinate frame
+			t = new Vector3(Vector3.Dot(t, boxA.AxisX), Vector3.Dot(t, boxA.AxisY), Vector3.Dot(t, boxA.AxisZ));
 
-			// Epsilon term to counteract arithmetic errors when two edges are parallell
-			Matrix3x3 bToAAbs;
-			MakeAbsEpsilonMatrix(ref bToA, out bToAAbs);
-			Matrix3x3 aToBAbs;
-			MakeAbsEpsilonMatrix(ref aToB, out aToBAbs);
+			// Compute common subexpressions. Add in an epsilon term to counteract arithmetic 
+			// errors when two edges are parallel and their cross product is (near) null.
+			Matrix3x3 AbsR;
+			AbsR.M11 = Math.Abs(R.M11) + EPSILON;
+			AbsR.M12 = Math.Abs(R.M12) + EPSILON;
+			AbsR.M13 = Math.Abs(R.M13) + EPSILON;
+			AbsR.M21 = Math.Abs(R.M21) + EPSILON;
+			AbsR.M22 = Math.Abs(R.M22) + EPSILON;
+			AbsR.M23 = Math.Abs(R.M23) + EPSILON;
+			AbsR.M31 = Math.Abs(R.M31) + EPSILON;
+			AbsR.M32 = Math.Abs(R.M32) + EPSILON;
+			AbsR.M33 = Math.Abs(R.M33) + EPSILON;
 
-			// Computes translation vector between boxA and B and transforms it into A space
-			Vector3 translVec = boxB.Position - boxA.Position;
-			Vector3 translVecA;
-			Matrix3x3.Transform(ref worldToA, ref translVec, out translVecA);
+			float ra, rb;
 
-			// Test all 15 axes in order of importance
-			float radiusA, radiusB;
+			// Test axis L = boxA.AxisX
+			ra = boxA.HalfExtentX;
+			rb = boxB.HalfExtentX * AbsR.M11 + boxB.HalfExtentY * AbsR.M12 + boxB.HalfExtentZ * AbsR.M13;
+			if (Math.Abs(t.X) > ra + rb) return false;
 
-			// Axes Ax, Ay and Az
-			for (uint i = 1; i <= 3; i++)
-			{
-				radiusA = At(boxA.HalfExtents, i);
-				radiusB = Vector3.Dot(bToAAbs.RowAt(i), boxB.HalfExtents);
-				if (Math.Abs(At(translVecA, i)) > radiusA + radiusB) return false;
-			}
+			// Test axis L = boxA.AxisY
+			ra = boxA.HalfExtentY;
+			rb = boxB.HalfExtentX * AbsR.M21 + boxB.HalfExtentY * AbsR.M22 + boxB.HalfExtentZ * AbsR.M23;
+			if (Math.Abs(t.Y) > ra + rb) return false;
 
-			// Axes Bx, By and Bz
-			for (uint i = 1; i <= 3; i++ )
-			{
-				radiusA = Vector3.Dot(aToBAbs.RowAt(i), boxA.HalfExtents);
-				radiusB = At(boxB.HalfExtents, i);
-				if (Math.Abs(Vector3.Dot(aToB.RowAt(i), translVecA)) > radiusA + radiusB) return false;
-			}
+			// Test axis L = boxA.AxisZ
+			ra = boxA.HalfExtentZ;
+			rb = boxB.HalfExtentX * AbsR.M31 + boxB.HalfExtentY * AbsR.M32 + boxB.HalfExtentZ * AbsR.M33;
+			if (Math.Abs(t.Z) > ra + rb) return false;
 
-			// TODO: 9 more axes to test
-			// This means that about 15% of the time intersection will be reported when it's not actually happening.
-			// Test is still conservative.
+			// Test axis L = boxB.AxisX
+			ra = boxA.HalfExtentX * AbsR.M11 + boxA.HalfExtentY * AbsR.M21 + boxA.HalfExtentZ * AbsR.M31;
+			rb = boxB.HalfExtentX;
+			if (Math.Abs(t.X * R.M11 + t.Y * R.M21 + t.Z * R.M31) > ra + rb) return false;
 
-			// Since we made it this far we have not disproven intersection, so it might be true.
+			// Test axis L = boxB.AxisY
+			ra = boxA.HalfExtentX * AbsR.M12 + boxA.HalfExtentY * AbsR.M22 + boxA.HalfExtentZ * AbsR.M32;
+			rb = boxB.HalfExtentY;
+			if (Math.Abs(t.X * R.M12 + t.Y * R.M22 + t.Z * R.M32) > ra + rb) return false;
+
+			// Test axis L = boxB.AxisZ
+			ra = boxA.HalfExtentX * AbsR.M13 + boxA.HalfExtentY * AbsR.M23 + boxA.HalfExtentZ * AbsR.M33;
+			rb = boxB.HalfExtentZ;
+			if (Math.Abs(t.X * R.M13 + t.Y * R.M23 + t.Z * R.M33) > ra + rb) return false;
+
+			// 6 most important tests done, now for less important tests.
+
+			// Test axis L = boxA.AxisX x boxB.AxisX
+			ra = boxA.HalfExtentY * AbsR.M31 + boxA.HalfExtentZ * AbsR.M21;
+			rb = boxB.HalfExtentY * AbsR.M13 + boxB.HalfExtentZ * AbsR.M12;
+			if (Math.Abs(t.Z * R.M21 - t.Y * R.M31) > ra + rb) return false;
+
+			// Test axis L = boxA.AxisX x boxB.AxisY
+			ra = boxA.HalfExtentY * AbsR.M32 + boxA.HalfExtentZ * AbsR.M22;
+			rb = boxB.HalfExtentX * AbsR.M13 + boxB.HalfExtentZ * AbsR.M11;
+			if (Math.Abs(t.Z * R.M22 - t.Y * R.M32) > ra + rb) return false;
+			
+			// Test axis L = boxA.AxisX x boxB.AxisZ
+			ra = boxA.HalfExtentY * AbsR.M33 + boxA.HalfExtentZ * AbsR.M23;
+			rb = boxB.HalfExtentX * AbsR.M12 + boxB.HalfExtentY * AbsR.M11;
+			if (Math.Abs(t.Z * R.M23 - t.Y * R.M33) > ra + rb) return false;
+			
+			// Test axis L = boxA.AxisY x boxB.AxisX
+			ra = boxA.HalfExtentX * AbsR.M31 + boxA.HalfExtentZ * AbsR.M11;
+			rb = boxB.HalfExtentY * AbsR.M23 + boxB.HalfExtentZ * AbsR.M22;
+			if (Math.Abs(t.X * R.M31 - t.Z * R.M11) > ra + rb) return false;
+
+			// Test axis L = boxA.AxisY x boxB.AxisY
+			ra = boxA.HalfExtentX * AbsR.M32 + boxA.HalfExtentZ * AbsR.M12;
+			rb = boxB.HalfExtentX * AbsR.M23 + boxB.HalfExtentZ * AbsR.M21;
+			if (Math.Abs(t.X * R.M32 - t.Z * R.M12) > ra + rb) return false;
+			
+			// Test axis L = boxA.AxisY x boxB.AxisZ
+			ra = boxA.HalfExtentX * AbsR.M33 + boxA.HalfExtentZ * AbsR.M13;
+			rb = boxB.HalfExtentX * AbsR.M22 + boxB.HalfExtentY * AbsR.M21;
+			if (Math.Abs(t.X * R.M33 - t.Z * R.M13) > ra + rb) return false;
+			
+			// Test axis L = boxA.AxisZ x boxB.AxisX
+			ra = boxA.HalfExtentX * AbsR.M21 + boxA.HalfExtentY * AbsR.M11;
+			rb = boxB.HalfExtentY * AbsR.M33 + boxB.HalfExtentZ * AbsR.M32;
+			if (Math.Abs(t.Y * R.M11 - t.X * R.M21) > ra + rb) return false;
+			
+			// Test axis L = boxA.AxisZ x boxB.AxisY
+			ra = boxA.HalfExtentX * AbsR.M22 + boxA.HalfExtentY * AbsR.M12;
+			rb = boxB.HalfExtentX * AbsR.M33 + boxB.HalfExtentZ * AbsR.M31;
+			if (Math.Abs(t.Y * R.M12 - t.X * R.M22) > ra + rb) return false;
+			
+			// Test axis L = boxA.AxisZ x boxB.AxisZ
+			ra = boxA.HalfExtentX * AbsR.M23 + boxA.HalfExtentY * AbsR.M13;
+			rb = boxB.HalfExtentX * AbsR.M32 + boxB.HalfExtentY * AbsR.M31;
+			if (Math.Abs(t.Y * R.M13 - t.X * R.M23) > ra + rb) return false;
+
+			// No separating axis found, must be intersecting.
 			return true;
 		}
 
