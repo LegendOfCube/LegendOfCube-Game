@@ -88,10 +88,10 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
-			world.SpawnPoint = new Vector3(0, 0, 0);
+			//world.SpawnPoint = new Vector3(0, 0, 0);
 			//world.SpawnPoint = new Vector3(-190, 0, 50);
 			//world.SpawnPoint = new Vector3(255, -35, 0);
-			//world.SpawnPoint = (new Vector3(425, 0, 65));
+			world.SpawnPoint = (new Vector3(425, 0, 65));
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -242,29 +242,44 @@ namespace LegendOfCube.Levels
 
 			//Wall climb
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 18, 2))
-				.WithPosition(new Vector3(430, 0, 70))
+				.WithTransform(Matrix.CreateScale(2, 5, 2))
+				.WithPosition(new Vector3(430, -2, 70))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 15, 2))
-				.WithPosition(new Vector3(420, 0, 70.01f))
+				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(425, 3, 75))
 				.WithStandardEffectParams(wallEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(415.5f, 37.51f, 70))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(2, 5, 2))
+				.WithPosition(new Vector3(420, 8, 70))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(425, 12, 65))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(2, 5, 2))
+				.WithPosition(new Vector3(430, 17, 70))
+				.WithStandardEffectParams(wallEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			//Teleport!!
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(415, 45, 80))
+				.WithPosition(new Vector3(425, 25, 80))
 				.WithStandardEffectParams(platformTeleportEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
