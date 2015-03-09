@@ -14,6 +14,18 @@ namespace LegendOfCube.Levels
 
 		public static void CreateLevel(World world, Game game)
 		{
+			world.SpawnPoint = new Vector3(0, 0, 0);
+			//world.SpawnPoint = new Vector3(-190, 0, 50);
+			//world.SpawnPoint = new Vector3(255, -35, 0);
+			//world.SpawnPoint = (new Vector3(425, 0, 65));
+			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
+			world.LightDirection = Vector3.Normalize(new Vector3
+			{
+				X = -1.0f,
+				Y = -1.0f,
+				Z = -1.0f
+			});
+			world.AmbientIntensity = 0.45f;
 
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
@@ -87,11 +99,6 @@ namespace LegendOfCube.Levels
 				DiffuseColor = Color.Purple.ToVector4(),
 				//SpecularColor = Color.Purple.ToVector4()
 			};
-
-			world.SpawnPoint = new Vector3(0, 0, 0);
-			//world.SpawnPoint = new Vector3(-190, 0, 50);
-			//world.SpawnPoint = new Vector3(255, -35, 0);
-			//world.SpawnPoint = (new Vector3(425, 0, 65));
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -616,14 +623,6 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1000, 1, 1000)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
-
-			world.LightDirection = Vector3.Normalize(new Vector3
-			{
-				X = 3,
-				Y = -1,
-				Z = 0
-			});
-			world.AmbientIntensity = 0.45f;
 		}
 	}
 }
