@@ -88,10 +88,10 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
-			//world.SpawnPoint = new Vector3(0, 0, 0);
+			world.SpawnPoint = new Vector3(0, 0, 0);
 			//world.SpawnPoint = new Vector3(-190, 0, 50);
 			//world.SpawnPoint = new Vector3(255, -35, 0);
-			world.SpawnPoint = (new Vector3(425, 0, 65));
+			//world.SpawnPoint = (new Vector3(425, 0, 65));
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
