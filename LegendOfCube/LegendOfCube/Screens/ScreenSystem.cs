@@ -31,7 +31,6 @@ namespace LegendOfCube.Screens
 				currentScreen = type;
 			}
 			screens[(int)type] = screen;
-			//screen.LoadContent();
 		}
 
 		public void SwitchScreen(ScreenTypes indicator)
