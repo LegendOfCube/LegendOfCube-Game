@@ -20,10 +20,12 @@ namespace LegendOfCube.Engine
 		private bool isStopping = false;
 		private float stopTimeLeft;*/
 
-		private const float MAX_JUMP_HEIGHT = 5.0f;
-		private const float MIN_JUMP_HEIGHT = 3.0f;
-		private const float JUMP_BASE_SPEED = 15.0f;
-		private const float JUMP_GRAVITY = (JUMP_BASE_SPEED * JUMP_BASE_SPEED) / (-2.0f * MAX_JUMP_HEIGHT);
+		private const float MAX_JUMP_RELEASE_HEIGHT = 5.0f;
+		private const float MIN_JUMP_RELEASE_HEIGHT = 1.0f;
+		private const float JUMP_SPEED = 16.0f;
+		private const float JUMP_SPEED_AT_APEX = 14.0f; // This value must be close to JUMP_SPEED, otherwise it will look like cube hits ceiling. A lower value will give more precise jumps.
+		private const float MAX_JUMP_RELEASE_TIME = MAX_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
+		private const float MIN_JUMP_RELEASE_TIME = MIN_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 
 		private float jumpTime = 0.0f;
 
@@ -35,13 +37,6 @@ namespace LegendOfCube.Engine
 				Debug.Assert(false);
 			}
 
-			float MIN_JUMP_TIME = CalculateJumpTime(MIN_JUMP_HEIGHT, JUMP_GRAVITY);
-			float MAX_JUMP_TIME = CalculateJumpTime(MAX_JUMP_HEIGHT, JUMP_GRAVITY);
-
-			// Clean previous input data
-			world.InputVelocities[i] = Vector3.Zero;
-			world.InputAccelerations[i] = Vector3.Zero;
-
 			// Hack: Clean previous velocity and acceleration
 			// TODO: Implement this properly with friction (or some sort of general decay) in PhysicsSystem
 			world.Velocities[i].X = 0.0f;
@@ -52,17 +47,26 @@ namespace LegendOfCube.Engine
 			if (world.InputData[i].GetDirection().Length() > 0.01f)
 			{
 				Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
-				world.InputVelocities[i] = rotatedInputDir * world.MaxSpeed[i];
+				Vector3 inputVelocity = rotatedInputDir * world.MaxSpeed[i];
+				world.InputVelocities[i].X = inputVelocity.X;
+				world.InputVelocities[i].Z = inputVelocity.Z;
+			}
+			else
+			{
+				world.InputVelocities[i].X = 0.0f;
+				world.InputVelocities[i].Z = 0.0f;
 			}
 
 			// New jump
 			if (world.InputData[i].NewJump())
 			{
+				float ANTI_GRAVITY = -world.Gravity.Y;
+
 				if (world.PlayerCubeState.OnGround)
 				{
-					world.Velocities[i].Y = 0.0f;
-					world.InputVelocities[i].Y = JUMP_BASE_SPEED;
-					world.InputAccelerations[i].Y = (JUMP_GRAVITY - world.Gravity.Y);
+					//world.Velocities[i].Y = 0.0f;
+					world.InputVelocities[i].Y = JUMP_SPEED;
+					world.InputAccelerations[i].Y = ANTI_GRAVITY;
 					jumpTime += delta;
 				}
 			}
@@ -71,16 +75,18 @@ namespace LegendOfCube.Engine
 			else if (jumpTime > 0.0f)
 			{
 				jumpTime += delta;
-				world.InputVelocities[i].Y = JUMP_BASE_SPEED;
-				world.InputAccelerations[i].Y = (JUMP_GRAVITY - world.Gravity.Y);
-				if (jumpTime > MAX_JUMP_TIME)
+				if (jumpTime > MAX_JUMP_RELEASE_TIME || (jumpTime > MIN_JUMP_RELEASE_TIME && !world.InputData[i].IsJumping()))
 				{
+					// Remove accumulated gravity during jump and add jump speed at apex to general velocity.
+					world.Velocities[i].Y += ((world.InputVelocities[i].Y - JUMP_SPEED) + JUMP_SPEED_AT_APEX);
 					jumpTime = 0.0f;
 				}
-				else if (jumpTime > MIN_JUMP_TIME && !world.InputData[i].IsJumping())
-				{
-					jumpTime = 0.0f;
-				}
+			}
+
+			// No jump
+			else {
+				world.InputVelocities[i].Y = 0.0f;
+				world.InputAccelerations[i].Y = 0.0f;
 			}
 
 
@@ -213,16 +219,6 @@ namespace LegendOfCube.Engine
 
 		// Private functions: Helpers
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		float CalculateJumpTime(float height, float gravity)
-		{
-			float a = (2.0f * JUMP_BASE_SPEED) / gravity;
-			float b = (-2.0f * height) / gravity;
-			float sqrt = (float)Math.Sqrt(((a*a)/4.0f) - b);
-			//float t1 = -(a / 2.0f) + sqrt; // Time point when going back down
-			float t2 = -(a / 2.0f) - sqrt; // Time point when going up
-			return t2;
-		}
 
 		Vector3 RotateInputDirectionRelativeCamera(World world, UInt32 i)
 		{
