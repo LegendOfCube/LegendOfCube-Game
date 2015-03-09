@@ -91,7 +91,7 @@ namespace LegendOfCube.Levels
 			world.SpawnPoint = new Vector3(0, 0, 0);
 			//world.SpawnPoint = new Vector3(-190, 0, 50);
 			//world.SpawnPoint = new Vector3(255, -35, 0);
-			world.SpawnPoint = (new Vector3(425, 0, 65));
+			//world.SpawnPoint = (new Vector3(425, 0, 65));
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -308,17 +308,50 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-150, -30, 115))
+				.WithPosition(new Vector3(-90, -10, 150))
+				.WithStandardEffectParams(bounceEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.WithVelocity(Vector3.UnitX * -5, 0)
+				.WithAI(new [] { new Vector3(-90, -10, 150), new Vector3(-110, -10, 150) }, true)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-100, 0, 185))
+				.WithStandardEffectParams(platformEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-150, -30, 185))
 				.WithStandardEffectParams(bounceEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-190, 0, 115))
+				.WithPosition(new Vector3(-190, 0, 185))
 				.WithStandardEffectParams(platformCheckpointEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-180, -10, 155))
+				.WithStandardEffectParams(bounceEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.WithVelocity(Vector3.UnitX * -5, 0)
+				.WithAI(new[] { new Vector3(-180, -10, 150), new Vector3(-200, -10, 150) }, true)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
+				.AddToWorld(world);
+
+			new EntityBuilder().WithModel(platformModel)
+				.WithPosition(new Vector3(-180, 0, 180))
+				.WithStandardEffectParams(bounceEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.WithVelocity(Vector3.UnitX * 5, 0)
+				.WithAI(new[] { new Vector3(-180, 0, 115), new Vector3(-200, 0, 115) }, true)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
 				.AddToWorld(world);
 
 			//Hidden shortcut
