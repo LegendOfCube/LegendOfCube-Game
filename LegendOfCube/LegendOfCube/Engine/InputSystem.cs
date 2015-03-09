@@ -56,7 +56,7 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
-				switcher.Switch();	
+				switcher.SwitchScreen(Screens.ScreenTypes.PAUSE);	
 			}
 
 			if (KeyWasJustPressed(Keys.F1))

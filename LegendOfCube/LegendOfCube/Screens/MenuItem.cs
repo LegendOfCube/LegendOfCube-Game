@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Screens
 { 
@@ -35,7 +36,9 @@ namespace LegendOfCube.Screens
 
 		public void draw()
 		{
-
+			SpriteBatch spriteBatch = ScreenSystem.spriteBatch;
+			SpriteFont font = ScreenSystem.font;
+			spriteBatch.DrawString(font, text, pos, Color.Black);
 		}
 
 	}

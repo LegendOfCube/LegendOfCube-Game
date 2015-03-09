@@ -64,7 +64,7 @@ namespace LegendOfCube.Engine
 
 			if (MouseClickWithinRectangle(playRect))
 			{	
-				switcher.Switch();
+				switcher.SwitchScreen(Screens.ScreenTypes.GAME);
 			}
 
 			if (MouseClickWithinRectangle(exitRect))
@@ -103,7 +103,7 @@ namespace LegendOfCube.Engine
 				switch (selection)
 				{
 					case 0:
-						switcher.Switch();
+						switcher.SwitchScreen(Screens.ScreenTypes.GAME);
 						break;
 					case 1:
 						//TODO: Level selct screen

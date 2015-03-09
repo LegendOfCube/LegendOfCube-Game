@@ -14,10 +14,7 @@ namespace LegendOfCube.Engine
 
 		private readonly RenderSystem renderSystem;
 		private readonly GraphicsDeviceManager graphicsManager;
-		private readonly List<Screen> screens;
-		private Screen currentScreen;
-
-		public ScreenSystem SwitcherSystem;
+		private readonly ScreenSystem screenSystem;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -35,9 +32,11 @@ namespace LegendOfCube.Engine
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
-			screens = new List<Screen> {new GameScreen(this), new PauseScreen(this)};
-			currentScreen = screens[0];
-			SwitcherSystem = new ScreenSystem(this);
+			screenSystem = new ScreenSystem(this);
+			//screenSystem.addScreen(new StartScreen(), ScreenTypes.START);
+			screenSystem.AddScreen(new GameScreen(this), ScreenTypes.GAME);
+			screenSystem.AddScreen(new PauseScreen(this), ScreenTypes.PAUSE);
+
 
 		}
 
@@ -64,11 +63,7 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			renderSystem.LoadContent();
-
-			foreach (var screen in screens)
-			{
-				screen.LoadContent();
-			}
+			screenSystem.LoadAllContent();
 		}
 
 		/// <summary>
@@ -87,7 +82,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			currentScreen.Update(gameTime, SwitcherSystem);
+			screenSystem.GetCurrentScreen().Update(gameTime, screenSystem);
 			base.Update(gameTime);
 		}
 
@@ -97,14 +92,14 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			currentScreen.Draw(gameTime, renderSystem);
+			screenSystem.GetCurrentScreen().Draw(gameTime, renderSystem);
 			base.Draw(gameTime);
 		}
 
 		// Helper methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void SwitchScreen()
+		/*public void SwitchScreen()
 		{
 			if (currentScreen is GameScreen)
 			{
@@ -118,7 +113,7 @@ namespace LegendOfCube.Engine
 				this.IsMouseVisible = false;
 				currentScreen = screens[0];
 			}
-		}
+		}*/
 
 		public void ResetPlayer()
 		{
