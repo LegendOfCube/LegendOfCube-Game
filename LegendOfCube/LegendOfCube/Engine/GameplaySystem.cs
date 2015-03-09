@@ -140,7 +140,20 @@ namespace LegendOfCube.Engine
 			// Color cube sides if on wall
 			var playerEffect = world.StandardEffectParams[world.Player.Id];
 			var cubeState = world.PlayerCubeState;
-			var newColor = cubeState.OnWall ? Color.Red : Color.Cyan;
+			
+			Color newColor;
+			if (cubeState.OnWall)
+			{
+				newColor = Color.OrangeRed;
+			}
+			else if (cubeState.OnGround)
+			{
+				newColor = Color.Cyan;
+			}
+			else
+			{
+				newColor = Color.ForestGreen;
+			}
 
 			float speed = world.Velocities[world.Player.Id].Length();
 			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[world.Player.Id]);
