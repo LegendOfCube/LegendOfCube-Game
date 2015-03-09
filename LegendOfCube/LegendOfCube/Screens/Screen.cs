@@ -23,7 +23,7 @@ namespace LegendOfCube.Screens
 			World = world;
 		}
 
-		protected internal abstract void Update(GameTime gameTime, SwitcherSystem switcher);
+		protected internal abstract void Update(GameTime gameTime, ScreenSystem switcher);
 		protected internal abstract void Draw(GameTime gameTime, RenderSystem renderSystem);
 		internal abstract void LoadContent();
 	}

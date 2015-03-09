@@ -19,8 +19,6 @@ namespace LegendOfCube.Screens
 		private readonly EventSystem EventSystem;
 		private readonly AISystem AI_system;
 
-		private SpriteFont font;
-		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
 		public GameScreen(Game game) : base(game)
@@ -34,7 +32,7 @@ namespace LegendOfCube.Screens
 			AI_system = new AISystem();
 		}
 
-		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
+		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			inputSystem.ApplyInput(gameTime, World, switcher);
@@ -71,9 +69,9 @@ namespace LegendOfCube.Screens
 			text.Append("OnWall: ");
 			text.AppendLine(World.PlayerCubeState.OnWall.ToString());
 
-			spriteBatch.Begin();
-			spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
-			spriteBatch.End();
+			ScreenSystem.spriteBatch.Begin();
+			ScreenSystem.spriteBatch.DrawString(ScreenSystem.font, text, fontPos, Color.DarkGreen);
+			ScreenSystem.spriteBatch.End();
 		}
 
 		internal override void LoadContent()
@@ -82,8 +80,8 @@ namespace LegendOfCube.Screens
 			//TestLevel1.CreateLevel(World, Game);
 
 
-			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-			font = Game.Content.Load<SpriteFont>("Arial");
+			ScreenSystem.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+			ScreenSystem.font = Game.Content.Load<SpriteFont>("Arial");
 			fontPos = new Vector2(0, 0);
 		}
 

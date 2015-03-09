@@ -17,7 +17,7 @@ namespace LegendOfCube.Engine
 		private readonly List<Screen> screens;
 		private Screen currentScreen;
 
-		public SwitcherSystem SwitcherSystem;
+		public ScreenSystem SwitcherSystem;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -37,7 +37,7 @@ namespace LegendOfCube.Engine
 
 			screens = new List<Screen> {new GameScreen(this), new PauseScreen(this)};
 			currentScreen = screens[0];
-			SwitcherSystem = new SwitcherSystem(this);
+			SwitcherSystem = new ScreenSystem(this);
 
 		}
 

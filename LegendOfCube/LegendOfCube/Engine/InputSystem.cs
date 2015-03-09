@@ -36,7 +36,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher)
+		public void ApplyInput(GameTime gameTime, World world, Screens.ScreenSystem switcher)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);

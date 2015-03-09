@@ -28,7 +28,7 @@ namespace LegendOfCube.Screens
 			selection = 0;
 		}
 
-		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
+		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
 		{
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
