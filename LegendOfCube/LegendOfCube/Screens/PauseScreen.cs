@@ -10,6 +10,7 @@ namespace LegendOfCube.Screens
 		private readonly InputSystem inputSystem;
 		private readonly MenuInputSystem menuInputSystem;
 		private readonly CameraSystem cameraSystem;
+		private readonly Game game;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
 
@@ -19,9 +20,10 @@ namespace LegendOfCube.Screens
 		private Texture2D select;
 		private int selection;
 
-		public PauseScreen(Game game) : base(game)
+		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game)
 		{
-			World = new World(1002);
+			World = screenSystem.GetWorld();
+			this.game = game;
 			inputSystem = new InputSystem(game);
 			cameraSystem = new CameraSystem();
 			menuInputSystem = new MenuInputSystem(game);

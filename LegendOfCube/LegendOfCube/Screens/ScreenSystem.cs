@@ -54,5 +54,10 @@ namespace LegendOfCube.Screens
 				screen.LoadContent();
 			}
 		}
+
+		public World GetWorld()
+		{
+				return screens[(int)ScreenTypes.GAME].World;
+		}
 	}
 }

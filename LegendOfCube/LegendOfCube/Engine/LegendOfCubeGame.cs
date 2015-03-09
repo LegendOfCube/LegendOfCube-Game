@@ -33,9 +33,9 @@ namespace LegendOfCube.Engine
 			graphicsManager.ApplyChanges();
 
 			screenSystem = new ScreenSystem(this);
-			//screenSystem.addScreen(new StartScreen(), ScreenTypes.START);
+			//screenSystem.AddScreen(new StartScreen(), ScreenTypes.START);
 			screenSystem.AddScreen(new GameScreen(this), ScreenTypes.GAME);
-			screenSystem.AddScreen(new PauseScreen(this), ScreenTypes.PAUSE);
+			screenSystem.AddScreen(new PauseScreen(this, screenSystem), ScreenTypes.PAUSE);
 
 
 		}

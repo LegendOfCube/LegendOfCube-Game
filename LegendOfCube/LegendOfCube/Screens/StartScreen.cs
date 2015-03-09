@@ -5,12 +5,16 @@ using System.Text;
 using LegendOfCube.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace LegendOfCube.Screens
 {
 	class StartScreen : Screen
 	{
-		public MenuItem startGame, exitGame, changeLevel;
+		private readonly MenuInputSystem menuInputSystem;
+
+		private MenuItem startGame, exitGame, changeLevel;
+		
 
 		public StartScreen()
 		{
@@ -20,19 +24,26 @@ namespace LegendOfCube.Screens
 			changeLevel.position = new Vector2(25, 40);
 			exitGame = new MenuItem("Exit");
 			exitGame.position = new Vector2(25, 55);
+
 		}
 		protected internal override void Update(Microsoft.Xna.Framework.GameTime gameTime, Screens.ScreenSystem switcher)
 		{
-			throw new NotImplementedException();
+			if (GamePad.GetState(PlayerIndex.One).IsButtonDown(Buttons.A))
+			{
+				switcher.SwitchScreen(ScreenTypes.GAME);
+			}
 		}
 
 		protected internal override void Draw(Microsoft.Xna.Framework.GameTime gameTime, Engine.Graphics.RenderSystem renderSystem)
 		{
-			startGame.draw();
-			changeLevel.draw();
-			exitGame.draw();
+			Game.GraphicsDevice.Clear(Color.CornflowerBlue);
 
-		}
+			ScreenSystem.spriteBatch.Begin();
+			startGame.draw();
+			changeLevel.draw();	
+			exitGame.draw();
+			ScreenSystem.spriteBatch.End();	
+		}	
 
 		internal override void LoadContent()
 		{
