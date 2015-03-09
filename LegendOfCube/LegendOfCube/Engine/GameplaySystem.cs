@@ -20,9 +20,10 @@ namespace LegendOfCube.Engine
 		private bool isStopping = false;
 		private float stopTimeLeft;*/
 
-		private const float MAX_JUMP_HEIGHT = 8.0f;
-		private const float MIN_JUMP_HEIGHT = 2.0f;
-		private const float JUMP_BASE_SPEED = 25.0f;
+		private const float MAX_JUMP_HEIGHT = 5.0f;
+		private const float MIN_JUMP_HEIGHT = 3.0f;
+		private const float JUMP_BASE_SPEED = 15.0f;
+		private const float JUMP_GRAVITY = (JUMP_BASE_SPEED * JUMP_BASE_SPEED) / (-2.0f * MAX_JUMP_HEIGHT);
 
 		private float jumpTime = 0.0f;
 
@@ -34,8 +35,8 @@ namespace LegendOfCube.Engine
 				Debug.Assert(false);
 			}
 
-			float MIN_JUMP_TIME = CalculateJumpTime(MIN_JUMP_HEIGHT, world.Gravity.Y);
-			float MAX_JUMP_TIME = CalculateJumpTime(MAX_JUMP_HEIGHT, world.Gravity.Y);
+			float MIN_JUMP_TIME = CalculateJumpTime(MIN_JUMP_HEIGHT, JUMP_GRAVITY);
+			float MAX_JUMP_TIME = CalculateJumpTime(MAX_JUMP_HEIGHT, JUMP_GRAVITY);
 
 			// Clean previous input data
 			world.InputVelocities[i] = Vector3.Zero;
@@ -61,6 +62,7 @@ namespace LegendOfCube.Engine
 				{
 					world.Velocities[i].Y = 0.0f;
 					world.InputVelocities[i].Y = JUMP_BASE_SPEED;
+					world.InputAccelerations[i].Y = (JUMP_GRAVITY - world.Gravity.Y);
 					jumpTime += delta;
 				}
 			}
@@ -70,6 +72,7 @@ namespace LegendOfCube.Engine
 			{
 				jumpTime += delta;
 				world.InputVelocities[i].Y = JUMP_BASE_SPEED;
+				world.InputAccelerations[i].Y = (JUMP_GRAVITY - world.Gravity.Y);
 				if (jumpTime > MAX_JUMP_TIME)
 				{
 					jumpTime = 0.0f;
