@@ -75,20 +75,27 @@ namespace LegendOfCube.Engine
 						world.Velocities[collidedWith] = Vector3.Zero;
 					}
 				}
+				if (world.EntityProperties[collidedWith].Satisfies(Properties.CHECKPOINT_FLAG))
+				{
+					if (collider == world.Player.Id)
+					{
+						world.SpawnPoint = world.Transforms[collidedWith].Translation;
+					}
+				}
+				else if (world.EntityProperties[collider].Satisfies(Properties.CHECKPOINT_FLAG))
+				{
+					if (collidedWith == world.Player.Id)
+					{
+						world.SpawnPoint = world.Transforms[collider].Translation;
+					}
+				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
 				{
-					while (true)
-					{
-						Random rnd = new Random();
-						int temp = rnd.Next((int)world.HighestOccupiedId);
-						if (world.EntityProperties[temp].Satisfies(Properties.TELEPORT_FLAG))
-						{
-							Vector3 temp2 = world.Transforms[temp].Translation;
-							temp2.Y += 25;
-							world.Transforms[collider].Translation = temp2;
-							break;
-						}
-					}
+					Random rnd = new Random();
+					var dest = world.EnumerateEntities(new Properties(Properties.TELEPORT_FLAG)).Where(entity => entity.Id != collidedWith).ToList();
+					int teleportTo = (int) dest[rnd.Next(dest.Count)].Id;
+					world.Transforms[collider].Translation = world.Transforms[teleportTo].Translation - 5*collisionEvent.Axis;
+					world.Velocities[collider] = collisionEvent.ColliderVelocity;
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
 				{
