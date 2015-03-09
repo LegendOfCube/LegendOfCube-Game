@@ -80,7 +80,7 @@ namespace LegendOfCube.Engine
 			world.Velocities[i] += (world.Accelerations[i] * delta);
 			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
 			{
-				world.Velocities[i] += (world.InputAccelerations[i] * delta);
+				world.InputVelocities[i] += (world.InputAccelerations[i] * delta);
 			}
 
 			// Clamp velocity in X and Y direction
