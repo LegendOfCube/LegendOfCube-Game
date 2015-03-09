@@ -338,6 +338,7 @@ namespace LegendOfCube.Levels
 				Y = -1,
 				Z = 0
 			});
+			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
 			world.AmbientIntensity = 0.45f;
 		}
 	}
