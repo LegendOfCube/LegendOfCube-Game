@@ -91,17 +91,11 @@ namespace LegendOfCube.Engine
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
 				{
-					while (true)
-					{
-						Random rnd = new Random();
-						int teleportTo = rnd.Next((int)world.HighestOccupiedId);
-						if (world.EntityProperties[teleportTo].Satisfies(Properties.TELEPORT_FLAG) && teleportTo != collidedWith)
-						{
-							world.Transforms[collider].Translation = world.Transforms[teleportTo].Translation - 5*collisionEvent.Axis;
-							world.Velocities[collider] = collisionEvent.ColliderVelocity;
-							break;
-						}
-					}
+					Random rnd = new Random();
+					var dest = world.EnumerateEntities(new Properties(Properties.TELEPORT_FLAG)).Where(entity => entity.Id != collidedWith).ToList();
+					int teleportTo = (int) dest[rnd.Next(dest.Count)].Id;
+					world.Transforms[collider].Translation = world.Transforms[teleportTo].Translation - 5*collisionEvent.Axis;
+					world.Velocities[collider] = collisionEvent.ColliderVelocity;
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
 				{

@@ -82,10 +82,10 @@ namespace LegendOfCube.Levels
 
 			var platformTeleportEffect = new StandardEffectParams
 			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
-				DiffuseColor = Color.LightBlue.ToVector4(),
-				SpecularColor = Color.Gray.ToVector4()
+				//DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
+				//NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
+				DiffuseColor = Color.Purple.ToVector4(),
+				//SpecularColor = Color.Purple.ToVector4()
 			};
 
 			world.SpawnPoint = new Vector3(0, 0, 0);
