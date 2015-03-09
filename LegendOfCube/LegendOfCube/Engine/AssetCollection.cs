@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
 {
-	public class GameObjectTemplateCollection
+	public class AssetCollection
 	{
-		public GameObjectTemplate PlayerCube { get; private set; }
-		public GameObjectTemplate PlayerCubePlain { get; private set; }
-		public GameObjectTemplate RustPlatform { get; private set; }
-		public GameObjectTemplate BrickWall { get; private set; }
+		public ModelData PlayerCube { get; private set; }
+		public ModelData PlayerCubePlain { get; private set; }
+		public ModelData RustPlatform { get; private set; }
+		public ModelData BrickWall { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
 			PlatformModel = cm.Load<Model>("Models/Platform/platform");
 			BrickWallModel = cm.Load<Model>("Models/Brick_Wall/brick_wall");
 
-			PlayerCube = new GameObjectTemplate
+			PlayerCube = new ModelData
 			{
 				Model = CubeModel,
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
@@ -38,7 +38,7 @@ namespace LegendOfCube.Engine
 				}
 			};
 
-			PlayerCubePlain = new GameObjectTemplate
+			PlayerCubePlain = new ModelData
 			{
 				Model = PlainCubeModel,
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
@@ -53,7 +53,7 @@ namespace LegendOfCube.Engine
 				}
 			};
 
-			RustPlatform = new GameObjectTemplate
+			RustPlatform = new ModelData
 			{
 				Model = PlatformModel,
 				EffectParams = new StandardEffectParams
@@ -65,7 +65,7 @@ namespace LegendOfCube.Engine
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 10.0f, 0.5f, 10.0f)
 			};
 
-			BrickWall = new GameObjectTemplate
+			BrickWall = new ModelData
 			{
 				Model = BrickWallModel,
 				EffectParams = new StandardEffectParams

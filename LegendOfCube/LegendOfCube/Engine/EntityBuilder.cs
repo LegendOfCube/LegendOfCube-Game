@@ -122,11 +122,11 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
-		public EntityBuilder WithTemplate(GameObjectTemplate template)
+		public EntityBuilder WithModelData(ModelData modelData)
 		{
-			return WithModel(template.Model)
-			      .WithBoundingVolume(template.Obb)
-			      .WithStandardEffectParams(template.EffectParams);
+			return WithModel(modelData.Model)
+			      .WithBoundingVolume(modelData.Obb)
+			      .WithStandardEffectParams(modelData.EffectParams);
 		}
 
 		/// <summary>

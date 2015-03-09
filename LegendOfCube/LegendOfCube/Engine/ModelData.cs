@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
 {
-	public class GameObjectTemplate
+	public class ModelData
 	{
 		public Model Model { get; set; }
 		public OBB Obb { get; set; }

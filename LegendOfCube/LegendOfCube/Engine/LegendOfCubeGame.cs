@@ -13,7 +13,7 @@ namespace LegendOfCube.Engine
 
 		private readonly RenderSystem renderSystem;
 		private readonly GraphicsDeviceManager graphicsManager;
-		private readonly GameObjectTemplateCollection gameObjectTemplates;
+		private readonly AssetCollection assets;
 		private readonly List<Screen> screens;
 		private Screen currentScreen;
 
@@ -26,7 +26,7 @@ namespace LegendOfCube.Engine
 		{
 			Content.RootDirectory = "Content";
 
-			gameObjectTemplates = new GameObjectTemplateCollection();
+			assets = new AssetCollection();
 
 			graphicsManager = new GraphicsDeviceManager(this);
 			renderSystem = new RenderSystem(this, graphicsManager);
@@ -37,7 +37,7 @@ namespace LegendOfCube.Engine
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
-			screens = new List<Screen> { new GameScreen(this, gameObjectTemplates), new MenuScreen(this) };
+			screens = new List<Screen> { new GameScreen(this, assets), new MenuScreen(this) };
 			currentScreen = screens[0];
 			SwitcherSystem = new SwitcherSystem(this);
 
@@ -65,7 +65,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
-			gameObjectTemplates.LoadContent(Content);
+			assets.LoadContent(Content);
 			renderSystem.LoadContent();
 
 			foreach (var screen in screens)

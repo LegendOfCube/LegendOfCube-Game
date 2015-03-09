@@ -12,10 +12,10 @@ namespace LegendOfCube.Levels
 {
 	class BeanStalkLevelFactory : ILevelFactory
 	{
-		public World CreateWorld(Game game, GameObjectTemplateCollection gameObjectTemplates)
+		public World CreateWorld(Game game, AssetCollection assets)
 		{
 			World world = new World(1000);
-			var player = new EntityBuilder().WithTemplate(gameObjectTemplates.PlayerCube)
+			var player = new EntityBuilder().WithModelData(assets.PlayerCube)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero, 30)
@@ -29,13 +29,13 @@ namespace LegendOfCube.Levels
 			};
 
 			new EntityBuilder()
-				.WithTemplate(gameObjectTemplates.PlayerCubePlain)
+				.WithModelData(assets.PlayerCubePlain)
 				.WithStandardEffectParams(groundEffect)
 				.WithTransform(Matrix.CreateScale(5000.0f, 1.0f, 5000.0f))
 				.AddToWorld(world);
 
 			var platformBuilder = new EntityBuilder()
-				.WithTemplate(gameObjectTemplates.RustPlatform);
+				.WithModelData(assets.RustPlatform);
 
 			world.LightDirection = Vector3.Normalize(new Vector3(1, -1, 1));
 			world.SpawnPoint = new Vector3(0, 0, 0);
