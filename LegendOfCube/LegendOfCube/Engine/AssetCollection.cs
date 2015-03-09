@@ -12,6 +12,7 @@ namespace LegendOfCube.Engine
 		public ModelData PlayerCubePlain { get; private set; }
 		public ModelData RustPlatform { get; private set; }
 		public ModelData BrickWall { get; private set; }
+		public ModelData PlainCube { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -51,6 +52,12 @@ namespace LegendOfCube.Engine
 					SpecularColor = Color.White.ToVector4(),
 					EmissiveColor = Color.White.ToVector4()
 				}
+			};
+
+			PlainCube = new ModelData
+			{
+				Model = PlainCubeModel,
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1)
 			};
 
 			RustPlatform = new ModelData

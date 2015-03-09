@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LegendOfCube.Engine;
-using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
@@ -17,8 +12,11 @@ namespace LegendOfCube.Levels
 			World world = new World(1000);
 			world.SpawnPoint = new Vector3(-30.0f, 5.0f, 0.0f);
 			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
+			world.LightDirection = Vector3.Normalize(new Vector3(1.0f, -1.0f, -1.0f));
+			world.AmbientIntensity = 0.3f;
 
-			world.Player = new EntityBuilder().WithModelData(assets.PlayerCube)
+			world.Player = new EntityBuilder()
+				.WithModelData(assets.PlayerCube)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero, 30)
@@ -37,13 +35,15 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseColor = Color.LightBlue.ToVector4()
 			};
-
+			
+			// Add ground
 			new EntityBuilder()
 				.WithModelData(assets.PlayerCubePlain)
 				.WithStandardEffectParams(groundEffect)
 				.WithTransform(Matrix.CreateScale(5000.0f, 1.0f, 5000.0f))
 				.AddToWorld(world);
 
+			// Add a massive wall
 			new EntityBuilder()
 				.WithModelData(assets.PlayerCubePlain)
 				.WithStandardEffectParams(massiveWallEffect)
@@ -51,14 +51,14 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(5.0f, 0.0f, 0.0f))
 				.AddToWorld(world);
 
+			// Prepare builder for platforms
 			var platformBuilder = new EntityBuilder()
-				.WithModelData(assets.RustPlatform)
+				.WithModelData(assets.PlayerCubePlain)
+				.WithTransform(Matrix.CreateTranslation(0.0f, -0.5f, 0.0f) * Matrix.CreateScale(10.0f, 0.5f, 10.0f))
 				.WithStandardEffectParams(platformEffect);
 
-			world.LightDirection = Vector3.Normalize(new Vector3(1.0f, -1.0f, -1.0f));
-			world.AmbientIntensity = 0.3f;
+			// Add platforms randomly located on the wall
 			var rnd = new Random(0);
-
 			for (int i = 0; i < 600; i++)
 			{
 				platformBuilder
