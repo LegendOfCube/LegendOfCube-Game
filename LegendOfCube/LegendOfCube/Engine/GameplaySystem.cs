@@ -51,6 +51,7 @@ namespace LegendOfCube.Engine
 				world.InputVelocities[i].X = inputVelocity.X;
 				world.InputVelocities[i].Z = inputVelocity.Z;
 			}
+			// No movement input
 			else
 			{
 				world.InputVelocities[i].X = 0.0f;
@@ -70,7 +71,6 @@ namespace LegendOfCube.Engine
 					jumpTime += delta;
 				}
 			}
-
 			// Continuing jump
 			else if (jumpTime > 0.0f)
 			{
@@ -82,13 +82,35 @@ namespace LegendOfCube.Engine
 					jumpTime = 0.0f;
 				}
 			}
-
 			// No jump
 			else {
 				world.InputVelocities[i].Y = 0.0f;
 				world.InputAccelerations[i].Y = 0.0f;
 			}
 
+
+			// Color cube sides if on wall
+			var playerEffect = world.StandardEffectParams[world.Player.Id];
+			var cubeState = world.PlayerCubeState;
+
+			Color newColor;
+			if (cubeState.OnWall)
+			{
+				newColor = Color.OrangeRed;
+			}
+			else if (cubeState.OnGround)
+			{
+				newColor = Color.Cyan;
+			}
+			else
+			{
+				newColor = Color.ForestGreen;
+			}
+
+			float speed = world.InputVelocities[i].Length();
+			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[i]);
+
+			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
 
 			/*for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
@@ -204,30 +226,7 @@ namespace LegendOfCube.Engine
 						jumpTimeLeft -= delta;
 					}
 				}
-			}
-
-			// Color cube sides if on wall
-			var playerEffect = world.StandardEffectParams[world.Player.Id];
-			var cubeState = world.PlayerCubeState;
-			
-			Color newColor;
-			if (cubeState.OnWall)
-			{
-				newColor = Color.OrangeRed;
-			}
-			else if (cubeState.OnGround)
-			{
-				newColor = Color.Cyan;
-			}
-			else
-			{
-				newColor = Color.ForestGreen;
-			}
-
-			float speed = world.Velocities[world.Player.Id].Length();
-			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[world.Player.Id]);
-
-			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();*/
+			}*/
 		}
 
 		// Private functions: Helpers
