@@ -88,8 +88,8 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
-			//world.SpawnPoint = new Vector3(0, 5, 0);
-			world.SpawnPoint = new Vector3(-190, 0, 50);
+			world.SpawnPoint = new Vector3(0, 5, 0);
+			//world.SpawnPoint = new Vector3(-190, 0, 50);
 
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
@@ -99,7 +99,7 @@ namespace LegendOfCube.Levels
 					.WithStandardEffectParams(playerEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
 						new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
+					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 					.AddToWorld(world);
 
 			world.Player = playerEntity;
@@ -621,6 +621,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(-190, 0, 0))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
 				.AddToWorld(world);
 
 			//Falling death
