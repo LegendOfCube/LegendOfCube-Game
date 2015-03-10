@@ -59,7 +59,7 @@ namespace LegendOfCube.Engine
 			{
 				var collidedWith = collisionEvent.CollidedWith.Id;
 				var collider = collisionEvent.Collider.Id;
-				/*if (world.EntityProperties[collidedWith].Satisfies((Properties.DEATH_ZONE_FLAG)))
+				if (world.EntityProperties[collidedWith].Satisfies((Properties.DEATH_ZONE_FLAG)))
 				{
 					if (collider == world.Player.Id)
 					{
@@ -95,7 +95,7 @@ namespace LegendOfCube.Engine
 					world.Velocities[collider] = Vector3.Reflect(collisionEvent.ColliderVelocity, collisionEvent.Axis);
 					world.PlayerCubeState.OnGround = false;
 					world.PlayerCubeState.OnWall = false;
-				}*/
+				}
 			}
 
 			//Magic LINQ from resharper
