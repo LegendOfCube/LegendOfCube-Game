@@ -183,7 +183,10 @@ namespace LegendOfCube.Engine
 				intersectionId = FindIntersection(world, i);
 			}
 
-			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+			// Update translation in transform
+			Vector3 obbDiff = worldSpaceOBBs[i].Position - oldObb.Position;
+			world.Transforms[i].Translation += obbDiff;
+			//TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
