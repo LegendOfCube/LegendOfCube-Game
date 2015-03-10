@@ -63,6 +63,10 @@ namespace LegendOfCube.Engine
 			{
 				world.DebugState.ShowOBBWireFrame = !world.DebugState.ShowOBBWireFrame;
 			}
+			if (KeyWasJustPressed(Keys.F2))
+			{
+				world.DebugState.ShowDebugOverlay = !world.DebugState.ShowDebugOverlay;
+			}
 
 			if (KeyWasJustPressed(Keys.R))
 			{
