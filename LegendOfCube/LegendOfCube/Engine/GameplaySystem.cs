@@ -44,8 +44,7 @@ namespace LegendOfCube.Engine
 			// No movement input
 			else
 			{
-				world.MovementVelocities[i].X = 0.0f;
-				world.MovementVelocities[i].Z = 0.0f;
+				world.MovementVelocities[i] = Vector3.Zero;
 			}
 
 			// New jump
@@ -55,7 +54,7 @@ namespace LegendOfCube.Engine
 
 				if (world.PlayerCubeState.OnGround)
 				{
-					world.MovementVelocities[i].Y = JUMP_SPEED;
+					world.JumpVelocities[i].Y = JUMP_SPEED;
 					world.Accelerations[i].Y = ANTI_GRAVITY;
 					jumpTime += delta;
 				}
@@ -73,7 +72,7 @@ namespace LegendOfCube.Engine
 			}
 			// No jump
 			else {
-				world.MovementVelocities[i].Y = 0.0f;
+				world.JumpVelocities[i] = Vector3.Zero;
 				world.Accelerations[i].Y = 0.0f;
 			}
 
