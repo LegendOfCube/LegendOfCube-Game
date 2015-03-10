@@ -19,7 +19,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero, 30)
-				.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG))
+				.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 				.AddToWorld(world);
 			world.Player = player;
 
