@@ -12,15 +12,15 @@ namespace LegendOfCube.Engine
 
 		// Ground jump constants
 		private const float MAX_JUMP_RELEASE_HEIGHT = 4.0f;
-		private const float MIN_JUMP_RELEASE_HEIGHT = 1.5f;
+		private const float MIN_JUMP_RELEASE_HEIGHT = 2.0f;
 		private const float JUMP_SPEED = 16.0f;
-		private const float JUMP_SPEED_AT_APEX = 8.0f; // This value must be close to JUMP_SPEED, otherwise it will look like cube hits ceiling. A lower value will give more precise jumps.
+		private const float JUMP_SPEED_AT_APEX = 6.0f; // If this value is to low it will look like cube hits ceiling (in high gravity). A lower value will give more precise jumps.
 		private const float MAX_JUMP_RELEASE_TIME = MAX_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 		private const float MIN_JUMP_RELEASE_TIME = MIN_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 
 		// Wall jump constants
-		private const float WALL_JUMP_AXIS_SPEED = 30.0f;
-		private const float WALL_JUMP_UP_SPEED = 30.0f;
+		private const float WALL_JUMP_AXIS_SPEED = 15.0f;
+		private const float WALL_JUMP_UP_SPEED = 25.0f;
 
 		// Air movement 
 		private const float AIR_MAX_MOVEMENT_LENGTH = 0.75f;
@@ -48,15 +48,6 @@ namespace LegendOfCube.Engine
 			// Clean up
 			world.Velocities[i].X = 0.0f; // Hack
 			world.Velocities[i].Z = 0.0f; // Hack
-			
-			// Reset many variables if Cube is on ground
-			if (world.PlayerCubeState.OnGround)
-			{
-				jumpTime = 0.0f;
-				jumpStartMovementVelocity = Vector3.Zero;
-				world.JumpVelocities[i] = Vector3.Zero;
-				world.Accelerations[i].Y = 0.0f;
-			}
 
 			// Movement input
 			if (world.InputData[i].GetDirection().Length() > 0.01f)
@@ -66,7 +57,7 @@ namespace LegendOfCube.Engine
 				Vector3 inputVelocity = inputDir * world.MaxSpeed[i];
 				if (world.PlayerCubeState.OnWall)
 				{
-					//inputVelocity -= Vector3.Dot(inputVelocity, world.PlayerCubeState.WallAxis) * world.PlayerCubeState.WallAxis;
+					inputVelocity -= Vector3.Dot(inputVelocity, world.PlayerCubeState.WallAxis) * world.PlayerCubeState.WallAxis;
 				}
 				else if (!world.PlayerCubeState.OnGround && !world.PlayerCubeState.OnWall)
 				{
@@ -122,6 +113,20 @@ namespace LegendOfCube.Engine
 					world.JumpVelocities[i] = Vector3.Zero;
 					world.Accelerations[i].Y = 0.0f;
 				}
+			}
+			else
+			{
+				jumpTime = 0.0f;
+				jumpStartMovementVelocity = Vector3.Zero;
+				world.JumpVelocities[i] = Vector3.Zero;
+				world.Accelerations[i].Y = 0.0f;
+			}
+
+			// Setting some variables if on wall
+			if (world.PlayerCubeState.OnWall)
+			{
+				world.Accelerations[i].Y = -world.Gravity.Y * 0.3f;
+				world.Velocities[i] -= world.PlayerCubeState.WallAxis * 4.0f;
 			}
 
 			SetCubeColor(world, i);
