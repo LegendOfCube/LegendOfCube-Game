@@ -152,13 +152,11 @@ namespace LegendOfCube.Engine
 			}
 			else
 			{
-				newColor = Color.ForestGreen;
+				newColor = Color.Yellow;
 			}
 
 			float speed = world.Velocities[world.Player.Id].Length();
-			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[world.Player.Id]);
-
-			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
+			playerEffect.EmissiveColor = newColor.ToVector4();
 		}
 	}
 }

@@ -24,10 +24,13 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectParameter dirLight0ShadowMapParam;
 		private readonly EffectParameter dirLight0ShadowMatrixParam;
 
+		private readonly EffectParameter pointLight0ViewSpacePosParam;
+		private readonly EffectParameter pointLight0ReachParam;
+		private readonly EffectParameter pointLight0ColorParam;
+
 		private readonly EffectParameter ambientIntensity;
 
 		// Material properties
-
 		private readonly EffectParameter useDiffuseTextureParam;
 		private readonly EffectParameter diffuseTextureParam;
 		private readonly EffectParameter materialDiffuseColorParam;
@@ -68,6 +71,10 @@ namespace LegendOfCube.Engine.Graphics
 			this.dirLight0ShadowMapParam = effect.Parameters["DirLight0ShadowMap"];
 			this.dirLight0ShadowMatrixParam = effect.Parameters["DirLight0ShadowMatrix"];
 
+			this.pointLight0ViewSpacePosParam = effect.Parameters["PointLight0ViewSpacePos"];
+			this.pointLight0ColorParam = effect.Parameters["PointLight0Color"];
+			this.pointLight0ReachParam = effect.Parameters["PointLight0Reach"];
+
 			this.ambientIntensity = effect.Parameters["AmbientIntensity"];
 
 			// Material properties
@@ -103,6 +110,13 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			dirLight0ViewSpaceDirParam.SetValue(Vector3.TransformNormal(direction, view));
 			dirLight0ColorParam.SetValue(lightColor);
+		}
+
+		public void SetPointLight0Properties(ref Vector3 position, ref float reach, ref Vector4 lightColor)
+		{
+			pointLight0ViewSpacePosParam.SetValue(Vector3.Transform(position, view));
+			pointLight0ReachParam.SetValue(reach);
+			pointLight0ColorParam.SetValue(lightColor);
 		}
 
 		public void SetDirLight0ShadowMap(Texture shadowMap)
