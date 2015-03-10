@@ -7,7 +7,7 @@ namespace LegendOfCube.Engine
 {
 	class GameplaySystem
 	{
-		private const float MAX_JUMP_RELEASE_HEIGHT = 5.0f;
+		private const float MAX_JUMP_RELEASE_HEIGHT = 4.0f;
 		private const float MIN_JUMP_RELEASE_HEIGHT = 1.0f;
 		private const float JUMP_SPEED = 16.0f;
 		private const float JUMP_SPEED_AT_APEX = 14.0f; // This value must be close to JUMP_SPEED, otherwise it will look like cube hits ceiling. A lower value will give more precise jumps.
@@ -31,7 +31,7 @@ namespace LegendOfCube.Engine
 			// TODO: Implement this properly with friction (or some sort of general decay) in PhysicsSystem
 			world.Velocities[i].X = 0.0f;
 			world.Velocities[i].Z = 0.0f;
-			world.Accelerations[i] = Vector3.Zero;
+			//world.Accelerations[i] = Vector3.Zero;
 
 			// Apply movement input
 			if (world.InputData[i].GetDirection().Length() > 0.01f)
@@ -56,7 +56,7 @@ namespace LegendOfCube.Engine
 				if (world.PlayerCubeState.OnGround)
 				{
 					world.InputVelocities[i].Y = JUMP_SPEED;
-					world.InputAccelerations[i].Y = ANTI_GRAVITY;
+					world.Accelerations[i].Y = ANTI_GRAVITY;
 					jumpTime += delta;
 				}
 			}
@@ -66,15 +66,15 @@ namespace LegendOfCube.Engine
 				jumpTime += delta;
 				if (jumpTime > MAX_JUMP_RELEASE_TIME || (jumpTime > MIN_JUMP_RELEASE_TIME && !world.InputData[i].IsJumping()))
 				{
-					// Remove accumulated gravity during jump and add jump speed at apex to general velocity.
-					world.Velocities[i].Y += ((world.InputVelocities[i].Y - JUMP_SPEED) + JUMP_SPEED_AT_APEX);
+					// Add jump speed at apex to general velocity.
+					world.Velocities[i].Y += JUMP_SPEED_AT_APEX;
 					jumpTime = 0.0f;
 				}
 			}
 			// No jump
 			else {
 				world.InputVelocities[i].Y = 0.0f;
-				world.InputAccelerations[i].Y = 0.0f;
+				world.Accelerations[i].Y = 0.0f;
 			}
 
 

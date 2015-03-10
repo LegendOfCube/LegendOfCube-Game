@@ -78,10 +78,6 @@ namespace LegendOfCube.Engine
 		private void Accelerate(World world, UInt32 i, float delta)
 		{
 			world.Velocities[i] += (world.Accelerations[i] * delta);
-			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
-			{
-				world.InputVelocities[i] += (world.InputAccelerations[i] * delta);
-			}
 
 			// Clamp velocity in X and Y direction
 			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM. Besides, current implementation too naive.
