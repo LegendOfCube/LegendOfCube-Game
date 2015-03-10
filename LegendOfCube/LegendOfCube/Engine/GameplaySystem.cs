@@ -7,6 +7,10 @@ namespace LegendOfCube.Engine
 {
 	class GameplaySystem
 	{
+		// Constants
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		// Ground jump constants
 		private const float MAX_JUMP_RELEASE_HEIGHT = 4.0f;
 		private const float MIN_JUMP_RELEASE_HEIGHT = 1.0f;
 		private const float JUMP_SPEED = 16.0f;
@@ -14,7 +18,21 @@ namespace LegendOfCube.Engine
 		private const float MAX_JUMP_RELEASE_TIME = MAX_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 		private const float MIN_JUMP_RELEASE_TIME = MIN_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 
+		// Wall jump constants
+		private const float WALL_JUMP_AXIS_SPEED = 30.0f;
+		private const float WALL_JUMP_UP_SPEED = 30.0f;
+
+		// Air movement 
+		private static readonly Vector2 AIR_MOVEMENT_VELOCITY_DELTA = new Vector2(3.0f, 3.0f);
+
+		// Variables
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
 		private float jumpTime = 0.0f;
+		private Vector3 jumpStartMovementVelocity = Vector3.Zero;
+
+		// Public functions
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public void ProcessInputData(World world, float delta)
 		{
@@ -27,69 +45,78 @@ namespace LegendOfCube.Engine
 				Debug.Assert(false);
 			}
 
-			// Hack: Clean previous velocity and acceleration
-			// TODO: Implement this properly with friction (or some sort of general decay) in PhysicsSystem
-			world.Velocities[i].X = 0.0f;
-			world.Velocities[i].Z = 0.0f;
-			//world.Accelerations[i] = Vector3.Zero;
+			// Clean up
+			world.Velocities[i].X = 0.0f; // Hack
+			world.Velocities[i].Z = 0.0f; // Hack
+			
+			// Reset many variables if Cube is on ground
+			if (world.PlayerCubeState.OnGround)
+			{
+				jumpTime = 0.0f;
+				jumpStartMovementVelocity = Vector3.Zero;
+				world.JumpVelocities[i] = Vector3.Zero;
+				world.Accelerations[i].Y = 0.0f;
+			}
 
-			// Apply movement input
+			// Movement input
 			if (world.InputData[i].GetDirection().Length() > 0.01f)
 			{
-				Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
-				Vector3 inputVelocity = rotatedInputDir * world.MaxSpeed[i];
-				world.MovementVelocities[i].X = inputVelocity.X;
-				world.MovementVelocities[i].Z = inputVelocity.Z;
+				Vector3 inputDir = RotateInputDirectionRelativeCamera(world, i);
+				Vector3 inputVelocity = inputDir * world.MaxSpeed[i];
+				if (world.PlayerCubeState.OnWall)
+				{
+					//inputVelocity -= Vector3.Dot(inputVelocity, world.PlayerCubeState.WallAxis) * world.PlayerCubeState.WallAxis;
+				}
+				else if (!world.PlayerCubeState.OnGround && !world.PlayerCubeState.OnWall)
+				{
+					Vector3 jumpMoveDir = jumpStartMovementVelocity;
+					jumpMoveDir.Normalize();
+					float dot = Vector3.Dot(inputDir, jumpMoveDir);
+					if (dot < 0.0f) inputVelocity = Vector3.Zero;
+				}
+				world.MovementVelocities[i] = inputVelocity;
 			}
-			// No movement input
 			else
 			{
 				world.MovementVelocities[i] = Vector3.Zero;
 			}
 
-			// New jump
-			if (world.InputData[i].NewJump())
+			// Jump
+			if (world.InputData[i].NewJump()) // New jump
 			{
-				float ANTI_GRAVITY = -world.Gravity.Y;
-
 				if (world.PlayerCubeState.OnGround)
 				{
-					world.JumpVelocities[i].Y = JUMP_SPEED;
-					world.Accelerations[i].Y = ANTI_GRAVITY;
-					jumpTime += delta;
+					world.JumpVelocities[i] = new Vector3(0, JUMP_SPEED, 0);
+					world.Accelerations[i].Y = -world.Gravity.Y; // Anti-gravity
+					jumpStartMovementVelocity = world.MovementVelocities[i];
+					jumpTime = delta;
+					world.PlayerCubeState.OnGround = false;
+				}
+				else if (world.PlayerCubeState.OnWall)
+				{
+					world.JumpVelocities[i] = world.PlayerCubeState.WallAxis * WALL_JUMP_AXIS_SPEED;
+					world.JumpVelocities[i].Y += WALL_JUMP_UP_SPEED;
+					world.Accelerations[i].Y = -world.Gravity.Y; // Anti-gravity
+					if (world.JumpVelocities[i].Y > WALL_JUMP_UP_SPEED) world.JumpVelocities[i] = new Vector3(0, WALL_JUMP_UP_SPEED, 0);
+					jumpStartMovementVelocity = world.MovementVelocities[i];
+					jumpTime = delta;
+					world.PlayerCubeState.OnWall = false;
 				}
 			}
-			// Continuing jump
-			else if (jumpTime > 0.0f)
+			else if (jumpTime > 0.0f) // Jump in progress
 			{
 				jumpTime += delta;
 				if (jumpTime > MAX_JUMP_RELEASE_TIME || (jumpTime > MIN_JUMP_RELEASE_TIME && !world.InputData[i].IsJumping()))
 				{
-					// Add jump speed at apex to general velocity.
-					world.Velocities[i].Y += JUMP_SPEED_AT_APEX;
+					world.Velocities[i].Y += JUMP_SPEED_AT_APEX; // Add jump speed at apex to general velocity.
 					jumpTime = 0.0f;
+					world.JumpVelocities[i] = Vector3.Zero;
+					world.Accelerations[i].Y = 0.0f;
 				}
 			}
-			// No jump
-			else {
-				world.JumpVelocities[i] = Vector3.Zero;
-				world.Accelerations[i].Y = 0.0f;
-			}
 
-
-			// Color cube sides if on wall
-			var playerEffect = world.StandardEffectParams[world.Player.Id];
-			var cubeState = world.PlayerCubeState;
-
-			Color newColor;
-			if (cubeState.OnWall) newColor = Color.OrangeRed;
-			else if (cubeState.OnGround) newColor = Color.Cyan;
-			else newColor = Color.ForestGreen;
-
-			float speed = world.MovementVelocities[i].Length();
-			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[i]);
-
-			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
+			SetCubeColor(world, i);
+			
 
 			/*for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
@@ -211,7 +238,7 @@ namespace LegendOfCube.Engine
 		// Private functions: Helpers
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		Vector3 RotateInputDirectionRelativeCamera(World world, UInt32 i)
+		private Vector3 RotateInputDirectionRelativeCamera(World world, UInt32 i)
 		{
 			Vector2 direction = world.InputData[i].GetDirection();
 			Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
@@ -227,6 +254,23 @@ namespace LegendOfCube.Engine
 			Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
 
 			return rotatedInput;
+		}
+
+		private void SetCubeColor(World world, UInt32 i)
+		{
+			// Color cube sides if on wall
+			var playerEffect = world.StandardEffectParams[i];
+			var cubeState = world.PlayerCubeState;
+
+			Color newColor;
+			if (cubeState.OnWall) newColor = Color.OrangeRed;
+			else if (cubeState.OnGround) newColor = Color.Cyan;
+			else newColor = Color.ForestGreen;
+
+			float speed = world.MovementVelocities[i].Length();
+			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[i]);
+
+			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
 		}
 	}
 }
