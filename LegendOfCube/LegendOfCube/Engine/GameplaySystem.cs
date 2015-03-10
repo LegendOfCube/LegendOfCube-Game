@@ -38,14 +38,14 @@ namespace LegendOfCube.Engine
 			{
 				Vector3 rotatedInputDir = RotateInputDirectionRelativeCamera(world, i);
 				Vector3 inputVelocity = rotatedInputDir * world.MaxSpeed[i];
-				world.InputVelocities[i].X = inputVelocity.X;
-				world.InputVelocities[i].Z = inputVelocity.Z;
+				world.MovementVelocities[i].X = inputVelocity.X;
+				world.MovementVelocities[i].Z = inputVelocity.Z;
 			}
 			// No movement input
 			else
 			{
-				world.InputVelocities[i].X = 0.0f;
-				world.InputVelocities[i].Z = 0.0f;
+				world.MovementVelocities[i].X = 0.0f;
+				world.MovementVelocities[i].Z = 0.0f;
 			}
 
 			// New jump
@@ -55,7 +55,7 @@ namespace LegendOfCube.Engine
 
 				if (world.PlayerCubeState.OnGround)
 				{
-					world.InputVelocities[i].Y = JUMP_SPEED;
+					world.MovementVelocities[i].Y = JUMP_SPEED;
 					world.Accelerations[i].Y = ANTI_GRAVITY;
 					jumpTime += delta;
 				}
@@ -73,7 +73,7 @@ namespace LegendOfCube.Engine
 			}
 			// No jump
 			else {
-				world.InputVelocities[i].Y = 0.0f;
+				world.MovementVelocities[i].Y = 0.0f;
 				world.Accelerations[i].Y = 0.0f;
 			}
 
@@ -87,7 +87,7 @@ namespace LegendOfCube.Engine
 			else if (cubeState.OnGround) newColor = Color.Cyan;
 			else newColor = Color.ForestGreen;
 
-			float speed = world.InputVelocities[i].Length();
+			float speed = world.MovementVelocities[i].Length();
 			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[i]);
 
 			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();

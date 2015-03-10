@@ -329,7 +329,8 @@ namespace LegendOfCube.Engine
 			Vector3 vel = world.Velocities[i];
 			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
 			{
-				vel += world.InputVelocities[i];
+				vel += world.MovementVelocities[i];
+				vel += world.JumpVelocities[i];
 			}
 			return vel;
 		}
@@ -340,8 +341,8 @@ namespace LegendOfCube.Engine
 			world.Velocities[i] -= (collidingSum * axis);
 			if (world.EntityProperties[i].Satisfies(Properties.INPUT))
 			{
-				collidingSum = Vector3.Dot(world.InputVelocities[i], axis);
-				world.InputVelocities[i] -= (collidingSum * axis);
+				collidingSum = Vector3.Dot(world.MovementVelocities[i], axis);
+				world.MovementVelocities[i] -= (collidingSum * axis);
 			}
 		}
 	}
