@@ -23,7 +23,7 @@ namespace LegendOfCube.Engine
 		private const float WALL_JUMP_UP_SPEED = 30.0f;
 
 		// Air movement 
-		private static readonly Vector2 AIR_MOVEMENT_VELOCITY_DELTA = new Vector2(3.0f, 3.0f);
+		private const float AIR_MAX_MOVEMENT_LENGTH = 0.75f;
 
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -61,7 +61,8 @@ namespace LegendOfCube.Engine
 			// Movement input
 			if (world.InputData[i].GetDirection().Length() > 0.01f)
 			{
-				Vector3 inputDir = RotateInputDirectionRelativeCamera(world, i);
+				Vector2 inputDir2D = world.InputData[i].GetDirection();
+				Vector3 inputDir = Rotate2DDirectionRelativeCamera(world, ref inputDir2D);
 				Vector3 inputVelocity = inputDir * world.MaxSpeed[i];
 				if (world.PlayerCubeState.OnWall)
 				{
@@ -69,10 +70,18 @@ namespace LegendOfCube.Engine
 				}
 				else if (!world.PlayerCubeState.OnGround && !world.PlayerCubeState.OnWall)
 				{
-					Vector3 jumpMoveDir = jumpStartMovementVelocity;
-					jumpMoveDir.Normalize();
-					float dot = Vector3.Dot(inputDir, jumpMoveDir);
-					if (dot < 0.0f) inputVelocity = Vector3.Zero;
+					// Limit movement in air
+					if (inputDir.Length() > AIR_MAX_MOVEMENT_LENGTH)
+					{
+						inputDir.Normalize();
+						inputDir *= AIR_MAX_MOVEMENT_LENGTH;
+					}
+					inputVelocity = (jumpStartMovementVelocity + inputDir * world.MaxSpeed[i]);
+					if (inputVelocity.Length() > world.MaxSpeed[i])
+					{
+						inputVelocity.Normalize();
+						inputVelocity = inputVelocity * world.MaxSpeed[i];
+					}
 				}
 				world.MovementVelocities[i] = inputVelocity;
 			}
@@ -238,9 +247,8 @@ namespace LegendOfCube.Engine
 		// Private functions: Helpers
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private Vector3 RotateInputDirectionRelativeCamera(World world, UInt32 i)
+		private Vector3 Rotate2DDirectionRelativeCamera(World world, ref Vector2 direction)
 		{
-			Vector2 direction = world.InputData[i].GetDirection();
 			Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
 
 			// Calculate angle formed along ground by the cameras position relative the player
