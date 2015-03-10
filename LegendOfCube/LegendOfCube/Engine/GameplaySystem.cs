@@ -12,9 +12,9 @@ namespace LegendOfCube.Engine
 
 		// Ground jump constants
 		private const float MAX_JUMP_RELEASE_HEIGHT = 4.0f;
-		private const float MIN_JUMP_RELEASE_HEIGHT = 1.0f;
+		private const float MIN_JUMP_RELEASE_HEIGHT = 1.5f;
 		private const float JUMP_SPEED = 16.0f;
-		private const float JUMP_SPEED_AT_APEX = 14.0f; // This value must be close to JUMP_SPEED, otherwise it will look like cube hits ceiling. A lower value will give more precise jumps.
+		private const float JUMP_SPEED_AT_APEX = 8.0f; // This value must be close to JUMP_SPEED, otherwise it will look like cube hits ceiling. A lower value will give more precise jumps.
 		private const float MAX_JUMP_RELEASE_TIME = MAX_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 		private const float MIN_JUMP_RELEASE_TIME = MIN_JUMP_RELEASE_HEIGHT / JUMP_SPEED;
 
