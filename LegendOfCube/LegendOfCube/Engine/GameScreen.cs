@@ -53,31 +53,30 @@ namespace LegendOfCube.Engine
 
 			renderSystem.RenderWorld(World);
 
-			StringBuilder text = new StringBuilder();
-			text.Append("FPS: ");
-			text.AppendLine(UIFormat(1.0f/(float)gameTime.ElapsedGameTime.TotalSeconds));
-			text.Append("CamPos: ");
-			text.AppendLine(UIFormat(World.CameraPosition));
-			text.Append("CamDir: ");
-			text.AppendLine(UIFormat(Vector3.Normalize(World.Transforms[World.Player.Id].Translation - World.CameraPosition)));
-			text.Append("CubePos: ");
-			text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
-			text.Append("CubeVel: ");
-			text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
-			text.Append("CubeAcc: ");
-			text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
-			text.Append("OnGround: ");
-			text.AppendLine(World.PlayerCubeState.OnGround.ToString());
-			text.Append("OnWall: ");
-			text.AppendLine(World.PlayerCubeState.OnWall.ToString());
-
-			spriteBatch.Begin();
-			// TODO Move all overlay stuff into if, when problem with texture filtering is fixed
 			if (World.DebugState.ShowDebugOverlay)
 			{
+				StringBuilder text = new StringBuilder();
+				text.Append("FPS: ");
+				text.AppendLine(UIFormat(1.0f/(float) gameTime.ElapsedGameTime.TotalSeconds));
+				text.Append("CamPos: ");
+				text.AppendLine(UIFormat(World.CameraPosition));
+				text.Append("CamDir: ");
+				text.AppendLine(UIFormat(Vector3.Normalize(World.Transforms[World.Player.Id].Translation - World.CameraPosition)));
+				text.Append("CubePos: ");
+				text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
+				text.Append("CubeVel: ");
+				text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
+				text.Append("CubeAcc: ");
+				text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
+				text.Append("OnGround: ");
+				text.AppendLine(World.PlayerCubeState.OnGround.ToString());
+				text.Append("OnWall: ");
+				text.AppendLine(World.PlayerCubeState.OnWall.ToString());
+
+				spriteBatch.Begin();
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+				spriteBatch.End();
 			}
-			spriteBatch.End();
 		}
 
 		internal override void LoadContent()

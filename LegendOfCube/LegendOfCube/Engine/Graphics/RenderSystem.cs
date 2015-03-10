@@ -106,6 +106,8 @@ namespace LegendOfCube.Engine.Graphics
 				}
 			}
 
+			standardEffect.PrepareRendering();
+
 			// Create shadow map for the primary light
 			Matrix shadowMatrix;
 			RenderShadowMap(world, renderableEntities, shadowRenderTarget, out shadowMatrix);
