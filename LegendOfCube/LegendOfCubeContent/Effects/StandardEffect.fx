@@ -16,6 +16,10 @@ float4 DirLight0Color = WHITE_COLOR;
 texture DirLight0ShadowMap;
 float4x4 DirLight0ShadowMatrix;
 
+float3 PointLight0ViewSpacePos;
+float4 PointLight0Color = WHITE_COLOR;
+float PointLight0Reach = 20.0;
+
 // Defines the the ambient look of an object (simulate that all surfaces are somewhat lit)
 float AmbientIntensity = 0.0;
 
@@ -183,33 +187,49 @@ NormalTexVertexShaderOutput NormalTexVertexShaderFunction(NormalTexVertexShaderI
 	return output;
 }
 
-float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 viewSpacePos, float3 normal)
+// General light constribution function, used by different types of lights
+float4 CalculateLightContribution(
+	float3 normal,
+	float3 directionToLight,
+	float3 directionToEye,
+	float4 lightColor,
+	float4 diffuseColor,
+	float4 specularColor)
 {
-	// Determine material color, from texture if available
-	float4 diffuseColor = MaterialDiffuseColor;
-	if (UseDiffuseTexture)
-	{
-		diffuseColor *= tex2D(diffuseTextureSampler, textureCoordinate);
-	}
-	float4 specularColor = MaterialSpecularColor;
-	if (UseSpecularTexture);
-	{
-		specularColor *= tex2D(specularTextureSampler, textureCoordinate);
-	}
-	float4 emissiveColor = MaterialEmissiveColor;
-	if (UseEmissiveTexture)
-	{
-		emissiveColor *= tex2D(emissiveTextureSampler, textureCoordinate);
-	}
-
-	// Calculate some interesting direction vectors
-	float3 directionToLight = normalize(-DirLight0ViewSpaceDir);
-	float3 directionToEye = normalize(-viewSpacePos);
 	float3 h = normalize(directionToLight + directionToEye);
+	float specularDot = dot(h, normal);
 
+	// Determine diffuse, specular and fresnel factor (0 to 1)
+	// At the moment, scale light with negative ambient intensity to easier be
+	// able to balance light for different levels
+	float diffuseFactor = (1.0 - AmbientIntensity) * max(0.0, dot(normal, directionToLight));
+	float specularFactor = (1.0 - AmbientIntensity) * specularDot <= 0.0 ? 0.0 : max(pow(specularDot, Shininess), 0.0);
+	float fresnelFactor = pow(clamp(1.0 - dot(directionToEye, normal), 0.0, 1.0), 5.0);
+
+	// Apply fresnel effect
+	float4 fresnelSpecular = specularColor + (WHITE_COLOR - specularColor) * fresnelFactor;
+
+	float4 diffuse = diffuseFactor * lightColor * diffuseColor;
+	float4 specular = specularFactor * lightColor * fresnelSpecular;
+	return diffuse + specular;
+}
+
+// Calculate the contribution of a directional light
+// TODO: Group properties by structs to make it more readable
+float4 CalculateDirLightContribution(
+	float4 lightSpacePos,
+	float3 lightDir,
+	texture shadowMap,
+	float4x4 shadowMatrix,
+	float3 normal,
+	float3 directionToEye,
+	float4 lightColor,
+	float4 diffuseColor,
+	float4 specularColor)
+{
 	// Determine sample coord from light space position
 	float2 shadowMapCoord = 0.5 * lightSpacePos.xy / lightSpacePos.w + float2(0.5, 0.5);
-	shadowMapCoord.y = 1.0f - shadowMapCoord.y;
+	shadowMapCoord.y = 1.0 - shadowMapCoord.y;
 
 	// Default to objects being lit, might want to do opposite if scene is dark
 	float visibility = 1.0;
@@ -236,27 +256,63 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 v
 			}
 		}
 	}
+	return visibility * CalculateLightContribution(normal, normalize(-lightDir), directionToEye, lightColor, diffuseColor, specularColor);
+}
 
-	// Determine diffuse, specular and fresnel factor (0 to 1)
-	float diffuseFactor = (1.0 - AmbientIntensity) * max(0.0, dot(normal, directionToLight));
-	float specularDot = dot(h, normal);
-	float specularFactor = (1.0 - AmbientIntensity) * specularDot <= 0.0 ? 0.0 : max(pow(specularDot, Shininess), 0.0);
-	float fresnelFactor = pow(clamp(1.0 - dot(directionToEye, normal), 0.0, 1.0), 5.0);
+// Calculate the contribution of a point light
+// TODO: Group properties by structs to make it more readable
+float4 CalculatePointLightContribution(
+	float3 viewSpacePos,
+	float3 lightPosition,
+	float lightReach,
+	float3 normal,
+	float3 directionToEye,
+	float4 lightColor,
+	float4 diffuseColor,
+	float4 specularColor)
+{
+	// Let distance from light modify result
+	float3 lightDifference = lightPosition - viewSpacePos;
+	float lightDistance = length(lightDifference);
+	float lightInverseFactor = 1.0 / (1.0 + lightReach);
+	float lightDistanceFactor = saturate(1.0 / (1.0 + lightInverseFactor * lightDistance * lightDistance));
 
-	// Apply fresnel effect
-	float4 fresnelSpecular = specularColor + (WHITE_COLOR - specularColor) * fresnelFactor;
+	return lightDistanceFactor * CalculateLightContribution(normal, normalize(lightDifference), directionToEye, lightColor, diffuseColor, specularColor);
+}
 
-	// Determine final colors of different lighting component
+float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 viewSpacePos, float3 normal)
+{
+	// Determine material color, from texture if available
+	float4 diffuseColor = MaterialDiffuseColor;
+	if (UseDiffuseTexture)
+	{
+		diffuseColor *= tex2D(diffuseTextureSampler, textureCoordinate);
+	}
+	float4 specularColor = MaterialSpecularColor;
+	if (UseSpecularTexture);
+	{
+		specularColor *= tex2D(specularTextureSampler, textureCoordinate);
+	}
+	float4 emissiveColor = MaterialEmissiveColor;
+	if (UseEmissiveTexture)
+	{
+		emissiveColor *= tex2D(emissiveTextureSampler, textureCoordinate);
+	}
+
+	float3 directionToEye = normalize(-viewSpacePos);
+
+	// Calculate light contribution
+	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos, DirLight0ViewSpaceDir, DirLight0ShadowMap, DirLight0ShadowMatrix, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
+	float4 pointLight0Contribution = CalculatePointLightContribution(viewSpacePos, PointLight0ViewSpacePos, PointLight0Reach, normal, directionToEye, PointLight0Color, diffuseColor, specularColor);
+
+	float4 totalLightContribution = dirLight0Contribution + pointLight0Contribution;
+
 	float4 ambientFinal = AmbientIntensity * diffuseColor; // Currently locked to diffuse color
-	float4 diffuseFinal = visibility * diffuseFactor * DirLight0Color * diffuseColor;
-	float4 specularFinal = visibility * specularFactor * DirLight0Color * fresnelSpecular;
 	float4 emissiveFinal = emissiveColor;
 
-	//return float4(visibility.xxx, 1.0);
 	return saturate(
 		ambientFinal +
-		diffuseFinal +
-		specularFinal +
+		totalLightContribution +
 		emissiveFinal
 	);
 }

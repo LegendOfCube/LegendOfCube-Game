@@ -75,7 +75,11 @@ namespace LegendOfCube.Engine
 			text.AppendLine(World.PlayerCubeState.OnWall.ToString());
 
 			spriteBatch.Begin();
-			spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+			// TODO Move all overlay stuff into if, when problem with texture filtering is fixed
+			if (World.DebugState.ShowDebugOverlay)
+			{
+				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+			}
 			spriteBatch.End();
 		}
 
@@ -83,6 +87,7 @@ namespace LegendOfCube.Engine
 		{
 			//ConceptLevel.CreateLevel(World, Game);
 			//TestLevel1.CreateLevel(World, Game);
+
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, assets);
 			World = new WallClimbLevelFactory().CreateWorld(Game, assets);
 

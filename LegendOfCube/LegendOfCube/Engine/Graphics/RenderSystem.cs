@@ -192,6 +192,14 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetDirLight0ShadowMap(shadowRenderTarget);
 			standardEffect.SetDirLight0ShadowMatrix(ref shadowMatrix);
 
+			// Make the player cube a light source
+			float reach = 10.0f;
+			bool playerHasStandardEffect = world.EntityProperties[world.Player.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE);
+			// Default to white color
+			Vector4 pointColor = playerHasStandardEffect ? world.StandardEffectParams[world.Player.Id].EmissiveColor : Color.White.ToVector4();
+			Vector3 pointLightPos = world.Transforms[world.Player.Id].Translation + new Vector3(0.0f, 0.5f, 0.0f);
+			standardEffect.SetPointLight0Properties(ref pointLightPos, ref reach, ref pointColor);
+
 			foreach (var entity in entities)
 			{
 				RenderEntity(entity, world, ref view, ref projection);
