@@ -7,19 +7,6 @@ namespace LegendOfCube.Engine
 {
 	class GameplaySystem
 	{
-		// Constants
-		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                   Properties.INPUT |
-		                                                                   Properties.ACCELERATION |
-		                                                                   Properties.VELOCITY);
-		// TODO: make stop_time a function of the velocity
-		/*private const float JUMP_TIME = 0.5f;
-		private float jumpTimeLeft = 1f;
-		private bool isStopping = false;
-		private float stopTimeLeft;*/
-
 		private const float MAX_JUMP_RELEASE_HEIGHT = 5.0f;
 		private const float MIN_JUMP_RELEASE_HEIGHT = 1.0f;
 		private const float JUMP_SPEED = 16.0f;
@@ -32,7 +19,10 @@ namespace LegendOfCube.Engine
 		public void ProcessInputData(World world, float delta)
 		{
 			UInt32 i = world.Player.Id;
-			if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT))
+			if (!world.EntityProperties[i].Satisfies(Properties.TRANSFORM |
+			                                         Properties.INPUT |
+			                                         Properties.ACCELERATION |
+			                                         Properties.VELOCITY))
 			{
 				Debug.Assert(false);
 			}
@@ -65,7 +55,6 @@ namespace LegendOfCube.Engine
 
 				if (world.PlayerCubeState.OnGround)
 				{
-					//world.Velocities[i].Y = 0.0f;
 					world.InputVelocities[i].Y = JUMP_SPEED;
 					world.InputAccelerations[i].Y = ANTI_GRAVITY;
 					jumpTime += delta;
@@ -94,18 +83,9 @@ namespace LegendOfCube.Engine
 			var cubeState = world.PlayerCubeState;
 
 			Color newColor;
-			if (cubeState.OnWall)
-			{
-				newColor = Color.OrangeRed;
-			}
-			else if (cubeState.OnGround)
-			{
-				newColor = Color.Cyan;
-			}
-			else
-			{
-				newColor = Color.ForestGreen;
-			}
+			if (cubeState.OnWall) newColor = Color.OrangeRed;
+			else if (cubeState.OnGround) newColor = Color.Cyan;
+			else newColor = Color.ForestGreen;
 
 			float speed = world.InputVelocities[i].Length();
 			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[i]);
