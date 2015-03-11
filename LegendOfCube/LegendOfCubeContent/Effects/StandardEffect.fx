@@ -13,7 +13,6 @@ float4x4 NormalMatrix;
 // Light properties for diffuse and specular illumination
 float3 DirLight0ViewSpaceDir;
 float4 DirLight0Color = WHITE_COLOR;
-texture DirLight0ShadowMap;
 float4x4 DirLight0ShadowMatrix;
 
 float3 PointLight0ViewSpacePos;
@@ -25,75 +24,23 @@ float AmbientIntensity = 0.0;
 
 // Defines the the diffuse look of an object (light spread in all directions)
 bool UseDiffuseTexture;
-texture DiffuseTexture;
 float4 MaterialDiffuseColor = WHITE_COLOR;
 
 // Defines the specular look of an object (highlights)
 bool UseSpecularTexture;
-texture SpecularTexture;
 float4 MaterialSpecularColor = WHITE_COLOR;
 float Shininess = 30.0;
 
 // Defines the self illumination of an object
 bool UseEmissiveTexture;
-texture EmissiveTexture;
 float4 MaterialEmissiveColor = WHITE_COLOR;
 
-// Defines the normals for an object
-texture NormalTexture;
-
-// This sampler has been moved to the top as a way to fix a problem with the
-// shadow map no longer being sampled with Point as filter, after the window
-// has been resized. Why this actually happened is unresolved, this is not a
-// proper fix.
-sampler2D ShadowMapSampler = sampler_state {
-	Texture = (DirLight0ShadowMap);
-	MipFilter = none;
-	MagFilter = Point;
-	MinFilter = Point;
-	AddressU = Clamp;
-	AddressV = Clamp;
-};
-
-sampler2D diffuseTextureSampler = sampler_state {
-	Texture = (DiffuseTexture);
-	MipFilter = linear;
-	MagFilter = linear;
-	MinFilter = anisotropic;
-	MaxAnisotropy = 16;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
-
-sampler2D specularTextureSampler = sampler_state {
-	Texture = (SpecularTexture);
-	MipFilter = linear;
-	MagFilter = linear;
-	MinFilter = anisotropic;
-	MaxAnisotropy = 16;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
-
-sampler2D emissiveTextureSampler = sampler_state {
-	Texture = (EmissiveTexture);
-	MipFilter = linear;
-	MagFilter = linear;
-	MinFilter = anisotropic;
-	MaxAnisotropy = 16;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
-
-sampler2D normalTextureSampler = sampler_state {
-	Texture = (NormalTexture);
-	MipFilter = linear;
-	MagFilter = linear;
-	MinFilter = anisotropic;
-	MaxAnisotropy = 16;
-	AddressU = Wrap;
-	AddressV = Wrap;
-};
+// These are set at XNA-level by using I from sI as an index
+sampler DiffuseTextureSampler  : register(ps, s0);
+sampler SpecularTextureSampler : register(ps, s1);
+sampler EmissiveTextureSampler : register(ps, s2);
+sampler NormalTextureSampler   : register(ps, s3);
+sampler ShadowMapSampler       : register(ps, s4);
 
 struct VertexShaderInput
 {
@@ -219,7 +166,6 @@ float4 CalculateLightContribution(
 float4 CalculateDirLightContribution(
 	float4 lightSpacePos,
 	float3 lightDir,
-	texture shadowMap,
 	float4x4 shadowMatrix,
 	float3 normal,
 	float3 directionToEye,
@@ -286,23 +232,23 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 v
 	float4 diffuseColor = MaterialDiffuseColor;
 	if (UseDiffuseTexture)
 	{
-		diffuseColor *= tex2D(diffuseTextureSampler, textureCoordinate);
+		diffuseColor *= tex2D(DiffuseTextureSampler, textureCoordinate);
 	}
 	float4 specularColor = MaterialSpecularColor;
 	if (UseSpecularTexture);
 	{
-		specularColor *= tex2D(specularTextureSampler, textureCoordinate);
+		specularColor *= tex2D(SpecularTextureSampler, textureCoordinate);
 	}
 	float4 emissiveColor = MaterialEmissiveColor;
 	if (UseEmissiveTexture)
 	{
-		emissiveColor *= tex2D(emissiveTextureSampler, textureCoordinate);
+		emissiveColor *= tex2D(EmissiveTextureSampler, textureCoordinate);
 	}
 
 	float3 directionToEye = normalize(-viewSpacePos);
 
 	// Calculate light contribution
-	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos, DirLight0ViewSpaceDir, DirLight0ShadowMap, DirLight0ShadowMatrix, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
+	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos, DirLight0ViewSpaceDir, DirLight0ShadowMatrix, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
 	float4 pointLight0Contribution = CalculatePointLightContribution(viewSpacePos, PointLight0ViewSpacePos, PointLight0Reach, normal, directionToEye, PointLight0Color, diffuseColor, specularColor);
 
 	float4 totalLightContribution = dirLight0Contribution + pointLight0Contribution;
@@ -327,7 +273,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 float4 NormalTexPixelShaderFunction(NormalTexVertexShaderOutput input) : COLOR0
 {
 	// Get normal from normal map
-	float4 normalTexVec = 2.0 * tex2D(normalTextureSampler, input.TextureCoordinate) - 1.0;
+	float4 normalTexVec = 2.0 * tex2D(NormalTextureSampler, input.TextureCoordinate) - 1.0;
 
 	// Inverting green channel might be needed when exporing from some 3D programs
 	// normalTexVec.y = -normalTexVec.y;
