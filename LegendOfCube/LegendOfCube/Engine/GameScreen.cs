@@ -86,9 +86,9 @@ namespace LegendOfCube.Engine
 		{
 			//ConceptLevel.CreateLevel(World, Game);
 			//TestLevel1.CreateLevel(World, Game);
-
+			DemoLevel.CreateLevel(World, Game);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, assets);
-			World = new WallClimbLevelFactory().CreateWorld(Game, assets);
+			//World = new WallClimbLevelFactory().CreateWorld(Game, assets);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
