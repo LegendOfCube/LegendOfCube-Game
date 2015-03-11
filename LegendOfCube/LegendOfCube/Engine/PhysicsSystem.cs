@@ -184,9 +184,7 @@ namespace LegendOfCube.Engine
 			}
 
 			// Update translation in transform
-			Vector3 obbDiff = worldSpaceOBBs[i].Position - oldObb.Position;
-			world.Transforms[i].Translation += obbDiff;
-			//TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
@@ -323,8 +321,8 @@ namespace LegendOfCube.Engine
 			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
 			transformOut.Translation += obbDiff;
 			// Update rotation: This is probably a really stupid way.
-			transformOut.Forward = newOBB.AxisZ * transformOut.Forward.Length();
-			transformOut.Left = newOBB.AxisX * transformOut.Left.Length();
+			transformOut.Backward = newOBB.AxisZ * transformOut.Forward.Length();
+			transformOut.Right = newOBB.AxisX * transformOut.Left.Length();
 			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
 		}
 	}
