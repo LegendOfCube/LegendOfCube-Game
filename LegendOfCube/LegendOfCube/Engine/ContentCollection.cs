@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine
 {
-	public class AssetCollection
+	public class ContentCollection
 	{
 		public ModelData PlayerCube { get; private set; }
 		public ModelData PlayerCubePlain { get; private set; }

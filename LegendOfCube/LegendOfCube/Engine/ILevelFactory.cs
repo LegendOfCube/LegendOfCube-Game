@@ -4,6 +4,6 @@ namespace LegendOfCube.Engine
 {
 	interface ILevelFactory
 	{
-		World CreateWorld(Game game, AssetCollection assets);
+		World CreateWorld(Game game, ContentCollection contentCollection);
 	}
 }

@@ -7,7 +7,7 @@ namespace LegendOfCube.Levels
 {
 	class BeanStalkLevelFactory : ILevelFactory
 	{
-		public World CreateWorld(Game game, AssetCollection assets)
+		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000) { SpawnPoint = new Vector3(0, 0, 0) };
 			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
@@ -15,7 +15,7 @@ namespace LegendOfCube.Levels
 			world.AmbientIntensity = 0.3f;
 
 			var player = new EntityBuilder()
-				.WithModelData(assets.PlayerCube)
+				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero, 30)
@@ -30,14 +30,14 @@ namespace LegendOfCube.Levels
 
 			// Add ground
 			new EntityBuilder()
-				.WithModelData(assets.PlainCube)
+				.WithModelData(contentCollection.PlainCube)
 				.WithStandardEffectParams(groundEffect)
 				.WithTransform(Matrix.CreateTranslation(0.0f, -0.5f, 0.0f) * Matrix.CreateScale(5000.0f, 1.0f, 5000.0f))
 				.AddToWorld(world);
 
 			// Prepare a builder for platforms
 			var platformBuilder = new EntityBuilder()
-				.WithModelData(assets.RustPlatform);
+				.WithModelData(contentCollection.RustPlatform);
 
 			// Add a lot of platforms building upwards
 			var rnd = new Random(0);

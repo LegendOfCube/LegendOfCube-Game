@@ -85,7 +85,7 @@
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />
-    <Compile Include="Engine\AssetCollection.cs" />
+    <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevelFactory.cs" />
     <Compile Include="Levels\BeanStalkLevelFactory.cs" />
     <Compile Include="Engine\ModelData.cs" />

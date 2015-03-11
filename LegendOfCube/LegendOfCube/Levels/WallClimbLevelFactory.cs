@@ -7,7 +7,7 @@ namespace LegendOfCube.Levels
 {
 	class WallClimbLevelFactory : ILevelFactory
 	{
-		public World CreateWorld(Game game, AssetCollection assets)
+		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 			world.SpawnPoint = new Vector3(-30.0f, 5.0f, 0.0f);
@@ -16,7 +16,7 @@ namespace LegendOfCube.Levels
 			world.AmbientIntensity = 0.3f;
 
 			world.Player = new EntityBuilder()
-				.WithModelData(assets.PlayerCube)
+				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero, 30)
@@ -38,14 +38,14 @@ namespace LegendOfCube.Levels
 			
 			// Add ground
 			new EntityBuilder()
-				.WithModelData(assets.PlayerCubePlain)
+				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithStandardEffectParams(groundEffect)
 				.WithTransform(Matrix.CreateScale(5000.0f, 1.0f, 5000.0f))
 				.AddToWorld(world);
 
 			// Add a massive wall
 			new EntityBuilder()
-				.WithModelData(assets.PlayerCubePlain)
+				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithStandardEffectParams(massiveWallEffect)
 				.WithTransform(Matrix.CreateScale(10.0f, 600.0f, 200.0f))
 				.WithPosition(new Vector3(5.0f, 0.0f, 0.0f))
@@ -53,7 +53,7 @@ namespace LegendOfCube.Levels
 
 			// Prepare builder for platforms
 			var platformBuilder = new EntityBuilder()
-				.WithModelData(assets.PlayerCubePlain)
+				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithTransform(Matrix.CreateTranslation(0.0f, -0.5f, 0.0f) * Matrix.CreateScale(10.0f, 0.5f, 10.0f))
 				.WithStandardEffectParams(platformEffect);
 
