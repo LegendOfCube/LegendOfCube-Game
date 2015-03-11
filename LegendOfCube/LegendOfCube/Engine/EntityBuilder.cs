@@ -122,6 +122,13 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		public EntityBuilder WithModelData(ModelData modelData)
+		{
+			return WithModel(modelData.Model)
+			      .WithBoundingVolume(modelData.Obb)
+			      .WithStandardEffectParams(modelData.EffectParams);
+		}
+
 		/// <summary>
 		/// Adds an Entity to the world, with the properties given to the builder.
 		/// </summary>
@@ -167,7 +174,5 @@ namespace LegendOfCube.Engine
 			}
 			return entity;
 		}
-
-
 	}
 }

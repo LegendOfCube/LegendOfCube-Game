@@ -17,13 +17,16 @@ namespace LegendOfCube.Engine
 		private readonly CameraSystem cameraSystem;
 		private readonly EventSystem EventSystem;
 		private readonly AISystem AI_system;
+		private readonly ContentCollection contentCollection;
 
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		public GameScreen(Game game) : base(game)
+		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
+			this.contentCollection = contentCollection;
+
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
@@ -84,7 +87,8 @@ namespace LegendOfCube.Engine
 			//ConceptLevel.CreateLevel(World, Game);
 			//TestLevel1.CreateLevel(World, Game);
 			DemoLevel.CreateLevel(World, Game);
-
+			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
+			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
