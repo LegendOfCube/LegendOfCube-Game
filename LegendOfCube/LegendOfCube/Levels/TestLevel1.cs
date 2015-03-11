@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
@@ -7,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	public class TestLevel1
+	public class TestLevel1 : ILevelFactory
 	{
 		
 		private static Entity playerEntity;
@@ -18,8 +19,9 @@ namespace LegendOfCube.Levels
 		private static Entity[] deathCubes;
 		private static Entity[] teleportCubes;
 
-		public static void CreateLevel(World world, Game game)
+		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
+			World world = new World(1000);
 			var cubeModel = game.Content.Load<Model>("Models/cube/cube_plain");
 
 			var playerEffect = new StandardEffectParams
@@ -175,6 +177,8 @@ namespace LegendOfCube.Levels
 
 			world.LightDirection = Vector3.Normalize(-new Vector3 {X = 0, Y = 1.5f, Z = 1});
 			world.AmbientIntensity = 0.3f;
+
+			return world;
 		}
 	}
 }

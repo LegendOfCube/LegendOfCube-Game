@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class ConceptLevel
+	class ConceptLevel : ILevelFactory
 	{
 		private static Entity playerEntity;
 
-		public static void CreateLevel(World world, Game game)
+		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-
+			World world = new World(1000);
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
@@ -340,6 +340,7 @@ namespace LegendOfCube.Levels
 			});
 			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
 			world.AmbientIntensity = 0.45f;
+			return world;
 		}
 	}
 }

@@ -84,9 +84,9 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
-			//ConceptLevel.CreateLevel(World, Game);
-			//TestLevel1.CreateLevel(World, Game);
-			DemoLevel.CreateLevel(World, Game);
+			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
+			//World = new TestLevel1().CreateWorld(Game, contentCollection);
+			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
