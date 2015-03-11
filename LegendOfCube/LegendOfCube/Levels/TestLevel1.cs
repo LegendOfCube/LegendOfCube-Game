@@ -87,7 +87,7 @@ namespace LegendOfCube.Levels
 					.WithStandardEffectParams(playerEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0),
 						new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
+					.WithAdditionalProperties(new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 					.AddToWorld(world);
 			world.Player = playerEntity;
 
