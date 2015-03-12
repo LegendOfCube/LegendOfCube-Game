@@ -21,7 +21,7 @@ namespace LegendOfCube.Levels
 
 		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-			World world = new World(1000);
+			World world = new World(1500);
 			var cubeModel = game.Content.Load<Model>("Models/cube/cube_plain");
 
 			var playerEffect = new StandardEffectParams
