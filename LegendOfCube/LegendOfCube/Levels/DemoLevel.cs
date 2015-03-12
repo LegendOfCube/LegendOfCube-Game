@@ -34,6 +34,7 @@ namespace LegendOfCube.Levels
 			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start_fix_2");
 			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix_2");
 			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
+			var doorModel = game.Content.Load<Model>("Models/Door/door");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -68,6 +69,12 @@ namespace LegendOfCube.Levels
 			var dropSignEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var doorEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Door/door_d"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
@@ -230,6 +237,19 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(20, 10, -10))
 				.WithStandardEffectParams(catwalkEffect)
 				.AddToWorld(world);
+			//Door 1
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, 10.5f,-14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			//Door 2
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, 10.5f, -14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+
 			//CATWALK LOWER
 			new EntityBuilder().WithModel(catwalkStartModel)
 				.WithTransform(Matrix.CreateScale(1, 1, 1))
@@ -246,7 +266,18 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(20, 0, -10))
 				.WithStandardEffectParams(catwalkEffect)
 				.AddToWorld(world);
-
+			//Door 1
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, 0.5f, -14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			//Door 2
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, 0.5f, -14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
 			/*
 			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
 			 */
