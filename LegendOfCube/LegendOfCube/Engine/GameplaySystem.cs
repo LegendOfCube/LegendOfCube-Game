@@ -1,6 +1,7 @@
 ﻿using System;
 using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
 
 namespace LegendOfCube.Engine
 {
@@ -9,19 +10,64 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                        Properties.INPUT |
-		                                                                        Properties.ACCELERATION |
-		                                                                        Properties.VELOCITY);
-		// TODO: make stop_time a function of the velocity
-		private const float JUMP_TIME = 0.5f;
-		private float jumpTimeLeft = 1f;
-		private bool isStopping = false;
-		private float stopTimeLeft;
+		private const float MOVEMENT_ACCELERATION = 15.0f;
+
+		// Variables
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private Vector3 currentMovementVelocity = Vector3.Zero;
+		private Vector3 targetMovementVelocity = Vector3.Zero;
+		
+		// Public functions
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public void ProcessInputData(World world, float delta)
 		{
-			for (UInt32 i = 0; i < world.MaxNumEntities; i++)
+			UInt32 i = world.Player.Id;
+			if (!world.EntityProperties[i].Satisfies(Properties.TRANSFORM |
+			                                         Properties.INPUT |
+			                                         Properties.ACCELERATION |
+			                                         Properties.VELOCITY))
+			{
+				Debug.Assert(false);
+			}
+
+			// Movement
+			{
+				// If cubes total velocity is less than currentMovementVelocity adjust currentMovementVelocity accordingly
+				if (Math.Abs(world.Velocities[i].X) < Math.Abs(currentMovementVelocity.X)) currentMovementVelocity.X = world.Velocities[i].X;
+				if (Math.Abs(world.Velocities[i].Z) < Math.Abs(currentMovementVelocity.Z)) currentMovementVelocity.Z = world.Velocities[i].Z;
+
+				// Remove currentMovementVelocity from cubes total velocity
+				world.Velocities[i].X -= currentMovementVelocity.X;
+				world.Velocities[i].Z -= currentMovementVelocity.Z;
+
+				// Calculate targetMovementVelocity
+				Vector2 inputDir = world.InputData[i].GetDirection();
+				Vector3 rotatedInputDir = Rotate2DDirectionRelativeCamera(world, ref inputDir);
+				if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * world.MaxSpeed[i];
+				else targetMovementVelocity = Vector3.Zero;
+
+				// Move currentMovementVelocity towards target velocity
+				Vector3 dirToTarget = targetMovementVelocity - currentMovementVelocity;
+				if (dirToTarget != Vector3.Zero) // Only mess with currentMovementVelocity if necessary
+				{
+					dirToTarget.Normalize();
+					currentMovementVelocity += dirToTarget * MOVEMENT_ACCELERATION * delta;
+
+					// If we passed targetMovementVelocity we clamp to it.
+					if (Vector3.Dot(targetMovementVelocity - currentMovementVelocity, dirToTarget) <= 0)
+					{
+						currentMovementVelocity = targetMovementVelocity;
+					}
+				}
+
+				// Add currentMovementVelocity to cubes total velocity
+				world.Velocities[i].X += currentMovementVelocity.X;
+				world.Velocities[i].Z += currentMovementVelocity.Z;
+			}
+
+			/*for (UInt32 i = 0; i < world.MaxNumEntities; i++)
 			{
 				if (!world.EntityProperties[i].Satisfies(MOVEMENT_INPUT)) continue;
 				// Updates velocities according to input
@@ -122,7 +168,7 @@ namespace LegendOfCube.Engine
 						jumpTimeLeft -= delta;
 					}
 				}
-			}
+			}*/
 
 			SetCubeColor(world, world.Player.Id);
 		}
