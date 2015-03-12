@@ -30,6 +30,7 @@ namespace LegendOfCube.Levels
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
+			var dropSignModel = game.Content.Load<Model>("Models/Sign_Drop/danger_drop");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -58,6 +59,12 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_n"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var dropSignEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
@@ -140,6 +147,14 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(0, 0, 0))
 				.WithStandardEffectParams(stonePlatformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+
+			//DROP SIGN
+			new EntityBuilder().WithModel(dropSignModel)
+				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
+				.WithPosition(new Vector3(2, 0, 0))
+				.WithStandardEffectParams(dropSignEffect)
+				//.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(platformModel)
