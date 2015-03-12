@@ -189,13 +189,11 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(0, 0, 0))
 				.WithStandardEffectParams(pillarEffect)
 				.AddToWorld(world);
-
 			//DROP SIGN
 			new EntityBuilder().WithModel(dropSignModel)
 				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
 				.WithPosition(new Vector3(2, 0, 0))
 				.WithStandardEffectParams(dropSignEffect)
-				//.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
 			// Normal jump platform
@@ -205,6 +203,11 @@ namespace LegendOfCube.Levels
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(30, 0, 0))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
 
 			// Wall slide platform
 			new EntityBuilder().WithModel(platformModel)
@@ -213,16 +216,30 @@ namespace LegendOfCube.Levels
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(82, 0, 0))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
 
 			//First wallslide
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 7.5f, 10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(60, 0, -5))
+				.WithPosition(new Vector3(60, 0, -5.5f))
 				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
-
-			//Wall high jump
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(50, 8, -5.5f))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(70, 8, -5.5f))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
+			//Wall high jump (DEATH)
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 3.1f, 2))
 				.WithPosition(new Vector3(105, 0, 0))
@@ -230,7 +247,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
-
+			//Checkpoint
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(125, 0, 0))
