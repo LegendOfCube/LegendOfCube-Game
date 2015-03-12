@@ -208,9 +208,42 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			//BACKGROUND GEOMETRY
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(1, 100, 100) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, -50, -15))
+				.WithStandardEffectParams(platformTeleportEffect)
+				.AddToWorld(world);
+
+			//CATWALK UPPER
 			new EntityBuilder().WithModel(catwalkStartModel)
 				.WithTransform(Matrix.CreateScale(1, 1, 1))
 				.WithPosition(new Vector3(0, 10, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkMiddleModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(10, 10, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkEndModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(20, 10, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			//CATWALK LOWER
+			new EntityBuilder().WithModel(catwalkStartModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(0, 0, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkMiddleModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(10, 0, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkEndModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(20, 0, -10))
 				.WithStandardEffectParams(catwalkEffect)
 				.AddToWorld(world);
 

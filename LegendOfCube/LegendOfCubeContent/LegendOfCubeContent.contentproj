@@ -331,25 +331,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Catwalk\catwalk_middle_fix.FBX">
-      <Name>catwalk_middle_fix</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\Catwalk\catwalk_start_fix.FBX">
-      <Name>catwalk_start_fix</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\Catwalk\catwalk_end_fix.FBX">
-      <Name>catwalk_end_fix</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\Catwalk\catwalk_end_fix_2.FBX">
       <Name>catwalk_end_fix_2</Name>
       <Importer>FbxImporter</Importer>
