@@ -54,9 +54,23 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
+			var stonePlatformEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_n"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
 			var wallEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
+			};
+
+			var wallHorizontalEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 			};
@@ -115,9 +129,9 @@ namespace LegendOfCube.Levels
 
 			// Starting platform
 			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2, 1, 1))
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
 				.WithPosition(new Vector3(0, 0, 0))
-				.WithStandardEffectParams(platformEffect)
+				.WithStandardEffectParams(stonePlatformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
@@ -139,7 +153,7 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 7.5f, 10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(60, 0, -5))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
