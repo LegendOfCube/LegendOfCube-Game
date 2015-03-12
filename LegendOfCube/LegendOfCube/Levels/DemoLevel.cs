@@ -210,7 +210,7 @@ namespace LegendOfCube.Levels
 			//BACKGROUND GEOMETRY
 			new EntityBuilder().WithModel(catwalkStartModel)
 				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(20, 0, 20))
+				.WithPosition(new Vector3(0, 0, -20))
 				.WithStandardEffectParams(catwalkEffect)
 				.AddToWorld(world);
 
