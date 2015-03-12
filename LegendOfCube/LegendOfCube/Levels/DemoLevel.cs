@@ -75,6 +75,13 @@ namespace LegendOfCube.Levels
 				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 			};
 
+			var wallVerticalEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
+			};
+
 			var wallDeathEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_d"),
@@ -186,21 +193,21 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(200, -35, -7.5f))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(220, -35, 7.5f))
-				.WithStandardEffectParams(wallEffect)
+				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(220, -20, 7.5f))
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(240, -35, -7.5f))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
@@ -265,35 +272,35 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2))
 				.WithPosition(new Vector3(430, -2, 70))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(425, 3, 75))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2))
 				.WithPosition(new Vector3(420, 8, 70))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(425, 12, 65))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2))
 				.WithPosition(new Vector3(430, 17, 70))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
