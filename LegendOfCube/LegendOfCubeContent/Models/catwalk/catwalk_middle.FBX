@@ -1445,7 +1445,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "C:\Users\Christoffer Matsson\Documents\3dsMax\scenes\LoC\catwalk\MetalBase0011_L.jpg"
-		RelativeFilename: "MetalBase0011_L.jpg"
+		RelativeFilename: "catwalk-d.jpg"
 	}
 	Texture: 2999500672, "Texture::Map #1", "" {
 		Type: "TextureVideoClip"
