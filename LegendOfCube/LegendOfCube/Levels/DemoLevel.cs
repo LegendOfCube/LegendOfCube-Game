@@ -31,9 +31,9 @@ namespace LegendOfCube.Levels
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
 			var dropSignModel = game.Content.Load<Model>("Models/Sign_Drop/danger_drop");
-			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start_fix");
-			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix");
-			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix");
+			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start_fix_2");
+			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix_2");
+			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -210,7 +210,7 @@ namespace LegendOfCube.Levels
 			//BACKGROUND GEOMETRY
 			new EntityBuilder().WithModel(catwalkStartModel)
 				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(0, 0, -20))
+				.WithPosition(new Vector3(0, 10, -10))
 				.WithStandardEffectParams(catwalkEffect)
 				.AddToWorld(world);
 
