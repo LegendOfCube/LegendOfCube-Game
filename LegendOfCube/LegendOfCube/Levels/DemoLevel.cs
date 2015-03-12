@@ -25,7 +25,7 @@ namespace LegendOfCube.Levels
 				Y = -1.0f,
 				Z = -1.0f
 			});
-			world.AmbientIntensity = 0.45f;
+			world.AmbientIntensity = 0.25f;
 
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
@@ -36,6 +36,7 @@ namespace LegendOfCube.Levels
 			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
 			var doorModel = game.Content.Load<Model>("Models/Door/door");
 			var exitSignModel = game.Content.Load<Model>("Models/Sign_Exit/exit_sign");
+			var pillarModel = game.Content.Load<Model>("Models/Platform/pillar");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -57,6 +58,12 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var pillarEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/metal_rust_tex_01"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
@@ -89,6 +96,8 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
 				EmissiveTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
+				SpecularColor = Color.Gray.ToVector4(),
+				EmissiveColor = Color.White.ToVector4()
 			};
 
 			var wallEffect = new StandardEffectParams
@@ -164,12 +173,21 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerEntity;
 
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
+
 			// Starting platform
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(1, 1, 1))
 				.WithPosition(new Vector3(0, 0, 0))
 				.WithStandardEffectParams(stonePlatformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(0, 0, 0))
+				.WithStandardEffectParams(pillarEffect)
 				.AddToWorld(world);
 
 			//DROP SIGN
