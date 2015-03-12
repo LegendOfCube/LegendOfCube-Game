@@ -35,6 +35,7 @@ namespace LegendOfCube.Levels
 			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix_2");
 			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
 			var doorModel = game.Content.Load<Model>("Models/Door/door");
+			var exitSignModel = game.Content.Load<Model>("Models/Sign_Exit/exit_sign");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -82,6 +83,12 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Catwalk/catwalk-d"),
 				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var exitSignEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
 			};
 
 			var wallEffect = new StandardEffectParams
@@ -237,17 +244,28 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(20, 10, -10))
 				.WithStandardEffectParams(catwalkEffect)
 				.AddToWorld(world);
+			
 			//Door 1
 			new EntityBuilder().WithModel(doorModel)
 				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(0, 10.5f,-14.7f))
 				.WithStandardEffectParams(doorEffect)
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(0, 15, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
+				.AddToWorld(world);
 			//Door 2
 			new EntityBuilder().WithModel(doorModel)
 				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(20, 10.5f, -14.7f))
 				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(20, 15, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
 				.AddToWorld(world);
 
 			//CATWALK LOWER
@@ -272,11 +290,21 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(0, 0.5f, -14.7f))
 				.WithStandardEffectParams(doorEffect)
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(0, 5, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
+				.AddToWorld(world);
 			//Door 2
 			new EntityBuilder().WithModel(doorModel)
 				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(20, 0.5f, -14.7f))
 				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(20, 5, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
 				.AddToWorld(world);
 			/*
 			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
