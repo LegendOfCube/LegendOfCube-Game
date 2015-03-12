@@ -121,7 +121,7 @@
     <Compile Include="Models\Cube\cube_clean.FBX">
       <Name>cube_clean</Name>
       <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Processor>StandardEffectModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -242,6 +242,12 @@
       <Processor>TextureProcessor</Processor>
       <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LegendOfCubePipeline\LegendOfCubePipeline.csproj">
+      <Project>{4394f0f5-28b0-4068-922a-a5cf7dfd0eab}</Project>
+      <Name>LegendOfCubePipeline</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
