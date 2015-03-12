@@ -1,0 +1,3 @@
+0,025 x 0,3 x 0,151
+
+Pivot: Bottom centre
