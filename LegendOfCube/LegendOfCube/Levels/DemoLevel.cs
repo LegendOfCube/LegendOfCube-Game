@@ -31,6 +31,9 @@ namespace LegendOfCube.Levels
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
 			var dropSignModel = game.Content.Load<Model>("Models/Sign_Drop/danger_drop");
+			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start");
+			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle");
+			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -65,6 +68,12 @@ namespace LegendOfCube.Levels
 			var dropSignEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var catwalkEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Catwalk/catwalk-d"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
@@ -157,6 +166,7 @@ namespace LegendOfCube.Levels
 				//.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
+			// Normal jump platform
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(30, 0, 0))
@@ -164,6 +174,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
 
+			// Wall slide platform
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(82, 0, 0))
@@ -195,6 +206,17 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
 				.AddToWorld(world);
+
+			//BACKGROUND GEOMETRY
+			new EntityBuilder().WithModel(catwalkStartModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(20, 0, 20))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
 
 			//Slidy slide
 			new EntityBuilder().WithModel(platformModel)

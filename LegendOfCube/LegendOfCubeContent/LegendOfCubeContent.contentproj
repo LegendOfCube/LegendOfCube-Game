@@ -273,8 +273,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Catwalk\MetalBase0011_L.jpg">
-      <Name>MetalBase0011_L</Name>
+    <Compile Include="Models\Catwalk\catwalk-d.jpg">
+      <Name>catwalk-d</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
