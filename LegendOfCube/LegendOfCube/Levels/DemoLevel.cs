@@ -31,9 +31,9 @@ namespace LegendOfCube.Levels
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
 			var dropSignModel = game.Content.Load<Model>("Models/Sign_Drop/danger_drop");
-			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start");
-			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle");
-			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end");
+			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start_fix");
+			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix");
+			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix");
 
 			var playerEffect = new StandardEffectParams
 			{
