@@ -64,6 +64,12 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
+			var blackEffect = new StandardEffectParams
+			{
+				DiffuseColor = new Vector4(new Vector3(0), 0),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
 			var pillarEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/metal_rust_tex_01"),
@@ -106,7 +112,7 @@ namespace LegendOfCube.Levels
 			var ductEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
-				//NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
+				NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 			var ductFanEffect = new StandardEffectParams
@@ -257,19 +263,40 @@ namespace LegendOfCube.Levels
 			
 			//Wall high jump (DEATH)
 			new EntityBuilder().WithModel(deathDuctModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(105, 0, 0))
+				.WithStandardEffectParams(ductEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
+				.AddToWorld(world);
+			//BLACK HACK
+			new EntityBuilder().WithModel(cube10Model)
+				.WithTransform(Matrix.CreateScale(0.95f, 0.95f, 0.1f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(105, 0.3f, 0))
+				.WithStandardEffectParams(blackEffect)
+				.AddToWorld(world);
+			//THE FAN
+			new EntityBuilder().WithModel(deathDuctFanModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(105, 0, 0))
 				.WithStandardEffectParams(ductFanEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, -5), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(7, 7, 0.5f)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+				.AddToWorld(world);
+
+			//DUCT PILLAR
+			new EntityBuilder().WithModel(cube10Model)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(105, -10, 0))
+				.WithStandardEffectParams(ductEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
 				.AddToWorld(world);
 			new EntityBuilder().WithModel(cube10Model)
 				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(95, 0, 0))
+				.WithPosition(new Vector3(105, -20, 0))
 				.WithStandardEffectParams(ductEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
 				.AddToWorld(world);
+
 			//Checkpoint
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
