@@ -37,8 +37,8 @@ namespace LegendOfCube.Levels
 			var doorModel = game.Content.Load<Model>("Models/Door/door");
 			var exitSignModel = game.Content.Load<Model>("Models/Sign_Exit/exit_sign");
 			var pillarModel = game.Content.Load<Model>("Models/Platform/pillar");
-			var deathCubeModel = game.Content.Load<Model>("Models/Duct/deathcube");
-			var deathCubeFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
+			var deathDuctModel = game.Content.Load<Model>("Models/Duct/deathcube");
+			var deathDuctFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -105,7 +105,7 @@ namespace LegendOfCube.Levels
 			var ductEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
+				//NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 			var ductFanEffect = new StandardEffectParams
@@ -253,11 +253,12 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(70, 8, -5.5f))
 				.WithStandardEffectParams(pillarEffect)
 				.AddToWorld(world);
+			
 			//Wall high jump (DEATH)
-			new EntityBuilder().WithModel(wallModel)
+			new EntityBuilder().WithModel(deathDuctModel)
 				.WithTransform(Matrix.CreateScale(2, 3.1f, 2))
 				.WithPosition(new Vector3(105, 0, 0))
-				.WithStandardEffectParams(wallDeathEffect)
+				.WithStandardEffectParams(ductEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
@@ -270,7 +271,8 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
 				.AddToWorld(world);
 
-			//BACKGROUND GEOMETRY
+			/***************BACKGROUND GEOMETRY************************/
+
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(1, 100, 100) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(0, -50, -15))
