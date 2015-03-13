@@ -37,6 +37,8 @@ namespace LegendOfCube.Levels
 			var doorModel = game.Content.Load<Model>("Models/Door/door");
 			var exitSignModel = game.Content.Load<Model>("Models/Sign_Exit/exit_sign");
 			var pillarModel = game.Content.Load<Model>("Models/Platform/pillar");
+			var deathCubeModel = game.Content.Load<Model>("Models/Duct/deathcube");
+			var deathCubeFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -98,6 +100,13 @@ namespace LegendOfCube.Levels
 				EmissiveTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
+			};
+
+			var ductEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
+				SpecularColor = Color.Gray.ToVector4()
 			};
 
 			var wallEffect = new StandardEffectParams
