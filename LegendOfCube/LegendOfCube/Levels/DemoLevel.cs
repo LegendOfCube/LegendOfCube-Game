@@ -39,6 +39,7 @@ namespace LegendOfCube.Levels
 			var pillarModel = game.Content.Load<Model>("Models/Platform/pillar");
 			var deathDuctModel = game.Content.Load<Model>("Models/Duct/deathcube");
 			var deathDuctFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
+			var cube10Model = game.Content.Load<Model>("Models/Duct/cube10");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -256,8 +257,15 @@ namespace LegendOfCube.Levels
 			
 			//Wall high jump (DEATH)
 			new EntityBuilder().WithModel(deathDuctModel)
-				.WithTransform(Matrix.CreateScale(2, 3.1f, 2))
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
 				.WithPosition(new Vector3(105, 0, 0))
+				.WithStandardEffectParams(ductFanEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(cube10Model)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(95, 0, 0))
 				.WithStandardEffectParams(ductEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
