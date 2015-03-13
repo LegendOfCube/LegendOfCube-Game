@@ -15,7 +15,6 @@ namespace LegendOfCube.Engine
 		private readonly GameplaySystem gameplaySystem;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
-		private readonly EventSystem eventSystem;
 		private readonly AISystem aiSystem;
 		private readonly ContentCollection contentCollection;
 
@@ -32,7 +31,6 @@ namespace LegendOfCube.Engine
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
-			eventSystem = new EventSystem();
 			aiSystem = new AISystem();
 		}
 
