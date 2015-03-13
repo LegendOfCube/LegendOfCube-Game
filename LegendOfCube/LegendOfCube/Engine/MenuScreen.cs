@@ -31,7 +31,7 @@ namespace LegendOfCube.Engine
 		{
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			inputSystem.ApplyInput(gameTime, World, switcher);
+			inputSystem.ApplyInput(World, gameTime, switcher);
 			menuInputSystem.ApplyInput(gameTime, World, switcher, ref selection);
 			cameraSystem.OnUpdate(World, delta);
 		}
