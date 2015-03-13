@@ -16,6 +16,7 @@ namespace LegendOfCube.Engine
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
 		private readonly AISystem aiSystem;
+		private readonly AnimationSystem animationSystem;
 		private readonly ContentCollection contentCollection;
 
 		private SpriteFont font;
@@ -32,6 +33,7 @@ namespace LegendOfCube.Engine
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			aiSystem = new AISystem();
+			animationSystem = new AnimationSystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
@@ -43,6 +45,7 @@ namespace LegendOfCube.Engine
 			physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
 			EventSystem.CalculateCubeState(World);
 			EventSystem.HandleEvents(World);
+			animationSystem.OnUpdate(World, delta);
 			cameraSystem.OnUpdate(World, delta);
 		}
 
