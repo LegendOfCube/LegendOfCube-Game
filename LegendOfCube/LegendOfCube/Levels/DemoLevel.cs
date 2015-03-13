@@ -108,6 +108,11 @@ namespace LegendOfCube.Levels
 				NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
+			var ductFanEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
 
 			var wallEffect = new StandardEffectParams
 			{
