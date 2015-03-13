@@ -10,7 +10,13 @@ namespace LegendOfCube.Engine
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
+		// Movement constants
 		private const float MOVEMENT_ACCELERATION = 15.0f;
+
+		// Ground jump constants
+		private const float MAX_JUMP_HEIGHT = 6.0f;
+		private const float MIN_JUMP_HEIGHT = 4.0f;
+		private const float MAX_DECISION_HEIGHT = 1.0f;
 
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -31,6 +37,12 @@ namespace LegendOfCube.Engine
 			{
 				Debug.Assert(false);
 			}
+
+			// Ground jump constants (that depend on gravity in some way)
+			float MIN_JUMP_SPEED = (float)Math.Sqrt(-2.0f * MIN_JUMP_HEIGHT * world.Gravity.Y);
+			float MAX_JUMP_SPEED = (float)Math.Sqrt(-2.0f * (MAX_JUMP_HEIGHT - MAX_DECISION_HEIGHT) * world.Gravity.Y);
+			float JUMP_DECISION_ACCELERATION = ((MAX_JUMP_SPEED * MAX_JUMP_SPEED - MIN_JUMP_SPEED * MIN_JUMP_SPEED) / (2 * MAX_DECISION_HEIGHT)) - world.Gravity.Y;
+			float MAX_DECISION_TIME = (-MIN_JUMP_SPEED / world.Gravity.Y) - (float)Math.Sqrt(((4.0f * MIN_JUMP_SPEED*MIN_JUMP_SPEED)/(JUMP_DECISION_ACCELERATION*JUMP_DECISION_ACCELERATION)) + (2*MAX_DECISION_HEIGHT/world.Gravity.Y));
 
 			// Movement
 			{
