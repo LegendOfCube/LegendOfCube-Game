@@ -74,6 +74,7 @@ namespace LegendOfCube.Levels
 			var pillarEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+				NormalTexture = game.Content.Load<Texture>("Models/Platform/pipe_normal"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
