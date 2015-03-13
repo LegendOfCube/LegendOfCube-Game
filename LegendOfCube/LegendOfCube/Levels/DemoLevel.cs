@@ -40,6 +40,7 @@ namespace LegendOfCube.Levels
 			var deathDuctModel = game.Content.Load<Model>("Models/Duct/deathcube");
 			var deathDuctFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
 			var cube10Model = game.Content.Load<Model>("Models/Duct/cube10");
+			var movingPartsSignModel = game.Content.Load<Model>("Models/Sign_Moving/moving_parts");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -107,6 +108,12 @@ namespace LegendOfCube.Levels
 				EmissiveTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
 				SpecularColor = Color.Gray.ToVector4(),
 				EmissiveColor = Color.White.ToVector4()
+			};
+
+			var movingSignEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Moving/moving_parts_d"),
+				SpecularColor = Color.Gray.ToVector4()
 			};
 
 			var ductEffect = new StandardEffectParams
@@ -259,6 +266,13 @@ namespace LegendOfCube.Levels
 				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(70, 8, -5.5f))
 				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
+
+			//Signs on wall
+			new EntityBuilder().WithModel(movingPartsSignModel)
+				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
+				.WithPosition(new Vector3(87, 0, 0))
+				.WithStandardEffectParams(movingSignEffect)
 				.AddToWorld(world);
 			
 			//Wall high jump (DEATH)
