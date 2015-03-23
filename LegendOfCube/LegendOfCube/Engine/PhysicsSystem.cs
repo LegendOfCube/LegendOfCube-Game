@@ -82,16 +82,7 @@ namespace LegendOfCube.Engine
 
 		private void ApplyGravity(World world, UInt32 i, float delta)
 		{
-			// Player moves slower when on wall.
-			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM.
-			if (world.PlayerCubeState.OnWall)
-			{
-				world.Velocities[i] += (world.Gravity * delta * 0.5f);
-			}
-			else
-			{
-				world.Velocities[i] += (world.Gravity * delta);
-			}
+			world.Velocities[i] += (world.Gravity * delta);
 		}
 		
 		private void MoveDynamicWithCollisionChecking(World world, UInt32 i, float delta)

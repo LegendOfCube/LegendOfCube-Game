@@ -13,6 +13,7 @@ namespace LegendOfCube.Engine
 		// Movement constants
 		private const float MOVEMENT_ACCELERATION = 35.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 10.0f;
+		private const float WALL_ANTI_GRAVITY_FACTOR = 0.75f;
 
 		// Ground jump constants
 		private const float MAX_JUMP_HEIGHT = 5.0f;
@@ -95,6 +96,12 @@ namespace LegendOfCube.Engine
 				float wallAxisVel = Vector3.Dot(world.Velocities[i], world.PlayerCubeState.WallAxis);
 				world.Velocities[i] -= wallAxisVel * world.PlayerCubeState.WallAxis;
 				world.Velocities[i] -= 2.5f * world.PlayerCubeState.WallAxis;
+			}
+
+			// WALL ANTI-GRAVITY HACK
+			if (world.PlayerCubeState.OnWall)
+			{
+				world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
 			}
 
 			// Jumping
