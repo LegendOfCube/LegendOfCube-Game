@@ -15,15 +15,16 @@ namespace LegendOfCube.Engine
 		private const float MOVEMENT_AIR_ACCELERATION = 10.0f;
 
 		// Ground jump constants
-		private const float MAX_JUMP_HEIGHT = 6.0f;
-		private const float MIN_JUMP_HEIGHT = 4.0f;
-		private const float MAX_DECISION_HEIGHT = 1.0f;
+		private const float MAX_JUMP_HEIGHT = 5.0f;
+		private const float MIN_JUMP_HEIGHT = 1.5f;
+		private const float MAX_DECISION_HEIGHT = 1.5f;
 
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private Vector3 currentMovementVelocity = Vector3.Zero;
 		private Vector3 targetMovementVelocity = Vector3.Zero;
+		private float jumpTime = 0.0f;
 		
 		// Public functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -40,10 +41,10 @@ namespace LegendOfCube.Engine
 			}
 
 			// Ground jump constants (that depend on gravity in some way)
-			float MIN_JUMP_SPEED = (float)Math.Sqrt(-2.0f * MIN_JUMP_HEIGHT * world.Gravity.Y);
-			float MAX_JUMP_SPEED = (float)Math.Sqrt(-2.0f * (MAX_JUMP_HEIGHT - MAX_DECISION_HEIGHT) * world.Gravity.Y);
-			float JUMP_DECISION_ACCELERATION = ((MAX_JUMP_SPEED * MAX_JUMP_SPEED - MIN_JUMP_SPEED * MIN_JUMP_SPEED) / (2 * MAX_DECISION_HEIGHT)) - world.Gravity.Y;
-			float MAX_DECISION_TIME = (-MIN_JUMP_SPEED / world.Gravity.Y) - (float)Math.Sqrt(((4.0f * MIN_JUMP_SPEED*MIN_JUMP_SPEED)/(JUMP_DECISION_ACCELERATION*JUMP_DECISION_ACCELERATION)) + (2*MAX_DECISION_HEIGHT/world.Gravity.Y));
+			float MIN_JUMP_SPEED = (float)Math.Sqrt(-2.0f * MIN_JUMP_HEIGHT * world.Gravity.Y); // Confarm
+			float MAX_JUMP_SPEED = (float)Math.Sqrt(-2.0f * (MAX_JUMP_HEIGHT - MAX_DECISION_HEIGHT) * world.Gravity.Y); // Confarm
+			float MAX_DECISION_TIME = MAX_DECISION_HEIGHT / (((MAX_JUMP_SPEED - MIN_JUMP_SPEED) / 2.0f) + MIN_JUMP_SPEED);
+			float JUMP_DECISION_ACCELERATION = ((MAX_JUMP_SPEED - MIN_JUMP_SPEED) / MAX_DECISION_TIME) - world.Gravity.Y;
 
 			// Movement
 			{
@@ -79,6 +80,37 @@ namespace LegendOfCube.Engine
 				// Add currentMovementVelocity to cubes total velocity
 				world.Velocities[i].X += currentMovementVelocity.X;
 				world.Velocities[i].Z += currentMovementVelocity.Z;
+			}
+
+			// Jumping
+			{
+				if (world.InputData[i].NewJump())
+				{
+					if (world.PlayerCubeState.OnGround) // Ground jump
+					{
+						world.Velocities[i].Y += MIN_JUMP_SPEED;
+						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION, 0.0f);
+						jumpTime = delta;
+					}
+					else if (world.PlayerCubeState.OnWall) // Wall jump
+					{
+
+					}
+				}
+				else if (jumpTime > 0.0f)
+				{
+					jumpTime += delta;
+					if (jumpTime > MAX_DECISION_TIME || !world.InputData[i].IsJumping())
+					{
+						
+						jumpTime = -1.0f;
+						world.Accelerations[i] = Vector3.Zero;
+					}
+				}
+				else // Not trying to jump
+				{
+					
+				}
 			}
 
 			/*for (UInt32 i = 0; i < world.MaxNumEntities; i++)
