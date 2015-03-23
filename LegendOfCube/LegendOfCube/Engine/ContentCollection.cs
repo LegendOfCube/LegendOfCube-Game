@@ -81,7 +81,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 10.0f, 0.5f, 10.0f)
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
 			};
 		}
 	}

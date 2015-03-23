@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
 		// Public functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyPhysics(float delta, World world)
+		public void ApplyPhysics(World world, float delta)
 		{
 			// Flush away old CollisionEvents
 			world.EventBuffer.Flush();
