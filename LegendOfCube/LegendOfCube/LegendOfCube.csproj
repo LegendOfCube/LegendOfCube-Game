@@ -83,6 +83,7 @@
     <Compile Include="Engine\EventSystem.cs" />
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
+    <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItem.cs" />
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />

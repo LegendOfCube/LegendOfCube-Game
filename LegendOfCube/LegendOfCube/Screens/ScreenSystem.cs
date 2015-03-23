@@ -5,7 +5,7 @@ using LegendOfCube.Engine;
 
 namespace LegendOfCube.Screens
 {
-	public enum ScreenTypes{ START, GAME, PAUSE, NULL };
+	public enum ScreenTypes{ START, GAME, PAUSE, LEVEL_SELECT, NULL };
 
 	public class ScreenSystem
 	{
@@ -16,7 +16,7 @@ namespace LegendOfCube.Screens
 		public ScreenSystem(LegendOfCubeGame game)
 		{
 			this.game = game;
-			screens = new Screen[4];
+			screens = new Screen[5];
 		}
 
 		public void AddScreen(Screen screen, ScreenTypes type)

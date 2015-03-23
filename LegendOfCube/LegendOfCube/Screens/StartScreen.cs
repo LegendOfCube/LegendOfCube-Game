@@ -30,7 +30,7 @@ namespace LegendOfCube.Screens
 			items[0].Selected = true;
 			items[0].Position = new Vector2(25, 25);
 
-			items[1] = new MenuItem("Change Level");
+			items[1] = new MenuItem("Select Level");
 			items[1].Position = new Vector2(25, 40);
 
 			items[2] = new MenuItem("Exit");

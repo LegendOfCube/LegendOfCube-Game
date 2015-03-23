@@ -35,6 +35,7 @@ namespace LegendOfCube.Engine
 			screenSystem = new ScreenSystem(this);
 			screenSystem.AddScreen(new StartScreen(this), ScreenTypes.START);
 			screenSystem.AddScreen(new GameScreen(this), ScreenTypes.GAME);
+			//screenSystem.AddScreen(new LevelSelectScreen(this), ScreenTypes.LEVEL_SELECT);
 			screenSystem.AddScreen(new PauseScreen(this, screenSystem), ScreenTypes.PAUSE);
 
 

@@ -106,7 +106,7 @@ namespace LegendOfCube.Engine
 						switcher.SwitchScreen(Screens.ScreenTypes.GAME);
 						break;
 					case 1:
-						//TODO: Level selct screen
+						switcher.SwitchScreen(Screens.ScreenTypes.LEVEL_SELECT);
 						break;
 					case 2:
 						game.Exit();
