@@ -11,7 +11,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Movement constants
-		private const float MOVEMENT_ACCELERATION = 15.0f;
+		private const float MOVEMENT_ACCELERATION = 35.0f;
 
 		// Ground jump constants
 		private const float MAX_JUMP_HEIGHT = 6.0f;

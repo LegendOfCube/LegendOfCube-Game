@@ -78,17 +78,6 @@ namespace LegendOfCube.Engine
 		private void Accelerate(World world, UInt32 i, float delta)
 		{
 			world.Velocities[i] += (world.Accelerations[i] * delta);
-
-			// Clamp velocity in X and Y direction
-			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM. Besides, current implementation too naive.
-			Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
-			if (groundVelocity.Length() > world.MaxSpeed[i])
-			{
-				groundVelocity.Normalize();
-				groundVelocity *= world.MaxSpeed[i];
-				world.Velocities[i].X = groundVelocity.X;
-				world.Velocities[i].Z = groundVelocity.Y;
-			}
 		}
 
 		private void ApplyGravity(World world, UInt32 i, float delta)
