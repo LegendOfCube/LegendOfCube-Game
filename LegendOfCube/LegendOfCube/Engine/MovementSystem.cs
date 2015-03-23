@@ -94,7 +94,7 @@ namespace LegendOfCube.Engine
 			{
 				float wallAxisVel = Vector3.Dot(world.Velocities[i], world.PlayerCubeState.WallAxis);
 				world.Velocities[i] -= wallAxisVel * world.PlayerCubeState.WallAxis;
-				world.Velocities[i] -= 5.0f * world.PlayerCubeState.WallAxis;
+				world.Velocities[i] -= 2.5f * world.PlayerCubeState.WallAxis;
 			}
 
 			// Jumping
