@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                        Properties.INPUT_FLAG |
+		                                                                        Properties.INPUT |
 		                                                                        Properties.ACCELERATION |
 		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
@@ -58,21 +58,8 @@ namespace LegendOfCube.Engine
 				{
 					isStopping = false;
 
-					// Rotate input
-
-					Vector3 cameraDiff = world.CameraPosition - world.CameraTarget;
-
-					// Calculate angle formed along ground by the cameras position relative the player
-					float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);
-
-					Vector2 directionInput = world.InputData[i].GetDirection();
-
-					// Invert y input
-					directionInput.Y = -directionInput.Y;
-
-					// Rotate in 3D, since don't have 2x2 matrix class
-					Vector3 directionInput3D = new Vector3(directionInput.X, 0, directionInput.Y);
-					Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
+					Vector2 inputDir = world.InputData[i].GetDirection();
+					Vector3 rotatedInput = Rotate2DDirectionRelativeCamera(world, ref inputDir);
 
 					if (!world.PlayerCubeState.OnGround)
 					{
@@ -136,29 +123,25 @@ namespace LegendOfCube.Engine
 					}
 				}
 			}
+		}
 
-			// Color cube sides if on wall
-			var playerEffect = world.StandardEffectParams[world.Player.Id];
-			var cubeState = world.PlayerCubeState;
-			
-			Color newColor;
-			if (cubeState.OnWall)
-			{
-				newColor = Color.OrangeRed;
-			}
-			else if (cubeState.OnGround)
-			{
-				newColor = Color.Cyan;
-			}
-			else
-			{
-				newColor = Color.ForestGreen;
-			}
+		// Private functions: Helpers
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-			float speed = world.Velocities[world.Player.Id].Length();
-			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[world.Player.Id]);
+		private Vector3 Rotate2DDirectionRelativeCamera(World world, ref Vector2 direction)
+		{
+			Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
+		
+			// Calculate angle formed along ground by the cameras position relative the player
+			float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);
 
-			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
+			// Invert y input
+			direction.Y = -direction.Y;
+
+			// Rotate in 3D, since don't have 2x2 matrix class
+			Vector3 directionInput3D = new Vector3(direction.X, 0, direction.Y);
+			Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
+			return rotatedInput;
 		}
 	}
 }

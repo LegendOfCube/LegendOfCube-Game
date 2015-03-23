@@ -25,7 +25,7 @@ namespace LegendOfCube.Engine
 		// Public functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyPhysics(float delta, World world)
+		public void ApplyPhysics(World world, float delta)
 		{
 			// Flush away old CollisionEvents
 			world.EventBuffer.Flush();
@@ -183,6 +183,7 @@ namespace LegendOfCube.Engine
 				intersectionId = FindIntersection(world, i);
 			}
 
+			// Update translation in transform
 			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
@@ -320,8 +321,8 @@ namespace LegendOfCube.Engine
 			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
 			transformOut.Translation += obbDiff;
 			// Update rotation: This is probably a really stupid way.
-			transformOut.Forward = newOBB.AxisZ * transformOut.Forward.Length();
-			transformOut.Left = newOBB.AxisX * transformOut.Left.Length();
+			transformOut.Backward = newOBB.AxisZ * transformOut.Forward.Length();
+			transformOut.Right = newOBB.AxisX * transformOut.Left.Length();
 			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
 		}
 	}

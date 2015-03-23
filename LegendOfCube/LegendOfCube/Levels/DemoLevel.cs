@@ -8,12 +8,22 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class DemoLevel
+	class DemoLevel : ILevelFactory
 	{
 		private static Entity playerEntity;
 
-		public static void CreateLevel(World world, Game game)
+		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
+			World world = new World(1000);
+			world.SpawnPoint = new Vector3(0, 0, 0);
+			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
+			world.LightDirection = Vector3.Normalize(new Vector3
+			{
+				X = -1.0f,
+				Y = -1.0f,
+				Z = -1.0f
+			});
+			world.AmbientIntensity = 0.45f;
 
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
@@ -88,11 +98,6 @@ namespace LegendOfCube.Levels
 				//SpecularColor = Color.Purple.ToVector4()
 			};
 
-			world.SpawnPoint = new Vector3(0, 0, 0);
-			//world.SpawnPoint = new Vector3(-190, 0, 50);
-			//world.SpawnPoint = new Vector3(255, -35, 0);
-			//world.SpawnPoint = (new Vector3(425, 0, 65));
-
 			playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(world.SpawnPoint)
@@ -101,7 +106,7 @@ namespace LegendOfCube.Levels
 					.WithStandardEffectParams(playerEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
 						new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
+					.WithAdditionalProperties(new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 					.AddToWorld(world);
 
 			world.Player = playerEntity;
@@ -617,13 +622,7 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
-			world.LightDirection = Vector3.Normalize(new Vector3
-			{
-				X = 3,
-				Y = -1,
-				Z = 0
-			});
-			world.AmbientIntensity = 0.45f;
+			return world;
 		}
 	}
 }

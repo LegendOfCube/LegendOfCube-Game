@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\AIComponent.cs" />
+    <Compile Include="Engine\AnimationSystem.cs" />
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
     <Compile Include="Engine\AISystem.cs" />
@@ -85,6 +86,11 @@
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />
+    <Compile Include="Engine\ContentCollection.cs" />
+    <Compile Include="Levels\WallClimbLevelFactory.cs" />
+    <Compile Include="Levels\BeanStalkLevelFactory.cs" />
+    <Compile Include="Engine\ModelData.cs" />
+    <Compile Include="Engine\ILevelFactory.cs" />
     <Compile Include="Levels\DemoLevel.cs" />
     <Compile Include="Levels\TestLevel1.cs" />
     <Compile Include="Engine\MenuScreen.cs" />

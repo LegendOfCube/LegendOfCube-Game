@@ -122,6 +122,13 @@ namespace LegendOfCube.Engine
 			return this;
 		}
 
+		public EntityBuilder WithModelData(ModelData modelData)
+		{
+			return WithModel(modelData.Model)
+			      .WithBoundingVolume(modelData.Obb)
+			      .WithStandardEffectParams(modelData.EffectParams);
+		}
+
 		/// <summary>
 		/// Adds an Entity to the world, with the properties given to the builder.
 		/// </summary>
@@ -153,10 +160,8 @@ namespace LegendOfCube.Engine
 			{
 				world.StandardEffectParams[entity.Id] = sep;
 			}
-			if (properties.Satisfies(Properties.INPUT_FLAG))
+			if (properties.Satisfies(Properties.INPUT))
 			{
-				// Not entirely sure if INPUT_FLAG implies having InputData
-				// TODO: Rename INPUT_FLAG to INPUT as it implies data.
 				world.InputData[entity.Id] = new InputDataImpl();
 			}
 			if (properties.Satisfies(Properties.MODEL_SPACE_BV))
@@ -169,7 +174,5 @@ namespace LegendOfCube.Engine
 			}
 			return entity;
 		}
-
-
 	}
 }

@@ -6,13 +6,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class ConceptLevel
+	class ConceptLevel : ILevelFactory
 	{
 		private static Entity playerEntity;
 
-		public static void CreateLevel(World world, Game game)
+		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-
+			World world = new World(1000);
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
@@ -69,7 +69,7 @@ namespace LegendOfCube.Levels
 					.WithAcceleration(Vector3.Zero, 60)
 					.WithStandardEffectParams(playerEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT_FLAG | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
+					.WithAdditionalProperties(new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 					.AddToWorld(world);
 
 			world.Player = playerEntity;
@@ -334,12 +334,13 @@ namespace LegendOfCube.Levels
 
 			world.LightDirection = Vector3.Normalize(new Vector3
 			{
-				X = 3,
-				Y = -1,
-				Z = 0
+				X = 3.0f,
+				Y = -1.0f,
+				Z = -3.0f
 			});
 			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
 			world.AmbientIntensity = 0.45f;
+			return world;
 		}
 	}
 }

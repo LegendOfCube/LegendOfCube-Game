@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                  Properties.INPUT_FLAG);
+		                                                                  Properties.INPUT);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -36,7 +36,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher)
+		public void ApplyInput(World world, GameTime gameTime, SwitcherSystem switcher)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -62,6 +62,10 @@ namespace LegendOfCube.Engine
 			if (KeyWasJustPressed(Keys.F1))
 			{
 				world.DebugState.ShowOBBWireFrame = !world.DebugState.ShowOBBWireFrame;
+			}
+			if (KeyWasJustPressed(Keys.F2))
+			{
+				world.DebugState.ShowDebugOverlay = !world.DebugState.ShowDebugOverlay;
 			}
 
 			if (KeyWasJustPressed(Keys.R))

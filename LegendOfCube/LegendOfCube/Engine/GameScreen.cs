@@ -15,33 +15,37 @@ namespace LegendOfCube.Engine
 		private readonly GameplaySystem gameplaySystem;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
-		private readonly EventSystem EventSystem;
-		private readonly AISystem AI_system;
+		private readonly AISystem aiSystem;
+		private readonly AnimationSystem animationSystem;
+		private readonly ContentCollection contentCollection;
 
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		public GameScreen(Game game) : base(game)
+		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
+			this.contentCollection = contentCollection;
+
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
-			EventSystem = new EventSystem();
-			AI_system = new AISystem();
+			aiSystem = new AISystem();
+			animationSystem = new AnimationSystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-			inputSystem.ApplyInput(gameTime, World, switcher);
-			AI_system.Update(World, delta);
+			inputSystem.ApplyInput(World, gameTime, switcher);
+			aiSystem.Update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
-			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
+			physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
 			EventSystem.CalculateCubeState(World);
 			EventSystem.HandleEvents(World);
+			animationSystem.OnUpdate(World, delta);
 			cameraSystem.OnUpdate(World, delta);
 		}
 
@@ -53,35 +57,39 @@ namespace LegendOfCube.Engine
 
 			renderSystem.RenderWorld(World);
 
-			StringBuilder text = new StringBuilder();
-			text.Append("FPS: ");
-			text.AppendLine(UIFormat(1.0f/(float)gameTime.ElapsedGameTime.TotalSeconds));
-			text.Append("CamPos: ");
-			text.AppendLine(UIFormat(World.CameraPosition));
-			text.Append("CamDir: ");
-			text.AppendLine(UIFormat(Vector3.Normalize(World.CameraTarget - World.CameraPosition)));
-			text.Append("CubePos: ");
-			text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
-			text.Append("CubeVel: ");
-			text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
-			text.Append("CubeAcc: ");
-			text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
-			text.Append("OnGround: ");
-			text.AppendLine(World.PlayerCubeState.OnGround.ToString());
-			text.Append("OnWall: ");
-			text.AppendLine(World.PlayerCubeState.OnWall.ToString());
+			if (World.DebugState.ShowDebugOverlay)
+			{
+				StringBuilder text = new StringBuilder();
+				text.Append("FPS: ");
+				text.AppendLine(UIFormat(1.0f/(float) gameTime.ElapsedGameTime.TotalSeconds));
+				text.Append("CamPos: ");
+				text.AppendLine(UIFormat(World.CameraPosition));
+				text.Append("CamDir: ");
+				text.AppendLine(UIFormat(Vector3.Normalize(World.CameraTarget - World.CameraPosition)));
+				text.Append("CubePos: ");
+				text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
+				text.Append("CubeVel: ");
+				text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
+				text.Append("CubeAcc: ");
+				text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
+				text.Append("OnGround: ");
+				text.AppendLine(World.PlayerCubeState.OnGround.ToString());
+				text.Append("OnWall: ");
+				text.AppendLine(World.PlayerCubeState.OnWall.ToString());
 
-			spriteBatch.Begin();
-			spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
-			spriteBatch.End();
+				spriteBatch.Begin();
+				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+				spriteBatch.End();
+			}
 		}
 
 		internal override void LoadContent()
 		{
-			//ConceptLevel.CreateLevel(World, Game);
-			//TestLevel1.CreateLevel(World, Game);
-			DemoLevel.CreateLevel(World, Game);
-
+			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
+			//World = new TestLevel1().CreateWorld(Game, contentCollection);
+			World = new DemoLevel().CreateWorld(Game, contentCollection);
+			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
+			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");

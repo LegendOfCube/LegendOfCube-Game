@@ -63,16 +63,14 @@ namespace LegendOfCube.Engine
 				{
 					if (collider == world.Player.Id)
 					{
-						world.Transforms[collider].Translation = world.SpawnPoint;
-						world.Velocities[collider] = Vector3.Zero;
+						RespawnPlayer(world);
 					}
 				}
 				else if (world.EntityProperties[collider].Satisfies(((Properties.DEATH_ZONE_FLAG))))
 				{
 					if (collidedWith == world.Player.Id)
 					{
-						world.Transforms[collidedWith].Translation = world.SpawnPoint;
-						world.Velocities[collidedWith] = Vector3.Zero;
+						RespawnPlayer(world);
 					}
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.CHECKPOINT_FLAG))
@@ -112,6 +110,17 @@ namespace LegendOfCube.Engine
 			//{
 			//	world.PlayerCubeState.InAir = true;
 			//
+		}
+
+		private static void RespawnPlayer(World world)
+		{
+			// Look toward where you died
+			// TODO: Refine this, view direction per spawn point?
+			world.CameraPosition = world.SpawnPoint - 2.0f * Vector3.Normalize(world.Transforms[world.Player.Id].Translation - world.SpawnPoint);
+			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
+
+			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
+			world.Velocities[world.Player.Id] = Vector3.Zero;
 		}
 	}
 }
