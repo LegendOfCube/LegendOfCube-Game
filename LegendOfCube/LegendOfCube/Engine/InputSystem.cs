@@ -70,9 +70,7 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.R))
 			{
-				world.Accelerations[world.Player.Id] = Vector3.Zero;
-				world.Velocities[world.Player.Id] = Vector3.Zero;
-				world.Transforms[world.Player.Id] = Matrix.CreateTranslation(world.SpawnPoint);
+				EventSystem.RespawnPlayer(world);
 			}
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {

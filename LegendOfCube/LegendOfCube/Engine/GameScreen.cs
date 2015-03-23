@@ -19,9 +19,13 @@ namespace LegendOfCube.Engine
 		private readonly AISystem AI_system;
 		private readonly ContentCollection contentCollection;
 
+		private Texture2D winScreen;
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
+
+		private float winDelay = 0;
+		private bool showGameOver = false;
 
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
@@ -39,13 +43,30 @@ namespace LegendOfCube.Engine
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-			inputSystem.ApplyInput(gameTime, World, switcher);
-			AI_system.Update(World, delta);
-			gameplaySystem.ProcessInputData(World, delta);
-			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
-			EventSystem.CalculateCubeState(World);
-			EventSystem.HandleEvents(World);
-			cameraSystem.OnUpdate(World, delta);
+			if (World.WinState)
+			{
+				inputSystem.ApplyInput(gameTime, World, switcher);
+				cameraSystem.OnUpdate(World, delta);
+
+				if (winDelay < 1.5f)
+				{
+					winDelay += delta;
+				}
+				else
+				{
+					showGameOver = true;
+				}
+			}
+			else
+			{
+				inputSystem.ApplyInput(gameTime, World, switcher);
+				AI_system.Update(World, delta);
+				gameplaySystem.ProcessInputData(World, delta);
+				physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
+				EventSystem.CalculateCubeState(World);
+				EventSystem.HandleEvents(World);
+				cameraSystem.OnUpdate(World, delta);
+			}
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
@@ -56,6 +77,7 @@ namespace LegendOfCube.Engine
 
 			renderSystem.RenderWorld(World);
 
+			spriteBatch.Begin();
 			if (World.DebugState.ShowDebugOverlay)
 			{
 				StringBuilder text = new StringBuilder();
@@ -76,10 +98,15 @@ namespace LegendOfCube.Engine
 				text.Append("OnWall: ");
 				text.AppendLine(World.PlayerCubeState.OnWall.ToString());
 
-				spriteBatch.Begin();
+
+
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
-				spriteBatch.End();
 			}
+			if (showGameOver)
+			{
+				spriteBatch.Draw(winScreen, new Vector2(10, 10), Color.Red);
+			}
+			spriteBatch.End();
 		}
 
 		internal override void LoadContent()
@@ -91,6 +118,7 @@ namespace LegendOfCube.Engine
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+			winScreen = Game.Content.Load<Texture2D>("Menu/winner screen");
 			font = Game.Content.Load<SpriteFont>("Arial");
 			fontPos = new Vector2(0, 0);
 		}
