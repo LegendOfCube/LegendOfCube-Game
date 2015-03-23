@@ -118,7 +118,7 @@ namespace LegendOfCube.Engine
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
 			world.WinState = false;
-			world.TimeSinceDeath = 0;
+			world.PlayerDeaths += 1;
 		}
 	}
 }

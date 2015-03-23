@@ -44,6 +44,8 @@ namespace LegendOfCube.Engine
 		//GameOver state
 		public bool WinState;
 		public float TimeSinceDeath;
+		public int PlayerDeaths;
+		public float GameTime;
 
 		// Shortcut to player entity which there will be one instance of
 		public Entity Player;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using LegendOfCube.Engine.Graphics;
@@ -25,9 +26,6 @@ namespace LegendOfCube.Engine
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		private float winDelay = 0;
-		private bool showGameOver = false;
-
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
 			this.contentCollection = contentCollection;
@@ -44,6 +42,10 @@ namespace LegendOfCube.Engine
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+			if (!World.WinState)
+			{
+				World.GameTime += delta;
+			}
 			if (World.WinState)
 			{
 				inputSystem.ApplyInput(gameTime, World, switcher);
@@ -95,13 +97,13 @@ namespace LegendOfCube.Engine
 				text.Append("OnWall: ");
 				text.AppendLine(World.PlayerCubeState.OnWall.ToString());
 
-
-
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
 			}
 			if (World.TimeSinceDeath > 1 && World.WinState)
 			{
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
+				spriteBatch.DrawString(font, World.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
+				spriteBatch.DrawString(font, UIFormat(World.GameTime) + "s", new Vector2(300, 160), Color.Red);
 			}
 			spriteBatch.End();
 		}
