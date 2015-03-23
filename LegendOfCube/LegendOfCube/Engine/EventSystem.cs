@@ -133,6 +133,10 @@ namespace LegendOfCube.Engine
 
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
+
+			world.CameraPosition = world.SpawnPoint;
+			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
+			world.CameraPosition.X -= 2;
 		}
 	}
 }
