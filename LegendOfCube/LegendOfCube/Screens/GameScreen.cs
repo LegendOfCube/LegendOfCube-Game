@@ -20,6 +20,8 @@ namespace LegendOfCube.Screens
 		private readonly AISystem AI_system;
 
 		private Vector2 fontPos;
+		private SpriteBatch spriteBatch;
+		private SpriteFont font;
 
 		public GameScreen(Game game) : base(game)
 		{
@@ -69,9 +71,9 @@ namespace LegendOfCube.Screens
 			text.Append("OnWall: ");
 			text.AppendLine(World.PlayerCubeState.OnWall.ToString());
 
-			ScreenSystem.spriteBatch.Begin();
-			ScreenSystem.spriteBatch.DrawString(ScreenSystem.font, text, fontPos, Color.DarkGreen);
-			ScreenSystem.spriteBatch.End();
+			spriteBatch.Begin();
+			spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+			spriteBatch.End();
 		}
 
 		internal override void LoadContent()
@@ -80,8 +82,8 @@ namespace LegendOfCube.Screens
 			//TestLevel1.CreateLevel(World, Game);
 
 
-			ScreenSystem.spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-			ScreenSystem.font = Game.Content.Load<SpriteFont>("Arial");
+			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+			font = Game.Content.Load<SpriteFont>("Arial");
 			fontPos = new Vector2(0, 0);
 		}
 

@@ -9,11 +9,6 @@ namespace LegendOfCube.Screens
 
 	public class ScreenSystem
 	{
-
-
-		public static SpriteFont font;
-		public static SpriteBatch spriteBatch;
-
 		private Screen[] screens;
 		private ScreenTypes currentScreen = ScreenTypes.NULL;
 		private readonly LegendOfCubeGame game;
