@@ -12,6 +12,7 @@ namespace LegendOfCube.Engine
 
 		// Movement constants
 		private const float MOVEMENT_ACCELERATION = 35.0f;
+		private const float MOVEMENT_AIR_ACCELERATION = 10.0f;
 
 		// Ground jump constants
 		private const float MAX_JUMP_HEIGHT = 6.0f;
@@ -65,7 +66,8 @@ namespace LegendOfCube.Engine
 				if (dirToTarget != Vector3.Zero) // Only mess with currentMovementVelocity if necessary
 				{
 					dirToTarget.Normalize();
-					currentMovementVelocity += dirToTarget * MOVEMENT_ACCELERATION * delta;
+					float movementAcc = (world.PlayerCubeState.OnGround || world.PlayerCubeState.OnWall) ? MOVEMENT_ACCELERATION : MOVEMENT_AIR_ACCELERATION;
+					currentMovementVelocity += dirToTarget * movementAcc * delta;
 
 					// If we passed targetMovementVelocity we clamp to it.
 					if (Vector3.Dot(targetMovementVelocity - currentMovementVelocity, dirToTarget) <= 0)
