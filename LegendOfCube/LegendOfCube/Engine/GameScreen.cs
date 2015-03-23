@@ -19,7 +19,8 @@ namespace LegendOfCube.Engine
 		private readonly AISystem AI_system;
 		private readonly ContentCollection contentCollection;
 
-		private Texture2D winScreen;
+		private Texture2D winScreen1;
+		private Texture2D winScreen2;
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
@@ -48,13 +49,9 @@ namespace LegendOfCube.Engine
 				inputSystem.ApplyInput(gameTime, World, switcher);
 				cameraSystem.OnUpdate(World, delta);
 
-				if (winDelay < 1.5f)
+				if (World.TimeSinceDeath < 1)
 				{
-					winDelay += delta;
-				}
-				else
-				{
-					showGameOver = true;
+					World.TimeSinceDeath += delta;
 				}
 			}
 			else
@@ -102,9 +99,9 @@ namespace LegendOfCube.Engine
 
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
 			}
-			if (showGameOver)
+			if (World.TimeSinceDeath > 1 && World.WinState)
 			{
-				spriteBatch.Draw(winScreen, new Vector2(10, 10), Color.Red);
+				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
 			}
 			spriteBatch.End();
 		}
@@ -118,7 +115,8 @@ namespace LegendOfCube.Engine
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-			winScreen = Game.Content.Load<Texture2D>("Menu/winner screen");
+			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
+			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
 			font = Game.Content.Load<SpriteFont>("Arial");
 			fontPos = new Vector2(0, 0);
 		}

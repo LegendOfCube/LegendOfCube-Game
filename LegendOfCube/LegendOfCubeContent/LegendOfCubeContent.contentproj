@@ -244,8 +244,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Menu\winner screen.png">
-      <Name>winner screen</Name>
+    <Compile Include="Menu\winnerScreen1.png">
+      <Name>winnerScreen1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Menu\winnerScreen2.png">
+      <Name>winnerScreen2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

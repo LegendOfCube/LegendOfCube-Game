@@ -103,7 +103,6 @@ namespace LegendOfCube.Engine
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.WIN_ZONE_FLAG))
 				{
-					//world.EntityProperties[collider].Subtact(Properties.GRAVITY_FLAG | Properties.ACCELERATION | Properties.DYNAMIC_VELOCITY_FLAG | Properties.VELOCITY);
 					world.WinState = true;
 				}
 			}
@@ -118,8 +117,8 @@ namespace LegendOfCube.Engine
 
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
-			//world.EntityProperties[world.Player.Id].Add(Properties.GRAVITY_FLAG | Properties.ACCELERATION | Properties.DYNAMIC_VELOCITY_FLAG | Properties.VELOCITY);
 			world.WinState = false;
+			world.TimeSinceDeath = 0;
 		}
 	}
 }
