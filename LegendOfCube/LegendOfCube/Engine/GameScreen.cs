@@ -12,7 +12,7 @@ namespace LegendOfCube.Engine
 	{
 
 		private readonly InputSystem inputSystem;
-		private readonly GameplaySystem gameplaySystem;
+		private readonly MovementSystem movementSystem;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
 		private readonly EventSystem EventSystem;
@@ -29,7 +29,7 @@ namespace LegendOfCube.Engine
 
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
-			gameplaySystem = new GameplaySystem();
+			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			EventSystem = new EventSystem();
@@ -41,7 +41,7 @@ namespace LegendOfCube.Engine
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 			inputSystem.ApplyInput(gameTime, World, switcher);
 			AI_system.Update(World, delta);
-			gameplaySystem.ProcessInputData(World, delta);
+			movementSystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
 			EventSystem.CalculateCubeState(World);
 			EventSystem.HandleEvents(World);

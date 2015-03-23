@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace LegendOfCube.Engine
 {
-	class GameplaySystem
+	class MovementSystem
 	{
 		// Constants
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
