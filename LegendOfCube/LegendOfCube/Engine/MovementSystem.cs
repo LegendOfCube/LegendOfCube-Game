@@ -89,6 +89,14 @@ namespace LegendOfCube.Engine
 				world.Velocities[i].Z += currentMovementVelocity.Z;
 			}
 
+			// WALL SUCK HACK
+			if (world.PlayerCubeState.OnWall)
+			{
+				float wallAxisVel = Vector3.Dot(world.Velocities[i], world.PlayerCubeState.WallAxis);
+				world.Velocities[i] -= wallAxisVel * world.PlayerCubeState.WallAxis;
+				world.Velocities[i] -= 5.0f * world.PlayerCubeState.WallAxis;
+			}
+
 			// Jumping
 			{
 				if (world.InputData[i].NewJump())
@@ -102,11 +110,13 @@ namespace LegendOfCube.Engine
 					}
 					else if (world.PlayerCubeState.OnWall) // Wall jump
 					{
+						Vector3 wallAxis = world.PlayerCubeState.WallAxis;
 						world.Velocities[i].Y += MIN_JUMP_SPEED;
 						if (world.Velocities[i].Y < MIN_JUMP_SPEED) world.Velocities[i].Y = MIN_JUMP_SPEED;
 						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION - world.Gravity.Y, 0.0f);
-						world.Velocities[i] += world.PlayerCubeState.WallAxis * WALL_JUMP_MIN_OUT_SPEED;
-						world.Accelerations[i] += world.PlayerCubeState.WallAxis * WALL_JUMP_DECISION_OUT_ACCELERATION;
+						world.Velocities[i] -= (Vector3.Dot(world.Velocities[i], wallAxis)) * wallAxis;
+						world.Velocities[i] += wallAxis * WALL_JUMP_MIN_OUT_SPEED;
+						world.Accelerations[i] += wallAxis * WALL_JUMP_DECISION_OUT_ACCELERATION;
 						jumpTime = delta;
 					}
 				}
