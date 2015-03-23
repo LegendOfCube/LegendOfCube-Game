@@ -70,7 +70,16 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.R))
 			{
+				if (world.WinState)
+				{
+					EventSystem.ResetLevel(world);
+				}
 				EventSystem.RespawnPlayer(world);
+			}
+
+			if (KeyWasJustPressed(Keys.Back))
+			{
+				EventSystem.ResetLevel(world);
 			}
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {

@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine
 
 		//GameOver state
 		public bool WinState;
-		public float TimeSinceDeath;
+		public float TimeSinceGameOver;
 		public int PlayerDeaths;
 		public float GameTime;
 
@@ -110,7 +110,7 @@ namespace LegendOfCube.Engine
 			PlayerCubeState.GroundAxis = Vector3.Zero;
 
 			WinState = false;
-			TimeSinceDeath = 0;
+			TimeSinceGameOver = 0;
 
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 			AirMovement = 0.4f;

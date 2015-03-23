@@ -16,9 +16,8 @@ namespace LegendOfCube.Engine
 		private readonly GameplaySystem gameplaySystem;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
-		private readonly EventSystem EventSystem;
 		private readonly AISystem AI_system;
-		private readonly ContentCollection contentCollection;
+		private readonly ContentCollection ContentCollection;
 
 		private Texture2D winScreen1;
 		private Texture2D winScreen2;
@@ -28,14 +27,13 @@ namespace LegendOfCube.Engine
 
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
-			this.contentCollection = contentCollection;
+			this.ContentCollection = contentCollection;
 
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
-			EventSystem = new EventSystem();
 			AI_system = new AISystem();
 		}
 
@@ -51,9 +49,9 @@ namespace LegendOfCube.Engine
 				inputSystem.ApplyInput(gameTime, World, switcher);
 				cameraSystem.OnUpdate(World, delta);
 
-				if (World.TimeSinceDeath < 1)
+				if (World.TimeSinceGameOver < 1)
 				{
-					World.TimeSinceDeath += delta;
+					World.TimeSinceGameOver += delta;
 				}
 			}
 			else
@@ -99,7 +97,7 @@ namespace LegendOfCube.Engine
 
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
 			}
-			if (World.TimeSinceDeath > 1 && World.WinState)
+			if (World.TimeSinceGameOver > 1 && World.WinState)
 			{
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
 				spriteBatch.DrawString(font, World.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
@@ -112,7 +110,7 @@ namespace LegendOfCube.Engine
 		{
 			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
 			//World = new TestLevel1().CreateWorld(Game, contentCollection);
-			World = new DemoLevel().CreateWorld(Game, contentCollection);
+			World = new DemoLevel().CreateWorld(Game, ContentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
