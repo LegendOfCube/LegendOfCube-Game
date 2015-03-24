@@ -17,7 +17,7 @@ namespace LegendOfCube.Engine
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
 		private readonly AISystem AI_system;
-		private readonly ContentCollection ContentCollection;
+		private readonly ContentCollection contentCollection;
 
 		private Texture2D winScreen1;
 		private Texture2D winScreen2;
@@ -27,7 +27,7 @@ namespace LegendOfCube.Engine
 
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
-			this.ContentCollection = contentCollection;
+			this.contentCollection = contentCollection;
 
 			World = new World(3002);
 			inputSystem = new InputSystem(game);
@@ -40,20 +40,23 @@ namespace LegendOfCube.Engine
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+			//GameOver update
 			if (!World.WinState)
 			{
-				World.GameTime += delta;
+				World.GameStats.GameTime += delta;
 			}
 			if (World.WinState)
 			{
 				inputSystem.ApplyInput(gameTime, World, switcher);
 				cameraSystem.OnUpdate(World, delta);
 
+				//Small delay before score screen.
 				if (World.TimeSinceGameOver < 1)
 				{
 					World.TimeSinceGameOver += delta;
 				}
 			}
+			//Normal update
 			else
 			{
 				inputSystem.ApplyInput(gameTime, World, switcher);
@@ -97,11 +100,13 @@ namespace LegendOfCube.Engine
 
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
 			}
-			if (World.TimeSinceGameOver > 1 && World.WinState)
+
+			//Gameover screen
+			if (World.TimeSinceGameOver >= 1 && World.WinState)
 			{
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
-				spriteBatch.DrawString(font, World.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
-				spriteBatch.DrawString(font, UIFormat(World.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, World.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
+				spriteBatch.DrawString(font, UIFormat(World.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
 			}
 			spriteBatch.End();
 		}
@@ -110,7 +115,7 @@ namespace LegendOfCube.Engine
 		{
 			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
 			//World = new TestLevel1().CreateWorld(Game, contentCollection);
-			World = new DemoLevel().CreateWorld(Game, ContentCollection);
+			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 

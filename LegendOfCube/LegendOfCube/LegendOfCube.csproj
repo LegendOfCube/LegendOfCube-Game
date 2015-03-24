@@ -84,6 +84,7 @@
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameScreen.cs" />
+    <Compile Include="Engine\GameStats.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevelFactory.cs" />

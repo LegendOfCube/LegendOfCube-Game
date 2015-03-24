@@ -120,14 +120,15 @@ namespace LegendOfCube.Engine
 			world.Velocities[world.Player.Id] = Vector3.Zero;
 			world.WinState = false;
 			world.TimeSinceGameOver = 0;
-			world.PlayerDeaths += 1;
+			world.GameStats.PlayerDeaths += 1;
 		}
 
 		public static void ResetLevel(World world)
 		{
+			//TODO: Should probably reload entire level instead of just resetting spawnpoints and stats
 			world.SpawnPoint = new Vector3(0,0,0);
-			world.PlayerDeaths = 0;
-			world.GameTime = 0;
+			world.GameStats.PlayerDeaths = 0;
+			world.GameStats.GameTime = 0;
 			world.WinState = false;
 			world.TimeSinceGameOver = 0;
 
