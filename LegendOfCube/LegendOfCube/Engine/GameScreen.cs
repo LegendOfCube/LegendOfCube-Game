@@ -15,8 +15,8 @@ namespace LegendOfCube.Engine
 		private readonly GameplaySystem gameplaySystem;
 		private readonly PhysicsSystem physicsSystem;
 		private readonly CameraSystem cameraSystem;
-		private readonly EventSystem EventSystem;
-		private readonly AISystem AI_system;
+		private readonly AISystem aiSystem;
+		private readonly AnimationSystem animationSystem;
 		private readonly ContentCollection contentCollection;
 
 		private SpriteFont font;
@@ -32,19 +32,20 @@ namespace LegendOfCube.Engine
 			gameplaySystem = new GameplaySystem();
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
-			EventSystem = new EventSystem();
-			AI_system = new AISystem();
+			aiSystem = new AISystem();
+			animationSystem = new AnimationSystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-			inputSystem.ApplyInput(gameTime, World, switcher);
-			AI_system.Update(World, delta);
+			inputSystem.ApplyInput(World, gameTime, switcher);
+			aiSystem.Update(World, delta);
 			gameplaySystem.ProcessInputData(World, delta);
-			physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
+			physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
 			EventSystem.CalculateCubeState(World);
 			EventSystem.HandleEvents(World);
+			animationSystem.OnUpdate(World, delta);
 			cameraSystem.OnUpdate(World, delta);
 		}
 
@@ -84,9 +85,9 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
-			//ConceptLevel.CreateLevel(World, Game);
-			//TestLevel1.CreateLevel(World, Game);
-			DemoLevel.CreateLevel(World, Game);
+			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
+			//World = new TestLevel1().CreateWorld(Game, contentCollection);
+			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 

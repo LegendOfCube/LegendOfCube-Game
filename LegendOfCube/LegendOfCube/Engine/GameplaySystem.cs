@@ -123,8 +123,6 @@ namespace LegendOfCube.Engine
 					}
 				}
 			}
-
-			SetCubeColor(world, world.Player.Id);
 		}
 
 		// Private functions: Helpers
@@ -144,21 +142,6 @@ namespace LegendOfCube.Engine
 			Vector3 directionInput3D = new Vector3(direction.X, 0, direction.Y);
 			Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
 			return rotatedInput;
-		}
-
-		private void SetCubeColor(World world, UInt32 i)
-		{
-			// Color cube sides if on wall
-			var playerEffect = world.StandardEffectParams[i];
-			var cubeState = world.PlayerCubeState;
-
-			Color newColor;
-			if (cubeState.OnWall) newColor = Color.OrangeRed;
-			else if (cubeState.OnGround) newColor = Color.Cyan;
-			else newColor = Color.ForestGreen;
-			float speed = world.Velocities[i].Length();
-			float brightness = MathUtils.ClampLerp(speed, 0.2f, 1.0f, 0.0f, world.MaxSpeed[i]);
-			playerEffect.EmissiveColor = (newColor * brightness).ToVector4();
 		}
 	}
 }

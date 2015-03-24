@@ -50,13 +50,23 @@ namespace LegendOfCube.Engine
 		/// has been called, the translation data will be replaced, but the
 		/// rest will remain unchanged.
 		/// </summary>
-		/// <param name="position">The position in world space</param>
 		/// <returns>An instance of this, for chaining</returns>
 		public EntityBuilder WithPosition(Vector3 position)
 		{
 			properties.Add(Properties.TRANSFORM);
 			this.transform.Translation = position;
 			return this;
+		}
+
+		/// <summary>
+		/// Assign a position for the entity being built. If WithTransform
+		/// has been called, the translation data will be replaced, but the
+		/// rest will remain unchanged.
+		/// </summary>
+		/// <returns>An instance of this, for chaining</returns>
+		public EntityBuilder WithPosition(float x, float y, float z)
+		{
+			return WithPosition(new Vector3(x, y, z));
 		}
 
 		/// <summary>
@@ -125,8 +135,13 @@ namespace LegendOfCube.Engine
 		public EntityBuilder WithModelData(ModelData modelData)
 		{
 			return WithModel(modelData.Model)
-			      .WithBoundingVolume(modelData.Obb)
-			      .WithStandardEffectParams(modelData.EffectParams);
+				  .WithBoundingVolume(modelData.Obb)
+				  .WithStandardEffectParams(modelData.EffectParams);
+		}
+
+		public EntityBuilder Copy()
+		{
+			return (EntityBuilder)MemberwiseClone();
 		}
 
 		/// <summary>
