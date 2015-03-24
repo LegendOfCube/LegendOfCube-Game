@@ -5,11 +5,12 @@ using LegendOfCube.Engine;
 
 namespace LegendOfCube.Screens
 {
-	class PauseScreen : Screen
+	class PauseScreen : MenuScreen
 	{
 		private readonly InputSystem inputSystem;
 		private readonly MenuInputSystem menuInputSystem;
 		private readonly CameraSystem cameraSystem;
+		private readonly ScreenSystem screenSystem;
 		private readonly Game game;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
@@ -24,6 +25,7 @@ namespace LegendOfCube.Screens
 		{
 			World = screenSystem.GetWorld();
 			this.game = game;
+			this.screenSystem = screenSystem;
 			inputSystem = new InputSystem(game);
 			cameraSystem = new CameraSystem();
 			menuInputSystem = new MenuInputSystem(game);
@@ -35,7 +37,7 @@ namespace LegendOfCube.Screens
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			inputSystem.ApplyInput(gameTime, World, switcher);
-			menuInputSystem.ApplyInput(gameTime, World, switcher, ref selection);
+			menuInputSystem.ApplyInput(gameTime, World, switcher, this, ref selection);
 			cameraSystem.OnUpdate(World, delta);
 		}
 
@@ -77,6 +79,22 @@ namespace LegendOfCube.Screens
 			exit = Game.Content.Load<Texture2D>("Menu/exit");
 			levelSelect = Game.Content.Load<Texture2D>("Menu/level select");
 			select = Game.Content.Load<Texture2D>("Menu/selector");
+		}
+
+		internal override void PerformSelection()
+		{
+			switch (selection)
+			{
+				case 0:
+					screenSystem.SwitchScreen(Screens.ScreenTypes.GAME);
+					break;
+				case 1:
+					screenSystem.SwitchScreen(Screens.ScreenTypes.LEVEL_SELECT);
+					break;
+				case 2:
+					screenSystem.SwitchScreen(Screens.ScreenTypes.START);
+					break;
+			}
 		}
 	}
 }

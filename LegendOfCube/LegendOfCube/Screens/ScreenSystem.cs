@@ -12,11 +12,17 @@ namespace LegendOfCube.Screens
 		private Screen[] screens;
 		private ScreenTypes currentScreen = ScreenTypes.NULL;
 		private readonly LegendOfCubeGame game;
+		private int[] screenStack;
 
 		public ScreenSystem(LegendOfCubeGame game)
 		{
 			this.game = game;
 			screens = new Screen[5];
+
+			AddScreen(new StartScreen(game, this), ScreenTypes.START);
+			AddScreen(new GameScreen(game), ScreenTypes.GAME);
+			//screenSystem.AddScreen(new LevelSelectScreen(this), ScreenTypes.LEVEL_SELECT);
+			AddScreen(new PauseScreen(game, this), ScreenTypes.PAUSE);
 		}
 
 		public void AddScreen(Screen screen, ScreenTypes type)
@@ -53,6 +59,11 @@ namespace LegendOfCube.Screens
 		public World GetWorld()
 		{
 				return screens[(int)ScreenTypes.GAME].World;
+		}
+
+		internal void MoveToPreviousScreen()
+		{
+
 		}
 	}
 }

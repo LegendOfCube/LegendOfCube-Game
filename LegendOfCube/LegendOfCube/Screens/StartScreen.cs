@@ -9,9 +9,10 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LegendOfCube.Screens
 {
-	class StartScreen : Screen
+	class StartScreen : MenuScreen
 	{
 		private readonly MenuInputSystem menuInputSystem;
+		private readonly ScreenSystem system;
 
 		private MenuItem[] items = new MenuItem[]{new MenuItem("Start Game"), new MenuItem("Change Level"), new MenuItem("Exit")};
 
@@ -21,10 +22,11 @@ namespace LegendOfCube.Screens
 		private int selection;
 		
 
-		public StartScreen(Game game)
+		public StartScreen(Game game, ScreenSystem system) : base(game)
 		{
 			menuInputSystem = new MenuInputSystem(game);
 			this.Game = game;
+			this.system = system;
 
 			selection = 0;
 			items[0].Selected = true;
@@ -39,7 +41,7 @@ namespace LegendOfCube.Screens
 		}
 		protected internal override void Update(Microsoft.Xna.Framework.GameTime gameTime, Screens.ScreenSystem switcher)
 		{
-			menuInputSystem.ApplyInput(gameTime, World, switcher, ref selection);
+			menuInputSystem.ApplyInput(gameTime, World, switcher, this, ref selection);
 			foreach(var item in items) 
 			{
 				item.Selected = false;
@@ -64,6 +66,22 @@ namespace LegendOfCube.Screens
 		{
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
+		}
+
+		internal override void PerformSelection()
+		{
+			switch (selection)
+			{
+				case 0:
+					system.SwitchScreen(ScreenTypes.GAME);
+					break;
+				case 1:
+					system.SwitchScreen(ScreenTypes.LEVEL_SELECT);
+					break;
+				case 2:
+					Game.Exit();
+					break;
+			}
 		}
 	}
 }

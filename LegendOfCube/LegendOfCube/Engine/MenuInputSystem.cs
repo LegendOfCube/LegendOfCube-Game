@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using LegendOfCube.Screens;
 
 namespace LegendOfCube.Engine
 {
@@ -40,7 +41,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		
-		public void ApplyInput(GameTime gameTime, World world, Screens.ScreenSystem switcher, ref int selection)
+		public void ApplyInput(GameTime gameTime, World world, ScreenSystem switcher, MenuScreen currentScreen, ref int selection)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -59,7 +60,8 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Escape) || ButtonWasJustPressed(Buttons.Back))
 			{
-				game.Exit();
+				switcher.MoveToPreviousScreen();
+				//game.Exit();
 			}	
 
 			if (MouseClickWithinRectangle(playRect))
@@ -100,18 +102,7 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Space) || ButtonWasJustPressed(Buttons.A))
 			{
-				switch (selection)
-				{
-					case 0:
-						switcher.SwitchScreen(Screens.ScreenTypes.GAME);
-						break;
-					case 1:
-						switcher.SwitchScreen(Screens.ScreenTypes.LEVEL_SELECT);
-						break;
-					case 2:
-						game.Exit();
-						break;
-				}
+				currentScreen.PerformSelection();
 			}
 
 			// Normalize the vector to our needs, then set direction

@@ -27,4 +27,12 @@ namespace LegendOfCube.Screens
 		protected internal abstract void Draw(GameTime gameTime, RenderSystem renderSystem);
 		internal abstract void LoadContent();
 	}
+	public abstract class MenuScreen : Screen
+	{
+		protected MenuScreen(Game game)
+		{
+			this.Game = game;
+		}
+		internal abstract void PerformSelection();
+	}
 }
