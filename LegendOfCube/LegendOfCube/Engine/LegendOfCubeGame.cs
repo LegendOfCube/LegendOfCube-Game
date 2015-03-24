@@ -15,13 +15,16 @@ namespace LegendOfCube.Engine
 		private readonly RenderSystem renderSystem;
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ScreenSystem screenSystem;
-
+		private readonly ContentCollection contentCollection;
+	
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public LegendOfCubeGame()
 		{
 			Content.RootDirectory = "Content";
+
+			contentCollection = new ContentCollection();
 
 			graphicsManager = new GraphicsDeviceManager(this);
 			renderSystem = new RenderSystem(this, graphicsManager);
@@ -32,7 +35,8 @@ namespace LegendOfCube.Engine
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
-			screenSystem = new ScreenSystem(this);
+			screenSystem = new ScreenSystem(this, contentCollection);
+
 		}
 
 		// Overriden XNA methods
@@ -57,6 +61,7 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void LoadContent()
 		{
+			contentCollection.LoadContent(Content);
 			renderSystem.LoadContent();
 			screenSystem.LoadAllContent();
 		}

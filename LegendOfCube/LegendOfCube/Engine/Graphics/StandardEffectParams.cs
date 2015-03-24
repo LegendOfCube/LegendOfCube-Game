@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Engine.Graphics
@@ -19,5 +20,14 @@ namespace LegendOfCube.Engine.Graphics
 		public Vector4 EmissiveColor { get; set; }
 		public Texture EmissiveTexture { get; set; }
 		public Texture NormalTexture { get; set; }
+
+		/// <summary>
+		/// Create a shallow copy of the instance.
+		/// </summary>
+		/// <returns>a copy of the object</returns>
+		public StandardEffectParams ShallowCopy()
+		{
+			return (StandardEffectParams)MemberwiseClone();
+		}
 	}
 }

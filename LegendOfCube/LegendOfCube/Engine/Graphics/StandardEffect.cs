@@ -10,6 +10,12 @@ namespace LegendOfCube.Engine.Graphics
 	/// </summary>
 	class StandardEffect
 	{
+		private const int DIFFUSE_TEXTURE_INDEX = 0;
+		private const int SPECULAR_TEXTURE_INDEX = 1;
+		private const int EMISSIVE_TEXTURE_INDEX = 2;
+		private const int NORMAL_TEXTURE_INDEX = 3;
+		private const int SHADOW_TEXTURE_INDEX = 4;
+
 		private readonly Effect effect;
 
 		// Matrices
@@ -21,30 +27,30 @@ namespace LegendOfCube.Engine.Graphics
 		// Lights
 		private readonly EffectParameter dirLight0ViewSpaceDirParam;
 		private readonly EffectParameter dirLight0ColorParam;
-		private readonly EffectParameter dirLight0ShadowMapParam;
 		private readonly EffectParameter dirLight0ShadowMatrixParam;
+
+		private readonly EffectParameter pointLight0ViewSpacePosParam;
+		private readonly EffectParameter pointLight0ReachParam;
+		private readonly EffectParameter pointLight0ColorParam;
 
 		private readonly EffectParameter ambientIntensity;
 
 		// Material properties
-
 		private readonly EffectParameter useDiffuseTextureParam;
-		private readonly EffectParameter diffuseTextureParam;
 		private readonly EffectParameter materialDiffuseColorParam;
 
 		private readonly EffectParameter useSpecularTextureParam;
-		private readonly EffectParameter specularTextureParam;
 		private readonly EffectParameter materialSpecularColorParam;
 
 		private readonly EffectParameter useEmissiveTextureParam;
-		private readonly EffectParameter emissiveTextureParam;
 		private readonly EffectParameter materialEmissiveColorParam;
-
-		private readonly EffectParameter normalTextureParam;
 
 		private readonly EffectTechnique defaultTechnique;
 		private readonly EffectTechnique normalMapTechnique;
 		private readonly EffectTechnique shadowMapTechnique;
+
+		private readonly SamplerState standardSamplerState;
+		private readonly SamplerState shadowSamplerState;
 
 		// Cache this, for determining normal matrix (model to view) after
 		// world has been set
@@ -65,31 +71,56 @@ namespace LegendOfCube.Engine.Graphics
 			// Lights
 			this.dirLight0ViewSpaceDirParam = effect.Parameters["DirLight0ViewSpaceDir"];
 			this.dirLight0ColorParam = effect.Parameters["DirLight0Color"];
-			this.dirLight0ShadowMapParam = effect.Parameters["DirLight0ShadowMap"];
 			this.dirLight0ShadowMatrixParam = effect.Parameters["DirLight0ShadowMatrix"];
+
+			this.pointLight0ViewSpacePosParam = effect.Parameters["PointLight0ViewSpacePos"];
+			this.pointLight0ColorParam = effect.Parameters["PointLight0Color"];
+			this.pointLight0ReachParam = effect.Parameters["PointLight0Reach"];
 
 			this.ambientIntensity = effect.Parameters["AmbientIntensity"];
 
 			// Material properties
 			
 			this.useDiffuseTextureParam = effect.Parameters["UseDiffuseTexture"];
-			this.diffuseTextureParam = effect.Parameters["DiffuseTexture"];
 			this.materialDiffuseColorParam = effect.Parameters["MaterialDiffuseColor"];
 
 			this.useSpecularTextureParam = effect.Parameters["UseSpecularTexture"];
-			this.specularTextureParam = effect.Parameters["SpecularTexture"];
 			this.materialSpecularColorParam = effect.Parameters["MaterialSpecularColor"];
 
 			this.useEmissiveTextureParam = effect.Parameters["UseEmissiveTexture"];
-			this.emissiveTextureParam = effect.Parameters["EmissiveTexture"];
 			this.materialEmissiveColorParam = effect.Parameters["MaterialEmissiveColor"];
-
-			this.normalTextureParam = effect.Parameters["NormalTexture"];
 
 			// Get handles to techniques
 			this.defaultTechnique = this.effect.Techniques["DefaultTechnique"];
 			this.normalMapTechnique = this.effect.Techniques["NormalMapTechnique"];
 			this.shadowMapTechnique = this.effect.Techniques["ShadowMapTechnique"];
+
+			this.standardSamplerState = new SamplerState
+			{
+				AddressU = TextureAddressMode.Wrap,
+				AddressV = TextureAddressMode.Wrap,
+				Filter = TextureFilter.Anisotropic,
+				MaxAnisotropy = 16
+			};
+			this.shadowSamplerState = new SamplerState
+			{
+				AddressU = TextureAddressMode.Clamp,
+				AddressV = TextureAddressMode.Clamp,
+				Filter = TextureFilter.Point
+			};
+		}
+
+		/// <summary>
+		/// Should be called each frame before making any draw calls.
+		/// </summary>
+		public void PrepareRendering()
+		{
+			// Reset sampler states each frame
+			for (int i = DIFFUSE_TEXTURE_INDEX; i < SHADOW_TEXTURE_INDEX; i++)
+			{
+				effect.GraphicsDevice.SamplerStates[i] = standardSamplerState;
+			}
+			effect.GraphicsDevice.SamplerStates[SHADOW_TEXTURE_INDEX] = shadowSamplerState;
 		}
 
 		public void SetViewProjection(ref Matrix view, ref Matrix projection)
@@ -105,9 +136,16 @@ namespace LegendOfCube.Engine.Graphics
 			dirLight0ColorParam.SetValue(lightColor);
 		}
 
+		public void SetPointLight0Properties(ref Vector3 position, ref float reach, ref Vector4 lightColor)
+		{
+			pointLight0ViewSpacePosParam.SetValue(Vector3.Transform(position, view));
+			pointLight0ReachParam.SetValue(reach);
+			pointLight0ColorParam.SetValue(lightColor);
+		}
+
 		public void SetDirLight0ShadowMap(Texture shadowMap)
 		{
-			dirLight0ShadowMapParam.SetValue(shadowMap);
+			effect.GraphicsDevice.Textures[SHADOW_TEXTURE_INDEX] = shadowMap;
 		}
 
 		public void SetDirLight0ShadowMatrix(ref Matrix shadowMatrix)
@@ -169,7 +207,7 @@ namespace LegendOfCube.Engine.Graphics
 		public void SetDiffuseTexture(Texture texture)
 		{
 			useDiffuseTextureParam.SetValue(texture != null);
-			diffuseTextureParam.SetValue(texture);
+			effect.GraphicsDevice.Textures[DIFFUSE_TEXTURE_INDEX] = texture;
 		}
 
 		/// <summary>
@@ -180,7 +218,7 @@ namespace LegendOfCube.Engine.Graphics
 		public void SetSpecularTexture(Texture texture)
 		{
 			useSpecularTextureParam.SetValue(texture != null);
-			specularTextureParam.SetValue(texture);
+			effect.GraphicsDevice.Textures[SPECULAR_TEXTURE_INDEX] = texture;
 		}
 
 		/// <summary>
@@ -191,7 +229,7 @@ namespace LegendOfCube.Engine.Graphics
 		public void SetEmissiveTexture(Texture texture)
 		{
 			useEmissiveTextureParam.SetValue(texture != null);
-			emissiveTextureParam.SetValue(texture);
+			effect.GraphicsDevice.Textures[EMISSIVE_TEXTURE_INDEX] = texture;
 		}
 
 		/// <summary>
@@ -202,7 +240,7 @@ namespace LegendOfCube.Engine.Graphics
 		public void SetNormalTexture(Texture texture)
 		{
 			effect.CurrentTechnique = texture != null ? normalMapTechnique : defaultTechnique;
-			normalTextureParam.SetValue(texture);
+			effect.GraphicsDevice.Textures[NORMAL_TEXTURE_INDEX] = texture;
 		}
 
 		public void SetShadowMapRendering(bool shadowMapRender)

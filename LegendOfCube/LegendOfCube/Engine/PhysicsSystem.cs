@@ -9,22 +9,6 @@ namespace LegendOfCube.Engine
 {
 	public class PhysicsSystem
 	{
-		// Constants
-		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		private static readonly Properties ACCELERATABLE = new Properties(Properties.VELOCITY |
-		                                                                  Properties.ACCELERATION);
-
-		private static readonly Properties HAS_GRAVITY = new Properties(Properties.VELOCITY |
-		                                                                Properties.GRAVITY_FLAG);
-
-		private static readonly Properties MOVABLE = new Properties(Properties.TRANSFORM |
-		                                                            Properties.VELOCITY |
-		                                                            Properties.MODEL_SPACE_BV);
-
-		private static readonly Properties MOVABLE_NO_BV = new Properties(Properties.TRANSFORM |
-		                                                                  Properties.VELOCITY);
-
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -41,169 +25,174 @@ namespace LegendOfCube.Engine
 		// Public functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyPhysics(float delta, World world)
+		public void ApplyPhysics(World world, float delta)
 		{
-			// Calculate all World Space OBBs
+			// Flush away old CollisionEvents
+			world.EventBuffer.Flush();
+
+			// Updating OBBs
+			UpdateWorldSpaceOBBs(world);
+
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+			{
+				// Acceleration
+				if (world.EntityProperties[i].Satisfies(Properties.VELOCITY | Properties.ACCELERATION))
+				{
+					Accelerate(world, i, delta);
+				}
+
+				// Gravity
+				if (world.EntityProperties[i].Satisfies(Properties.VELOCITY | Properties.GRAVITY_FLAG))
+				{
+					ApplyGravity(world, i, delta);
+				}
+
+				// Moving
+				if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV | Properties.DYNAMIC_VELOCITY_FLAG))
+				{
+					MoveDynamicWithCollisionChecking(world, i, delta);
+				}
+				else if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY | Properties.MODEL_SPACE_BV))
+				{
+					MoveStaticWithCollisionChecking(world, i, delta);
+				}
+				else if (world.EntityProperties[i].Satisfies(Properties.TRANSFORM | Properties.VELOCITY))
+				{
+					MoveWithoutCollisionChecking(world, i, delta);
+				}
+			}
+		}
+
+		// Private functions: Segments
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private void UpdateWorldSpaceOBBs(World world)
+		{
 			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
 				if (!world.EntityProperties[i].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
 				worldSpaceOBBs[i] = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
 			}
+		}
 
-			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+		private void Accelerate(World world, UInt32 i, float delta)
+		{
+			world.Velocities[i] += (world.Accelerations[i] * delta);
+
+			// Clamp velocity in X and Y direction
+			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM. Besides, current implementation too naive.
+			Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
+			if (groundVelocity.Length() > world.MaxSpeed[i])
 			{
-				Properties properties = world.EntityProperties[i];
-
-				// Check if velocity should be updated
-				if (properties.Satisfies(ACCELERATABLE))
-				{
-					world.Velocities[i] += (world.Accelerations[i] * delta);
-
-					// Clamp velocity in X and Y direction
-					Vector2 groundVelocity = new Vector2(world.Velocities[i].X, world.Velocities[i].Z);
-					if (groundVelocity.Length() > world.MaxSpeed[i])
-					{
-						groundVelocity.Normalize();
-						groundVelocity *= world.MaxSpeed[i];
-						world.Velocities[i].X = groundVelocity.X;
-						world.Velocities[i].Z = groundVelocity.Y;
-					}
-				}
-
-				// Apply gravity
-				if (properties.Satisfies(HAS_GRAVITY))
-				{
-					if (world.PlayerCubeState.OnWall)
-					{
-						world.Velocities[i] += (world.Gravity*delta*0.5f);
-					}
-					else
-					{
-						world.Velocities[i] += (world.Gravity*delta);
-					}
-				}
-
-				// Update position
-				if (properties.Satisfies(MOVABLE))
-				{
-					OBB oldObb = worldSpaceOBBs[i];
-					Vector3 diff = (world.Velocities[i] * delta);
-					worldSpaceOBBs[i].Position += diff;
-
-					// Player specific collision response part 1: Reading PlayerCubeState
-					PlayerCubeState tempCubeState = world.PlayerCubeState;
-					if (i == world.Player.Id)
-					{
-						tempCubeState.OnGround = false;
-						tempCubeState.GroundAxis = Vector3.Zero;
-
-
-						tempCubeState.OnWall = false;
-						tempCubeState.WallAxis = Vector3.Zero;
-					}
-
-					// Iterate until object no longer intersects with anything.
-					float timeLeft = delta;
-					UInt32 intersectionId = FindIntersection(world, i);
-					int iterations = 0;
-					while (intersectionId != UInt32.MaxValue)
-					{
-						if (iterations >= 10) break;
-						iterations++;
-						Debug.Assert(intersectionId != i);
-
-						// Collision axis
-						Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
-						Debug.Assert(!float.IsNaN(axis.X));
-
-						// Add Collision Event to EventBuffer
-						CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), axis, world.Velocities[i]);
-						world.EventBuffer.AddEvent(ref ce);
-
-						// Move OBB to collision point
-						worldSpaceOBBs[i].Position -= diff;
-						float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
-						                     ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
-						diff = world.Velocities[i] * timeUntilCol;
-						worldSpaceOBBs[i].Position += diff;
-
-						// Update timeLeft
-						timeLeft -= timeUntilCol;
-						if (timeLeft <= 0.0f) break;
-
-						// Collision response
-						float collidingSum = Vector3.Dot(world.Velocities[i], axis);
-						world.Velocities[i] -= (collidingSum * axis);
-
-						// Player specific collision response part 2
-						if (i == world.Player.Id)
-						{
-							float wallDot = Math.Abs(axis.X) + Math.Abs(axis.Z);
-							if (wallDot > 0.95f)
-							{
-								tempCubeState.OnWall = true;
-								tempCubeState.WallAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
-							}
-
-							float groundDot = axis.Y;
-							if (groundDot > 0.75f)
-							{
-								tempCubeState.OnGround = true;
-								tempCubeState.OnWall = false;
-								tempCubeState.GroundAxis = worldSpaceOBBs[intersectionId].ClosestAxis(ref axis);
-								tempCubeState.WallAxis = Vector3.Zero;
-							}
-						}
-
-						// Attempt to move for remaining time
-						diff = world.Velocities[i] * timeLeft;
-						worldSpaceOBBs[i].Position += diff;
-
-						// Do it all again
-						//intersectionId = UInt32.MaxValue;
-						intersectionId = FindIntersection(world, i);
-					}
-
-					// Attempt to resolve remaining intersections
-					iterations = 0;
-					while (intersectionId != UInt32.MaxValue)
-					{
-						if (iterations > 15) break;
-						iterations++;
-						Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
-						PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
-						intersectionId = FindIntersection(world, i);
-					}
-
-					// Emergency step. If we haven't resolved collisions until now we just move collider to the top.
-					iterations = 0;
-					while (intersectionId != UInt32.MaxValue)
-					{
-						if (iterations > 100) break;
-						iterations++;
-						Vector3 emergencyAxis = Vector3.UnitY;
-						PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref emergencyAxis);
-						intersectionId = FindIntersection(world, i);
-					}
-
-					// Player specific collision response part 3: Setting PlayerCubeState
-					if (i == world.Player.Id)
-					{
-						world.PlayerCubeState = tempCubeState;
-					}
-
-					// Update translation in transform
-					Vector3 obbDiff = worldSpaceOBBs[i].Position - oldObb.Position;
-					world.Transforms[i].Translation += obbDiff;
-				}
-				else if (properties.Satisfies(MOVABLE_NO_BV))
-				{
-					world.Transforms[i].Translation += (world.Velocities[i] * delta);
-				}
+				groundVelocity.Normalize();
+				groundVelocity *= world.MaxSpeed[i];
+				world.Velocities[i].X = groundVelocity.X;
+				world.Velocities[i].Z = groundVelocity.Y;
 			}
 		}
 
-		// Private functions
+		private void ApplyGravity(World world, UInt32 i, float delta)
+		{
+			// Player moves slower when on wall.
+			// TODO: REMOVE! THIS SHOULD NOT BE IN PHYSICS SYSTEM.
+			if (world.PlayerCubeState.OnWall)
+			{
+				world.Velocities[i] += (world.Gravity * delta * 0.5f);
+			}
+			else
+			{
+				world.Velocities[i] += (world.Gravity * delta);
+			}
+		}
+		
+		private void MoveDynamicWithCollisionChecking(World world, UInt32 i, float delta)
+		{
+			OBB oldObb = worldSpaceOBBs[i];
+			Vector3 diff = (world.Velocities[i] * delta);
+			worldSpaceOBBs[i].Position += diff;
+
+			// Iterate until object no longer intersects with anything.
+			float timeLeft = delta;
+			UInt32 intersectionId = FindIntersection(world, i);
+			int iterations = 0;
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations >= 10) break;
+				iterations++;
+
+				// Calculate collision axis and rotate collider
+				Vector3 collisionAxis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
+				RotateOBB(ref worldSpaceOBBs[i], ref collisionAxis);
+
+				// Add Collision Event to EventBuffer
+				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxis, world.Velocities[i]);
+				world.EventBuffer.AddEvent(ref ce);
+
+				// Move OBB to collision point
+				worldSpaceOBBs[i].Position -= diff;
+				float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
+									 ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
+				diff = world.Velocities[i] * timeUntilCol;
+				worldSpaceOBBs[i].Position += diff;
+
+				// Update timeLeft
+				timeLeft -= timeUntilCol;
+				if (timeLeft <= 0.0f) break;
+
+				// Remove velocity in colliding axis
+				float collidingSum = Vector3.Dot(world.Velocities[i], collisionAxis);
+				world.Velocities[i] -= (collidingSum * collisionAxis);
+
+				// Move in remaining velocity for the remaining time and then check for more intersections
+				diff = world.Velocities[i] * timeLeft;
+				worldSpaceOBBs[i].Position += diff;
+				intersectionId = FindIntersection(world, i);
+			}
+
+			// Attempt to resolve remaining intersections
+			PushOutEntityCollisionAxis(world, i, 15);
+			PushOutEntityFixedAxis(world, i, Vector3.UnitY, 25);
+
+			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+		}
+
+		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
+		{
+			OBB oldObb = worldSpaceOBBs[i];
+			worldSpaceOBBs[i].Position += (world.Velocities[i] * delta);
+
+			// Iterate until object no longer intersects with anything.
+			UInt32 intersectionId = FindIntersection(world, i);
+			int iterations = 0;
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations >= 10) break;
+				iterations++;
+
+				// Push out target
+				Vector3 collisionAxisInv = -FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
+				if (world.EntityProperties[intersectionId].Satisfies(Properties.DYNAMIC_VELOCITY_FLAG))
+				{
+					PushOutEntityFixedAxis(world, intersectionId, collisionAxisInv, 10);
+				}
+
+				// Add Collision Event to EventBuffer
+				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxisInv, world.Velocities[i]);
+				world.EventBuffer.AddEvent(ref ce);
+
+				intersectionId = FindIntersection(world, i);
+			}
+
+			// Update translation in transform
+			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+		}
+
+		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
+		{
+			world.Transforms[i].Translation += (world.Velocities[i] * delta);
+		}
+
+		// Private functions: Helpers
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Precondition: param entity must satisfy MOVABLE
@@ -271,6 +260,70 @@ namespace LegendOfCube.Engine
 
 			float timeUntilCol = FindTimeUntilIntersection(ref target, ref collider, -axisOut * accumulatedStep, 1.0f, 4);
 			collider.Position += (timeUntilCol * accumulatedStep * -axisOut);
+		}
+
+		private void PushOutEntityCollisionAxis(World world, UInt32 i, int maxNumIterations)
+		{
+			int iterations = 0;
+			UInt32 intersectionId = FindIntersection(world, i);
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations > maxNumIterations) break;
+				iterations++;
+				Vector3 axis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref worldSpaceOBBs[i]);
+				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
+				intersectionId = FindIntersection(world, i);
+			}
+		}
+
+		private void PushOutEntityFixedAxis(World world, UInt32 i, Vector3 axis, int maxNumIterations)
+		{
+			int iterations = 0;
+			UInt32 intersectionId = FindIntersection(world, i);
+			while (intersectionId != UInt32.MaxValue)
+			{
+				if (iterations > maxNumIterations) break;
+				iterations++;
+				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
+				intersectionId = FindIntersection(world, i);
+			}
+		}
+
+		private void RotateOBB(ref OBB obbOut, ref Vector3 axis)
+		{
+			OBBAxis colAxisEnum = obbOut.ClosestAxisEnum(ref axis);
+			switch (colAxisEnum)
+			{
+				case OBBAxis.X_PLUS:
+				case OBBAxis.X_MINUS:
+					obbOut.AxisX = colAxisEnum.Sign() * axis;
+					obbOut.AxisY = Vector3.Cross(obbOut.AxisZ, obbOut.AxisX);
+					obbOut.AxisZ = Vector3.Cross(obbOut.AxisX, obbOut.AxisY);
+					break;
+				case OBBAxis.Y_PLUS:
+				case OBBAxis.Y_MINUS:
+					obbOut.AxisY = colAxisEnum.Sign() * axis;
+					obbOut.AxisX = Vector3.Cross(obbOut.AxisY, obbOut.AxisZ);
+					obbOut.AxisZ = Vector3.Cross(obbOut.AxisX, obbOut.AxisY);
+					break;
+				case OBBAxis.Z_PLUS:
+				case OBBAxis.Z_MINUS:
+					obbOut.AxisZ = colAxisEnum.Sign() * axis;
+					obbOut.AxisX = Vector3.Cross(obbOut.AxisY, obbOut.AxisZ);
+					obbOut.AxisY = Vector3.Cross(obbOut.AxisZ, obbOut.AxisX);
+					break;
+			}
+		}
+
+		private void TransformFromOBBs(ref OBB oldOBB, ref OBB newOBB, ref Matrix transformOut)
+		{
+			// Update translation in transform
+			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
+			transformOut.Translation += obbDiff;
+			// Update rotation: This is probably a really stupid way.
+			transformOut.Backward = newOBB.AxisZ * transformOut.Forward.Length();
+			transformOut.Right = newOBB.AxisX * transformOut.Left.Length();
+			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
 		}
 	}
 }

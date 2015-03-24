@@ -11,7 +11,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                  Properties.INPUT_FLAG);
+		                                                                  Properties.INPUT);
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

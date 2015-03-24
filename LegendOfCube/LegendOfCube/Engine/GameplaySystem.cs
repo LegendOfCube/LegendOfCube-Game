@@ -1,4 +1,5 @@
 ﻿using System;
+using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
@@ -9,7 +10,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private static readonly Properties MOVEMENT_INPUT = new Properties(Properties.TRANSFORM |
-		                                                                        Properties.INPUT_FLAG |
+		                                                                        Properties.INPUT |
 		                                                                        Properties.ACCELERATION |
 		                                                                        Properties.VELOCITY);
 		// TODO: make stop_time a function of the velocity
@@ -57,21 +58,8 @@ namespace LegendOfCube.Engine
 				{
 					isStopping = false;
 
-					// Rotate input
-
-					Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
-
-					// Calculate angle formed along ground by the cameras position relative the player
-					float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);
-
-					Vector2 directionInput = world.InputData[i].GetDirection();
-
-					// Invert y input
-					directionInput.Y = -directionInput.Y;
-
-					// Rotate in 3D, since don't have 2x2 matrix class
-					Vector3 directionInput3D = new Vector3(directionInput.X, 0, directionInput.Y);
-					Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
+					Vector2 inputDir = world.InputData[i].GetDirection();
+					Vector3 rotatedInput = Rotate2DDirectionRelativeCamera(world, ref inputDir);
 
 					if (!world.PlayerCubeState.OnGround)
 					{
@@ -115,7 +103,7 @@ namespace LegendOfCube.Engine
 					if (world.InputData[i].NewJump() && world.PlayerCubeState.OnWall)
 					{
 						world.Velocities[i].Y = 0;
-						world.Velocities[i] += world.PlayerCubeState.WallAxis * 15;
+						world.Velocities[i] += world.PlayerCubeState.WallAxis * 20;
 						world.Velocities[i].Y += 1f*world.BaseJump;
 						world.PlayerCubeState.OnWall = false;
 						world.PlayerCubeState.OnGround = false;
@@ -135,6 +123,25 @@ namespace LegendOfCube.Engine
 					}
 				}
 			}
+		}
+
+		// Private functions: Helpers
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private Vector3 Rotate2DDirectionRelativeCamera(World world, ref Vector2 direction)
+		{
+			Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
+		
+			// Calculate angle formed along ground by the cameras position relative the player
+			float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);
+
+			// Invert y input
+			direction.Y = -direction.Y;
+
+			// Rotate in 3D, since don't have 2x2 matrix class
+			Vector3 directionInput3D = new Vector3(direction.X, 0, direction.Y);
+			Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
+			return rotatedInput;
 		}
 	}
 }

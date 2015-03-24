@@ -23,7 +23,7 @@ namespace LegendOfCube.Screens
 
 		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game)
 		{
-			World = screenSystem.GetWorld();
+			World = screenSystem.GetCurrentWorld();
 			this.game = game;
 			this.screenSystem = screenSystem;
 			inputSystem = new InputSystem(game);
@@ -38,7 +38,7 @@ namespace LegendOfCube.Screens
 
 			inputSystem.ApplyInput(gameTime, World, switcher);
 			menuInputSystem.ApplyInput(gameTime, World, switcher, this, ref selection);
-			cameraSystem.OnUpdate(World, delta);
+			cameraSystem.OnUpdate(screenSystem.GetCurrentWorld(), delta);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)

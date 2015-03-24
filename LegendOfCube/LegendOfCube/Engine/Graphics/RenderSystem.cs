@@ -19,6 +19,8 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM |
 		                                                                Properties.STANDARD_EFFECT);
+	
+		private static readonly Properties HAS_OBB = new Properties(Properties.MODEL_SPACE_BV);
 
 		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 		private const int SHADOW_MAP_SIZE = 2048;
@@ -85,7 +87,7 @@ namespace LegendOfCube.Engine.Graphics
 			                              MathHelper.ToRadians(FOV),
 			                              game.GraphicsDevice.Viewport.AspectRatio,
 			                              0.1f,
-			                              1000.0f);
+			                              5000.0f);
 
 			var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
 
@@ -104,6 +106,8 @@ namespace LegendOfCube.Engine.Graphics
 				}
 			}
 
+			standardEffect.PrepareRendering();
+
 			// Create shadow map for the primary light
 			Matrix shadowMatrix;
 			RenderShadowMap(world, renderableEntities, shadowRenderTarget, out shadowMatrix);
@@ -117,7 +121,7 @@ namespace LegendOfCube.Engine.Graphics
 			// Render OBB wireframes
 			if (world.DebugState.ShowOBBWireFrame)
 			{
-				RenderOBBs(world, visibleEntities, ref cameraView, ref cameraProjection);
+				RenderOBBs(world, ref cameraView, ref cameraProjection);
 			}
 		}
 
@@ -189,6 +193,14 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetDirLight0Properties(ref world.LightDirection, ref lightColor);
 			standardEffect.SetDirLight0ShadowMap(shadowRenderTarget);
 			standardEffect.SetDirLight0ShadowMatrix(ref shadowMatrix);
+
+			// Make the player cube a light source
+			float reach = 10.0f;
+			bool playerHasStandardEffect = world.EntityProperties[world.Player.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE);
+			// Default to white color
+			Vector4 pointColor = playerHasStandardEffect ? world.StandardEffectParams[world.Player.Id].EmissiveColor : Color.White.ToVector4();
+			Vector3 pointLightPos = world.Transforms[world.Player.Id].Translation + new Vector3(0.0f, 0.5f, 0.0f);
+			standardEffect.SetPointLight0Properties(ref pointLightPos, ref reach, ref pointColor);
 
 			foreach (var entity in entities)
 			{
@@ -263,9 +275,9 @@ namespace LegendOfCube.Engine.Graphics
 			}
 		}
 
-		private void RenderOBBs(World world, List<Entity> entities, ref Matrix view, ref Matrix projection)
+		private void RenderOBBs(World world, ref Matrix view, ref Matrix projection)
 		{
-			foreach (var entity in entities)
+			foreach (var entity in world.EnumerateEntities(HAS_OBB))
 			{
 				OBB obb = world.ModelSpaceBVs[entity.Id];
 				OBB transformed = OBB.TransformOBB(ref obb, ref world.Transforms[entity.Id]);
