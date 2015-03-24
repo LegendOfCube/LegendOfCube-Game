@@ -19,9 +19,9 @@ namespace LegendOfCube.Levels
 			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
 			world.LightDirection = Vector3.Normalize(new Vector3
 			{
-				X = -1.0f,
+				X = -2.0f,
 				Y = -1.0f,
-				Z = -1.0f
+				Z = -2.0f
 			});
 			world.AmbientIntensity = 0.25f;
 
