@@ -98,12 +98,15 @@ namespace LegendOfCube.Engine.Graphics
 			foreach (var entity in world.EnumerateEntities(MODEL_AND_TRANSFORM))
 			{
 				renderableEntities.Add(entity);
-				Model model = world.Models[entity.Id];
+
+				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+				/*Model model = world.Models[entity.Id];
 				Matrix worldTransform = world.Transforms[entity.Id];
 				if (IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
 				{
 					visibleEntities.Add(entity);
-				}
+				}*/
+				visibleEntities.Add(entity);
 			}
 
 			standardEffect.PrepareRendering();
@@ -287,24 +290,33 @@ namespace LegendOfCube.Engine.Graphics
 
 		private static bool IsModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
 		{
-			// Go through all BoundingSpheres in Model and check if inside frustrums
-			foreach (var mesh in model.Meshes)
+
+			BoundingSphere boundingSphere;
+			CreateMergedBoundingSphere(model, out boundingSphere);
+
+			// Not entirely sure if model.Root.Transform should be used in
+			// this context, but it seems like mesh.BoundingSphere doesn't
+			// cover the whole object otherwise. The bug might lie
+			// elsewhere.
+			var modifiedWorldTransform = model.Root.Transform * worldTransform;
+			BoundingSphere worldBoundingSphere;
+			boundingSphere.Transform(ref modifiedWorldTransform, out worldBoundingSphere);
+			bool intersects;
+			boundingFrustum.Intersects(ref worldBoundingSphere, out intersects);
+			return intersects;
+		}
+
+		private static void CreateMergedBoundingSphere(Model model, out BoundingSphere boundingSphere)
+		{
+			boundingSphere = model.Meshes[0].BoundingSphere;
+			for (int i = 1; i < model.Meshes.Count; i++)
 			{
-				// Not entirely sure if model.Root.Transform should be used in
-				// this context, but it seems like mesh.BoundingSphere doesn't
-				// cover the whole object otherwise. The bug might lie
-				// elsewhere.
-				var modifiedWorldTransform = model.Root.Transform * worldTransform;
-				BoundingSphere worldBoundingSphere;
-				mesh.BoundingSphere.Transform(ref modifiedWorldTransform, out worldBoundingSphere);
-				bool intersects;
-				boundingFrustum.Intersects(ref worldBoundingSphere, out intersects);
-				if (intersects)
-				{
-					return true;
-				}
+				ModelMesh mesh = model.Meshes[i];
+				// As with model.Root.Transform, it may be that this 
+				// mesh.ParentBone.Transform shouldn't be used
+				BoundingSphere additional = mesh.BoundingSphere.Transform(mesh.ParentBone.Transform);
+				boundingSphere = BoundingSphere.CreateMerged(boundingSphere, additional);
 			}
-			return false;
 		}
 	}
 }
