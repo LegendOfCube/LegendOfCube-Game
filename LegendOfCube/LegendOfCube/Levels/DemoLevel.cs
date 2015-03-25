@@ -863,7 +863,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(-190, 0, 0))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
+				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
 
 			//Falling death

@@ -41,6 +41,13 @@ namespace LegendOfCube.Engine
 		// Player state
 		public PlayerCubeState PlayerCubeState;
 
+		//GameOver state
+		public bool WinState;
+		public float TimeSinceGameOver;
+
+		//Game statistics
+		public GameStats GameStats;
+
 		// Shortcut to player entity which there will be one instance of
 		public Entity Player;
 
@@ -102,6 +109,11 @@ namespace LegendOfCube.Engine
 			PlayerCubeState.OnGround = false;
 			PlayerCubeState.WallAxis = Vector3.Zero;
 			PlayerCubeState.GroundAxis = Vector3.Zero;
+
+			WinState = false;
+			TimeSinceGameOver = 0;
+
+			GameStats = new GameStats();
 
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 			AirMovement = 0.4f;
