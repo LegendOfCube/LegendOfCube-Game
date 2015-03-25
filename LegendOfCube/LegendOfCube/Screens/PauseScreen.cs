@@ -23,7 +23,6 @@ namespace LegendOfCube.Screens
 
 		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game)
 		{
-			World = screenSystem.GetCurrentWorld();
 			this.game = game;
 			this.screenSystem = screenSystem;
 			inputSystem = new InputSystem(game);
@@ -34,20 +33,24 @@ namespace LegendOfCube.Screens
 
 		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
 		{
+			var world = screenSystem.GetCurrentWorld();
+
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			inputSystem.ApplyInput(gameTime, World, switcher);
-			menuInputSystem.ApplyInput(gameTime, World, switcher, this, ref selection);
+			inputSystem.ApplyInput(gameTime, world, switcher);
+			menuInputSystem.ApplyInput(gameTime, world, switcher, this, ref selection);
 			cameraSystem.OnUpdate(screenSystem.GetCurrentWorld(), delta);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
 		{
+			var world = screenSystem.GetCurrentWorld();
+
 			Game.GraphicsDevice.Clear(Color.DarkTurquoise);
 
 			Game.GraphicsDevice.BlendState = BlendState.Opaque;
 			Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-			renderSystem.RenderWorld(World);
+			renderSystem.RenderWorld(world);
 
 			spriteBatch.Begin();
 			spriteBatch.Draw(play, new Vector2(100, 20), Color.Red);
