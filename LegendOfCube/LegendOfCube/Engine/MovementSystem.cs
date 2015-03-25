@@ -2,6 +2,7 @@
 using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using LegendOfCube.Engine.BoundingVolumes;
 
 namespace LegendOfCube.Engine
 {
@@ -14,6 +15,8 @@ namespace LegendOfCube.Engine
 		private const float MOVEMENT_ACCELERATION = 35.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 10.0f;
 		private const float WALL_ANTI_GRAVITY_FACTOR = 0.75f;
+		private const float ROTATIONAL_SPEED = 360;
+		private static readonly float ROTATIONAL_SPEED_RAD = MathHelper.ToRadians(ROTATIONAL_SPEED);
 
 		// Ground jump constants
 		private const float MAX_JUMP_HEIGHT = 5.0f;
@@ -90,6 +93,35 @@ namespace LegendOfCube.Engine
 				world.Velocities[i].Z += currentMovementVelocity.Z;
 			}
 
+			// Cube rotation
+			if (currentMovementVelocity != Vector3.Zero)
+			{
+				Vector3 movementDir = currentMovementVelocity;
+				movementDir.Normalize();
+
+				OBB wsOBB = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+				OBBAxis closestAxisEnum = wsOBB.ClosestAxisEnum(ref movementDir);
+				Vector3 closestAxis = wsOBB.ClosestAxis(ref movementDir);
+				closestAxis.Normalize();
+
+				float angleBetween = angleRadBetweenTwoNormalizedVectors(ref movementDir, ref closestAxis);
+				float angleToMove = ROTATIONAL_SPEED_RAD * delta;
+				if (angleToMove > angleBetween) angleToMove = angleBetween;
+
+				if (!MathUtils.ApproxEqu(closestAxis, movementDir, 0.01f))
+				{
+					Vector3 rotationAxis = Vector3.Cross(closestAxis, movementDir);
+					rotationAxis.Normalize();
+					Matrix3x3 rotationMatrix = Matrix3x3.CreateRotationMatrix(ref rotationAxis, angleToMove);
+
+					OBB oldOBB = wsOBB;
+					Vector3 rotatedAxis = rotationMatrix * closestAxis;
+					RotateOBB(ref wsOBB, closestAxisEnum, ref rotatedAxis);
+
+					TransformFromOBBs(ref oldOBB, ref wsOBB, ref world.Transforms[i]);
+				}
+			}
+
 			// WALL SUCK HACK
 			if (world.PlayerCubeState.OnWall)
 			{
@@ -156,6 +188,47 @@ namespace LegendOfCube.Engine
 			Vector3 directionInput3D = new Vector3(direction.X, 0, direction.Y);
 			Vector3 rotatedInput = Vector3.Transform(directionInput3D, Matrix.CreateRotationY(offset));
 			return rotatedInput;
+		}
+
+		private void RotateOBB(ref OBB obbOut, OBBAxis axisEnum, ref Vector3 newAxis)
+		{
+			switch (axisEnum)
+			{
+				case OBBAxis.X_PLUS:
+				case OBBAxis.X_MINUS:
+					obbOut.AxisX = axisEnum.Sign() * newAxis;
+					obbOut.AxisY = Vector3.Cross(obbOut.AxisZ, obbOut.AxisX);
+					obbOut.AxisZ = Vector3.Cross(obbOut.AxisX, obbOut.AxisY);
+					break;
+				case OBBAxis.Y_PLUS:
+				case OBBAxis.Y_MINUS:
+					obbOut.AxisY = axisEnum.Sign() * newAxis;
+					obbOut.AxisX = Vector3.Cross(obbOut.AxisY, obbOut.AxisZ);
+					obbOut.AxisZ = Vector3.Cross(obbOut.AxisX, obbOut.AxisY);
+					break;
+				case OBBAxis.Z_PLUS:
+				case OBBAxis.Z_MINUS:
+					obbOut.AxisZ = axisEnum.Sign() * newAxis;
+					obbOut.AxisX = Vector3.Cross(obbOut.AxisY, obbOut.AxisZ);
+					obbOut.AxisY = Vector3.Cross(obbOut.AxisZ, obbOut.AxisX);
+					break;
+			}
+		}
+
+		private void TransformFromOBBs(ref OBB oldOBB, ref OBB newOBB, ref Matrix transformOut)
+		{
+			// Update translation in transform
+			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
+			transformOut.Translation += obbDiff;
+			// Update rotation: This is probably a really stupid way.
+			transformOut.Backward = newOBB.AxisZ * transformOut.Forward.Length();
+			transformOut.Right = newOBB.AxisX * transformOut.Left.Length();
+			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
+		}
+
+		private float angleRadBetweenTwoNormalizedVectors(ref Vector3 a, ref Vector3 b)
+		{
+			return (float)Math.Acos(Vector3.Dot(a, b));
 		}
 	}
 }

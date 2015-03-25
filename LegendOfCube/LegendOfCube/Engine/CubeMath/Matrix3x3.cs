@@ -12,6 +12,25 @@ namespace LegendOfCube.Engine.CubeMath
 		public float M21, M22, M23;
 		public float M31, M32, M33;
 
+		// Constructor
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+		public Matrix3x3(float M11, float M12, float M13,
+		                 float M21, float M22, float M23,
+		                 float M31, float M32, float M33)
+		{
+			this.M11 = M11;
+			this.M12 = M12;
+			this.M13 = M13;
+
+			this.M21 = M21;
+			this.M22 = M22;
+			this.M23 = M23;
+
+			this.M31 = M31;
+			this.M32 = M32;
+			this.M33 = M33;
+		}
+
 		// Creation functions
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -37,6 +56,22 @@ namespace LegendOfCube.Engine.CubeMath
 			result.M23 = zAxis.Y;
 			result.M33 = zAxis.Z;
 			return result;
+		}
+
+		public static Matrix3x3 CreateRotationMatrix(ref Vector3 axis, float angleRads)
+		{
+				Vector3 r = axis;
+				r.Normalize();
+				float x = r.X;
+				float y = r.Y;
+				float z = r.Z;
+				float c = (float)Math.Cos(angleRads);
+				float s = (float)Math.Sin(angleRads);
+				float cm1 = 1.0f - c;
+				// Matrix by Goldman, page 71 of Real-Time Rendering.
+				return new Matrix3x3(c + cm1*x*x, cm1*x*y - z*s, cm1*x*z + y*s,
+				                     cm1*x*y + z*s, c + cm1*y*y, cm1*y*z - x*s,
+				                     cm1*x*z - y*s, cm1*y*z + x*s, c + cm1*z*z);
 		}
 
 		// Public functions
