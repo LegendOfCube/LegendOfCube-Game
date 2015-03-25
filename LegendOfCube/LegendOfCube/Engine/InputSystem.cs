@@ -75,7 +75,10 @@ namespace LegendOfCube.Engine
 				{
 					EventSystem.ResetLevel(world);
 				}
-				EventSystem.RespawnPlayer(world);
+				else
+				{
+					EventSystem.RespawnPlayer(world);
+				}
 			}
 
 			if (KeyWasJustPressed(Keys.Back))

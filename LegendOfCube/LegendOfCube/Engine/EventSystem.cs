@@ -126,7 +126,7 @@ namespace LegendOfCube.Engine
 		public static void ResetLevel(World world)
 		{
 			//TODO: Should probably reload entire level instead of just resetting spawnpoints and stats
-			world.SpawnPoint = new Vector3(0,0,0);
+			world.SpawnPoint = new Vector3(0,1,0);
 			world.GameStats.PlayerDeaths = 0;
 			world.GameStats.GameTime = 0;
 			world.WinState = false;

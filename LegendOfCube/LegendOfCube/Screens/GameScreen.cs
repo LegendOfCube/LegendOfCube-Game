@@ -43,7 +43,7 @@ namespace LegendOfCube.Screens
 			if (World.WinState)
 			{
 				inputSystem.ApplyInput(gameTime, World, switcher);
-				cameraSystem.OnUpdate(World, delta);
+				physicsSystem.ApplyPhysics(World, delta);
 
 				//Small delay before score screen.
 				if (World.TimeSinceGameOver < 1)
