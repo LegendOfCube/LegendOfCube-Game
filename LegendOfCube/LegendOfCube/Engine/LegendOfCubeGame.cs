@@ -27,6 +27,8 @@ namespace LegendOfCube.Engine
 			contentCollection = new ContentCollection();
 
 			graphicsManager = new GraphicsDeviceManager(this);
+			graphicsManager.PreferredBackBufferHeight = 600;
+			graphicsManager.PreferredBackBufferWidth = 800;
 			renderSystem = new RenderSystem(this, graphicsManager);
 
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
@@ -51,7 +53,7 @@ namespace LegendOfCube.Engine
 		protected override void Initialize()
 		{
 			renderSystem.Initialize();
-
+			
 			base.Initialize();
 		}
 
@@ -114,10 +116,5 @@ namespace LegendOfCube.Engine
 				currentScreen = screens[0];
 			}
 		}*/
-
-		public void ResetPlayer()
-		{
-			
-		}
 	}
 }

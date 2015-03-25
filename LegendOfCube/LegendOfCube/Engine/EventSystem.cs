@@ -6,6 +6,7 @@ using System.Text;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using LegendOfCube.Levels;
 
 namespace LegendOfCube.Engine
 {
@@ -101,18 +102,14 @@ namespace LegendOfCube.Engine
 					world.PlayerCubeState.OnGround = false;
 					world.PlayerCubeState.OnWall = false;
 				}
+				if (world.EntityProperties[collidedWith].Satisfies(Properties.WIN_ZONE_FLAG))
+				{
+					world.WinState = true;
+				}
 			}
-
-			//Magic LINQ from resharper
-			//var playerAffected = eventBuffer.CollisionEvents.Any(collisionEvent => collisionEvent.Collider.Id == world.Player.Id);
-
-			//if (!playerAffected)
-			//{
-			//	world.PlayerCubeState.InAir = true;
-			//
 		}
 
-		private static void RespawnPlayer(World world)
+		public static void RespawnPlayer(World world)
 		{
 			// Look toward where you died
 			// TODO: Refine this, view direction per spawn point?
@@ -121,6 +118,26 @@ namespace LegendOfCube.Engine
 
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
+			world.WinState = false;
+			world.TimeSinceGameOver = 0;
+			world.GameStats.PlayerDeaths += 1;
+		}
+
+		public static void ResetLevel(World world)
+		{
+			//TODO: Should probably reload entire level instead of just resetting spawnpoints and stats
+			world.SpawnPoint = new Vector3(0,1,0);
+			world.GameStats.PlayerDeaths = 0;
+			world.GameStats.GameTime = 0;
+			world.WinState = false;
+			world.TimeSinceGameOver = 0;
+
+			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
+			world.Velocities[world.Player.Id] = Vector3.Zero;
+
+			world.CameraPosition = world.SpawnPoint;
+			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
+			world.CameraPosition.X -= 2;
 		}
 	}
 }
