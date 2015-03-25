@@ -1,13 +1,18 @@
 ﻿using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
+using LegendOfCube.Engine;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Screens
 {
 	public abstract class Screen
 	{
 		protected Game Game;
 		public World World;
 
+		protected Screen()
+		{
+
+		}
 		protected Screen(Game game)
 		{
 			this.Game = game;
@@ -18,8 +23,16 @@ namespace LegendOfCube.Engine
 			World = world;
 		}
 
-		protected internal abstract void Update(GameTime gameTime, SwitcherSystem switcher);
+		protected internal abstract void Update(GameTime gameTime, ScreenSystem switcher);
 		protected internal abstract void Draw(GameTime gameTime, RenderSystem renderSystem);
 		internal abstract void LoadContent();
+	}
+	public abstract class MenuScreen : Screen
+	{
+		protected MenuScreen(Game game)
+		{
+			this.Game = game;
+		}
+		internal abstract void PerformSelection();
 	}
 }
