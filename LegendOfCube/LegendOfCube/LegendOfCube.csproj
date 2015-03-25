@@ -102,7 +102,7 @@
     <Compile Include="Engine\Graphics\OBBRenderer.cs" />
     <Compile Include="Engine\PlayerCubeState.cs" />
     <Compile Include="Engine\EntityBuilder.cs" />
-    <Compile Include="Engine\GameplaySystem.cs" />
+    <Compile Include="Engine\MovementSystem.cs" />
     <Compile Include="Engine\InputData.cs" />
     <Compile Include="Engine\Properties.cs" />
     <Compile Include="Engine\Entity.cs" />

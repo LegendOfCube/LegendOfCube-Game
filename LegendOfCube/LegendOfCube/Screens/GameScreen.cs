@@ -13,7 +13,7 @@ namespace LegendOfCube.Screens
 	class GameScreen : Screen
 	{
 		private InputSystem inputSystem;
-		private GameplaySystem gameplaySystem;
+		private MovementSystem movementSystem;
 		private PhysicsSystem physicsSystem;
 		private CameraSystem cameraSystem;
 		private AISystem aiSystem;
@@ -56,7 +56,7 @@ namespace LegendOfCube.Screens
 			{
 				inputSystem.ApplyInput(gameTime, World, switcher);
 				aiSystem.Update(World, delta);
-				gameplaySystem.ProcessInputData(World, delta);
+				movementSystem.ProcessInputData(World, delta);
 				physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
 				EventSystem.CalculateCubeState(World);
 				EventSystem.HandleEvents(World);
@@ -117,7 +117,7 @@ namespace LegendOfCube.Screens
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
 
 			inputSystem = new InputSystem(Game);
-			gameplaySystem = new GameplaySystem();
+			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			aiSystem = new AISystem();
