@@ -19,15 +19,26 @@ namespace LegendOfCube.Levels
 			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
 			world.LightDirection = Vector3.Normalize(new Vector3
 			{
-				X = -1.0f,
+				X = -2.0f,
 				Y = -1.0f,
-				Z = -1.0f
+				Z = -2.0f
 			});
-			world.AmbientIntensity = 0.45f;
+			world.AmbientIntensity = 0.25f;
 
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
+			var dropSignModel = game.Content.Load<Model>("Models/Sign_Drop/danger_drop");
+			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start_fix_2");
+			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix_2");
+			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
+			var doorModel = game.Content.Load<Model>("Models/Door/door");
+			var exitSignModel = game.Content.Load<Model>("Models/Sign_Exit/exit_sign");
+			var pillarModel = game.Content.Load<Model>("Models/Platform/pillar");
+			var deathDuctModel = game.Content.Load<Model>("Models/Duct/deathcube");
+			var deathDuctFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
+			var cube10Model = game.Content.Load<Model>("Models/Duct/cube10");
+			var movingPartsSignModel = game.Content.Load<Model>("Models/Sign_Moving/moving_parts");
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -52,9 +63,87 @@ namespace LegendOfCube.Levels
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
+			var blackEffect = new StandardEffectParams
+			{
+				DiffuseColor = new Vector4(new Vector3(0), 0),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var pillarEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+				NormalTexture = game.Content.Load<Texture>("Models/Platform/pipe_normal"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var stonePlatformEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_n"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var dropSignEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var doorEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Door/door_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var catwalkEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Catwalk/catwalk-d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var exitSignEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
+				EmissiveTexture = game.Content.Load<Texture>("Models/Sign_Exit/exit_d_e"),
+				SpecularColor = Color.Gray.ToVector4(),
+				EmissiveColor = Color.White.ToVector4()
+			};
+
+			var movingSignEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Moving/moving_parts_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
+			var ductEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+			var ductFanEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
+				SpecularColor = Color.Gray.ToVector4()
+			};
+
 			var wallEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
+			};
+
+			var wallHorizontalEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
+				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
+			};
+
+			var wallVerticalEffect = new StandardEffectParams
+			{
+				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
 				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 			};
@@ -111,45 +200,117 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerEntity;
 
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
+
 			// Starting platform
 			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2, 1, 1))
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
 				.WithPosition(new Vector3(0, 0, 0))
-				.WithStandardEffectParams(platformEffect)
+				.WithStandardEffectParams(stonePlatformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(0, 0, 0))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
+			//DROP SIGN
+			new EntityBuilder().WithModel(dropSignModel)
+				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
+				.WithPosition(new Vector3(2, 0, 0))
+				.WithStandardEffectParams(dropSignEffect)
+				.AddToWorld(world);
 
+			// Normal jump platform
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(30, 0, 0))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(30, 0, 0))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
 
+			// Wall slide platform
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(82, 0, 0))
 				.WithStandardEffectParams(platformEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(82, 0, 0))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
 
 			//First wallslide
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 7.5f, 10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(60, 0, -5))
-				.WithStandardEffectParams(wallEffect)
+				.WithPosition(new Vector3(60, 0, -5.5f))
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(50, 8, -5.5f))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(pillarModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(70, 8, -5.5f))
+				.WithStandardEffectParams(pillarEffect)
+				.AddToWorld(world);
 
-			//Wall high jump
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 3.1f, 2))
+			//Signs on wall
+			new EntityBuilder().WithModel(movingPartsSignModel)
+				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
+				.WithPosition(new Vector3(87, 0, 0))
+				.WithStandardEffectParams(movingSignEffect)
+				.AddToWorld(world);
+			
+			//Wall high jump (DEATH)
+			new EntityBuilder().WithModel(deathDuctModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(105, 0, 0))
-				.WithStandardEffectParams(wallDeathEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
+				.WithStandardEffectParams(ductEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
+				.AddToWorld(world);
+			//BLACK HACK
+			new EntityBuilder().WithModel(cube10Model)
+				.WithTransform(Matrix.CreateScale(0.95f, 0.95f, 0.1f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(105, 0.3f, 0))
+				.WithStandardEffectParams(blackEffect)
+				.AddToWorld(world);
+			//THE FAN
+			new EntityBuilder().WithModel(deathDuctFanModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(105, 0, 0))
+				.WithStandardEffectParams(ductFanEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, -5), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(7, 7, 0.5f)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
+			//DUCT PILLAR
+			new EntityBuilder().WithModel(cube10Model)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(105, -10, 0))
+				.WithStandardEffectParams(ductEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(cube10Model)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(105, -20, 0))
+				.WithStandardEffectParams(ductEffect)
+				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
+				.AddToWorld(world);
+
+			//Checkpoint
 			new EntityBuilder().WithModel(platformModel)
 				.WithTransform(Matrix.CreateScale(2, 1, 1))
 				.WithPosition(new Vector3(125, 0, 0))
@@ -157,6 +318,96 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
 				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
 				.AddToWorld(world);
+
+			/***************BACKGROUND GEOMETRY************************/
+
+			new EntityBuilder().WithModel(wallModel)
+				.WithTransform(Matrix.CreateScale(1, 100, 100) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, -50, -15))
+				.WithStandardEffectParams(platformTeleportEffect)
+				.AddToWorld(world);
+
+			//CATWALK UPPER
+			new EntityBuilder().WithModel(catwalkStartModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(0, 10, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkMiddleModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(10, 10, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkEndModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(20, 10, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			
+			//Door 1
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, 10.5f,-14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(0, 15, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
+				.AddToWorld(world);
+			//Door 2
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, 10.5f, -14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(20, 15, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
+				.AddToWorld(world);
+
+			//CATWALK LOWER
+			new EntityBuilder().WithModel(catwalkStartModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(0, 0, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkMiddleModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(10, 0, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(catwalkEndModel)
+				.WithTransform(Matrix.CreateScale(1, 1, 1))
+				.WithPosition(new Vector3(20, 0, -10))
+				.WithStandardEffectParams(catwalkEffect)
+				.AddToWorld(world);
+			//Door 1
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, 0.5f, -14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(0, 5, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
+				.AddToWorld(world);
+			//Door 2
+			new EntityBuilder().WithModel(doorModel)
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, 0.5f, -14.7f))
+				.WithStandardEffectParams(doorEffect)
+				.AddToWorld(world);
+			new EntityBuilder().WithModel(exitSignModel)
+				.WithTransform(Matrix.CreateScale(3, 3, 3))
+				.WithPosition(new Vector3(20, 5, -14.7f))
+				.WithStandardEffectParams(exitSignEffect)
+				.AddToWorld(world);
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
 
 			//Slidy slide
 			new EntityBuilder().WithModel(platformModel)
@@ -170,21 +421,21 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(200, -35, -7.5f))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(220, -35, 7.5f))
-				.WithStandardEffectParams(wallEffect)
+				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(220, -20, 7.5f))
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(240, -35, -7.5f))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallHorizontalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
@@ -249,35 +500,35 @@ namespace LegendOfCube.Levels
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2))
 				.WithPosition(new Vector3(430, -2, 70))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(425, 3, 75))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2))
 				.WithPosition(new Vector3(420, 8, 70))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(425, 12, 65))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 
 			new EntityBuilder().WithModel(wallModel)
 				.WithTransform(Matrix.CreateScale(2, 5, 2))
 				.WithPosition(new Vector3(430, 17, 70))
-				.WithStandardEffectParams(wallEffect)
+				.WithStandardEffectParams(wallVerticalEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
 				.AddToWorld(world);
 

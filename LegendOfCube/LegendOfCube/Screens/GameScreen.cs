@@ -6,18 +6,19 @@ using LegendOfCube.Engine.Graphics;
 using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
-
-		private readonly InputSystem inputSystem;
-		private readonly GameplaySystem gameplaySystem;
-		private readonly PhysicsSystem physicsSystem;
-		private readonly CameraSystem cameraSystem;
-		private readonly AISystem AI_system;
-		private readonly ContentCollection contentCollection;
+		private InputSystem inputSystem;
+		private GameplaySystem gameplaySystem;
+		private PhysicsSystem physicsSystem;
+		private CameraSystem cameraSystem;
+		private AISystem aiSystem;
+		private AnimationSystem animationSystem;
+		private ContentCollection contentCollection;
 
 		private Texture2D winScreen1;
 		private Texture2D winScreen2;
@@ -28,18 +29,12 @@ namespace LegendOfCube.Engine
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
 			this.contentCollection = contentCollection;
-
-			World = new World(3002);
-			inputSystem = new InputSystem(game);
-			gameplaySystem = new GameplaySystem();
-			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
-			cameraSystem = new CameraSystem();
-			AI_system = new AISystem();
 		}
 
-		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
+		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
 			//GameOver update
 			if (!World.WinState)
 			{
@@ -60,11 +55,12 @@ namespace LegendOfCube.Engine
 			else
 			{
 				inputSystem.ApplyInput(gameTime, World, switcher);
-				AI_system.Update(World, delta);
+				aiSystem.Update(World, delta);
 				gameplaySystem.ProcessInputData(World, delta);
-				physicsSystem.ApplyPhysics(delta, World); // Note, delta should be fixed time step.
+				physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
 				EventSystem.CalculateCubeState(World);
 				EventSystem.HandleEvents(World);
+				animationSystem.OnUpdate(World, delta);
 				cameraSystem.OnUpdate(World, delta);
 			}
 		}
@@ -113,11 +109,19 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
+
 			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
 			//World = new TestLevel1().CreateWorld(Game, contentCollection);
 			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
+
+			inputSystem = new InputSystem(Game);
+			gameplaySystem = new GameplaySystem();
+			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
+			cameraSystem = new CameraSystem();
+			aiSystem = new AISystem();
+			animationSystem = new AnimationSystem();
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");

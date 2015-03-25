@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
+using LegendOfCube.Screens;
 
 namespace LegendOfCube.Engine
 {
@@ -36,7 +37,7 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world, SwitcherSystem switcher)
+		public void ApplyInput(GameTime gameTime, World world, ScreenSystem switcher)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
@@ -56,7 +57,7 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
-				switcher.Switch();	
+				switcher.SwitchScreen(Screens.ScreenTypes.PAUSE);	
 			}
 
 			if (KeyWasJustPressed(Keys.F1))
