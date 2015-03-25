@@ -11,14 +11,13 @@ namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
-
-		private readonly InputSystem inputSystem;
-		private readonly GameplaySystem gameplaySystem;
-		private readonly PhysicsSystem physicsSystem;
-		private readonly CameraSystem cameraSystem;
-		private readonly AISystem aiSystem;
-		private readonly AnimationSystem animationSystem;
-		private readonly ContentCollection contentCollection;
+		private InputSystem inputSystem;
+		private GameplaySystem gameplaySystem;
+		private PhysicsSystem physicsSystem;
+		private CameraSystem cameraSystem;
+		private AISystem aiSystem;
+		private AnimationSystem animationSystem;
+		private ContentCollection contentCollection;
 
 		private Vector2 fontPos;
 		private SpriteBatch spriteBatch;
@@ -27,14 +26,6 @@ namespace LegendOfCube.Screens
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
 			this.contentCollection = contentCollection;
-
-			World = new World(3002);
-			inputSystem = new InputSystem(game);
-			gameplaySystem = new GameplaySystem();
-			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
-			cameraSystem = new CameraSystem();
-			aiSystem = new AISystem();
-			animationSystem = new AnimationSystem();
 		}
 
 		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
@@ -86,11 +77,19 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
+
 			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
 			//World = new TestLevel1().CreateWorld(Game, contentCollection);
 			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
+
+			inputSystem = new InputSystem(Game);
+			gameplaySystem = new GameplaySystem();
+			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
+			cameraSystem = new CameraSystem();
+			aiSystem = new AISystem();
+			animationSystem = new AnimationSystem();
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
