@@ -5,41 +5,33 @@ using LegendOfCube.Engine.Graphics;
 using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
+		private InputSystem inputSystem;
+		private MovementSystem movementSystem;
+		private PhysicsSystem physicsSystem;
+		private CameraSystem cameraSystem;
+		private AISystem aiSystem;
+		private AnimationSystem animationSystem;
+		private ContentCollection contentCollection;
 
-		private readonly InputSystem inputSystem;
-		private readonly MovementSystem movementSystem;
-		private readonly PhysicsSystem physicsSystem;
-		private readonly CameraSystem cameraSystem;
-		private readonly AISystem aiSystem;
-		private readonly AnimationSystem animationSystem;
-		private readonly ContentCollection contentCollection;
-
-		private SpriteFont font;
-		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
+		private SpriteBatch spriteBatch;
+		private SpriteFont font;
 
 		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
 		{
 			this.contentCollection = contentCollection;
-
-			World = new World(3002);
-			inputSystem = new InputSystem(game);
-			movementSystem = new MovementSystem();
-			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
-			cameraSystem = new CameraSystem();
-			aiSystem = new AISystem();
-			animationSystem = new AnimationSystem();
 		}
 
-		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
+		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
-			inputSystem.ApplyInput(World, gameTime, switcher);
+			inputSystem.ApplyInput(gameTime, World, switcher);
 			aiSystem.Update(World, delta);
 			movementSystem.ProcessInputData(World, delta);
 			physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
@@ -85,11 +77,19 @@ namespace LegendOfCube.Engine
 
 		internal override void LoadContent()
 		{
+
 			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
 			//World = new TestLevel1().CreateWorld(Game, contentCollection);
 			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
+
+			inputSystem = new InputSystem(Game);
+			movementSystem = new MovementSystem();
+			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
+			cameraSystem = new CameraSystem();
+			aiSystem = new AISystem();
+			animationSystem = new AnimationSystem();
 
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");

@@ -1,14 +1,17 @@
 ﻿using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using LegendOfCube.Engine;
 
-namespace LegendOfCube.Engine
+namespace LegendOfCube.Screens
 {
-	class MenuScreen : Screen
+	class PauseScreen : MenuScreen
 	{
 		private readonly InputSystem inputSystem;
 		private readonly MenuInputSystem menuInputSystem;
 		private readonly CameraSystem cameraSystem;
+		private readonly ScreenSystem screenSystem;
+		private readonly Game game;
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
 
@@ -18,31 +21,36 @@ namespace LegendOfCube.Engine
 		private Texture2D select;
 		private int selection;
 
-		public MenuScreen(Game game) : base(game)
+		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game)
 		{
-			World = new World(1002);
+			this.game = game;
+			this.screenSystem = screenSystem;
 			inputSystem = new InputSystem(game);
 			cameraSystem = new CameraSystem();
 			menuInputSystem = new MenuInputSystem(game);
 			selection = 0;
 		}
 
-		protected internal override void Update(GameTime gameTime, SwitcherSystem switcher)
+		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
 		{
+			var world = screenSystem.GetCurrentWorld();
+
 			var delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-			inputSystem.ApplyInput(World, gameTime, switcher);
-			menuInputSystem.ApplyInput(gameTime, World, switcher, ref selection);
-			cameraSystem.OnUpdate(World, delta);
+			inputSystem.ApplyInput(gameTime, world, switcher);
+			menuInputSystem.ApplyInput(gameTime, world, switcher, this, ref selection);
+			cameraSystem.OnUpdate(screenSystem.GetCurrentWorld(), delta);
 		}
 
 		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
 		{
+			var world = screenSystem.GetCurrentWorld();
+
 			Game.GraphicsDevice.Clear(Color.DarkTurquoise);
 
 			Game.GraphicsDevice.BlendState = BlendState.Opaque;
 			Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-			renderSystem.RenderWorld(World);
+			renderSystem.RenderWorld(world);
 
 			spriteBatch.Begin();
 			spriteBatch.Draw(play, new Vector2(100, 20), Color.Red);
@@ -74,6 +82,22 @@ namespace LegendOfCube.Engine
 			exit = Game.Content.Load<Texture2D>("Menu/exit");
 			levelSelect = Game.Content.Load<Texture2D>("Menu/level select");
 			select = Game.Content.Load<Texture2D>("Menu/selector");
+		}
+
+		internal override void PerformSelection()
+		{
+			switch (selection)
+			{
+				case 0:
+					screenSystem.SwitchScreen(Screens.ScreenTypes.GAME);
+					break;
+				case 1:
+					screenSystem.SwitchScreen(Screens.ScreenTypes.LEVEL_SELECT);
+					break;
+				case 2:
+					screenSystem.SwitchScreen(Screens.ScreenTypes.START);
+					break;
+			}
 		}
 	}
 }
