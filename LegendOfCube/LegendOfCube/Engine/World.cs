@@ -65,6 +65,9 @@ namespace LegendOfCube.Engine
 		public Vector3 LightDirection;
 		public float AmbientIntensity;
 
+		public bool PointLight0Enabled;
+		public PointLight PointLight0;
+
 		public DebugState DebugState;
 
 		// Constructors
@@ -120,6 +123,11 @@ namespace LegendOfCube.Engine
 			StopTime = 0.05f;
 			BaseJump = 12f;
 			SpawnPoint = new Vector3(0, 25, 0);
+
+			LightDirection = new Vector3(0, -1, 0);
+			AmbientIntensity = 0.5f;
+			PointLight0Enabled = false;
+
 			EventBuffer = new EventBuffer();
 		}
 
