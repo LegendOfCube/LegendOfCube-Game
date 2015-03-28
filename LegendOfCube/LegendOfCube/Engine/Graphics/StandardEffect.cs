@@ -250,13 +250,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		public void ApplyOnModel(Model model)
 		{
-			foreach (var mesh in model.Meshes)
-			{
-				foreach (var meshPart in mesh.MeshParts)
-				{
-					meshPart.Effect = effect;
-				}
-			}
+			GraphicsUtils.ApplyEffectOnModel(model, effect);
 		}
 
 		public static StandardEffect LoadEffect(ContentManager contentManager)
