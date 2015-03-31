@@ -13,6 +13,7 @@ namespace LegendOfCube.Engine
 		public ModelData RustPlatform { get; private set; }
 		public ModelData BrickWall { get; private set; }
 		public ModelData PlainCube { get; private set; }
+		public ModelData DropSign { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -29,6 +30,7 @@ namespace LegendOfCube.Engine
 		public Model DeathDuctFanModel { get; private set; }
 		public Model Cube10Model { get; private set; }
 		public Model MovingPartsSignModel { get; private set; }
+		public Model HangingPlatformModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -46,6 +48,7 @@ namespace LegendOfCube.Engine
 			DeathDuctFanModel = cm.Load<Model>("Models/Duct/deathcube_fan");
 			Cube10Model = cm.Load<Model>("Models/Duct/cube10");
 			MovingPartsSignModel = cm.Load<Model>("Models/Sign_Moving/moving_parts");
+			HangingPlatformModel = cm.Load<Model>("Models/Hanging_Platform/hanging_platform");
 
 			PlayerCube = new ModelData
 			{
@@ -104,6 +107,17 @@ namespace LegendOfCube.Engine
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
 			};
+
+			DropSign = new ModelData
+			{
+				Model = DropSignModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
+
 		}
 	}
 }
