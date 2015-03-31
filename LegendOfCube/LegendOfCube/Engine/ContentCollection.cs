@@ -20,6 +20,9 @@ namespace LegendOfCube.Engine
 		public ModelData Door { get; private set; }
 		public ModelData ExitSign { get; private set; }
 		public ModelData Pillar { get; private set; }
+		public ModelData DeathDuct { get; private set; }
+		public ModelData Duct { get; private set; }
+		public ModelData Fan { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -187,9 +190,37 @@ namespace LegendOfCube.Engine
 				}
 			};
 
-
-
-
+			DeathDuct = new ModelData
+			{
+				Model = DeathDuctModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
+					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 5, 5, 5)
+			};
+			Duct = new ModelData
+			{
+				Model = Cube10Model,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
+					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 5, 5, 5)
+			};
+			Fan = new ModelData
+			{
+				Model = DeathDuctFanModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
 		}
 	}
 }
