@@ -14,6 +14,9 @@ namespace LegendOfCube.Engine
 		public ModelData BrickWall { get; private set; }
 		public ModelData PlainCube { get; private set; }
 		public ModelData DropSign { get; private set; }
+		public ModelData CatwalkStart { get; private set; }
+		public ModelData CatwalkMiddle { get; private set; }
+		public ModelData CatwalkEnd { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -31,6 +34,7 @@ namespace LegendOfCube.Engine
 		public Model Cube10Model { get; private set; }
 		public Model MovingPartsSignModel { get; private set; }
 		public Model HangingPlatformModel { get; private set; }
+
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -114,6 +118,35 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
+
+			CatwalkStart = new ModelData
+			{
+				Model = CatwalkStartModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Catwalk/catwalk-d"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
+
+			CatwalkMiddle = new ModelData
+			{
+				Model = CatwalkMiddleModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Catwalk/catwalk-d"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
+			CatwalkEnd = new ModelData
+			{
+				Model = CatwalkEndModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Catwalk/catwalk-d"),
 					SpecularColor = Color.Gray.ToVector4()
 				}
 			};
