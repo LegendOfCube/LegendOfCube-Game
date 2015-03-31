@@ -17,6 +17,7 @@ namespace LegendOfCube.Engine
 		public ModelData CatwalkStart { get; private set; }
 		public ModelData CatwalkMiddle { get; private set; }
 		public ModelData CatwalkEnd { get; private set; }
+		public ModelData Door { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -151,6 +152,15 @@ namespace LegendOfCube.Engine
 				}
 			};
 
+			Door = new ModelData
+			{
+				Model = DoorModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Door/door_d"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
 		}
 	}
 }
