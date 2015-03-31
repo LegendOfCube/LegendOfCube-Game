@@ -19,6 +19,7 @@ namespace LegendOfCube.Engine
 		public ModelData CatwalkEnd { get; private set; }
 		public ModelData Door { get; private set; }
 		public ModelData ExitSign { get; private set; }
+		public ModelData Pillar { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -174,6 +175,20 @@ namespace LegendOfCube.Engine
 					EmissiveColor = Color.White.ToVector4()
 				}
 			};
+
+			Pillar = new ModelData
+			{
+				Model = PillarModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+					NormalTexture = cm.Load<Texture>("Models/Platform/pipe_normal"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
+			};
+
+
+
 
 		}
 	}
