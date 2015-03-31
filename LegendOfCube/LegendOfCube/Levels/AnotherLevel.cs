@@ -44,10 +44,6 @@ namespace LegendOfCube.Levels
 			var wallBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.BrickWall);
 
-			var deathWallBuilder = wallBuilder.Copy()
-				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
-				.WithStandardEffectParams(wallDeathEffect);
-
 			var sawTrap = wallBuilder.Copy()
 				.WithTransform(Matrix.CreateScale(1, 2, 1)*Matrix.CreateRotationY(MathHelper.ToRadians(90))*
 				               Matrix.CreateRotationZ(MathHelper.ToRadians(45)))

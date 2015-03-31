@@ -6,7 +6,7 @@ namespace LegendOfCube.Engine
 	{
 
 		private const float DISTANCE_ABOVE_PLAYER = 2.0f;
-		private const float CAMERA_DISTANCE = 7.0f;
+		private const float CAMERA_DISTANCE = 10.0f;
 		private const float X_SCALE = 4.0f;
 		private const float Y_SCALE = 4.0f;
 
