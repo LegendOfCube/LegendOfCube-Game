@@ -18,13 +18,34 @@ namespace LegendOfCube.Engine
 		public Model PlainCubeModel { get; private set; }
 		public Model PlatformModel { get; private set; }
 		public Model BrickWallModel { get; private set; }
+		public Model DropSignModel { get; private set; }
+		public Model CatwalkStartModel { get; private set; }
+		public Model CatwalkMiddleModel { get; private set; }
+		public Model CatwalkEndModel { get; private set; }
+		public Model DoorModel { get; private set; }
+		public Model ExitSignModel { get; private set; }
+		public Model PillarModel { get; private set; }
+		public Model DeathDuctModel { get; private set; }
+		public Model DeathDuctFanModel { get; private set; }
+		public Model Cube10Model { get; private set; }
+		public Model MovingPartsSignModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
-			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
 			PlatformModel = cm.Load<Model>("Models/Platform/platform");
 			BrickWallModel = cm.Load<Model>("Models/Brick_Wall/brick_wall");
+			DropSignModel = cm.Load<Model>("Models/Sign_Drop/danger_drop");
+			CatwalkStartModel = cm.Load<Model>("Models/Catwalk/catwalk_start_fix_2");
+			CatwalkMiddleModel = cm.Load<Model>("Models/Catwalk/catwalk_middle_fix_2");
+			CatwalkEndModel = cm.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
+			DoorModel = cm.Load<Model>("Models/Door/door");
+			ExitSignModel = cm.Load<Model>("Models/Sign_Exit/exit_sign");
+			PillarModel = cm.Load<Model>("Models/Platform/pillar");
+			DeathDuctModel = cm.Load<Model>("Models/Duct/deathcube");
+			DeathDuctFanModel = cm.Load<Model>("Models/Duct/deathcube_fan");
+			Cube10Model = cm.Load<Model>("Models/Duct/cube10");
+			MovingPartsSignModel = cm.Load<Model>("Models/Sign_Moving/moving_parts");
 
 			PlayerCube = new ModelData
 			{
