@@ -23,6 +23,7 @@ namespace LegendOfCube.Engine
 		public ModelData DeathDuct { get; private set; }
 		public ModelData Duct { get; private set; }
 		public ModelData Fan { get; private set; }
+		public ModelData MovingPartsSign { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -219,8 +220,20 @@ namespace LegendOfCube.Engine
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
 					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 5, -5), 7, 7, 0.5f)
+			};
+
+			MovingPartsSign = new ModelData
+			{
+				Model = MovingPartsSignModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Sign_Moving/moving_parts_d"),
+					SpecularColor = Color.Gray.ToVector4()
 				}
 			};
+
 		}
 	}
 }
