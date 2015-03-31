@@ -24,6 +24,7 @@ namespace LegendOfCube.Engine
 		public ModelData Duct { get; private set; }
 		public ModelData Fan { get; private set; }
 		public ModelData MovingPartsSign { get; private set; }
+		public ModelData HangingPlatform { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -200,7 +201,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(Vector3.Zero, 5, 5, 5)
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 10, 10, 10)
 			};
 			Duct = new ModelData
 			{
@@ -211,7 +212,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(Vector3.Zero, 5, 5, 5)
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 10, 10, 10)
 			};
 			Fan = new ModelData
 			{
@@ -234,6 +235,18 @@ namespace LegendOfCube.Engine
 				}
 			};
 
+			HangingPlatform = new ModelData
+			{
+				Model = HangingPlatformModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					NormalTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-normal"),
+					SpecularTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-spec"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 10.0f, 0.5f, 10.0f)
+			};
 		}
 	}
 }
