@@ -18,6 +18,7 @@ namespace LegendOfCube.Engine
 		public ModelData CatwalkMiddle { get; private set; }
 		public ModelData CatwalkEnd { get; private set; }
 		public ModelData Door { get; private set; }
+		public ModelData ExitSign { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -161,6 +162,19 @@ namespace LegendOfCube.Engine
 					SpecularColor = Color.Gray.ToVector4()
 				}
 			};
+
+			ExitSign = new ModelData
+			{
+				Model = ExitSignModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Sign_Exit/exit_d_e"),
+					EmissiveTexture = cm.Load<Texture>("Models/Sign_Exit/exit_d_e"),
+					SpecularColor = Color.Gray.ToVector4(),
+					EmissiveColor = Color.White.ToVector4()
+				}
+			};
+
 		}
 	}
 }
