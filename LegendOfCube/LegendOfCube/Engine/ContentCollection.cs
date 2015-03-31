@@ -12,6 +12,7 @@ namespace LegendOfCube.Engine
 		public ModelData PlayerCubePlain { get; private set; }
 		public ModelData RustPlatform { get; private set; }
 		public ModelData BrickWall { get; private set; }
+		public ModelData BrickWallWindow { get; private set; }
 		public ModelData PlainCube { get; private set; }
 		public ModelData DropSign { get; private set; }
 		public ModelData CatwalkStart { get; private set; }
@@ -39,6 +40,7 @@ namespace LegendOfCube.Engine
 		public Model PlainCubeModel { get; private set; }
 		public Model PlatformModel { get; private set; }
 		public Model BrickWallModel { get; private set; }
+		public Model BrickWallWindowModel { get; private set; }
 		public Model DropSignModel { get; private set; }
 		public Model CatwalkStartModel { get; private set; }
 		public Model CatwalkMiddleModel { get; private set; }
@@ -78,6 +80,8 @@ namespace LegendOfCube.Engine
 			ManholeModel = cm.Load<Model>("Models/Manhole/manhole");
 			RoofSupportModel = cm.Load<Model>("Models/Roof_Beam/roof_beam");
 			SignModel = cm.Load<Model>("Models/Signs/sign");
+			Ground50x50 = cm.Load<Model>("Models/Ground/ground_50x50");
+			BrickWallWindowModel = cm.Load<Model>("Models/Brick_Wall/brick_wall_window_standard");
 
 			PlayerCube = new ModelData
 			{
@@ -128,6 +132,18 @@ namespace LegendOfCube.Engine
 			BrickWall = new ModelData
 			{
 				Model = BrickWallModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
+			};
+
+			BrickWallWindow = new ModelData
+			{
+				Model = BrickWallWindowModel,
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
@@ -290,7 +306,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Ground/concrete_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -1f, 0.0f), 50, 2, 50)
 			};
 			GroundAsphalt = new ModelData
 			{
@@ -301,7 +317,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Ground/asphalt_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -1f, 0.0f), 50, 2, 50)
 			};
 			GroundWood = new ModelData
 			{
@@ -312,7 +328,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Ground/planks_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -1f, 0.0f), 50, 2, 50)
 			};
 			GroundStone = new ModelData
 			{
@@ -323,7 +339,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Ground/stone_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -1f, 0.0f), 50, 2, 50)
 			};
 
 			SignArrowUp = new ModelData
