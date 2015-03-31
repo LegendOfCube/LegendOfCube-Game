@@ -25,6 +25,7 @@ namespace LegendOfCube.Engine
 		public ModelData Fan { get; private set; }
 		public ModelData MovingPartsSign { get; private set; }
 		public ModelData HangingPlatform { get; private set; }
+		public ModelData Manhole { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -42,6 +43,7 @@ namespace LegendOfCube.Engine
 		public Model Cube10Model { get; private set; }
 		public Model MovingPartsSignModel { get; private set; }
 		public Model HangingPlatformModel { get; private set; }
+		public Model ManholeModel { get; private set; }
 
 
 		public void LoadContent(ContentManager cm)
@@ -61,6 +63,7 @@ namespace LegendOfCube.Engine
 			Cube10Model = cm.Load<Model>("Models/Duct/cube10");
 			MovingPartsSignModel = cm.Load<Model>("Models/Sign_Moving/moving_parts");
 			HangingPlatformModel = cm.Load<Model>("Models/Hanging_Platform/hanging_platform");
+			ManholeModel = cm.Load<Model>("Models/Manhole/manhole");
 
 			PlayerCube = new ModelData
 			{
@@ -246,6 +249,17 @@ namespace LegendOfCube.Engine
 					SpecularColor = Color.Gray.ToVector4()
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 10.0f, 0.5f, 10.0f)
+			};
+
+			Manhole = new ModelData
+			{
+				Model = ManholeModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Manhole/rusted-manhole-d"),
+					NormalTexture = cm.Load<Texture>("Models/Manhole/rusted-manhole-n"),
+					SpecularColor = Color.Gray.ToVector4()
+				}
 			};
 		}
 	}
