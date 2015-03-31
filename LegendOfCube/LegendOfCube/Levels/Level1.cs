@@ -31,6 +31,9 @@ namespace LegendOfCube.Levels
 			var brickWallBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.BrickWall);
 
+			var brickWallWindowBuilder = new EntityBuilder()
+				.WithModelData(contentCollection.BrickWallWindow);
+
 			var groundConcreteBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.GroundConcrete);
 
@@ -41,7 +44,13 @@ namespace LegendOfCube.Levels
 
 			// Starting platform
 			groundConcreteBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.5f))
 				.WithPosition(0, 0, 0)
+				.AddToWorld(world);
+
+			brickWallWindowBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(0, 0, 10)
 				.AddToWorld(world);
 
 
