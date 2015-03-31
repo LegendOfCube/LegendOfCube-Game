@@ -33,6 +33,8 @@ namespace LegendOfCube.Levels
 
 			var brickWallWindowBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.BrickWallWindow);
+			var windowBarsBuilder = new EntityBuilder()
+				.WithModelData(contentCollection.WindowBars);
 
 			var groundConcreteBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.GroundConcrete);
@@ -40,19 +42,70 @@ namespace LegendOfCube.Levels
 			var hangingPlatformBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.HangingPlatform);
 
+			var dropSignBuilder = new EntityBuilder()
+				.WithModelData(contentCollection.DropSign);
+
 			world.Player = playerBuilder.AddToWorld(world);
 
-			// Starting platform
+			// Starting Room
 			groundConcreteBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.5f))
-				.WithPosition(0, 0, 0)
+				.WithTransform(Matrix.CreateScale(0.4f, 0.2f, 0.2f))
+				.WithPosition(5, 0, 0)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(0, 0, 5)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(0, 5, 5)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(0, 0, -5)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(0, 5, -5)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2))
+				.WithPosition(-5.25f, 0, 0)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2))
+				.WithPosition(-5.25f, 5, 0)
 				.AddToWorld(world);
 
 			brickWallWindowBuilder.Copy()
 				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(0, 0, 10)
+				.WithPosition(10, 0, 5)
+				.AddToWorld(world);
+			windowBarsBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(10, 0, 5)
 				.AddToWorld(world);
 
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(10, 5, 5)
+				.AddToWorld(world);
+
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(10, 0, -5)
+				.AddToWorld(world);
+			
+			brickWallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(10, 5, -5)
+				.AddToWorld(world);
 
 			//Falling death
 			new EntityBuilder()
