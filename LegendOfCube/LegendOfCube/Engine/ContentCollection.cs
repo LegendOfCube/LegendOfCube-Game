@@ -26,6 +26,7 @@ namespace LegendOfCube.Engine
 		public ModelData MovingPartsSign { get; private set; }
 		public ModelData HangingPlatform { get; private set; }
 		public ModelData Manhole { get; private set; }
+		public ModelData RoofSupport { get; private set; }
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -44,6 +45,7 @@ namespace LegendOfCube.Engine
 		public Model MovingPartsSignModel { get; private set; }
 		public Model HangingPlatformModel { get; private set; }
 		public Model ManholeModel { get; private set; }
+		public Model RoofSupportModel { get; private set; }
 
 
 		public void LoadContent(ContentManager cm)
@@ -64,6 +66,7 @@ namespace LegendOfCube.Engine
 			MovingPartsSignModel = cm.Load<Model>("Models/Sign_Moving/moving_parts");
 			HangingPlatformModel = cm.Load<Model>("Models/Hanging_Platform/hanging_platform");
 			ManholeModel = cm.Load<Model>("Models/Manhole/manhole");
+			RoofSupportModel = cm.Load<Model>("Models/Roof_Beam/roof_beam");
 
 			PlayerCube = new ModelData
 			{
@@ -260,6 +263,11 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Manhole/rusted-manhole-n"),
 					SpecularColor = Color.Gray.ToVector4()
 				}
+			};
+
+			RoofSupport = new ModelData
+			{
+				Model = RoofSupportModel
 			};
 		}
 	}
