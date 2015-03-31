@@ -31,6 +31,8 @@ namespace LegendOfCube.Engine
 		public ModelData GroundAsphalt { get; private set; }
 		public ModelData GroundWood { get; private set; }
 		public ModelData GroundStone { get; private set; }
+		public ModelData SignArrowUp { get; private set; }
+		public ModelData SignTrampoline { get; private set; }
 
 
 		public Model CubeModel { get; private set; }
@@ -53,6 +55,7 @@ namespace LegendOfCube.Engine
 		public Model RoofSupportModel { get; private set; }
 		public Model Ground50x50 { get; private set; }
 		public Model Ground100x50 { get; private set; }
+		public Model SignModel { get; private set; }
 
 
 		public void LoadContent(ContentManager cm)
@@ -74,6 +77,7 @@ namespace LegendOfCube.Engine
 			HangingPlatformModel = cm.Load<Model>("Models/Hanging_Platform/hanging_platform");
 			ManholeModel = cm.Load<Model>("Models/Manhole/manhole");
 			RoofSupportModel = cm.Load<Model>("Models/Roof_Beam/roof_beam");
+			SignModel = cm.Load<Model>("Models/Signs/sign");
 
 			PlayerCube = new ModelData
 			{
@@ -320,6 +324,25 @@ namespace LegendOfCube.Engine
 					SpecularColor = Color.Gray.ToVector4()
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+			};
+
+			SignArrowUp = new ModelData
+			{
+				Model = SignModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Signs/arrowuo"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+			};
+			SignTrampoline = new ModelData
+			{
+				Model = SignModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Signs/trampoline"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
 			};
 		}
 	}
