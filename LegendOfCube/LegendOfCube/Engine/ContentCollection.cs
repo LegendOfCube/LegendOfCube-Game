@@ -27,6 +27,11 @@ namespace LegendOfCube.Engine
 		public ModelData HangingPlatform { get; private set; }
 		public ModelData Manhole { get; private set; }
 		public ModelData RoofSupport { get; private set; }
+		public ModelData GroundConcrete { get; private set; }
+		public ModelData GroundAsphalt { get; private set; }
+		public ModelData GroundWood { get; private set; }
+		public ModelData GroundStone { get; private set; }
+
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -46,6 +51,8 @@ namespace LegendOfCube.Engine
 		public Model HangingPlatformModel { get; private set; }
 		public Model ManholeModel { get; private set; }
 		public Model RoofSupportModel { get; private set; }
+		public Model Ground50x50 { get; private set; }
+		public Model Ground100x50 { get; private set; }
 
 
 		public void LoadContent(ContentManager cm)
@@ -268,6 +275,51 @@ namespace LegendOfCube.Engine
 			RoofSupport = new ModelData
 			{
 				Model = RoofSupportModel
+			};
+
+			GroundConcrete = new ModelData
+			{
+				Model = Ground50x50,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/concrete-d"),
+					NormalTexture = cm.Load<Texture>("Models/Ground/concrete-n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+			};
+			GroundAsphalt = new ModelData
+			{
+				Model = Ground50x50,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/asphalt_d"),
+					NormalTexture = cm.Load<Texture>("Models/Ground/asphalt_n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+			};
+			GroundWood = new ModelData
+			{
+				Model = Ground50x50,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/planks_d"),
+					NormalTexture = cm.Load<Texture>("Models/Ground/planks_n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
+			};
+			GroundStone = new ModelData
+			{
+				Model = Ground50x50,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/stone_d"),
+					NormalTexture = cm.Load<Texture>("Models/Ground/stone_n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
 			};
 		}
 	}
