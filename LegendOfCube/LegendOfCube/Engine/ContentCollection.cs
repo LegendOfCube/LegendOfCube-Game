@@ -286,8 +286,8 @@ namespace LegendOfCube.Engine
 				Model = Ground50x50,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Ground/concrete-d"),
-					NormalTexture = cm.Load<Texture>("Models/Ground/concrete-n"),
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/concrete_d"),
+					NormalTexture = cm.Load<Texture>("Models/Ground/concrete_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 50, 1.5f, 50)
@@ -331,7 +331,7 @@ namespace LegendOfCube.Engine
 				Model = SignModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Signs/arrowuo"),
+					DiffuseTexture = cm.Load<Texture>("Models/Signs/arrowup"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
 			};
