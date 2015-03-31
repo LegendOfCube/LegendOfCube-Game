@@ -89,7 +89,9 @@ namespace LegendOfCube.Engine.Graphics
 			                              0.1f,
 			                              5000.0f);
 
-			var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
+			// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+			// TODO: Fix or completely remove
+			//var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
 
 			// Filter out a list of interesting entities to be used in different steps
 			// (Value types such as Enity won't be autoboxed in List<Entity>)
@@ -100,6 +102,7 @@ namespace LegendOfCube.Engine.Graphics
 				renderableEntities.Add(entity);
 
 				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+				// TODO: Fix or completely remove
 				/*Model model = world.Models[entity.Id];
 				Matrix worldTransform = world.Transforms[entity.Id];
 				if (IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
@@ -145,7 +148,10 @@ namespace LegendOfCube.Engine.Graphics
 			Matrix lightProjection = Matrix.CreateOrthographic(80.0f, 80.0f, 100.0f, 1000.0f);
 
 			standardEffect.SetViewProjection(ref lightView, ref lightProjection);
-			var boundingFrustum = new BoundingFrustum(lightView * lightProjection);
+
+			// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+			// TODO: Fix or completely remove
+			//var boundingFrustum = new BoundingFrustum(lightView * lightProjection);
 
 			foreach (var entity in entities)
 			{
@@ -156,11 +162,15 @@ namespace LegendOfCube.Engine.Graphics
 				var model = world.Models[entity.Id];
 				var worldTransform = world.Transforms[entity.Id];
 
+				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+				// TODO: Fix or completely remove
+				/*
 				// Don't render if entity wouldn't be seen
 				if (!IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
 				{
 					continue;
 				}
+				*/
 
 				Matrix[] transforms = GetTransformsForModel(model);
 				if (world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
