@@ -48,6 +48,15 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.WithStandardEffectParams(wallDeathEffect);
 
+			var sawTrap = wallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(1, 2, 1)*Matrix.CreateRotationY(MathHelper.ToRadians(90))*
+				               Matrix.CreateRotationZ(MathHelper.ToRadians(45)))
+				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
+				.WithStandardEffectParams(new StandardEffectParams()
+				{
+					DiffuseColor = Color.Gray.ToVector4()
+				});
+
 			world.Player = playerBuilder.AddToWorld(world);
 
 			/*
@@ -68,8 +77,31 @@ namespace LegendOfCube.Levels
 
 			// Second platform
 			platformBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(4, 5, 1.5f))
+				.WithTransform(Matrix.CreateScale(4, 7.5f, 1.5f))
 				.WithPosition(new Vector3(-10, 15f, 0))
+				.AddToWorld(world);
+
+			// First saw deathtrap
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, -6))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, -4))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, -2f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, 0))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, 2f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, 4f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 13, 6))
 				.AddToWorld(world);
 
 			// Second Wall
@@ -80,14 +112,73 @@ namespace LegendOfCube.Levels
 
 			// Third platform
 			platformBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(4, 5, 1.5f))
+				.WithTransform(Matrix.CreateScale(4, 7.5f, 1.5f))
 				.WithPosition(new Vector3(10, 30f, 0))
+				.AddToWorld(world);
+
+			// Second saw deathtrap
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, -6))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, -4))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, -2f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, 0))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, 2f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, 4f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(20, 28, 6))
 				.AddToWorld(world);
 
 			// Fourth platform
 			platformBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(4, 5, 1.5f))
-				.WithPosition(new Vector3(-10, 45f, 0))
+				.WithTransform(Matrix.CreateScale(2, 5, 1.5f))
+				.WithPosition(new Vector3(0, 45f, 0))
+				.AddToWorld(world);
+
+			// Third saw deathtrap
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, -6))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, -4))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, -2f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, 0))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, 2f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, 4f))
+				.AddToWorld(world);
+			sawTrap.Copy()
+				.WithPosition(new Vector3(8, 43, 6))
+				.AddToWorld(world);
+
+
+			// Finnish 
+			platformBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2.5f, 1.5f))
+				.WithPosition(new Vector3(-20, 43.75f, 0))
+				.AddToWorld(world);
+
+			platformBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(2, 2.5f, 1.5f))
+				.WithPosition(new Vector3(-20, 45f, 0))
+				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
 
 			//Falling death
