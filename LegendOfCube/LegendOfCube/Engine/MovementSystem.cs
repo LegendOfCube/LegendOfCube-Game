@@ -19,13 +19,13 @@ namespace LegendOfCube.Engine
 		private static readonly float ROTATIONAL_SPEED_RAD = MathHelper.ToRadians(ROTATIONAL_SPEED);
 
 		// Ground jump constants
-		private const float MAX_JUMP_HEIGHT = 5.0f;
-		private const float MIN_JUMP_HEIGHT = 1.5f;
-		private const float MAX_DECISION_HEIGHT = 1.5f;
+		private const float MAX_JUMP_HEIGHT = 10.0f;
+		private const float MIN_JUMP_HEIGHT = 3f;
+		private const float MAX_DECISION_HEIGHT = 3f;
 
 		// Wall jump constants
-		private const float WALL_JUMP_MIN_OUT_SPEED = 4.0f;
-		private const float WALL_JUMP_MAX_OUT_SPEED = 8.0f;
+		private const float WALL_JUMP_MIN_OUT_SPEED = 8.0f;
+		private const float WALL_JUMP_MAX_OUT_SPEED = 16.0f;
 
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

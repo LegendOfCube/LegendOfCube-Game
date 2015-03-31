@@ -33,7 +33,7 @@ namespace LegendOfCube.Levels
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
-				.WithVelocity(Vector3.Zero, 15)
+				.WithVelocity(Vector3.Zero, 30)
 				.WithAcceleration(Vector3.Zero, 60)
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG));
@@ -56,20 +56,38 @@ namespace LegendOfCube.Levels
 
 			// Starting platform
 			platformBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(4, 1, 1.5f))
+				.WithTransform(Matrix.CreateScale(6, 1, 1.5f))
 				.WithPosition(Vector3.Zero)
 				.AddToWorld(world);
 
 			// First Wall
 			wallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(1,10,3))
-				.WithPosition(new Vector3(20, 0, 0))
+				.WithTransform(Matrix.CreateScale(1,30,3))
+				.WithPosition(new Vector3(30, 0, 0))
 				.AddToWorld(world);
 
-			//Second platform
+			// Second platform
 			platformBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(3, 1, 1.5f))
-				.WithPosition(new Vector3(-5, 7.5f, 0))
+				.WithTransform(Matrix.CreateScale(4, 1, 1.5f))
+				.WithPosition(new Vector3(-10, 15f, 0))
+				.AddToWorld(world);
+
+			// Second Wall
+			wallBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(1, 30, 3))
+				.WithPosition(new Vector3(-30, 0, 0))
+				.AddToWorld(world);
+
+			// Third platform
+			platformBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(4, 1, 1.5f))
+				.WithPosition(new Vector3(10, 30f, 0))
+				.AddToWorld(world);
+
+			// Fourth platform
+			platformBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(4, 1, 1.5f))
+				.WithPosition(new Vector3(-10, 45f, 0))
 				.AddToWorld(world);
 
 			//Falling death
