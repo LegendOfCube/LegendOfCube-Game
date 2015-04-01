@@ -132,9 +132,22 @@ namespace LegendOfCube.Engine
 
 		public EntityBuilder WithModelData(ModelData modelData)
 		{
-			return WithModel(modelData.Model)
-				  .WithBoundingVolume(modelData.Obb)
-				  .WithStandardEffectParams(modelData.EffectParams);
+			EntityBuilder result = this;
+
+			if (modelData.Model != null)
+			{
+				result = result.WithModel(modelData.Model);
+			}
+			if (modelData.HasObb)
+			{
+				result = result.WithBoundingVolume(modelData.Obb);
+			}
+			if (modelData.EffectParams != null)
+			{
+				result = result.WithStandardEffectParams(modelData.EffectParams);
+			}
+
+			return result;
 		}
 
 		public EntityBuilder Copy()
