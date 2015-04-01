@@ -78,7 +78,7 @@ namespace LegendOfCube.Engine
 				if (dirToTarget != Vector3.Zero) // Only mess with currentMovementVelocity if necessary
 				{
 					dirToTarget.Normalize();
-					float movementAcc = (world.PlayerCubeState.OnGround || world.PlayerCubeState.OnWall) ? MOVEMENT_ACCELERATION : MOVEMENT_AIR_ACCELERATION;
+					float movementAcc = (world.PlayerCubeState.OnGround) ? MOVEMENT_ACCELERATION : MOVEMENT_AIR_ACCELERATION;
 					currentMovementVelocity += dirToTarget * movementAcc * delta;
 
 					// If we passed targetMovementVelocity we clamp to it.
