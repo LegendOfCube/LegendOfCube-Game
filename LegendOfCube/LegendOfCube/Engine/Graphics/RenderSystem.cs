@@ -34,8 +34,13 @@ namespace LegendOfCube.Engine.Graphics
 		private GraphicsDeviceManager graphicsManager;
 		private StandardEffect standardEffect;
 		private OBBRenderer obbRenderer;
+
+		private DepthStencilState renderOccludedState;
+		private BasicEffect occludedEffect;
+
 		private RenderTarget2D shadowRenderTarget0;
 		private RenderTarget2D shadowRenderTarget1;
+
 
 		// Store an array that's reused for each entity
 		// (very high allocation count when profiling otherwise)
@@ -60,8 +65,26 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			this.graphicsDevice = game.GraphicsDevice;
 			obbRenderer = new OBBRenderer(graphicsDevice);
+
 			shadowRenderTarget0 = CreateShadowMapTarget();
 			shadowRenderTarget1 = CreateShadowMapTarget();
+
+			// DepthStencilState with reversed depth test, used for
+			// showing object only if it's occluded
+			renderOccludedState = new DepthStencilState
+			{
+				DepthBufferFunction = CompareFunction.Greater,
+				DepthBufferWriteEnable = false
+			};
+
+			// Effect used for rendering the player when it's occluded
+			occludedEffect = new BasicEffect(graphicsDevice)
+			{
+				PreferPerPixelLighting = false,
+				DiffuseColor = new Color(0x09, 0xCD, 0xDA).ToVector3(),
+				VertexColorEnabled = false,
+				TextureEnabled = false,
+			};
 		}
 
 		public void LoadContent()
@@ -222,8 +245,43 @@ namespace LegendOfCube.Engine.Graphics
 
 			foreach (var entity in entities)
 			{
+				// Filter out player, need to be rendered last for occlusion effect
+				if (entity.Id == world.Player.Id)
+				{
+					continue;
+				}
 				RenderEntity(entity, world, ref view, ref projection);
 			}
+
+			// Render player
+			RenderPlayer(world, ref view, ref projection);
+		}
+
+		private void RenderPlayer(World world, ref Matrix view, ref Matrix projection)
+		{
+			var originalDepthState = graphicsDevice.DepthStencilState;
+			graphicsDevice.DepthStencilState = renderOccludedState;
+			
+			occludedEffect.View = view;
+			occludedEffect.Projection = projection;
+
+			Model model = world.Models[world.Player.Id];
+			var worldTransform = world.Transforms[world.Player.Id];
+			Matrix[] transforms = GetTransformsForModel(model);
+
+			// Draw with solid color BasicEffect what will be seen through walls
+			GraphicsUtils.ApplyEffectOnModel(model, occludedEffect);
+			foreach (var mesh in model.Meshes)
+			{
+				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
+				occludedEffect.World = worldMatrix;
+				mesh.Draw();
+			}
+
+			graphicsDevice.DepthStencilState = originalDepthState;
+
+			// Render player normally
+			RenderEntity(world.Player, world, ref view, ref projection);
 		}
 
 		private void RenderEntity(Entity entity, World world, ref Matrix view, ref Matrix projection)
@@ -238,7 +296,7 @@ namespace LegendOfCube.Engine.Graphics
 			}
 			else
 			{
-				RenderEntityWithBasicEffect(entity, model, transforms, world, ref  worldTransform, ref view, ref projection);
+				RenderEntityWithBasicEffect(entity, model, transforms, world, ref worldTransform, ref view, ref projection);
 			}
 		}
 
