@@ -81,7 +81,7 @@ namespace LegendOfCube.Engine.Graphics
 			occludedEffect = new BasicEffect(graphicsDevice)
 			{
 				PreferPerPixelLighting = false,
-				DiffuseColor = Color.LimeGreen.ToVector3(),
+				DiffuseColor = new Color(0x09, 0xCD, 0xDA).ToVector3(),
 				VertexColorEnabled = false,
 				TextureEnabled = false,
 			};
