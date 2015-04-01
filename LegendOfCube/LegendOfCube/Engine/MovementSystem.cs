@@ -12,7 +12,6 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Movement constants
-		private const float MOVEMENT_ACCELERATION = 35.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 13.0f;
 		private const float WALL_ANTI_GRAVITY_FACTOR = 0.5f;
 		private const float ROTATIONAL_SPEED = 360;
