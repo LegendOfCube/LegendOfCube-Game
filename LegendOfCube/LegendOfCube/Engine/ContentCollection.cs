@@ -126,7 +126,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Platform/rusted metal-d"),
-					NormalTexture = cm.Load<Texture>("Models/Platform/rust_normal_sharp"),
+					NormalTexture = cm.Load<Texture>("Models/Platform/platform-normal"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -0.25f, 0.0f), 10.0f, 0.5f, 10.0f)

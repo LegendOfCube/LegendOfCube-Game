@@ -12,8 +12,8 @@ namespace LegendOfCube.Levels
 		{
 			World world = new World(1000);
 
-			world.SpawnPoint = new Vector3(0, 5, 0);
-			world.LightDirection = Vector3.Normalize(new Vector3(3.0f, -1.0f, -3.0f));
+			world.SpawnPoint = new Vector3(0, 0, 0);
+			world.LightDirection = Vector3.Normalize(new Vector3(3.0f, -3.0f, -3.0f));
 			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
 			world.AmbientIntensity = 0.45f;
 
@@ -25,87 +25,21 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG));
 
-			var platformBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.RustPlatform);
-
-			var brickWallBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.BrickWall);
-
-			var brickWallWindowBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.BrickWallWindow);
-			var windowBarsBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.WindowBars);
-
-			var groundConcreteBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.GroundConcrete);
-
-			var hangingPlatformBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.HangingPlatform);
-
-			var dropSignBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.DropSign);
+			var platformBuilder = new EntityBuilder().WithModelData(contentCollection.RustPlatform);
+			var brickWallBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWall);
+			var brickWallWindowBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallWindow);
+			var windowBarsBuilder = new EntityBuilder().WithModelData(contentCollection.WindowBars);
+			var groundConcreteBuilder = new EntityBuilder()	.WithModelData(contentCollection.GroundConcrete);
+			var hangingPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.HangingPlatform);
+			var dropSignBuilder = new EntityBuilder().WithModelData(contentCollection.DropSign);
+			var arrowDownBuilder = new EntityBuilder().WithModelData(contentCollection.SignArrowUp);
+			var pillarBuilder = new EntityBuilder().WithModelData(contentCollection.Pillar);
 
 			world.Player = playerBuilder.AddToWorld(world);
 
 			// Starting Room
-			groundConcreteBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(0.4f, 0.2f, 0.2f))
-				.WithPosition(5, 0, 0)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(0, 0, 5)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(0, 5, 5)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(0, 0, -5)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(0, 5, -5)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2))
-				.WithPosition(-5.25f, 0, 0)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2))
-				.WithPosition(-5.25f, 5, 0)
-				.AddToWorld(world);
-
-			brickWallWindowBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(10, 0, 5)
-				.AddToWorld(world);
-			windowBarsBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(10, 0, 5)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(10, 5, 5)
-				.AddToWorld(world);
-
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(10, 0, -5)
-				.AddToWorld(world);
-			
-			brickWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(2, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(10, 5, -5)
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(0, 0, 0).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(0, 0, 0).AddToWorld(world);
 
 			//Falling death
 			new EntityBuilder()
