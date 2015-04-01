@@ -479,6 +479,7 @@
       <Name>asphalt_n</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
     <Compile Include="Models\Ground\concrete_d.jpg">
       <Name>concrete_d</Name>
@@ -490,6 +491,7 @@
       <Name>concrete_n</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
     <Compile Include="Models\Ground\planks_d.jpg">
       <Name>planks_d</Name>
@@ -501,6 +503,7 @@
       <Name>planks_n</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
     <Compile Include="Models\Ground\stone_d.JPG">
       <Name>stone_d</Name>
@@ -512,6 +515,7 @@
       <Name>stone_n</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <ItemGroup>
