@@ -13,7 +13,7 @@ namespace LegendOfCube.Engine
 
 		// Movement constants
 		private const float MOVEMENT_ACCELERATION = 80.0f;
-		private const float MOVEMENT_AIR_ACCELERATION = 15.0f;
+		private const float MOVEMENT_AIR_ACCELERATION = 13.0f;
 		private const float WALL_ANTI_GRAVITY_FACTOR = 0.5f;
 		private const float ROTATIONAL_SPEED = 360;
 		private static readonly float ROTATIONAL_SPEED_RAD = MathHelper.ToRadians(ROTATIONAL_SPEED);
@@ -71,7 +71,7 @@ namespace LegendOfCube.Engine
 				Vector2 inputDir = world.InputData[i].GetDirection();
 				Vector3 rotatedInputDir = Rotate2DDirectionRelativeCamera(world, ref inputDir);
 				if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * world.MaxSpeed[i];
-				else targetMovementVelocity = Vector3.Zero;
+				else if(world.PlayerCubeState.OnGround) targetMovementVelocity = Vector3.Zero;
 
 				// Move currentMovementVelocity towards target velocity
 				Vector3 dirToTarget = targetMovementVelocity - currentMovementVelocity;
@@ -142,7 +142,7 @@ namespace LegendOfCube.Engine
 				{
 					if (world.PlayerCubeState.OnGround) // Ground jump
 					{
-						world.Velocities[i].Y += MIN_JUMP_SPEED;
+						world.Velocities[i].Y = MIN_JUMP_SPEED;
 						if (world.Velocities[i].Y < MIN_JUMP_SPEED) world.Velocities[i].Y = MIN_JUMP_SPEED;
 						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION - world.Gravity.Y, 0.0f);
 						jumpTime = delta;
@@ -150,7 +150,7 @@ namespace LegendOfCube.Engine
 					else if (world.PlayerCubeState.OnWall) // Wall jump
 					{
 						Vector3 wallAxis = world.PlayerCubeState.WallAxis;
-						world.Velocities[i].Y += MIN_JUMP_SPEED;
+						world.Velocities[i].Y = MIN_JUMP_SPEED;
 						if (world.Velocities[i].Y < MIN_JUMP_SPEED) world.Velocities[i].Y = MIN_JUMP_SPEED;
 						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION - world.Gravity.Y, 0.0f);
 						world.Velocities[i] -= (Vector3.Dot(world.Velocities[i], wallAxis)) * wallAxis;
