@@ -31,7 +31,6 @@ namespace LegendOfCube.Engine
 		public readonly Vector3[] Velocities; // VELOCITY
 		public readonly float[] MaxSpeed; // VELOCITY
 		public readonly Vector3[] Accelerations; // ACCELERATION
-		public readonly float[] MaxAcceleration; // ACCELERATION
 		public readonly InputData[] InputData; // INPUT
 		public readonly OBB[] ModelSpaceBVs; // MODEL_SPACE_BV
 		public readonly AIComponent[] AIComponents; // AI_FLAG

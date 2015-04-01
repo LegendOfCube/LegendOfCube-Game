@@ -31,7 +31,7 @@ namespace LegendOfCube.Levels
 				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
-				.WithAcceleration(Vector3.Zero, 30)
+				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT |
 					               Properties.GRAVITY_FLAG |
