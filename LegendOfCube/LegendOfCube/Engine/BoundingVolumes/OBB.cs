@@ -209,17 +209,6 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 			return result;
 		}
-
-		private static Vector3 Transform(ref Matrix m, ref Vector3 v)
-		{
-			Vector3 res = new Vector3
-			{
-				X = m.M11 * v.X + m.M12 * v.Y + m.M13 * v.Z,
-				Y = m.M21 * v.X + m.M22 * v.Y + m.M23 * v.Z,
-				Z = m.M31 * v.X + m.M32 * v.Y + m.M33 * v.Z
-			};
-			return res;
-		}
 		
 		// Public properties
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

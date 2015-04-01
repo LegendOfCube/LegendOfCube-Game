@@ -84,7 +84,12 @@
     <Compile Include="Engine\EventSystem.cs" />
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
-    <Compile Include="Engine\GameScreen.cs" />
+    <Compile Include="Engine\GameStats.cs" />
+    <Compile Include="Engine\Graphics\PointLight.cs" />
+    <Compile Include="Screens\LevelSelectScreen.cs" />
+    <Compile Include="Screens\MenuItem.cs" />
+    <Compile Include="Screens\StartScreen.cs" />
+    <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevelFactory.cs" />
@@ -93,12 +98,12 @@
     <Compile Include="Engine\ILevelFactory.cs" />
     <Compile Include="Levels\DemoLevel.cs" />
     <Compile Include="Levels\TestLevel1.cs" />
-    <Compile Include="Engine\MenuScreen.cs" />
+    <Compile Include="Screens\PauseScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />
     <Compile Include="Engine\Graphics\OBBRenderer.cs" />
     <Compile Include="Engine\PlayerCubeState.cs" />
     <Compile Include="Engine\EntityBuilder.cs" />
-    <Compile Include="Engine\GameplaySystem.cs" />
+    <Compile Include="Engine\MovementSystem.cs" />
     <Compile Include="Engine\InputData.cs" />
     <Compile Include="Engine\Properties.cs" />
     <Compile Include="Engine\Entity.cs" />
@@ -109,8 +114,8 @@
     <Compile Include="Engine\Graphics\RenderSystem.cs" />
     <Compile Include="Engine\Graphics\StandardEffect.cs" />
     <Compile Include="Engine\Graphics\StandardEffectParams.cs" />
-    <Compile Include="Engine\Screen.cs" />
-    <Compile Include="Engine\SwitcherSystem.cs" />
+    <Compile Include="Screens\Screen.cs" />
+    <Compile Include="Screens\ScreenSystem.cs" />
     <Compile Include="Engine\World.cs" />
     <Compile Include="Levels\ConceptLevel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -149,6 +154,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

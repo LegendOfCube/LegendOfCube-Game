@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LegendOfCube.Engine.CubeMath;
+using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
@@ -31,9 +32,18 @@ namespace LegendOfCube.Engine
 			float speed = world.Velocities[e.Id].Length();
 			float brightness = MathUtils.ClampLerp(speed, 0.6f, 1.0f, 0.0f, world.MaxSpeed[e.Id]);
 
-			newEffect.EmissiveColor = (newColor * brightness).ToVector4();
+			Vector4 vecColor = (newColor * brightness).ToVector4();
+			newEffect.EmissiveColor = vecColor;
 
 			world.StandardEffectParams[e.Id] = newEffect;
+
+			// Make the cube a point light source
+			// Currently assumes the player is of height 1
+			Matrix cubeTransform = world.Transforms[world.Player.Id];
+			Vector3 lightPosition = cubeTransform.Translation + 0.5f * cubeTransform.Up;
+			PointLight cubeLight = new PointLight(10.0f, vecColor, lightPosition);
+			world.PointLight0Enabled = true;
+			world.PointLight0 = cubeLight;
 		}
 	}
 }
