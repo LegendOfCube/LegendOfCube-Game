@@ -85,6 +85,8 @@
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameStats.cs" />
+    <Compile Include="Engine\Graphics\GraphicsUtils.cs" />
+    <Compile Include="Engine\Graphics\PointLight.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItem.cs" />
     <Compile Include="Screens\StartScreen.cs" />

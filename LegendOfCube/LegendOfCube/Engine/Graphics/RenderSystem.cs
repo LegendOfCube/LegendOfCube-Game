@@ -34,7 +34,13 @@ namespace LegendOfCube.Engine.Graphics
 		private GraphicsDeviceManager graphicsManager;
 		private StandardEffect standardEffect;
 		private OBBRenderer obbRenderer;
-		private RenderTarget2D shadowRenderTarget;
+
+		private DepthStencilState renderOccludedState;
+		private BasicEffect occludedEffect;
+
+		private RenderTarget2D shadowRenderTarget0;
+		private RenderTarget2D shadowRenderTarget1;
+
 
 		// Store an array that's reused for each entity
 		// (very high allocation count when profiling otherwise)
@@ -59,7 +65,26 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			this.graphicsDevice = game.GraphicsDevice;
 			obbRenderer = new OBBRenderer(graphicsDevice);
-			shadowRenderTarget = CreateShadowMapTarget();
+
+			shadowRenderTarget0 = CreateShadowMapTarget();
+			shadowRenderTarget1 = CreateShadowMapTarget();
+
+			// DepthStencilState with reversed depth test, used for
+			// showing object only if it's occluded
+			renderOccludedState = new DepthStencilState
+			{
+				DepthBufferFunction = CompareFunction.Greater,
+				DepthBufferWriteEnable = false
+			};
+
+			// Effect used for rendering the player when it's occluded
+			occludedEffect = new BasicEffect(graphicsDevice)
+			{
+				PreferPerPixelLighting = false,
+				DiffuseColor = new Color(0x09, 0xCD, 0xDA).ToVector3(),
+				VertexColorEnabled = false,
+				TextureEnabled = false,
+			};
 		}
 
 		public void LoadContent()
@@ -69,8 +94,9 @@ namespace LegendOfCube.Engine.Graphics
 
 		private RenderTarget2D CreateShadowMapTarget()
 		{
-			// Create our render target
-			return new RenderTarget2D(graphicsDevice,
+			return new RenderTarget2D
+			(
+				graphicsDevice,
 				SHADOW_MAP_SIZE,
 				SHADOW_MAP_SIZE,
 				false,
@@ -89,7 +115,9 @@ namespace LegendOfCube.Engine.Graphics
 			                              0.1f,
 			                              5000.0f);
 
-			var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
+			// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+			// TODO: Fix or completely remove
+			//var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
 
 			// Filter out a list of interesting entities to be used in different steps
 			// (Value types such as Enity won't be autoboxed in List<Entity>)
@@ -100,6 +128,7 @@ namespace LegendOfCube.Engine.Graphics
 				renderableEntities.Add(entity);
 
 				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+				// TODO: Fix or completely remove
 				/*Model model = world.Models[entity.Id];
 				Matrix worldTransform = world.Transforms[entity.Id];
 				if (IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
@@ -112,14 +141,16 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.PrepareRendering();
 
 			// Create shadow map for the primary light
-			Matrix shadowMatrix;
-			RenderShadowMap(world, renderableEntities, shadowRenderTarget, out shadowMatrix);
+			Matrix shadowMatrix0;
+			Matrix shadowMatrix1;
+			RenderShadowMap(world, renderableEntities, 80, 80, shadowRenderTarget0, out shadowMatrix0);
+			RenderShadowMap(world, renderableEntities, 500, 500, shadowRenderTarget1, out shadowMatrix1);
 
 			// For some reason, it seems that changing the render target will undo the previous clear
 			game.GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			// Render all visible entities in the world
-			RenderFinal(world, visibleEntities, ref cameraView, ref cameraProjection, ref shadowMatrix);
+			RenderFinal(world, visibleEntities, ref cameraView, ref cameraProjection, ref shadowMatrix0, ref shadowMatrix1);
 
 			// Render OBB wireframes
 			if (world.DebugState.ShowOBBWireFrame)
@@ -128,11 +159,11 @@ namespace LegendOfCube.Engine.Graphics
 			}
 		}
 
-		private void RenderShadowMap(World world, List<Entity> entities, RenderTarget2D renderTarget, out Matrix shadowMatrix)
+		private void RenderShadowMap(World world, List<Entity> entities, float width, float height, RenderTarget2D renderTarget, out Matrix shadowMatrix)
 		{
 			RenderTargetBinding[] origRenderTargets = new RenderTargetBinding[game.GraphicsDevice.GetRenderTargets().Length];
 			game.GraphicsDevice.GetRenderTargets().CopyTo(origRenderTargets, 0);
-			game.GraphicsDevice.SetRenderTarget(shadowRenderTarget);
+			game.GraphicsDevice.SetRenderTarget(renderTarget);
 			game.GraphicsDevice.Clear(Color.Black);
 			standardEffect.SetShadowMapRendering(true);
 
@@ -142,10 +173,13 @@ namespace LegendOfCube.Engine.Graphics
 			// and pointed toward the player
 			Vector3 lightTarget = world.Transforms[world.Player.Id].Translation;
 			Matrix lightView = Matrix.CreateLookAt(lightTarget - 300 * world.LightDirection, lightTarget, Vector3.Forward);
-			Matrix lightProjection = Matrix.CreateOrthographic(80.0f, 80.0f, 100.0f, 1000.0f);
+			Matrix lightProjection = Matrix.CreateOrthographic(width, height, 100.0f, 1000.0f);
 
 			standardEffect.SetViewProjection(ref lightView, ref lightProjection);
-			var boundingFrustum = new BoundingFrustum(lightView * lightProjection);
+
+			// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+			// TODO: Fix or completely remove
+			//var boundingFrustum = new BoundingFrustum(lightView * lightProjection);
 
 			foreach (var entity in entities)
 			{
@@ -156,11 +190,15 @@ namespace LegendOfCube.Engine.Graphics
 				var model = world.Models[entity.Id];
 				var worldTransform = world.Transforms[entity.Id];
 
+				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
+				// TODO: Fix or completely remove
+				/*
 				// Don't render if entity wouldn't be seen
 				if (!IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
 				{
 					continue;
 				}
+				*/
 
 				Matrix[] transforms = GetTransformsForModel(model);
 				if (world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
@@ -187,28 +225,63 @@ namespace LegendOfCube.Engine.Graphics
 			return transforms;
 		}
 
-		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection, ref Matrix shadowMatrix)
+		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection, ref Matrix shadowMatrix0, ref Matrix shadowMatrix1)
 		{
 			standardEffect.SetViewProjection(ref view, ref projection);
 			standardEffect.SetAmbientIntensity(world.AmbientIntensity);
 
 			var lightColor = LIGHT_COLOR;
 			standardEffect.SetDirLight0Properties(ref world.LightDirection, ref lightColor);
-			standardEffect.SetDirLight0ShadowMap(shadowRenderTarget);
-			standardEffect.SetDirLight0ShadowMatrix(ref shadowMatrix);
+			standardEffect.SetDirLight0ShadowMap0(shadowRenderTarget0);
+			standardEffect.SetDirLight0ShadowMatrix0(ref shadowMatrix0);
 
-			// Make the player cube a light source
-			float reach = 10.0f;
-			bool playerHasStandardEffect = world.EntityProperties[world.Player.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE);
-			// Default to white color
-			Vector4 pointColor = playerHasStandardEffect ? world.StandardEffectParams[world.Player.Id].EmissiveColor : Color.White.ToVector4();
-			Vector3 pointLightPos = world.Transforms[world.Player.Id].Translation + new Vector3(0.0f, 0.5f, 0.0f);
-			standardEffect.SetPointLight0Properties(ref pointLightPos, ref reach, ref pointColor);
+			standardEffect.SetDirLight0ShadowMap1(shadowRenderTarget1);
+			standardEffect.SetDirLight0ShadowMatrix1(ref shadowMatrix1);
+
+			if (world.PointLight0Enabled)
+			{
+				standardEffect.SetPointLight0Properties(ref world.PointLight0.lightPosition, ref world.PointLight0.reach, ref world.PointLight0.color);
+			}
 
 			foreach (var entity in entities)
 			{
+				// Filter out player, need to be rendered last for occlusion effect
+				if (entity.Id == world.Player.Id)
+				{
+					continue;
+				}
 				RenderEntity(entity, world, ref view, ref projection);
 			}
+
+			// Render player
+			RenderPlayer(world, ref view, ref projection);
+		}
+
+		private void RenderPlayer(World world, ref Matrix view, ref Matrix projection)
+		{
+			var originalDepthState = graphicsDevice.DepthStencilState;
+			graphicsDevice.DepthStencilState = renderOccludedState;
+			
+			occludedEffect.View = view;
+			occludedEffect.Projection = projection;
+
+			Model model = world.Models[world.Player.Id];
+			var worldTransform = world.Transforms[world.Player.Id];
+			Matrix[] transforms = GetTransformsForModel(model);
+
+			// Draw with solid color BasicEffect what will be seen through walls
+			GraphicsUtils.ApplyEffectOnModel(model, occludedEffect);
+			foreach (var mesh in model.Meshes)
+			{
+				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
+				occludedEffect.World = worldMatrix;
+				mesh.Draw();
+			}
+
+			graphicsDevice.DepthStencilState = originalDepthState;
+
+			// Render player normally
+			RenderEntity(world.Player, world, ref view, ref projection);
 		}
 
 		private void RenderEntity(Entity entity, World world, ref Matrix view, ref Matrix projection)
@@ -223,7 +296,7 @@ namespace LegendOfCube.Engine.Graphics
 			}
 			else
 			{
-				RenderEntityWithBasicEffect(entity, model, transforms, world, ref  worldTransform, ref view, ref projection);
+				RenderEntityWithBasicEffect(entity, model, transforms, world, ref worldTransform, ref view, ref projection);
 			}
 		}
 
