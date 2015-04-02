@@ -14,7 +14,8 @@ namespace LegendOfCube.Engine
 		// Movement constants
 		private const float MOVEMENT_ACCELERATION = 40.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 15.0f;
-		private const float WALL_ANTI_GRAVITY_FACTOR = 0.5f;
+		private const float WALL_ANTI_GRAVITY_FACTOR_DOWN = 0.50f;
+		private const float WALL_ANTI_GRAVITY_FACTOR_UP = 0.25f;
 		private const float ROTATIONAL_SPEED = 360;
 		private static readonly float ROTATIONAL_SPEED_RAD = MathHelper.ToRadians(ROTATIONAL_SPEED);
 
@@ -143,7 +144,8 @@ namespace LegendOfCube.Engine
 			// WALL ANTI-GRAVITY HACK
 			if (world.PlayerCubeState.OnWall)
 			{
-				if (world.Velocities[i].Y < 0) world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
+				if (world.Velocities[i].Y < 0) world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR_DOWN;
+				else world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR_UP;
 			}
 
 			// Jumping
