@@ -10,7 +10,7 @@ namespace LegendOfCube.Levels
 		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000) { SpawnPoint = new Vector3(0, 0, 0) };
-			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
+			world.Camera.Position = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
 			world.LightDirection = Vector3.Normalize(new Vector3(1, -1, 1));
 			world.AmbientIntensity = 0.3f;
 

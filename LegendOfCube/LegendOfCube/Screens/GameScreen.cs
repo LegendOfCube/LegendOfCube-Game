@@ -80,9 +80,9 @@ namespace LegendOfCube.Screens
 				text.Append("FPS: ");
 				text.AppendLine(UIFormat(1.0f/(float) gameTime.ElapsedGameTime.TotalSeconds));
 				text.Append("CamPos: ");
-				text.AppendLine(UIFormat(World.CameraPosition));
+				text.AppendLine(UIFormat(World.Camera.Position));
 				text.Append("CamDir: ");
-				text.AppendLine(UIFormat(Vector3.Normalize(World.CameraTarget - World.CameraPosition)));
+				text.AppendLine(UIFormat(Vector3.Normalize(World.Camera.Target - World.Camera.Position)));
 				text.Append("CubePos: ");
 				text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
 				text.Append("CubeVel: ");

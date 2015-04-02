@@ -142,13 +142,13 @@ namespace LegendOfCube.Engine
 			var deathToSpawnPoint = world.Transforms[world.Player.Id].Translation - world.SpawnPoint;
 			if (deathToSpawnPoint.Length() > 1)
 			{
-				world.CameraPosition = world.SpawnPoint - 2.0f * Vector3.Normalize(deathToSpawnPoint);
+				world.Camera.Position = world.SpawnPoint - 2.0f * Vector3.Normalize(deathToSpawnPoint);
 			}
 			else
 			{
-				world.CameraPosition = world.SpawnPoint;
+				world.Camera.Position = world.SpawnPoint;
 			}
-			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
+			world.Camera.Position.Y = world.SpawnPoint.Y + 2.0f;
 
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
@@ -169,9 +169,10 @@ namespace LegendOfCube.Engine
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
 
-			world.CameraPosition = world.SpawnPoint;
-			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
-			world.CameraPosition.X -= 2;
+			world.Camera = Camera.DEFAULT_CAMERA;
+			world.Camera.Position = world.SpawnPoint;
+			world.Camera.Position.Y = world.SpawnPoint.Y + 2.0f;
+			world.Camera.Position.X -= 2;
 		}
 	}
 }

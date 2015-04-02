@@ -186,7 +186,7 @@ namespace LegendOfCube.Engine
 
 		private Vector3 Rotate2DDirectionRelativeCamera(World world, ref Vector2 direction)
 		{
-			Vector3 cameraDiff = world.CameraPosition - world.Transforms[world.Player.Id].Translation;
+			Vector3 cameraDiff = world.Camera.Position - world.Transforms[world.Player.Id].Translation;
 		
 			// Calculate angle formed along ground by the cameras position relative the player
 			float offset = (float)Math.Atan2(cameraDiff.X, cameraDiff.Z);

@@ -60,8 +60,7 @@ namespace LegendOfCube.Engine
 		public readonly float StopTime;
 		public readonly float BaseJump;
 
-		public Vector3 CameraPosition;
-		public Vector3 CameraTarget;
+		public Camera Camera;
 
 		public Vector3 LightDirection;
 		public float AmbientIntensity;
@@ -126,6 +125,8 @@ namespace LegendOfCube.Engine
 			LightDirection = new Vector3(0, -1, 0);
 			AmbientIntensity = 0.5f;
 			PointLight0Enabled = false;
+
+			Camera = Camera.DEFAULT_CAMERA;
 
 			EventBuffer = new EventBuffer();
 		}

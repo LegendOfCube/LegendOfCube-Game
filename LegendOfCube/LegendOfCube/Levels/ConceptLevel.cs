@@ -14,7 +14,7 @@ namespace LegendOfCube.Levels
 
 			world.SpawnPoint = new Vector3(0, 5, 0);
 			world.LightDirection = Vector3.Normalize(new Vector3(3.0f, -1.0f, -3.0f));
-			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
+			world.Camera.Position = world.SpawnPoint + new Vector3(-3, 0, 0);
 			world.AmbientIntensity = 0.45f;
 
 			var wallDeathEffect = contentCollection.BrickWall.EffectParams.ShallowCopy();
