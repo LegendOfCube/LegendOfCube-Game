@@ -14,7 +14,8 @@ namespace LegendOfCube.Engine
 		// Movement constants
 		private const float MOVEMENT_ACCELERATION = 40.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 15.0f;
-		private const float WALL_ANTI_GRAVITY_FACTOR = 0.5f;
+		private const float WALL_ANTI_GRAVITY_FACTOR_DOWN = 0.50f;
+		private const float WALL_ANTI_GRAVITY_FACTOR_UP = 0.25f;
 		private const float ROTATIONAL_SPEED = 360;
 		private static readonly float ROTATIONAL_SPEED_RAD = MathHelper.ToRadians(ROTATIONAL_SPEED);
 
@@ -97,31 +98,42 @@ namespace LegendOfCube.Engine
 			}
 
 			// Cube rotation
-			if (currentMovementVelocity != Vector3.Zero)
+			if (!MathUtils.ApproxEqu(currentMovementVelocity, Vector3.Zero, 0.1f))
 			{
+				// Find direction we want to rotate closest cube face towards
 				Vector3 movementDir = currentMovementVelocity;
 				movementDir.Normalize();
 
+				// Calculate world space OBBs
 				OBB wsOBB = OBB.TransformOBB(ref world.ModelSpaceBVs[i], ref world.Transforms[i]);
+				OBB oldOBB = wsOBB;
+
+				// Find which OBBAxis is closest (enum and actual vector)
 				OBBAxis closestAxisEnum = wsOBB.ClosestAxisEnum(ref movementDir);
+				//OBBAxis closestAxisEnum = OBBAxis.Z_PLUS;
 				Vector3 closestAxis = wsOBB.ClosestAxis(ref movementDir);
+				//Vector3 closestAxis = world.Transforms[i].Forward;//wsOBB.AxisZ;
 				closestAxis.Normalize();
 
+				// Calculate the angle to rotate 
 				float angleBetween = angleRadBetweenTwoNormalizedVectors(ref movementDir, ref closestAxis);
 				float angleToMove = ROTATIONAL_SPEED_RAD * delta;
 				if (angleToMove > angleBetween) angleToMove = angleBetween;
 
+				// Rotate world space OBB if needed
 				if (!MathUtils.ApproxEqu(closestAxis, movementDir, 0.01f))
 				{
+					// Rotation axis & matrix
 					Vector3 rotationAxis = Vector3.Cross(closestAxis, movementDir);
 					rotationAxis.Normalize();
-					Matrix3x3 rotationMatrix = Matrix3x3.CreateRotationMatrix(ref rotationAxis, angleToMove);
+					Matrix rotationMatrix = Matrix.CreateFromAxisAngle(rotationAxis, angleToMove);
 
-					OBB oldOBB = wsOBB;
-					Vector3 rotatedAxis = rotationMatrix * closestAxis;
+					// Calculate new rotated axis
+					Vector3 rotatedAxis = Vector3.TransformNormal(closestAxis, rotationMatrix);
+
+					// Rotate cube
 					RotateOBB(ref wsOBB, closestAxisEnum, ref rotatedAxis);
-
-					TransformFromOBBs(ref oldOBB, ref wsOBB, ref world.Transforms[i]);
+					TransformFromOBBs(ref world.ModelSpaceBVs[i], ref oldOBB, ref wsOBB, ref world.Transforms[i]);
 				}
 			}
 
@@ -143,7 +155,8 @@ namespace LegendOfCube.Engine
 			// WALL ANTI-GRAVITY HACK
 			if (world.PlayerCubeState.OnWall)
 			{
-				if (world.Velocities[i].Y < 0) world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
+				if (world.Velocities[i].Y < 0) world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR_DOWN;
+				else world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR_UP;
 			}
 
 			// Jumping
@@ -225,15 +238,11 @@ namespace LegendOfCube.Engine
 			}
 		}
 
-		private void TransformFromOBBs(ref OBB oldOBB, ref OBB newOBB, ref Matrix transformOut)
+		private void TransformFromOBBs(ref OBB msOBB, ref OBB oldWSOBB, ref OBB newWSOBB, ref Matrix transformOut)
 		{
-			// Update translation in transform
-			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
-			transformOut.Translation += obbDiff;
-			// Update rotation: This is probably a really stupid way.
-			transformOut.Backward = newOBB.AxisZ * transformOut.Forward.Length();
-			transformOut.Right = newOBB.AxisX * transformOut.Left.Length();
-			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
+			Vector3 oldTransl = transformOut.Translation;
+			transformOut = OBB.TransformFromOBBs(ref msOBB, ref newWSOBB);
+			transformOut.Translation = oldTransl + (newWSOBB.Position - oldWSOBB.Position);
 		}
 
 		private float angleRadBetweenTwoNormalizedVectors(ref Vector3 a, ref Vector3 b)
