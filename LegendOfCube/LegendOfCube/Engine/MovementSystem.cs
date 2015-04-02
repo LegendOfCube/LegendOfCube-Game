@@ -143,7 +143,7 @@ namespace LegendOfCube.Engine
 			// WALL ANTI-GRAVITY HACK
 			if (world.PlayerCubeState.OnWall)
 			{
-				world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
+				if (world.Velocities[i].Y < 0) world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
 			}
 
 			// Jumping
