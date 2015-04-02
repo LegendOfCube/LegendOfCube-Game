@@ -12,20 +12,22 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Movement constants
-		private const float MOVEMENT_ACCELERATION = 35.0f;
-		private const float MOVEMENT_AIR_ACCELERATION = 10.0f;
-		private const float WALL_ANTI_GRAVITY_FACTOR = 0.75f;
+		private const float MOVEMENT_ACCELERATION = 40.0f;
+		private const float MOVEMENT_AIR_ACCELERATION = 15.0f;
+		private const float WALL_ANTI_GRAVITY_FACTOR = 0.5f;
 		private const float ROTATIONAL_SPEED = 360;
 		private static readonly float ROTATIONAL_SPEED_RAD = MathHelper.ToRadians(ROTATIONAL_SPEED);
 
 		// Ground jump constants
-		private const float MAX_JUMP_HEIGHT = 5.0f;
-		private const float MIN_JUMP_HEIGHT = 1.5f;
-		private const float MAX_DECISION_HEIGHT = 1.5f;
+		private const float MAX_JUMP_HEIGHT = 7f;
+		private const float MIN_JUMP_HEIGHT = 2f;
+		private const float MAX_DECISION_HEIGHT = 2f;
 
 		// Wall jump constants
-		private const float WALL_JUMP_MIN_OUT_SPEED = 4.0f;
+		private const float WALL_JUMP_MIN_OUT_SPEED = 5.0f;
 		private const float WALL_JUMP_MAX_OUT_SPEED = 8.0f;
+
+		private const float MIN_WALL_JUMP_HEIGHT = 1f;
 
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -56,6 +58,7 @@ namespace LegendOfCube.Engine
 
 			// Wall jump constants
 			float WALL_JUMP_DECISION_OUT_ACCELERATION = ((WALL_JUMP_MAX_OUT_SPEED - WALL_JUMP_MIN_OUT_SPEED) / MAX_DECISION_TIME);
+			float MIN_WALL_JUMP_SPEED = (float)Math.Sqrt(-2.0f * MIN_WALL_JUMP_HEIGHT * world.Gravity.Y);
 
 			// Movement
 			{
@@ -71,14 +74,14 @@ namespace LegendOfCube.Engine
 				Vector2 inputDir = world.InputData[i].GetDirection();
 				Vector3 rotatedInputDir = Rotate2DDirectionRelativeCamera(world, ref inputDir);
 				if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * world.MaxSpeed[i];
-				else targetMovementVelocity = Vector3.Zero;
+				else if(world.PlayerCubeState.OnGround) targetMovementVelocity = Vector3.Zero;
 
 				// Move currentMovementVelocity towards target velocity
 				Vector3 dirToTarget = targetMovementVelocity - currentMovementVelocity;
 				if (dirToTarget != Vector3.Zero) // Only mess with currentMovementVelocity if necessary
 				{
 					dirToTarget.Normalize();
-					float movementAcc = (world.PlayerCubeState.OnGround || world.PlayerCubeState.OnWall) ? MOVEMENT_ACCELERATION : MOVEMENT_AIR_ACCELERATION;
+					float movementAcc = (world.PlayerCubeState.OnGround) ? MOVEMENT_ACCELERATION : MOVEMENT_AIR_ACCELERATION;
 					currentMovementVelocity += dirToTarget * movementAcc * delta;
 
 					// If we passed targetMovementVelocity we clamp to it.
@@ -127,13 +130,20 @@ namespace LegendOfCube.Engine
 			{
 				float wallAxisVel = Vector3.Dot(world.Velocities[i], world.PlayerCubeState.WallAxis);
 				world.Velocities[i] -= wallAxisVel * world.PlayerCubeState.WallAxis;
+
+				//Reset velocity against wall
+				float wallAxisCurVel = Vector3.Dot(currentMovementVelocity, world.PlayerCubeState.WallAxis);
+				currentMovementVelocity -= wallAxisCurVel * world.PlayerCubeState.WallAxis;
+				float wallAxisTargetVel = Vector3.Dot(targetMovementVelocity, world.PlayerCubeState.WallAxis);
+				targetMovementVelocity -= wallAxisTargetVel * world.PlayerCubeState.WallAxis;
+
 				world.Velocities[i] -= 2.5f * world.PlayerCubeState.WallAxis;
 			}
 
 			// WALL ANTI-GRAVITY HACK
 			if (world.PlayerCubeState.OnWall)
 			{
-				world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
+				if (world.Velocities[i].Y < 0) world.Velocities[i].Y += (-world.Gravity.Y) * delta * WALL_ANTI_GRAVITY_FACTOR;
 			}
 
 			// Jumping
@@ -142,7 +152,7 @@ namespace LegendOfCube.Engine
 				{
 					if (world.PlayerCubeState.OnGround) // Ground jump
 					{
-						world.Velocities[i].Y += MIN_JUMP_SPEED;
+						world.Velocities[i].Y = MIN_JUMP_SPEED;
 						if (world.Velocities[i].Y < MIN_JUMP_SPEED) world.Velocities[i].Y = MIN_JUMP_SPEED;
 						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION - world.Gravity.Y, 0.0f);
 						jumpTime = delta;
@@ -150,8 +160,8 @@ namespace LegendOfCube.Engine
 					else if (world.PlayerCubeState.OnWall) // Wall jump
 					{
 						Vector3 wallAxis = world.PlayerCubeState.WallAxis;
-						world.Velocities[i].Y += MIN_JUMP_SPEED;
-						if (world.Velocities[i].Y < MIN_JUMP_SPEED) world.Velocities[i].Y = MIN_JUMP_SPEED;
+						world.Velocities[i].Y = MIN_WALL_JUMP_SPEED;
+						if (world.Velocities[i].Y < MIN_WALL_JUMP_SPEED) world.Velocities[i].Y = MIN_WALL_JUMP_SPEED;
 						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION - world.Gravity.Y, 0.0f);
 						world.Velocities[i] -= (Vector3.Dot(world.Velocities[i], wallAxis)) * wallAxis;
 						world.Velocities[i] += wallAxis * WALL_JUMP_MIN_OUT_SPEED;
