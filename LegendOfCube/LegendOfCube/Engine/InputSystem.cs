@@ -50,7 +50,7 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape) || ButtonWasJustPressed(Buttons.Back))
+			if (KeyWasJustPressed(Keys.Escape))
 			{
 				game.Exit();
 			}
@@ -69,7 +69,7 @@ namespace LegendOfCube.Engine
 				world.DebugState.ShowDebugOverlay = !world.DebugState.ShowDebugOverlay;
 			}
 
-			if (KeyWasJustPressed(Keys.R))
+			if (KeyWasJustPressed(Keys.R) || ButtonWasJustPressed(Buttons.Back))
 			{
 				if (world.WinState)
 				{
