@@ -35,6 +35,11 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 	public struct OBB {
 
+		// Public members
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		public static readonly OBB IDENTITY = new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1.0f, 1.0f, 1.0f);
+
 		// Private members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -176,6 +181,25 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			}
 
 			throw new ArgumentException("direction must be a direction");
+		}
+
+		public bool ApproxEqu(ref OBB other, float epsilon)
+		{
+			if (!MathUtils.ApproxEqu(center, other.center, epsilon)) return false;
+			if (!MathUtils.ApproxEqu(xAxis, other.xAxis, epsilon)) return false;
+			if (!MathUtils.ApproxEqu(yAxis, other.yAxis, epsilon)) return false;
+			if (!MathUtils.ApproxEqu(zAxis, other.zAxis, epsilon)) return false;
+			return true;
+		}
+
+		public Matrix IdentityToThisMatrix()
+		{
+			Matrix m = Matrix.Identity;
+			m.Right = xAxis * halfExtents.X * 2.0f;
+			m.Up = yAxis * halfExtents.Y * 2.0f;
+			m.Backward = zAxis * halfExtents.Z * 2.0f;
+			m.Translation = center;
+			return m;
 		}
 
 		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
