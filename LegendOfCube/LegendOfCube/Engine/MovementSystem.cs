@@ -27,7 +27,7 @@ namespace LegendOfCube.Engine
 		private const float WALL_JUMP_MIN_OUT_SPEED = 5.0f;
 		private const float WALL_JUMP_MAX_OUT_SPEED = 8.0f;
 
-		private const float MIN_WALL_JUMP_HEIGHT = 0.5f;
+		private const float MIN_WALL_JUMP_HEIGHT = 1f;
 
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
