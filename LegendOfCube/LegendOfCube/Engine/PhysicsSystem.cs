@@ -297,9 +297,6 @@ namespace LegendOfCube.Engine
 
 		private void TransformFromOBBs(ref OBB msOBB, ref OBB oldWSOBB, ref OBB newWSOBB, ref Matrix transformOut)
 		{
-			//Vector3 oldTransl = world.Transforms[i].Translation;
-			//world.Transforms[i] = OBB.TransformFromOBBs(ref world.ModelSpaceBVs[i], ref worldSpaceOBBs[i]);
-			//world.Transforms[i].Translation = oldTransl + (worldSpaceOBBs[i].Position - oldObb.Position);
 			Vector3 oldTransl = transformOut.Translation;
 			transformOut = OBB.TransformFromOBBs(ref msOBB, ref newWSOBB);
 			transformOut.Translation = oldTransl + (newWSOBB.Position - oldWSOBB.Position);
