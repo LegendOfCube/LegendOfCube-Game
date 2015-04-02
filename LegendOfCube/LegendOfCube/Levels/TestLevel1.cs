@@ -10,14 +10,14 @@ namespace LegendOfCube.Levels
 	public class TestLevel1 : ILevelFactory
 	{
 		private const int RANDOM_SEED = 2;
-		private const int NUM_OTHER_CUBE = 1000;
-		private const int NUM_DEATH_CUBE = 100;
-		private const int NUM_BOUNCE_CUBE = 100;
-		private const int NUM_TELEPORT_CUBE = 100;
+		private const int NUM_OTHER_CUBE = 1200;
+		private const int NUM_DEATH_CUBE = 0;
+		private const int NUM_BOUNCE_CUBE = 300;
+		private const int NUM_TELEPORT_CUBE = 0;
 
 		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-			World world = new World(1500);
+			World world = new World(3000);
 
 			world.SpawnPoint = new Vector3(0, 2, 0);
 			world.CameraPosition = world.SpawnPoint + new Vector3(2, 2, 0);
