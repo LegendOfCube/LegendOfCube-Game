@@ -6,6 +6,8 @@ using System.Text;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using LegendOfCube.Engine.BoundingVolumes;
+using LegendOfCube.Engine.CubeMath;
 using LegendOfCube.Levels;
 
 namespace LegendOfCube.Engine
@@ -53,27 +55,42 @@ namespace LegendOfCube.Engine
 			}
 		}
 
+		private static bool IsPairCombination(CollisionEvent c, Func<Entity, bool> entity1Satisfies, Func<Entity, bool> entity2Satisfies)
+		{
+			if (entity1Satisfies(c.Collider))
+			{
+				return entity2Satisfies(c.CollidedWith);
+			}
+			if (entity2Satisfies(c.CollidedWith))
+			{
+				return entity1Satisfies(c.Collider);
+			}
+			return false;
+		}
+
+		private static bool PlayerShouldWin(World world, CollisionEvent c)
+		{
+			return IsPairCombination(c,
+				e => e.Id == world.Player.Id,
+				e => world.EntityProperties[e.Id].Satisfies((Properties.WIN_ZONE_FLAG)));
+		}
+
+		private static bool PlayerShouldDie(World world, CollisionEvent c)
+		{
+			return IsPairCombination(c,
+				e => e.Id == world.Player.Id,
+				e => world.EntityProperties[e.Id].Satisfies((Properties.DEATH_ZONE_FLAG)));
+		}
+
 		public static void HandleEvents(World world)
 		{
 			EventBuffer eventBuffer = world.EventBuffer;
+
 			foreach (var collisionEvent in eventBuffer.CollisionEvents)
 			{
 				var collidedWith = collisionEvent.CollidedWith.Id;
 				var collider = collisionEvent.Collider.Id;
-				if (world.EntityProperties[collidedWith].Satisfies((Properties.DEATH_ZONE_FLAG)))
-				{
-					if (collider == world.Player.Id)
-					{
-						RespawnPlayer(world);
-					}
-				}
-				else if (world.EntityProperties[collider].Satisfies(((Properties.DEATH_ZONE_FLAG))))
-				{
-					if (collidedWith == world.Player.Id)
-					{
-						RespawnPlayer(world);
-					}
-				}
+
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.CHECKPOINT_FLAG))
 				{
 					if (collider == world.Player.Id)
@@ -88,12 +105,13 @@ namespace LegendOfCube.Engine
 						world.SpawnPoint = world.Transforms[collider].Translation;
 					}
 				}
+
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.TELEPORT_FLAG))
 				{
 					Random rnd = new Random();
 					var dest = world.EnumerateEntities(new Properties(Properties.TELEPORT_FLAG)).Where(entity => entity.Id != collidedWith).ToList();
-					int teleportTo = (int) dest[rnd.Next(dest.Count)].Id;
-					world.Transforms[collider].Translation = world.Transforms[teleportTo].Translation - 5*collisionEvent.Axis;
+					int teleportTo = (int)dest[rnd.Next(dest.Count)].Id;
+					world.Transforms[collider].Translation = world.Transforms[teleportTo].Translation - 5 * collisionEvent.Axis;
 					world.Velocities[collider] = collisionEvent.ColliderVelocity;
 				}
 				if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
@@ -102,18 +120,34 @@ namespace LegendOfCube.Engine
 					world.PlayerCubeState.OnGround = false;
 					world.PlayerCubeState.OnWall = false;
 				}
-				if (world.EntityProperties[collidedWith].Satisfies(Properties.WIN_ZONE_FLAG))
-				{
-					world.WinState = true;
-				}
 			}
+
+			if (eventBuffer.CollisionEvents.Any(c => PlayerShouldWin(world, c)))
+			{
+				world.WinState = true;
+				return;
+			}
+
+			if (eventBuffer.CollisionEvents.Any(c => PlayerShouldDie(world, c)))
+			{
+				RespawnPlayer(world);
+			}
+
 		}
 
 		public static void RespawnPlayer(World world)
 		{
 			// Look toward where you died
 			// TODO: Refine this, view direction per spawn point?
-			world.CameraPosition = world.SpawnPoint - 2.0f * Vector3.Normalize(world.Transforms[world.Player.Id].Translation - world.SpawnPoint);
+			var deathToSpawnPoint = world.Transforms[world.Player.Id].Translation - world.SpawnPoint;
+			if (deathToSpawnPoint.Length() > 1)
+			{
+				world.CameraPosition = world.SpawnPoint - 2.0f * Vector3.Normalize(deathToSpawnPoint);
+			}
+			else
+			{
+				world.CameraPosition = world.SpawnPoint;
+			}
 			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
 
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;

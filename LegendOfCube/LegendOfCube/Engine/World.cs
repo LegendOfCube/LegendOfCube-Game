@@ -31,7 +31,6 @@ namespace LegendOfCube.Engine
 		public readonly Vector3[] Velocities; // VELOCITY
 		public readonly float[] MaxSpeed; // VELOCITY
 		public readonly Vector3[] Accelerations; // ACCELERATION
-		public readonly float[] MaxAcceleration; // ACCELERATION
 		public readonly InputData[] InputData; // INPUT
 		public readonly OBB[] ModelSpaceBVs; // MODEL_SPACE_BV
 		public readonly AIComponent[] AIComponents; // AI_FLAG
@@ -91,7 +90,6 @@ namespace LegendOfCube.Engine
 			Transforms = new Matrix[MaxNumEntities];
 			InputData = new InputData[MaxNumEntities];
 			MaxSpeed = new float[MaxNumEntities];
-			MaxAcceleration = new float[MaxNumEntities];
 			ModelSpaceBVs = new OBB[MaxNumEntities];
 			AIComponents = new AIComponent[MaxNumEntities];
 
@@ -101,7 +99,6 @@ namespace LegendOfCube.Engine
 				Velocities[i] = Vector3.Zero;
 				MaxSpeed[i] = 0;
 				Accelerations[i] = Vector3.Zero;
-				MaxAcceleration[i] = 0;
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
 				Models[i] = null;
@@ -221,7 +218,6 @@ namespace LegendOfCube.Engine
 			Velocities[entityToDestroy.Id] = Vector3.Zero;
 			MaxSpeed[entityToDestroy.Id] = 0;
 			Accelerations[entityToDestroy.Id] = Vector3.Zero;
-			MaxAcceleration[entityToDestroy.Id] = 0;
 			Transforms[entityToDestroy.Id] = Matrix.Identity;
 			InputData[entityToDestroy.Id] = null;
 			Models[entityToDestroy.Id] = null;
