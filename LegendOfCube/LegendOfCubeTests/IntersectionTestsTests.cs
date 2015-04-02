@@ -94,6 +94,32 @@ namespace LegendOfCubeTests
 			Assert.IsTrue(OBB.TransformOBB(ref IDENTITY, ref identityToThis4).ApproxEqu(ref test4, 0.01f));
 		}
 
+		[TestMethod]
+		public void TestTransformFromOBB()
+		{
+			OBB obb1 = new OBB(new Vector3(0.5f, 0.5f, 0.5f), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1, 1, 1);
+			Matrix m1 = Matrix.Identity;
+			OBB obb1Post = OBB.TransformOBB(ref obb1, ref m1);
+			Matrix m1Recr = OBB.TransformFromOBBs(ref obb1, ref obb1Post);
+			Trace.WriteLine("m1 =\n" + MatrixToString(m1) + "\nm1Recr =\n" + MatrixToString(m1Recr));
+			Assert.IsTrue(MathUtils.ApproxEqu(m1, m1Recr, 0.01f));
+
+			OBB obb2 = obb1;
+			Matrix m2 = Matrix.CreateRotationX(0.5f) * Matrix.CreateRotationY(0.5f);
+			OBB obb2Post = OBB.TransformOBB(ref obb2, ref m2);
+			Matrix m2Recr = OBB.TransformFromOBBs(ref obb2, ref obb2Post);
+			Trace.WriteLine("\nm2 =\n" + MatrixToString(m2) + "\nm2Recr =\n" + MatrixToString(m2Recr));
+			Assert.IsTrue(MathUtils.ApproxEqu(m2, m2Recr, 0.01f));
+		}
+
+		private String MatrixToString(Matrix m)
+		{
+			return "{ {" + m.M11 + ", " + m.M12 + ", " + m.M13 + ", " + m.M14 + "}, "
+			     + "\n{" + m.M21 + ", " + m.M22 + ", " + m.M23 + ", " + m.M24 + "}, "
+			     + "\n{" + m.M31 + ", " + m.M32 + ", " + m.M33 + ", " + m.M34 + "}, "
+			     + "\n{" + m.M41 + ", " + m.M42 + ", " + m.M43 + ", " + m.M44 + "} }";
+		}
+
 		private const float EPSILON = 0.001f;
 
 		private bool approxEqu(float lhs, float rhs)
