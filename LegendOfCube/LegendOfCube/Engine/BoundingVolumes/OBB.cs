@@ -195,10 +195,29 @@ namespace LegendOfCube.Engine.BoundingVolumes
 		public Matrix IdentityToThisMatrix()
 		{
 			Matrix m = Matrix.Identity;
-			m.Right = xAxis * halfExtents.X * 2.0f;
-			m.Up = yAxis * halfExtents.Y * 2.0f;
-			m.Backward = zAxis * halfExtents.Z * 2.0f;
-			m.Translation = center;
+			//m.Right = xAxis * halfExtents.X * 2.0f;
+			//m.Up = yAxis * halfExtents.Y * 2.0f;
+			//m.Backward = zAxis * halfExtents.Z * 2.0f;
+
+			Vector3 x = xAxis * halfExtents.X * 2.0f;
+			m.M11 = x.X;
+			m.M12 = x.Y;
+			m.M13 = x.Z;
+
+			Vector3 y = yAxis * halfExtents.Y * 2.0f;
+			m.M21 = y.X;
+			m.M22 = y.Y;
+			m.M23 = y.Z;
+
+			Vector3 z = zAxis * halfExtents.Z * 2.0f;
+			m.M31 = z.X;
+			m.M32 = z.Y;
+			m.M33 = z.Z;
+
+			m.M41 = center.X;
+			m.M42 = center.Y;
+			m.M43 = center.Z;
+
 			return m;
 		}
 
@@ -232,6 +251,11 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			result.zAxis.Normalize();
 
 			return result;
+		}
+
+		public static Matrix TransformFromOBBs(ref OBB pre, ref OBB post)
+		{
+			return post.IdentityToThisMatrix() * Matrix.Invert(pre.IdentityToThisMatrix());
 		}
 		
 		// Public properties
