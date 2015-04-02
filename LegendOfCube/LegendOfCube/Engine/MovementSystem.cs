@@ -27,6 +27,8 @@ namespace LegendOfCube.Engine
 		private const float WALL_JUMP_MIN_OUT_SPEED = 5.0f;
 		private const float WALL_JUMP_MAX_OUT_SPEED = 8.0f;
 
+		private const float MIN_WALL_JUMP_HEIGHT = 0.5f;
+
 		// Variables
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -56,6 +58,7 @@ namespace LegendOfCube.Engine
 
 			// Wall jump constants
 			float WALL_JUMP_DECISION_OUT_ACCELERATION = ((WALL_JUMP_MAX_OUT_SPEED - WALL_JUMP_MIN_OUT_SPEED) / MAX_DECISION_TIME);
+			float MIN_WALL_JUMP_SPEED = (float)Math.Sqrt(-2.0f * MIN_WALL_JUMP_HEIGHT * world.Gravity.Y);
 
 			// Movement
 			{
@@ -127,6 +130,13 @@ namespace LegendOfCube.Engine
 			{
 				float wallAxisVel = Vector3.Dot(world.Velocities[i], world.PlayerCubeState.WallAxis);
 				world.Velocities[i] -= wallAxisVel * world.PlayerCubeState.WallAxis;
+
+				//Reset velocity against wall
+				float wallAxisCurVel = Vector3.Dot(currentMovementVelocity, world.PlayerCubeState.WallAxis);
+				currentMovementVelocity -= wallAxisCurVel * world.PlayerCubeState.WallAxis;
+				float wallAxisTargetVel = Vector3.Dot(targetMovementVelocity, world.PlayerCubeState.WallAxis);
+				targetMovementVelocity -= wallAxisTargetVel * world.PlayerCubeState.WallAxis;
+
 				world.Velocities[i] -= 2.5f * world.PlayerCubeState.WallAxis;
 			}
 
@@ -150,8 +160,8 @@ namespace LegendOfCube.Engine
 					else if (world.PlayerCubeState.OnWall) // Wall jump
 					{
 						Vector3 wallAxis = world.PlayerCubeState.WallAxis;
-						world.Velocities[i].Y = MIN_JUMP_SPEED;
-						if (world.Velocities[i].Y < MIN_JUMP_SPEED) world.Velocities[i].Y = MIN_JUMP_SPEED;
+						world.Velocities[i].Y = MIN_WALL_JUMP_SPEED;
+						if (world.Velocities[i].Y < MIN_WALL_JUMP_SPEED) world.Velocities[i].Y = MIN_WALL_JUMP_SPEED;
 						world.Accelerations[i] = new Vector3(0.0f, JUMP_DECISION_ACCELERATION - world.Gravity.Y, 0.0f);
 						world.Velocities[i] -= (Vector3.Dot(world.Velocities[i], wallAxis)) * wallAxis;
 						world.Velocities[i] += wallAxis * WALL_JUMP_MIN_OUT_SPEED;
