@@ -50,5 +50,10 @@ namespace LegendOfCube.Engine.CubeMath
 		{
 			return MathHelper.Clamp(MathHelper.Lerp(minOut, maxOut, minIn + value / (maxIn - minIn)), minOut, maxOut);
 		}
+
+		public static Vector3 Lerp(float value, Vector3 min, Vector3 max)
+		{
+			return min + (max - min) * value;
+		}
 	}
 }
