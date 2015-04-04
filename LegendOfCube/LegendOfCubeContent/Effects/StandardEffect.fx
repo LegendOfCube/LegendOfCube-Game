@@ -252,23 +252,22 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos0, float4 
 {
 	// Determine material color, from texture if available
 	float4 diffuseColor = MaterialDiffuseColor;
-	if (UseDiffuseTexture)
+	if (UseDiffuseTexture == true)
 	{
 		diffuseColor *= tex2D(DiffuseTextureSampler, textureCoordinate);
 	}
 	float4 specularColor = MaterialSpecularColor;
-	if (UseSpecularTexture);
+	if (UseSpecularTexture == true)
 	{
 		specularColor *= tex2D(SpecularTextureSampler, textureCoordinate);
 	}
 	float4 emissiveColor = MaterialEmissiveColor;
-	if (UseEmissiveTexture)
+	if (UseEmissiveTexture == true)
 	{
 		emissiveColor *= tex2D(EmissiveTextureSampler, textureCoordinate);
 	}
 
 	float3 directionToEye = normalize(-viewSpacePos);
-
 	// Calculate light contribution
 	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos0, lightSpacePos1, DirLight0ViewSpaceDir, DirLight0ShadowMatrix0, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
 	float4 pointLight0Contribution = CalculatePointLightContribution(viewSpacePos, PointLight0ViewSpacePos, PointLight0Reach, normal, directionToEye, PointLight0Color, diffuseColor, specularColor);
