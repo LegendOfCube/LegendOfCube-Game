@@ -252,17 +252,17 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos0, float4 
 {
 	// Determine material color, from texture if available
 	float4 diffuseColor = MaterialDiffuseColor;
-	if (UseDiffuseTexture == true)
+	if (UseDiffuseTexture)
 	{
 		diffuseColor *= tex2D(DiffuseTextureSampler, textureCoordinate);
 	}
 	float4 specularColor = MaterialSpecularColor;
-	if (UseSpecularTexture == true)
+	if (UseSpecularTexture)
 	{
 		specularColor *= tex2D(SpecularTextureSampler, textureCoordinate);
 	}
 	float4 emissiveColor = MaterialEmissiveColor;
-	if (UseEmissiveTexture == true)
+	if (UseEmissiveTexture)
 	{
 		emissiveColor *= tex2D(EmissiveTextureSampler, textureCoordinate);
 	}
