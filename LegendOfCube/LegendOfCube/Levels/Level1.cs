@@ -21,13 +21,15 @@ namespace LegendOfCube.Levels
 				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
-				.WithAcceleration(Vector3.Zero, 60)
+				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG));
 
 			var platformBuilder = new EntityBuilder().WithModelData(contentCollection.RustPlatform);
 			var brickWallBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWall);
 			var brickWallWindowBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallWindow);
+			var brickWallArrowsHBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallArrowsHorizontal);
+			var brickWallArrowsVBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallArrowsVertical);
 			var windowBarsBuilder = new EntityBuilder().WithModelData(contentCollection.WindowBars);
 			var groundConcreteBuilder = new EntityBuilder()	.WithModelData(contentCollection.GroundConcrete);
 			var hangingPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.HangingPlatform);
@@ -39,6 +41,39 @@ namespace LegendOfCube.Levels
 			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
 
 			world.Player = playerBuilder.AddToWorld(world);
+
+
+			//Level geometry
+			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, 0, 0).AddToWorld(world);
+			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(4, 0, 0).AddToWorld(world);
+
+			platformBuilder.Copy().WithPosition(20, -3, 0).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(20, -3, 0).AddToWorld(world);
+
+			hangingPlatformBuilder.Copy().WithPosition(40, 1, 0).AddToWorld(world);
+			dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(43, 1, 0).AddToWorld(world);
+
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5, 5, 5)).WithPosition(45, 1, 20).AddToWorld(world);
+
+
+
+			platformBuilder.Copy().WithPosition(60, -10, 0).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(60, -10, 0).AddToWorld(world);
+			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.10f, 0.05f, 0.3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationZ(MathHelper.ToRadians(-20))).WithPosition(72, -13, 0).AddToWorld(world);
+
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(125, -40, 0).AddToWorld(world);
+
+
+
+
+
+
+
+
+
 
 			//Ground
 			groundConcreteBuilder.Copy().WithPosition(0, -75, 0).AddToWorld(world);
@@ -176,27 +211,6 @@ namespace LegendOfCube.Levels
 					.WithPosition(125, 50, 50).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90)))
 					.WithPosition(125, 100, 50).AddToWorld(world);
-
-			//Level geometry
-			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, 0, 0).AddToWorld(world);
-			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) 
-				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(4, 0, 0).AddToWorld(world);
-
-			platformBuilder.Copy().WithPosition(20, -3, 0).AddToWorld(world);
-			pillarBuilder.Copy().WithPosition(20, -3, 0).AddToWorld(world);
-
-			hangingPlatformBuilder.Copy().WithPosition(40, 1, 0).AddToWorld(world);
-			dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(43, 1, 0).AddToWorld(world);
-
-			platformBuilder.Copy().WithPosition(60, -10, 0).AddToWorld(world);
-			pillarBuilder.Copy().WithPosition(60, -10, 0).AddToWorld(world);
-			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.10f, 0.05f, 0.3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationZ(MathHelper.ToRadians(-20))).WithPosition(72, -13, 0).AddToWorld(world);
-			
-			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(125, -40, 0).AddToWorld(world);
-
-
 
 			//Falling death
 			new EntityBuilder()
