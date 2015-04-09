@@ -61,10 +61,14 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 
-			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -32, 54).AddToWorld(world);
+			//Wall jump to hanging platform
+			platformBuilder.Copy().WithPosition(60, -37, 70).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(60, -37, 70).AddToWorld(world);
 
-			hangingPlatformBuilder.Copy().WithPosition(43, -27, 50).AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -32, 74).AddToWorld(world);
+
+			hangingPlatformBuilder.Copy().WithPosition(43, -27, 70).AddToWorld(world);
 			
 			/*dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(58, -40, 45).AddToWorld(world);
