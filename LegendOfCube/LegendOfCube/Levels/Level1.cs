@@ -83,8 +83,12 @@ namespace LegendOfCube.Levels
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(-3, -27, 88).AddToWorld(world);
 			hangingPlatformBuilder.Copy().WithPosition(-45, -27, 88).AddToWorld(world);
 
-			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 70).AddToWorld(world);
-			
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 65).AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -27, 45).AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 25).AddToWorld(world);
+
+			hangingPlatformBuilder.Copy().WithPosition(-45, -27, 0).AddToWorld(world);
+
 			/*dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(58, -40, 45).AddToWorld(world);
 			*/
