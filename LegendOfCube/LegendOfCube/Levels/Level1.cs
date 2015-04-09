@@ -61,14 +61,18 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 
+			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.18f, 0.1f, 0.6f) * Matrix.CreateRotationY(MathHelper.ToRadians(0))
+				* Matrix.CreateRotationX(MathHelper.ToRadians(-5))).WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
+
+
 			//Wall jump to hanging platform
-			platformBuilder.Copy().WithPosition(60, -37, 70).AddToWorld(world);
-			pillarBuilder.Copy().WithPosition(60, -37, 70).AddToWorld(world);
+			platformBuilder.Copy().WithPosition(60, -34.9f, 88).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(60, -34.9f, 88).AddToWorld(world);
 
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -32, 74).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -29.9f, 92).AddToWorld(world);
 
-			hangingPlatformBuilder.Copy().WithPosition(43, -27, 70).AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithPosition(43, -27, 88).AddToWorld(world);
 			
 			/*dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(58, -40, 45).AddToWorld(world);
