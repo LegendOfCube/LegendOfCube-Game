@@ -62,20 +62,22 @@ namespace LegendOfCube.Levels
 			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 15).AddToWorld(world);
 			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 25).AddToWorld(world);
 
+			platformBuilder.Copy().WithPosition(55, -37, 50).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(55, -37, 50).AddToWorld(world);
 
-			platformBuilder.Copy().WithPosition(60, -50, 0).AddToWorld(world);
+			/*platformBuilder.Copy().WithPosition(60, -50, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -50, 0).AddToWorld(world);
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.10f, 0.05f, 0.3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(-20))).WithPosition(72, -53, 0).AddToWorld(world);
 
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(125, -80, 0).AddToWorld(world);
+			*/
 
 
 
 
 
-
-
+/*
 
 
 
@@ -216,6 +218,8 @@ namespace LegendOfCube.Levels
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90)))
 					.WithPosition(125, 100, 50).AddToWorld(world);
 
+
+ */
 			//Falling death
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(1900))
