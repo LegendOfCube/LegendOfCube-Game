@@ -54,17 +54,21 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(55, -37, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(55, -37, 0).AddToWorld(world);
 
-			//hangingPlatformBuilder.Copy().WithPosition(40, -39, 0).AddToWorld(world);
-			//dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
-			//	* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(43, -39, 0).AddToWorld(world);
-
-			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5, 5, 5)).WithPosition(65, -39, 20).AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(65, -39, 20).AddToWorld(world);
 			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 15).AddToWorld(world);
 			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 25).AddToWorld(world);
 
-			platformBuilder.Copy().WithPosition(55, -37, 50).AddToWorld(world);
-			pillarBuilder.Copy().WithPosition(55, -37, 50).AddToWorld(world);
+			platformBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -32, 54).AddToWorld(world);
+
+			hangingPlatformBuilder.Copy().WithPosition(43, -27, 50).AddToWorld(world);
+			
+			/*dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(58, -40, 45).AddToWorld(world);
+			*/
 			/*platformBuilder.Copy().WithPosition(60, -50, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -50, 0).AddToWorld(world);
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.10f, 0.05f, 0.3f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
