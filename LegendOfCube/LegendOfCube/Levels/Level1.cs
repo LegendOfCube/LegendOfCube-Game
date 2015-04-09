@@ -58,9 +58,9 @@ namespace LegendOfCube.Levels
 			//dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 			//	* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(43, -39, 0).AddToWorld(world);
 
-			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5, 5, 5)).WithPosition(45, -39, 20).AddToWorld(world);
-			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(45.5f, -33, 15).AddToWorld(world);
-			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(45.5f, -33, 25).AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5, 5, 5)).WithPosition(65, -39, 20).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 15).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 25).AddToWorld(world);
 
 
 			platformBuilder.Copy().WithPosition(60, -50, 0).AddToWorld(world);
