@@ -58,10 +58,7 @@ namespace LegendOfCube.Engine.Graphics
 			this.graphicsManager = graphicsDeviceManager;
 		}
 
-		// Public methods
-		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		public void Initialize()
+		public void LoadContent()
 		{
 			this.graphicsDevice = game.GraphicsDevice;
 			obbRenderer = new OBBRenderer(graphicsDevice);
@@ -85,10 +82,7 @@ namespace LegendOfCube.Engine.Graphics
 				VertexColorEnabled = false,
 				TextureEnabled = false,
 			};
-		}
 
-		public void LoadContent()
-		{
 			this.standardEffect = StandardEffect.LoadEffect(game.Content);
 		}
 

@@ -90,6 +90,7 @@
     <Compile Include="Levels\LevelConstants.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItem.cs" />
+    <Compile Include="Screens\MenuScreen.cs" />
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Engine\MenuInputSystem.cs" />

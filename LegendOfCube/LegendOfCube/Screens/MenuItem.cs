@@ -9,49 +9,35 @@ namespace LegendOfCube.Screens
 { 
 	class MenuItem
 	{
-		private string text;
-		private Vector2 pos;
-		private bool selected;
 
-		public MenuItem(string text)
+		public MenuItem(string text, Rectangle rectangle, Action onClick)
 		{
-			this.text = text;
-			selected = false;
+			Text = text;
+			Rectangle = rectangle;
+			Selected = false;
+			OnClick = onClick;
 		}
 
-		public string Text
-		{
-			set {text = value;}
-			get {return text;}
-		}
+		public string Text { get; private set; }
 
-		public Vector2 Position
-		{
-			set {pos = value;}
-			get {return pos;}
-		}
+		public Rectangle Rectangle { get; private set; }
 
-		public bool Selected
-		{
-			set { selected = value; }
-			get { return selected; }
-		}
-
-		public void Update()
-		{
-
-		}
+		public bool Selected { get; set; }
+		public Action OnClick { get; private set; }
 
 		public void Draw(SpriteBatch spriteBatch, SpriteFont font)
 		{
-			Color color = selected ? Color.DarkOrange : Color.Black;
-			spriteBatch.DrawString(font, text, pos, color);
+			Color shadowColor = Color.Black;
+			Color color = Selected ? Color.DarkOrange : Color.White;
+			spriteBatch.DrawString(font, Text, new Vector2(Rectangle.Left + 1, Rectangle.Top + 1), shadowColor);
+			spriteBatch.DrawString(font, Text, new Vector2(Rectangle.Left, Rectangle.Top), color);
 		}
 
-		public void loadContent()
+		public void LoadContent()
 		{
 
 		}
 
 	}
+
 }

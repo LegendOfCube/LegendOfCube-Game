@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using LegendOfCube.Engine;
+using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Screens
 {
 	class LevelSelectScreen : Screen
 	{
-		protected internal override void Update(Microsoft.Xna.Framework.GameTime gameTime, ScreenSystem switcher)
+		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) {}
+
+		internal override void Update(GameTime gameTime)
 		{
 			throw new NotImplementedException();
 		}
 
-		protected internal override void Draw(Microsoft.Xna.Framework.GameTime gameTime, Engine.Graphics.RenderSystem renderSystem)
+		internal override void Draw(GameTime gameTime)
 		{
 			throw new NotImplementedException();
 		}
