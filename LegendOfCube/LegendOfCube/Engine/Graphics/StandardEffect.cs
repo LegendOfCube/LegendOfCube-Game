@@ -28,6 +28,7 @@ namespace LegendOfCube.Engine.Graphics
 		// Lights
 		private readonly EffectParameter dirLight0ViewSpaceDirParam;
 		private readonly EffectParameter dirLight0ColorParam;
+		private readonly EffectParameter applyShadowsParam;
 		private readonly EffectParameter dirLight0ShadowMatrix0Param;
 		private readonly EffectParameter dirLight0ShadowMatrix1Param;
 
@@ -73,6 +74,7 @@ namespace LegendOfCube.Engine.Graphics
 			// Lights
 			this.dirLight0ViewSpaceDirParam = effect.Parameters["DirLight0ViewSpaceDir"];
 			this.dirLight0ColorParam = effect.Parameters["DirLight0Color"];
+			this.applyShadowsParam = effect.Parameters["ApplyShadows"];
 			this.dirLight0ShadowMatrix0Param = effect.Parameters["DirLight0ShadowMatrix0"];
 			this.dirLight0ShadowMatrix1Param = effect.Parameters["DirLight0ShadowMatrix1"];
 
@@ -147,6 +149,11 @@ namespace LegendOfCube.Engine.Graphics
 			pointLight0ViewSpacePosParam.SetValue(Vector3.Transform(position, view));
 			pointLight0ReachParam.SetValue(reach);
 			pointLight0ColorParam.SetValue(lightColor);
+		}
+
+		public void SetApplyShadows(bool applyShadows)
+		{
+			applyShadowsParam.SetValue(applyShadows);
 		}
 
 		public void SetDirLight0ShadowMap0(Texture shadowMap)

@@ -13,6 +13,7 @@ float4x4 NormalMatrix;
 // Light properties for diffuse and specular illumination
 float3 DirLight0ViewSpaceDir;
 float4 DirLight0Color = WHITE_COLOR;
+bool ApplyShadows;
 float4x4 DirLight0ShadowMatrix0;
 float4x4 DirLight0ShadowMatrix1;
 
@@ -186,43 +187,45 @@ float4 CalculateDirLightContribution(
 
 	// Default to objects being lit, might want to do opposite if scene is dark
 	float visibility = 1.0;
+	if (ApplyShadows) {
 
-	// Sample shadow map if inside
-	// (setting border color on sampler seems to be deprecated)
-	float shadowLookupMin = PCF_SPACING;
-	float shadowLookupMax = 1.0 - PCF_SPACING;
+		// Sample shadow map if inside
+		// (setting border color on sampler seems to be deprecated)
+		float shadowLookupMin = PCF_SPACING;
+		float shadowLookupMax = 1.0 - PCF_SPACING;
 
-	if (shadowMapCoord0.x >= shadowLookupMin && shadowMapCoord0.x <= shadowLookupMax &&
-	    shadowMapCoord0.y >= shadowLookupMin && shadowMapCoord0.y <= shadowLookupMax)
-	{
-		visibility = 0.0;
-		// Sample 9 points around actual coordinate, 3x3 grid
-		for (int x = -1; x <= 1; x++)
-		{
-			for (int y = -1; y <= 1; y++)
-			{
-				float2 offset = PCF_SPACING * float2(x, y);
-				float shadowMapDepth = tex2D(ShadowMapSampler0, shadowMapCoord0 + offset).x;
-				float lightSpaceDepth = lightSpacePos0.z / lightSpacePos0.w;
-				float sampleContribution = 1.0 / 9.0;
-				visibility += ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? sampleContribution : 0.0;
-			}
-		}
-	}
-	else
-	{
-		// Check if fragment is covered by the less detailed shadow map
-		float2 shadowMapCoord1 = 0.5 * lightSpacePos1.xy / lightSpacePos1.w + float2(0.5, 0.5);
-			shadowMapCoord1.y = 1.0 - shadowMapCoord1.y;
-
-		if (shadowMapCoord1.x >= shadowLookupMin && shadowMapCoord1.x <= shadowLookupMax &&
-			shadowMapCoord1.y >= shadowLookupMin && shadowMapCoord1.y <= shadowLookupMax)
+		if (shadowMapCoord0.x >= shadowLookupMin && shadowMapCoord0.x <= shadowLookupMax &&
+			shadowMapCoord0.y >= shadowLookupMin && shadowMapCoord0.y <= shadowLookupMax)
 		{
 			visibility = 0.0;
-			float shadowMapDepth = tex2D(ShadowMapSampler1, shadowMapCoord1).x;
-			float lightSpaceDepth = lightSpacePos1.z / lightSpacePos1.w;
-			visibility = ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? 1.0 : 0.0;
+			// Sample 9 points around actual coordinate, 3x3 grid
+			for (int x = -1; x <= 1; x++)
+			{
+				for (int y = -1; y <= 1; y++)
+				{
+					float2 offset = PCF_SPACING * float2(x, y);
+					float shadowMapDepth = tex2D(ShadowMapSampler0, shadowMapCoord0 + offset).x;
+					float lightSpaceDepth = lightSpacePos0.z / lightSpacePos0.w;
+					float sampleContribution = 1.0 / 9.0;
+					visibility += ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? sampleContribution : 0.0;
+				}
+			}
 		}
+		else
+		{
+			// Check if fragment is covered by the less detailed shadow map
+			float2 shadowMapCoord1 = 0.5 * lightSpacePos1.xy / lightSpacePos1.w + float2(0.5, 0.5);
+			shadowMapCoord1.y = 1.0 - shadowMapCoord1.y;
+
+			if (shadowMapCoord1.x >= shadowLookupMin && shadowMapCoord1.x <= shadowLookupMax &&
+				shadowMapCoord1.y >= shadowLookupMin && shadowMapCoord1.y <= shadowLookupMax)
+			{
+				float shadowMapDepth = tex2D(ShadowMapSampler1, shadowMapCoord1).x;
+				float lightSpaceDepth = lightSpacePos1.z / lightSpacePos1.w;
+				visibility = ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? 1.0 : 0.0;
+			}
+		}
+
 	}
 	return visibility * CalculateLightContribution(normal, normalize(-lightDir), directionToEye, lightColor, diffuseColor, specularColor);
 }
