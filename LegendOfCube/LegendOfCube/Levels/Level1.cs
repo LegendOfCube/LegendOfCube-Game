@@ -51,7 +51,8 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(30, -43, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(30, -43, 0).AddToWorld(world);
 
-			platformBuilder.Copy().WithPosition(55, -37, 0).AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1)
+				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(55, -37, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(55, -37, 0).AddToWorld(world);
 
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(65, -39, 20).AddToWorld(world);
@@ -68,9 +69,6 @@ namespace LegendOfCube.Levels
 			//Wall jump to hanging platform
 			platformBuilder.Copy().WithPosition(60, -34.9f, 88).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -34.9f, 88).AddToWorld(world);
-
-			//brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
-			//	* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -29.9f, 92).AddToWorld(world);
 
 			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 4, 2)
 				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(64.5f, -34.9f, 88).AddToWorld(world);
@@ -94,9 +92,16 @@ namespace LegendOfCube.Levels
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 25).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
-			hangingPlatformBuilder.Copy().WithPosition(-5, -22, 0).AddToWorld(world);
-			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2)).WithPosition(0.5f, -22, 0).AddToWorld(world);
-			platformBuilder.Copy().WithPosition(5, -14, 0).AddToWorld(world);
+			
+			hangingPlatformBuilder.Copy().WithPosition(0, -22, 0).AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2)).WithPosition(5.5f, -22, 0).AddToWorld(world);
+			platformBuilder.Copy().WithPosition(10, -14, 0).AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) 
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(10, -14, 4.5f).AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1) 
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(10, -6, 9).AddToWorld(world);
+
+			hangingPlatformBuilder.Copy().WithPosition(35, 0, 12).AddToWorld(world);
 
 			/*dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(4, 4, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(58, -40, 45).AddToWorld(world);
