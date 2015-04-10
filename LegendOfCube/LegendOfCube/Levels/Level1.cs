@@ -84,7 +84,7 @@ namespace LegendOfCube.Levels
 			hangingPlatformBuilder.Copy().WithPosition(-45, -27, 88).AddToWorld(world);
 
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 65).AddToWorld(world);
-			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -27, 45).AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5) * Matrix.CreateRotationX(MathHelper.ToRadians(180))).WithPosition(-45, -14, 45).AddToWorld(world);
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 25).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(-45, -27, 0).AddToWorld(world);
