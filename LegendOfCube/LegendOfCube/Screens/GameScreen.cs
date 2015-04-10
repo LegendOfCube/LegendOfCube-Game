@@ -109,7 +109,7 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-			int hardCodedLevelIndex = 2;
+			int hardCodedLevelIndex = 0;
 			World = LevelConstants.LEVELS[hardCodedLevelIndex].CreateWorld(Game, contentCollection);
 			
 
