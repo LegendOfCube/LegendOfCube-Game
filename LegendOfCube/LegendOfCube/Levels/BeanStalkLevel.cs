@@ -5,9 +5,11 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Levels
 {
-	class BeanStalkLevelFactory : ILevelFactory
+	class BeanStalkLevel : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public BeanStalkLevel() : base("Bean Stalk Level") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000) { SpawnPoint = new Vector3(0, 0, 0) };
 			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
