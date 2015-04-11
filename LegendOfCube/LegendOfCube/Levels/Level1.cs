@@ -62,10 +62,14 @@ namespace LegendOfCube.Levels
 			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 25).AddToWorld(world);
 
 			// Ducts
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -49, 20).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -49, 25).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -49, 30).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(60, -46.5f, 31.25f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 13).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 18).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 23).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 28).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 33).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(60, -42.5f, 34.25f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(65, -42.5f, 34.25f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(70, -42.5f, 34.25f).AddToWorld(world);
 
 			platformBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
@@ -107,7 +111,7 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(10, -14, 0).AddToWorld(world);
 			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) 
 				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(10, -14, 4.5f).AddToWorld(world);
-			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1) 
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(1) 
 				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(10, -6, 9).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(35, 0, 12).AddToWorld(world);

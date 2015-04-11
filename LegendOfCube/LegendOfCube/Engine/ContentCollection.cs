@@ -260,7 +260,8 @@ namespace LegendOfCube.Engine
 					DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
 					NormalTexture = cm.Load<Texture>("Models/Platform/pipe_normal"),
 					SpecularColor = Color.Gray.ToVector4()
-				}
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, -39, 0), 4.5f, 77, 4.5f)
 			};
 
 			DeathDuct = new ModelData
