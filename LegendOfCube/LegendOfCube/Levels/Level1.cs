@@ -113,6 +113,10 @@ namespace LegendOfCube.Levels
 				.WithPosition(-45, -14, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5) * Matrix.CreateRotationX(MathHelper.ToRadians(180)))
 				.WithPosition(-44.99f, -14, 45).AddToWorld(world);
+
+			trussBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-68.5f, -29.3f, 40).AddToWorld(world);
+			trussBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-68.5f, -29.3f, 50).AddToWorld(world);
+			
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 25).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
