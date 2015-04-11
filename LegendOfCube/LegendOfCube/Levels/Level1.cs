@@ -40,6 +40,7 @@ namespace LegendOfCube.Levels
 			var groundWoodBuilder = new EntityBuilder().WithModelData(contentCollection.GroundWood);
 			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
 			var ductBuilder = new EntityBuilder().WithModelData(contentCollection.Duct);
+			var trussBuilder = new EntityBuilder().WithModelData(contentCollection.Truss);
 
 			world.Player = playerBuilder.AddToWorld(world);
 
@@ -52,6 +53,8 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(30, -43, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(30, -43, 0).AddToWorld(world);
 
+			trussBuilder.Copy().WithPosition(25, -43, 0).AddToWorld(world);
+
 			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1)
 				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(55, -37, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(55, -37, 0).AddToWorld(world);
@@ -62,14 +65,18 @@ namespace LegendOfCube.Levels
 			pillarBuilder.Copy().WithTransform(Matrix.CreateScale(1) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(65.5f, -33, 25).AddToWorld(world);
 
 			// Ducts
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 13).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 18).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 23).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 28).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(60, -45, 33).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(60, -42.5f, 34.25f).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(65, -42.5f, 34.25f).AddToWorld(world);
-			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(70, -42.5f, 34.25f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(71, -55, 11.75f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(66, -55, 11.75f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(61, -55, 11.75f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(61, -50, 11.75f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(61, -45, 13).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(61, -45, 18).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(61, -45, 23).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(61, -45, 28).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.25f, 0.5f)).WithPosition(61, -45, 33).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(61, -42.5f, 34.25f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(66, -42.5f, 34.25f).AddToWorld(world);
+			ductBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.25f)).WithPosition(71, -42.5f, 34.25f).AddToWorld(world);
 
 			platformBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);

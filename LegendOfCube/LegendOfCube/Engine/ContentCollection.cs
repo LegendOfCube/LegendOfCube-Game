@@ -29,7 +29,7 @@ namespace LegendOfCube.Engine
 		public ModelData MovingPartsSign { get; private set; }
 		public ModelData HangingPlatform { get; private set; }
 		public ModelData Manhole { get; private set; }
-		public ModelData RoofSupport { get; private set; }
+		public ModelData Truss { get; private set; }
 		public ModelData GroundConcrete { get; private set; }
 		public ModelData GroundAsphalt { get; private set; }
 		public ModelData GroundWood { get; private set; }
@@ -57,7 +57,7 @@ namespace LegendOfCube.Engine
 		public Model MovingPartsSignModel { get; private set; }
 		public Model HangingPlatformModel { get; private set; }
 		public Model ManholeModel { get; private set; }
-		public Model RoofSupportModel { get; private set; }
+		public Model TrussModel { get; private set; }
 		public Model Ground50x50 { get; private set; }
 		public Model Ground100x50 { get; private set; }
 		public Model SignModel { get; private set; }
@@ -82,7 +82,7 @@ namespace LegendOfCube.Engine
 			MovingPartsSignModel = cm.Load<Model>("Models/Sign_Moving/moving_parts");
 			HangingPlatformModel = cm.Load<Model>("Models/Hanging_Platform/hanging_platform");
 			ManholeModel = cm.Load<Model>("Models/Manhole/manhole");
-			RoofSupportModel = cm.Load<Model>("Models/Roof_Beam/roof_beam");
+			TrussModel = cm.Load<Model>("Models/Roof_Beam/roof_beam");
 			SignModel = cm.Load<Model>("Models/Signs/sign");
 			Ground50x50 = cm.Load<Model>("Models/Ground/ground_50x50");
 			BrickWallWindowModel = cm.Load<Model>("Models/Brick_Wall/brick_wall_window_no_bars");
@@ -331,9 +331,16 @@ namespace LegendOfCube.Engine
 				}
 			};
 
-			RoofSupport = new ModelData
+			Truss = new ModelData
 			{
-				Model = RoofSupportModel
+				Model = TrussModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseColor = Color.DarkRed.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Manhole/rusted-manhole-n"),
+					SpecularColor = Color.Gray.ToVector4()
+				},
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 50, 2, 0.5f)
 			};
 
 			GroundConcrete = new ModelData
