@@ -96,9 +96,15 @@ namespace LegendOfCube.Levels
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(40, -27, 89).AddToWorld(world);
 			dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(40, -27, 87).AddToWorld(world);
+			
+			hangingPlatformBuilder.Copy().WithPosition(21.5f, -21.5f, 88).AddToWorld(world);
+			
 			hangingPlatformBuilder.Copy().WithPosition(0, -27, 88).AddToWorld(world);
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(90))).WithPosition(-3, -27, 88).AddToWorld(world);
+			
+			hangingPlatformBuilder.Copy().WithPosition(-22.5f, -21.5f, 88).AddToWorld(world);
+			
 			hangingPlatformBuilder.Copy().WithPosition(-45, -27, 88).AddToWorld(world);
 
 			//Wall jump x3
