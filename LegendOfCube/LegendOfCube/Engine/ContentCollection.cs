@@ -340,7 +340,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Manhole/rusted-manhole-n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(Vector3.Zero, 50, 2, 0.5f)
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 1.4f, 0), 0.5f, 2.8f, 50)
 			};
 
 			GroundConcrete = new ModelData
