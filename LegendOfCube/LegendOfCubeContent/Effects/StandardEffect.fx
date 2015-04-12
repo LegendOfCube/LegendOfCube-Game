@@ -257,7 +257,7 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos0, float4 
 		diffuseColor *= tex2D(DiffuseTextureSampler, textureCoordinate);
 	}
 	float4 specularColor = MaterialSpecularColor;
-	if (UseSpecularTexture);
+	if (UseSpecularTexture)
 	{
 		specularColor *= tex2D(SpecularTextureSampler, textureCoordinate);
 	}
@@ -268,7 +268,6 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos0, float4 
 	}
 
 	float3 directionToEye = normalize(-viewSpacePos);
-
 	// Calculate light contribution
 	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos0, lightSpacePos1, DirLight0ViewSpaceDir, DirLight0ShadowMatrix0, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
 	float4 pointLight0Contribution = CalculatePointLightContribution(viewSpacePos, PointLight0ViewSpacePos, PointLight0Reach, normal, directionToEye, PointLight0Color, diffuseColor, specularColor);
