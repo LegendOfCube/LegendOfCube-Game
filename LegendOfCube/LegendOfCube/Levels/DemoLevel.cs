@@ -10,8 +10,6 @@ namespace LegendOfCube.Levels
 {
 	class DemoLevel : ILevelFactory
 	{
-		private static Entity playerEntity;
-
 		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
@@ -39,6 +37,24 @@ namespace LegendOfCube.Levels
 			var deathDuctFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
 			var cube10Model = game.Content.Load<Model>("Models/Duct/cube10");
 			var movingPartsSignModel = game.Content.Load<Model>("Models/Sign_Moving/moving_parts");
+
+			//Builders form Level1
+			var platformBuilder = new EntityBuilder().WithModelData(contentCollection.RustPlatform);
+			var brickWallBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWall);
+			var brickWallWindowBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallWindow);
+			var brickWallArrowsHBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallArrowsHorizontal);
+			var brickWallArrowsVBuilder = new EntityBuilder().WithModelData(contentCollection.BrickWallArrowsVertical);
+			var windowBarsBuilder = new EntityBuilder().WithModelData(contentCollection.WindowBars);
+			var groundConcreteBuilder = new EntityBuilder().WithModelData(contentCollection.GroundConcrete);
+			var hangingPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.HangingPlatform);
+			var dropSignBuilder = new EntityBuilder().WithModelData(contentCollection.DropSign);
+			var arrowDownBuilder = new EntityBuilder().WithModelData(contentCollection.SignArrowUp);
+			var pillarBuilder = new EntityBuilder().WithModelData(contentCollection.Pillar);
+			var groundStoneBuilder = new EntityBuilder().WithModelData(contentCollection.GroundStone);
+			var groundWoodBuilder = new EntityBuilder().WithModelData(contentCollection.GroundWood);
+			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
+			var ductBuilder = new EntityBuilder().WithModelData(contentCollection.Duct);
+			var trussBuilder = new EntityBuilder().WithModelData(contentCollection.Truss);
 
 			var playerEffect = new StandardEffectParams
 			{
@@ -187,18 +203,15 @@ namespace LegendOfCube.Levels
 				//SpecularColor = Color.Purple.ToVector4()
 			};
 
-			playerEntity =
-				new EntityBuilder().WithModel(cubeModel)
-					.WithPosition(world.SpawnPoint)
-					.WithVelocity(Vector3.Zero, 20)
-					.WithAcceleration(Vector3.Zero)
-					.WithStandardEffectParams(playerEffect)
-					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
-						new Vector3(1, 1, 1)))
-					.WithAdditionalProperties(new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
-					.AddToWorld(world);
+			var playerBuilder = new EntityBuilder()
+				.WithModelData(contentCollection.PlayerCube)
+				.WithPosition(world.SpawnPoint)
+				.WithVelocity(Vector3.Zero, 20)
+				.WithAcceleration(Vector3.Zero)
+				.WithAdditionalProperties(
+					new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG));
 
-			world.Player = playerEntity;
+			world.Player = playerBuilder.AddToWorld(world);
 
 			/***************BACKGROUND GEOMETRY************************/
 
@@ -293,73 +306,33 @@ namespace LegendOfCube.Levels
 			 */
 
 			// Starting platform
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(0, 0, 0))
-				.WithStandardEffectParams(stonePlatformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
-			new EntityBuilder().WithModel(pillarModel)
-				.WithPosition(new Vector3(0, 0, 0))
-				.WithStandardEffectParams(pillarEffect)
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(0, 0, 0)).AddToWorld(world);
+			pillarBuilder.WithPosition(new Vector3(0, 0, 0)).AddToWorld(world);
 
 			//DROP SIGN
-			new EntityBuilder().WithModel(dropSignModel)
-				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
-				.WithPosition(new Vector3(2, 0, 0))
-				.WithStandardEffectParams(dropSignEffect)
-				.AddToWorld(world);
+			dropSignBuilder.Copy().WithTransform(Matrix.CreateScale(5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
+				.WithPosition(new Vector3(2, 0, 0)).AddToWorld(world);
 
 			// Normal jump platform
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2, 1, 1))
-				.WithPosition(new Vector3(35, 0, 0))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
-			new EntityBuilder().WithModel(pillarModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(35, 0, 0))
-				.WithStandardEffectParams(pillarEffect)
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(2, 1, 1)).WithPosition(new Vector3(35, 0, 0)).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(new Vector3(35, 0, 0)).AddToWorld(world);
 
 			// Wall slide platform
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2, 1, 1))
-				.WithPosition(new Vector3(92, 0, 0))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
-			new EntityBuilder().WithModel(pillarModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(92, 0, 0))
-				.WithStandardEffectParams(pillarEffect)
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(2, 1, 1)).WithPosition(new Vector3(92, 0, 0)).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(new Vector3(92, 0, 0)).AddToWorld(world);
 
 			//First wallslide
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 7.5f, 10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(65, 0, -5.5f))
-				.WithStandardEffectParams(wallHorizontalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
-			new EntityBuilder().WithModel(pillarModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(55, 8, -5.5f))
-				.WithStandardEffectParams(pillarEffect)
-				.AddToWorld(world);
-			new EntityBuilder().WithModel(pillarModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(70, 8, -5.5f))
-				.WithStandardEffectParams(pillarEffect)
-				.AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(2, 7.5f, 10) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(65, 0, -5.5f)).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(55, 8, -5.5f)).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(70, 8, -5.5f)).AddToWorld(world);
 
-			//Signs on wall
+			//Signs on platform
 			new EntityBuilder().WithModel(movingPartsSignModel)
 				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
-				.WithPosition(new Vector3(87, 0, 0))
-				.WithStandardEffectParams(movingSignEffect)
-				.AddToWorld(world);
+				.WithPosition(new Vector3(87, 0, 0)).WithStandardEffectParams(movingSignEffect).AddToWorld(world);
 			
 			//Wall high jump (DEATH)
 			new EntityBuilder().WithModel(deathDuctModel)
