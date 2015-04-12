@@ -145,8 +145,8 @@ namespace LegendOfCube.Levels
 			hangingPlatformBuilder.Copy().WithPosition(38, 0, 12).AddToWorld(world);
 
 			new EntityBuilder()
-				.WithTransform(Matrix.CreateScale(8, 0.1f, 8))
-				.WithPosition(38, 0.5f, 12)
+				.WithTransform(Matrix.CreateScale(9.8f, 0.1f, 9.8f))
+				.WithPosition(38, 0.001f, 12)
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
