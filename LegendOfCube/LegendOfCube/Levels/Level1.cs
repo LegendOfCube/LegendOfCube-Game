@@ -132,15 +132,24 @@ namespace LegendOfCube.Levels
 
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
 			
-			//2 story climb
-			hangingPlatformBuilder.Copy().WithPosition(0, -22, 0).AddToWorld(world);
-			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2)).WithPosition(5.5f, -22, 0).AddToWorld(world);
-			platformBuilder.Copy().WithPosition(10, -14, 0).AddToWorld(world);
-			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) 
-				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(10, -14, 4.5f).AddToWorld(world);
-			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(10, -6, 9).AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithPosition(-15, -28, 0).AddToWorld(world);
 
-			hangingPlatformBuilder.Copy().WithPosition(35, 0, 12).AddToWorld(world);
+			//2 story climb
+			hangingPlatformBuilder.Copy().WithPosition(3, -22, 0).AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2)).WithPosition(8.5f, -22, 0).AddToWorld(world);
+			platformBuilder.Copy().WithPosition(13, -14, 0).AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 3, 2) 
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(13, -14, 4.5f).AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(13, -6, 9).AddToWorld(world);
+
+			hangingPlatformBuilder.Copy().WithPosition(38, 0, 12).AddToWorld(world);
+
+			new EntityBuilder()
+				.WithTransform(Matrix.CreateScale(8, 0.1f, 8))
+				.WithPosition(38, 0.5f, 12)
+				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
+				.AddToWorld(world);
 
 			//Falling death
 			new EntityBuilder()
