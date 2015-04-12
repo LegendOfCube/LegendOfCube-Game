@@ -135,7 +135,6 @@ namespace LegendOfCube.Levels
 			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 25).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
-			
 			hangingPlatformBuilder.Copy().WithPosition(-15, -28, 0).AddToWorld(world);
 
 			//2 story climb
@@ -156,6 +155,11 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
 			*/
+
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f)).WithPosition(85, -14.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73.5f, -28, 20.5f).AddToWorld(world);
+
 			//Falling death
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(1900))
@@ -163,6 +167,15 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
+
+
+			// TEST GEOMETRY
+			//groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(10) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+			//	* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-100, 20, 50).AddToWorld(world);
+
+
+
+
 
 			return world;
 		}
