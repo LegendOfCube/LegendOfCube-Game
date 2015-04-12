@@ -115,9 +115,14 @@ namespace LegendOfCube.Levels
 				.WithPosition(-44.99f, -14, 45).AddToWorld(world);
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 25).AddToWorld(world);
 
+			trussBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-71, -12, 40).AddToWorld(world);
+			trussBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-71, -12, 50).AddToWorld(world);
 			trussBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-71, -29.3f, 40).AddToWorld(world);
 			trussBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-71, -29.3f, 50).AddToWorld(world);
-				//Walls
+				//Surrounding Walls
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -14.5f, 65).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -14, 45).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -14.5f, 25).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -39.5f, 65).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -39, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -39.5f, 25).AddToWorld(world);
