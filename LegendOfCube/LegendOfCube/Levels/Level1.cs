@@ -44,7 +44,6 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
@@ -129,6 +128,11 @@ namespace LegendOfCube.Levels
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -52, 65).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -51.5f, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -52, 25).AddToWorld(world);
+				//Support Pipes
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -13, 65).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 65).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -13, 25).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 25).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
 			
@@ -144,13 +148,14 @@ namespace LegendOfCube.Levels
 
 			hangingPlatformBuilder.Copy().WithPosition(38, 0, 12).AddToWorld(world);
 
+			/*
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(9.8f, 0.1f, 9.8f))
 				.WithPosition(38, 0.001f, 12)
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
-
+			*/
 			//Falling death
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(1900))
