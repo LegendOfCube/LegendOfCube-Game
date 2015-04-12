@@ -29,7 +29,6 @@ namespace LegendOfCube.Engine
 		public readonly Properties[] EntityProperties;
 		public readonly Matrix[] Transforms; // TRANSFORM
 		public readonly Vector3[] Velocities; // VELOCITY
-		public readonly float[] MaxSpeed; // VELOCITY
 		public readonly Vector3[] Accelerations; // ACCELERATION
 		public readonly InputData[] InputData; // INPUT
 		public readonly OBB[] ModelSpaceBVs; // MODEL_SPACE_BV
@@ -56,9 +55,6 @@ namespace LegendOfCube.Engine
 		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
-		public readonly float AirMovement;
-		public readonly float StopTime;
-		public readonly float BaseJump;
 		public Vector3 CameraPosition;
 
 		public Vector3 LightDirection;
@@ -87,7 +83,6 @@ namespace LegendOfCube.Engine
 			Accelerations = new Vector3[MaxNumEntities];
 			Transforms = new Matrix[MaxNumEntities];
 			InputData = new InputData[MaxNumEntities];
-			MaxSpeed = new float[MaxNumEntities];
 			ModelSpaceBVs = new OBB[MaxNumEntities];
 			AIComponents = new AIComponent[MaxNumEntities];
 
@@ -95,7 +90,6 @@ namespace LegendOfCube.Engine
 			StandardEffectParams = new StandardEffectParams[MaxNumEntities];
 			for (UInt32 i = 0; i < MaxNumEntities; i++) {
 				Velocities[i] = Vector3.Zero;
-				MaxSpeed[i] = 0;
 				Accelerations[i] = Vector3.Zero;
 				Transforms[i] = Matrix.Identity;
 				InputData[i] = null;
@@ -116,9 +110,6 @@ namespace LegendOfCube.Engine
 			GameStats = new GameStats();
 
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
-			AirMovement = 0.4f;
-			StopTime = 0.05f;
-			BaseJump = 12f;
 			SpawnPoint = new Vector3(0, 25, 0);
 
 			LightDirection = new Vector3(0, -1, 0);
@@ -214,7 +205,6 @@ namespace LegendOfCube.Engine
 
 			// Clean-up components
 			Velocities[entityToDestroy.Id] = Vector3.Zero;
-			MaxSpeed[entityToDestroy.Id] = 0;
 			Accelerations[entityToDestroy.Id] = Vector3.Zero;
 			Transforms[entityToDestroy.Id] = Matrix.Identity;
 			InputData[entityToDestroy.Id] = null;

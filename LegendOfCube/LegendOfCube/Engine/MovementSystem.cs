@@ -12,6 +12,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Movement constants
+		private const float MAX_SPEED = 20.0f; //subject to change untill next meeting
 		private const float MOVEMENT_ACCELERATION = 40.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 15.0f;
 		private const float WALL_ANTI_GRAVITY_FACTOR_DOWN = 0.50f;
@@ -74,7 +75,7 @@ namespace LegendOfCube.Engine
 				// Calculate targetMovementVelocity
 				Vector2 inputDir = world.InputData[i].GetDirection();
 				Vector3 rotatedInputDir = Rotate2DDirectionRelativeCamera(world, ref inputDir);
-				if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * world.MaxSpeed[i];
+				if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * MAX_SPEED;
 				else if(world.PlayerCubeState.OnGround) targetMovementVelocity = Vector3.Zero;
 
 				// Move currentMovementVelocity towards target velocity
