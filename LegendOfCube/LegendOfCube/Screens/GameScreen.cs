@@ -111,7 +111,6 @@ namespace LegendOfCube.Screens
 		{
 			int hardCodedLevelIndex = 0;
 			World = LevelConstants.LEVELS[hardCodedLevelIndex].CreateWorld(Game, contentCollection);
-			
 
 			inputSystem = new InputSystem(Game);
 			movementSystem = new MovementSystem();

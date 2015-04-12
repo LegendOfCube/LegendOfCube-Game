@@ -190,7 +190,7 @@ namespace LegendOfCube.Levels
 			var playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(world.SpawnPoint)
-					.WithVelocity(Vector3.Zero, 20)
+					.WithVelocity(Vector3.Zero, 0)
 					.WithAcceleration(Vector3.Zero)
 					.WithStandardEffectParams(playerEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,
