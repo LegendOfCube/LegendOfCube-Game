@@ -75,7 +75,8 @@ namespace LegendOfCube.Engine
 				// Calculate targetMovementVelocity
 				Vector2 inputDir = world.InputData[i].GetDirection();
 				Vector3 rotatedInputDir = Rotate2DDirectionRelativeCamera(world, ref inputDir);
-				if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * MAX_SPEED;
+				if (inputDir.Length() > 0.05f && i == world.Player.Id) targetMovementVelocity = rotatedInputDir * MAX_SPEED;
+				else if (inputDir.Length() > 0.05f) targetMovementVelocity = rotatedInputDir * world.MaxSpeed[i];
 				else if(world.PlayerCubeState.OnGround) targetMovementVelocity = Vector3.Zero;
 
 				// Move currentMovementVelocity towards target velocity

@@ -30,7 +30,7 @@ namespace LegendOfCube.Levels
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithPosition(world.SpawnPoint)
-				.WithVelocity(Vector3.Zero)
+				.WithVelocity(Vector3.Zero, 0)
 				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT |

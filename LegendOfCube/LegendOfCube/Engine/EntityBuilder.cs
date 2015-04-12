@@ -14,6 +14,7 @@ namespace LegendOfCube.Engine
 		private Vector3 velocity;
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
+		private float maxSpeed;
 		private Model model;
 		private StandardEffectParams sep;
 		private OBB modelSpaceOBB;
@@ -85,10 +86,11 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		/// <param name="velocity">The initial velocity for the entity</param>
 		/// <returns>An instance of this, for chaining</returns>
-		public EntityBuilder WithVelocity(Vector3 velocity)
+		public EntityBuilder WithVelocity(Vector3 velocity, float maxSpeed)
 		{
 			properties.Add(Properties.VELOCITY);
 			this.velocity = velocity;
+			this.maxSpeed = maxSpeed;
 			return this;
 		}
 
@@ -173,6 +175,7 @@ namespace LegendOfCube.Engine
 			if (properties.Satisfies(Properties.VELOCITY))
 			{
 				world.Velocities[entity.Id] = velocity;
+				world.MaxSpeed[entity.Id] = maxSpeed;
 			}
 			if (properties.Satisfies(Properties.MODEL))
 			{
