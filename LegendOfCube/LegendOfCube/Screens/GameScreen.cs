@@ -112,10 +112,10 @@ namespace LegendOfCube.Screens
 
 			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
 			//World = new TestLevel1().CreateWorld(Game, contentCollection);
-			//World = new DemoLevel().CreateWorld(Game, contentCollection);
+			World = new DemoLevel().CreateWorld(Game, contentCollection);
 			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
 			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
-			World = new Level1().CreateWorld(Game, contentCollection);
+			//World = new Level1().CreateWorld(Game, contentCollection);
 
 			inputSystem = new InputSystem(Game);
 			movementSystem = new MovementSystem();
