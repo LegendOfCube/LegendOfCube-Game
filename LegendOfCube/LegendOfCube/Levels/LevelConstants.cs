@@ -13,6 +13,7 @@ namespace LegendOfCube.Levels
 		public static readonly Level TEST_LEVEL1 = new TestLevel1();
 		public static readonly Level WALL_CLIMB_LEVEL = new WallClimbLevel();
 		public static readonly Level BEAN_STALK_LEVEL = new BeanStalkLevel();
+		public static readonly Level LEVEL_13 = new Level13();
 
 		public static readonly Level[] LEVELS =
 		{
@@ -20,7 +21,8 @@ namespace LegendOfCube.Levels
 			CONCEPT_LEVEL,
 			TEST_LEVEL1,
 			WALL_CLIMB_LEVEL,
-			BEAN_STALK_LEVEL
+			BEAN_STALK_LEVEL,
+			LEVEL_13
 		};
 	}
 }
