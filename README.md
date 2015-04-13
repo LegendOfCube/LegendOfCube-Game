@@ -39,5 +39,9 @@ void Foo()
 - Due to problems with Visual Studio, it is ok to use tabs for additional indentation.
 - To use tabs by default in Visual Studio, enable "Keep tabs" in "Tools > Options... > Text Editor > C# > Tabs".
 
+## Distribution
+### Windows
+Installation on Windows is done through an installer program. See [separate repo](https://github.com/helmertz/legendofcube-installer-windows) for info about how to create one.
+
 ## License
 TBD
