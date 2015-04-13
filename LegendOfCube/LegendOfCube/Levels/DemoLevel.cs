@@ -26,17 +26,13 @@ namespace LegendOfCube.Levels
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");
 			var platformModel = game.Content.Load<Model>("Models/Platform/platform");
 			var wallModel = game.Content.Load<Model>("Models/Brick_Wall/brick_wall");
-			var dropSignModel = game.Content.Load<Model>("Models/Sign_Drop/danger_drop");
 			var catwalkStartModel = game.Content.Load<Model>("Models/Catwalk/catwalk_start_fix_2");
 			var catwalkMiddleModel = game.Content.Load<Model>("Models/Catwalk/catwalk_middle_fix_2");
 			var catwalkEndModel = game.Content.Load<Model>("Models/Catwalk/catwalk_end_fix_2");
 			var doorModel = game.Content.Load<Model>("Models/Door/door");
 			var exitSignModel = game.Content.Load<Model>("Models/Sign_Exit/exit_sign");
-			var pillarModel = game.Content.Load<Model>("Models/Platform/pillar");
-			var deathDuctModel = game.Content.Load<Model>("Models/Duct/deathcube");
 			var deathDuctFanModel = game.Content.Load<Model>("Models/Duct/deathcube_fan");
 			var cube10Model = game.Content.Load<Model>("Models/Duct/cube10");
-			var movingPartsSignModel = game.Content.Load<Model>("Models/Sign_Moving/moving_parts");
 
 			//Builders form Level1
 			var platformBuilder = new EntityBuilder().WithModelData(contentCollection.RustPlatform);
@@ -290,8 +286,8 @@ namespace LegendOfCube.Levels
 			ductBuilder.Copy().WithPosition(new Vector3(123, -25f, 0)).AddToWorld(world);
 
 			//Slidy slide
-			platformBuilder.Copy().WithTransform(Matrix.CreateScale(5, 1, 0.9999f) * Matrix.CreateRotationZ(MathHelper.ToRadians(-20)))
-				.WithPosition(new Vector3(151.5f, -3.57f, 0)).AddToWorld(world);
+			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f, 0.5f, 0.2f) * Matrix.CreateRotationZ(MathHelper.ToRadians(-20)))
+				.WithPosition(new Vector3(145.5f, -1.5f, 0)).AddToWorld(world);
 
 			//Wall jump puzzle
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
