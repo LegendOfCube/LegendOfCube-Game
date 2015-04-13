@@ -273,7 +273,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
-				Obb = OBB.CreateAxisAligned(Vector3.Zero, 10, 10, 10)
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 5, 0), 10, 10, 10)
 			};
 			Duct = new ModelData
 			{

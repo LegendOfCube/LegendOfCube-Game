@@ -48,6 +48,7 @@ namespace LegendOfCube.Levels
 			var groundConcreteBuilder = new EntityBuilder().WithModelData(contentCollection.GroundConcrete);
 			var hangingPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.HangingPlatform);
 			var dropSignBuilder = new EntityBuilder().WithModelData(contentCollection.DropSign);
+			var movingPartsBuilder = new EntityBuilder().WithModelData(contentCollection.MovingPartsSign);
 			var arrowDownBuilder = new EntityBuilder().WithModelData(contentCollection.SignArrowUp);
 			var pillarBuilder = new EntityBuilder().WithModelData(contentCollection.Pillar);
 			var groundStoneBuilder = new EntityBuilder().WithModelData(contentCollection.GroundStone);
@@ -55,14 +56,6 @@ namespace LegendOfCube.Levels
 			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
 			var ductBuilder = new EntityBuilder().WithModelData(contentCollection.Duct);
 			var trussBuilder = new EntityBuilder().WithModelData(contentCollection.Truss);
-
-			var playerEffect = new StandardEffectParams
-			{
-				DiffuseColor = new Vector4(new Vector3(0.3f), 1.0f),
-				EmissiveTexture = game.Content.Load<Texture>("Models/Cube/cube_emissive"),
-				SpecularColor = Color.Gray.ToVector4(),
-				EmissiveColor = Color.White.ToVector4()
-			};
 
 			var deathCubeEffect = new StandardEffectParams
 			{
@@ -82,26 +75,6 @@ namespace LegendOfCube.Levels
 			var blackEffect = new StandardEffectParams
 			{
 				DiffuseColor = new Vector4(new Vector3(0), 0),
-				SpecularColor = Color.Gray.ToVector4()
-			};
-
-			var pillarEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/metal_rust_tex_01"),
-				NormalTexture = game.Content.Load<Texture>("Models/Platform/pipe_normal"),
-				SpecularColor = Color.Gray.ToVector4()
-			};
-
-			var stonePlatformEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Paved_Stone/paved_n"),
-				SpecularColor = Color.Gray.ToVector4()
-			};
-
-			var dropSignEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Drop/danger_drop_d"),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
@@ -125,18 +98,6 @@ namespace LegendOfCube.Levels
 				EmissiveColor = Color.White.ToVector4()
 			};
 
-			var movingSignEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Sign_Moving/moving_parts_d"),
-				SpecularColor = Color.Gray.ToVector4()
-			};
-
-			var ductEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Duct/duct_n"),
-				SpecularColor = Color.Gray.ToVector4()
-			};
 			var ductFanEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Duct/duct_d"),
@@ -150,31 +111,10 @@ namespace LegendOfCube.Levels
 				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 			};
 
-			var wallHorizontalEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
-				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
-			};
-
-			var wallVerticalEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
-				SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
-			};
-
-			var wallDeathEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
-				DiffuseColor = Color.DarkRed.ToVector4()
-			};
-
 			var bounceEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
+				NormalTexture = game.Content.Load<Texture>("Models/Platform/platform-normal"),
 				DiffuseColor = Color.Yellow.ToVector4(),
 				SpecularColor = Color.Gray.ToVector4()
 			};
@@ -182,16 +122,8 @@ namespace LegendOfCube.Levels
 			var platformCheckpointEffect = new StandardEffectParams
 			{
 				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
+				NormalTexture = game.Content.Load<Texture>("Models/Platform/platform-normal"),
 				DiffuseColor = Color.DarkTurquoise.ToVector4(),
-				SpecularColor = Color.Gray.ToVector4()
-			};
-
-			var platformDeathEffect = new StandardEffectParams
-			{
-				DiffuseTexture = game.Content.Load<Texture>("Models/Platform/rusted metal-d"),
-				NormalTexture = game.Content.Load<Texture>("Models/Platform/rust_normal_sharp"),
-				DiffuseColor = Color.Red.ToVector4(),
 				SpecularColor = Color.Gray.ToVector4()
 			};
 
@@ -330,16 +262,13 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(70, 8, -5.5f)).AddToWorld(world);
 
 			//Signs on platform
-			new EntityBuilder().WithModel(movingPartsSignModel)
-				.WithTransform(Matrix.CreateScale(5, 5, 5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
-				.WithPosition(new Vector3(87, 0, 0)).WithStandardEffectParams(movingSignEffect).AddToWorld(world);
+			movingPartsBuilder.Copy().WithTransform(Matrix.CreateScale(5) * Matrix.CreateRotationY(MathHelper.ToRadians(90)) * Matrix.CreateRotationZ(MathHelper.ToRadians(-90)))
+				.WithPosition(new Vector3(87, 0, 0)).AddToWorld(world);
 			
 			//Wall high jump (DEATH)
-			new EntityBuilder().WithModel(deathDuctModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+			new EntityBuilder().WithModelData(contentCollection.DeathDuct)
+				.WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(123, -5f, 0))
-				.WithStandardEffectParams(ductEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
 				.AddToWorld(world);
 			//BLACK HACK
 			new EntityBuilder().WithModel(cube10Model)
@@ -349,7 +278,7 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 			//THE FAN
 			new EntityBuilder().WithModel(deathDuctFanModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 1) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(new Vector3(123, -5f, 0))
 				.WithStandardEffectParams(ductFanEffect)
 				.WithBoundingVolume(new OBB(new Vector3(0, 5, -5), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(7, 7, 0.5f)))
@@ -357,228 +286,106 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			//DUCT PILLAR
-			new EntityBuilder().WithModel(cube10Model)
-				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(123, -15f, 0))
-				.WithStandardEffectParams(ductEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
-				.AddToWorld(world);
-			new EntityBuilder().WithModel(cube10Model)
-				.WithTransform(Matrix.CreateScale(1, 1, 1))
-				.WithPosition(new Vector3(123, -25f, 0))
-				.WithStandardEffectParams(ductEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 5, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 10, 10)))
-				.AddToWorld(world);
+			ductBuilder.Copy().WithPosition(new Vector3(123, -15f, 0)).AddToWorld(world);
+			ductBuilder.Copy().WithPosition(new Vector3(123, -25f, 0)).AddToWorld(world);
 
 			//Slidy slide
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(5, 1, 0.9999f) * Matrix.CreateRotationZ(MathHelper.ToRadians(-20)))
-				.WithPosition(new Vector3(151.5f, -3.57f, 0))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(5, 1, 0.9999f) * Matrix.CreateRotationZ(MathHelper.ToRadians(-20)))
+				.WithPosition(new Vector3(151.5f, -3.57f, 0)).AddToWorld(world);
 
 			//Wall jump puzzle
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(210, -10, -7.5f))
-				.WithStandardEffectParams(wallHorizontalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(210, -10, -7.5f)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(240, 5, 7.5f))
-				.WithStandardEffectParams(wallHorizontalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(240, 5, 7.5f)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(270, -10, -7.5f))
-				.WithStandardEffectParams(wallHorizontalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsHBuilder.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(270, -10, -7.5f)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2))
-				.WithPosition(new Vector3(300, -10, 0))
-				.WithStandardEffectParams(platformCheckpointEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(2))
+				.WithPosition(new Vector3(300, -10, 0)).WithStandardEffectParams(platformCheckpointEffect)
+				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG)).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(300, -10, 0).AddToWorld(world);
 
 			//Climbpuzzle
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(0.75f))
-				.WithPosition(new Vector3(335f, -15, 5))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f))
+				.WithPosition(new Vector3(335f, -15, 5)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(0.75f))
-				.WithPosition(new Vector3(350f, -10, 0))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f))
+				.WithPosition(new Vector3(350f, -10, 0)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(0.75f))
-				.WithPosition(new Vector3(360f, -5, 10f))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f))
+				.WithPosition(new Vector3(360f, -5, 10f)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(0.75f))
-				.WithPosition(new Vector3(375, -0, 25))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f))
+				.WithPosition(new Vector3(375, -0, 25)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(0.75f))
-				.WithPosition(new Vector3(400, -5, 45))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f))
+				.WithPosition(new Vector3(400, -5, 45)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(1, 1, 2))
-				.WithPosition(new Vector3(425, 0, 65))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 2))
+				.WithPosition(new Vector3(425, 0, 65)).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(new Vector3(425, 0, 65)).AddToWorld(world);
 
 			//Wall climb
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 5, 2))
-				.WithPosition(new Vector3(430, -2, 70))
-				.WithStandardEffectParams(wallVerticalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 5, 2))
+				.WithPosition(new Vector3(430, -2, 70)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(425, 3, 75))
-				.WithStandardEffectParams(wallVerticalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(425, 3, 75)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 5, 2))
-				.WithPosition(new Vector3(420, 8, 70))
-				.WithStandardEffectParams(wallVerticalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 5, 2))
+				.WithPosition(new Vector3(420, 8, 70)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(425, 12, 65))
-				.WithStandardEffectParams(wallVerticalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 5, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(425, 12, 65)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(wallModel)
-				.WithTransform(Matrix.CreateScale(2, 5, 2))
-				.WithPosition(new Vector3(430, 17, 70))
-				.WithStandardEffectParams(wallVerticalEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, 1.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(0.5f, 2.5f, 5)))
-				.AddToWorld(world);
+			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 5, 2))
+				.WithPosition(new Vector3(430, 17, 70)).AddToWorld(world);
 
 			//Teleport!!
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(425, 25, 80))
-				.WithStandardEffectParams(platformTeleportEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(425, 25, 80)).WithStandardEffectParams(platformTeleportEffect)
+				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(-100, 10, 0))
-				.WithStandardEffectParams(platformTeleportEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(-100, 10, 0)).WithStandardEffectParams(platformTeleportEffect)
+				.WithAdditionalProperties(new Properties(Properties.TELEPORT_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithTransform(Matrix.CreateScale(2))
-				.WithPosition(new Vector3(-100, 0, 20))
-				.WithStandardEffectParams(platformCheckpointEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(2))
+				.WithPosition(new Vector3(-100, 0, 20)).WithStandardEffectParams(platformCheckpointEffect)
+				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG)).AddToWorld(world);
 
 			//Bounce puzzle
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-100, 0, 60))
-				.WithStandardEffectParams(bounceEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-100, 0, 60)).WithStandardEffectParams(bounceEffect)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-100, 0, 85))
-				.WithStandardEffectParams(bounceEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-100, 0, 85)).WithStandardEffectParams(bounceEffect)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-100, 0, 115))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-100, 0, 115)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-90, -10, 150))
-				.WithStandardEffectParams(bounceEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithVelocity(Vector3.UnitX * -5, 0)
-				.WithAI(new [] { new Vector3(-90, -10, 150), new Vector3(-110, -10, 150) }, true)
-				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-90, -10, 150)).WithStandardEffectParams(bounceEffect)
+				.WithVelocity(Vector3.UnitX * -5, 0).WithAI(new [] { new Vector3(-90, -10, 150), new Vector3(-110, -10, 150) }, true)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-100, 0, 185))
-				.WithStandardEffectParams(platformEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-100, 0, 185)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-150, -30, 185))
-				.WithStandardEffectParams(bounceEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-150, -30, 185)).WithStandardEffectParams(bounceEffect)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-190, 0, 185))
-				.WithStandardEffectParams(platformCheckpointEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-190, 0, 185)).WithStandardEffectParams(platformCheckpointEffect)
+				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-180, -10, 155))
-				.WithStandardEffectParams(bounceEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithVelocity(Vector3.UnitX * -5, 0)
-				.WithAI(new[] { new Vector3(-180, -10, 150), new Vector3(-200, -10, 150) }, true)
-				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
-				.AddToWorld(world);
+			platformBuilder.Copy().WithPosition(new Vector3(-180, -10, 155)).WithStandardEffectParams(bounceEffect)
+				.WithVelocity(Vector3.UnitX * -5, 0).WithAI(new[] { new Vector3(-180, -10, 150), new Vector3(-200, -10, 150) }, true)
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG)).AddToWorld(world);
 
-			new EntityBuilder().WithModel(platformModel)
-				.WithPosition(new Vector3(-180, 0, 180))
-				.WithStandardEffectParams(bounceEffect)
-				.WithBoundingVolume(new OBB(new Vector3(0, -0.25f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, new Vector3(10, 0.5f, 10)))
-				.WithVelocity(Vector3.UnitX * 5, 0)
+			platformBuilder.Copy().WithPosition(new Vector3(-180, 0, 180))
+				.WithStandardEffectParams(bounceEffect).WithVelocity(Vector3.UnitX * 5, 0)
 				.WithAI(new[] { new Vector3(-180, 0, 115), new Vector3(-200, 0, 115) }, true)
-				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG))
-				.AddToWorld(world);
+				.WithAdditionalProperties(new Properties(Properties.BOUNCE_FLAG)).AddToWorld(world);
 
 			//Hidden shortcut
 			new EntityBuilder()
