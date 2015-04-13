@@ -109,12 +109,8 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-
-			World = new ConceptLevel().CreateWorld(Game, contentCollection);
-			//World = new TestLevel1().CreateWorld(Game, contentCollection);
-			//World = new DemoLevel().CreateWorld(Game, contentCollection);
-			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
-			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
+			int hardCodedLevelIndex = 0;
+			World = LevelConstants.LEVELS[hardCodedLevelIndex].CreateWorld(Game, contentCollection);
 
 			inputSystem = new InputSystem(Game);
 			movementSystem = new MovementSystem();

@@ -6,9 +6,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class ConceptLevel : ILevelFactory
+	class ConceptLevel : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public ConceptLevel() : base("Concept Level") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 
