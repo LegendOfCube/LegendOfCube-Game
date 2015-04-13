@@ -53,6 +53,7 @@
       <Name>brick_normal_enhanced</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
     <Compile Include="Models\Brick_Wall\brick_n_sharp.jpg">
       <Name>brick_n_sharp</Name>
@@ -136,6 +137,7 @@
       <Name>cube_emissive_2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +214,7 @@
       <Name>wall</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -267,6 +270,7 @@
       <Name>catwalk-d</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +285,7 @@
       <Name>door_d</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -407,11 +412,13 @@
       <Name>duct_d</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
     <Compile Include="Models\Duct\duct_n.jpg">
       <Name>duct_n</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+      <ProcessorParameters_GenerateMipmaps>True</ProcessorParameters_GenerateMipmaps>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

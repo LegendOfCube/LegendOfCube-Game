@@ -117,9 +117,6 @@ namespace LegendOfCube.Engine
 			GameStats = new GameStats();
 
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
-			AirMovement = 0.4f;
-			StopTime = 0.05f;
-			BaseJump = 12f;
 			SpawnPoint = new Vector3(0, 25, 0);
 
 			LightDirection = new Vector3(0, -1, 0);

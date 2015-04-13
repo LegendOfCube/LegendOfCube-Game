@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	public class TestLevel1 : ILevelFactory
+	public class TestLevel1 : Level
 	{
 		private const int RANDOM_SEED = 2;
 		private const int NUM_OTHER_CUBE = 1200;
@@ -15,7 +15,10 @@ namespace LegendOfCube.Levels
 		private const int NUM_BOUNCE_CUBE = 300;
 		private const int NUM_TELEPORT_CUBE = 0;
 
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public TestLevel1() : base("Test Level 1") {}
+
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(3000);
 
@@ -30,7 +33,7 @@ namespace LegendOfCube.Levels
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithPosition(world.SpawnPoint)
-				.WithVelocity(Vector3.Zero, 15)
+				.WithVelocity(Vector3.Zero, 0)
 				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT |
