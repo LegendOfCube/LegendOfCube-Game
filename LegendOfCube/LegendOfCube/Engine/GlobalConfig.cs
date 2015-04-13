@@ -5,6 +5,11 @@ using System.Text;
 
 namespace LegendOfCube.Engine
 {
+	/// <summary>
+	/// GlobalConfig for all global settings.
+	/// 
+	/// Settings should only be of type float, int or bool.
+	/// </summary>
 	public class GlobalConfig
 	{
 		// Singleton instance
@@ -21,6 +26,10 @@ namespace LegendOfCube.Engine
 
 		// Settings
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		// Graphics
+		public bool Fullscreen;
+		public int InternalResX, InternalResY;
 
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -42,7 +51,9 @@ namespace LegendOfCube.Engine
 
 		private GlobalConfig()
 		{
-			
+			this.Fullscreen = false;
+			this.InternalResX = 1280;
+			this.InternalResY = 800;
 		}
 	}
 }
