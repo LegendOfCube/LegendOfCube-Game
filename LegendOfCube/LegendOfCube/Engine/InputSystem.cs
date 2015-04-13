@@ -16,6 +16,8 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
+		private GlobalConfig cfg = GlobalConfig.Instance;
+
 		private Game game;
 		private ScreenSystem screenSystem;
 		private KeyboardState keyState;
@@ -132,16 +134,16 @@ namespace LegendOfCube.Engine
 
 				Vector2 cameraDirection = new Vector2(0,0);
 				// Camera movement
-				if (keyState.IsKeyDown(Keys.Up) ) cameraDirection.Y++;
-
-				if (keyState.IsKeyDown(Keys.Down)) cameraDirection.Y--;
-
-				if (keyState.IsKeyDown(Keys.Left)) cameraDirection.X--;
-
-				if (keyState.IsKeyDown(Keys.Right)) cameraDirection.X++;
+				if (keyState.IsKeyDown(Keys.Up)) cameraDirection.Y = 1.0f;
+				if (keyState.IsKeyDown(Keys.Down)) cameraDirection.Y = -1.0f;
+				if (keyState.IsKeyDown(Keys.Left)) cameraDirection.X = -1.0f;
+				if (keyState.IsKeyDown(Keys.Right)) cameraDirection.X = 1.0f;
 
 				// Normalize the vector to our needs, then set direction
 				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : gamePadState.ThumbSticks.Right;
+
+				if (cfg.RightStickInvertedY) cameraDirection.Y = -cameraDirection.Y;
+				if (cfg.RightStickInvertedX) cameraDirection.X = -cameraDirection.X;
 
 				inputData.SetCameraDirection(cameraDirection);
 
