@@ -35,6 +35,11 @@ namespace LegendOfCube.Engine.BoundingVolumes
 
 	public struct OBB {
 
+		// Public members
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		public static readonly OBB IDENTITY = new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, 1.0f, 1.0f, 1.0f);
+
 		// Private members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -178,6 +183,44 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			throw new ArgumentException("direction must be a direction");
 		}
 
+		public bool ApproxEqu(ref OBB other, float epsilon)
+		{
+			if (!MathUtils.ApproxEqu(center, other.center, epsilon)) return false;
+			if (!MathUtils.ApproxEqu(xAxis, other.xAxis, epsilon)) return false;
+			if (!MathUtils.ApproxEqu(yAxis, other.yAxis, epsilon)) return false;
+			if (!MathUtils.ApproxEqu(zAxis, other.zAxis, epsilon)) return false;
+			return true;
+		}
+
+		public Matrix IdentityToThisMatrix()
+		{
+			Matrix m = Matrix.Identity;
+			//m.Right = xAxis * halfExtents.X * 2.0f;
+			//m.Up = yAxis * halfExtents.Y * 2.0f;
+			//m.Backward = zAxis * halfExtents.Z * 2.0f;
+
+			Vector3 x = xAxis * halfExtents.X * 2.0f;
+			m.M11 = x.X;
+			m.M12 = x.Y;
+			m.M13 = x.Z;
+
+			Vector3 y = yAxis * halfExtents.Y * 2.0f;
+			m.M21 = y.X;
+			m.M22 = y.Y;
+			m.M23 = y.Z;
+
+			Vector3 z = zAxis * halfExtents.Z * 2.0f;
+			m.M31 = z.X;
+			m.M32 = z.Y;
+			m.M33 = z.Z;
+
+			m.M41 = center.X;
+			m.M42 = center.Y;
+			m.M43 = center.Z;
+
+			return m;
+		}
+
 		public static OBB TransformOBB(ref OBB obb, ref Matrix transform)
 		{
 			Vector3 obbX = obb.AxisX;
@@ -208,6 +251,11 @@ namespace LegendOfCube.Engine.BoundingVolumes
 			result.zAxis.Normalize();
 
 			return result;
+		}
+
+		public static Matrix TransformFromOBBs(ref OBB pre, ref OBB post)
+		{
+			return post.IdentityToThisMatrix() * Matrix.Invert(pre.IdentityToThisMatrix());
 		}
 		
 		// Public properties

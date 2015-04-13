@@ -1,25 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using LegendOfCube.Engine;
+using LegendOfCube.Levels;
+using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Screens
 {
-	class LevelSelectScreen : Screen
+	class LevelSelectScreen : MenuScreen
 	{
-		protected internal override void Update(Microsoft.Xna.Framework.GameTime gameTime, ScreenSystem switcher)
-		{
-			throw new NotImplementedException();
-		}
-
-		protected internal override void Draw(Microsoft.Xna.Framework.GameTime gameTime, Engine.Graphics.RenderSystem renderSystem)
-		{
-			throw new NotImplementedException();
-		}
+		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
 		internal override void LoadContent()
 		{
-			throw new NotImplementedException();
+			base.LoadContent();
+
+			// Add entry for each level
+			// Not using foreach due to warning about using a foreach variable in closure
+			for (int i = 0; i < LevelConstants.LEVELS.Count(); i++)
+			{
+				Level level = LevelConstants.LEVELS[i];
+				AddItemBelow(level.Name, () =>
+					ScreenSystem.AddGameScreen(level)
+				);
+			}
+
+			AddItemBelow("Back", () => 
+				ScreenSystem.RemoveCurrentScreen()
+			);
 		}
 	}
 }

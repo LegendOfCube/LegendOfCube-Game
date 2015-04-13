@@ -17,6 +17,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private Game game;
+		private ScreenSystem screenSystem;
 		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
 
@@ -26,9 +27,11 @@ namespace LegendOfCube.Engine
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game)
+		public InputSystem(Game game, ScreenSystem screenSystem)
 		{
 			this.game = game;
+			this.screenSystem = screenSystem;
+
 			// TODO: settings for inverted y axis
 			oldKeyState = Keyboard.GetState();
 			oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
@@ -37,12 +40,13 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world, ScreenSystem switcher)
+		public void ApplyInput(GameTime gameTime, World world)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
 			Vector2 directionInput = new Vector2(0, 0);
 
+			game.IsMouseVisible = false;
 
 			if (!gamePadState.IsConnected)
 			{
@@ -50,14 +54,14 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape) || ButtonWasJustPressed(Buttons.Back))
+			if (KeyWasJustPressed(Keys.Escape))
 			{
 				game.Exit();
 			}
 
 			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
-				switcher.SwitchScreen(Screens.ScreenTypes.PAUSE);	
+				screenSystem.AddScreen(new PauseScreen(game, screenSystem));
 			}
 
 			if (KeyWasJustPressed(Keys.F1))
@@ -69,7 +73,7 @@ namespace LegendOfCube.Engine
 				world.DebugState.ShowDebugOverlay = !world.DebugState.ShowDebugOverlay;
 			}
 
-			if (KeyWasJustPressed(Keys.R))
+			if (KeyWasJustPressed(Keys.R) || ButtonWasJustPressed(Buttons.Back))
 			{
 				if (world.WinState)
 				{

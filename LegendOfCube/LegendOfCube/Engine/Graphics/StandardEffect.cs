@@ -14,7 +14,8 @@ namespace LegendOfCube.Engine.Graphics
 		private const int SPECULAR_TEXTURE_INDEX = 1;
 		private const int EMISSIVE_TEXTURE_INDEX = 2;
 		private const int NORMAL_TEXTURE_INDEX = 3;
-		private const int SHADOW_TEXTURE_INDEX = 4;
+		private const int SHADOW_TEXTURE_0_INDEX = 4;
+		private const int SHADOW_TEXTURE_1_INDEX = 5;
 
 		private readonly Effect effect;
 
@@ -27,7 +28,9 @@ namespace LegendOfCube.Engine.Graphics
 		// Lights
 		private readonly EffectParameter dirLight0ViewSpaceDirParam;
 		private readonly EffectParameter dirLight0ColorParam;
-		private readonly EffectParameter dirLight0ShadowMatrixParam;
+		private readonly EffectParameter applyShadowsParam;
+		private readonly EffectParameter dirLight0ShadowMatrix0Param;
+		private readonly EffectParameter dirLight0ShadowMatrix1Param;
 
 		private readonly EffectParameter pointLight0ViewSpacePosParam;
 		private readonly EffectParameter pointLight0ReachParam;
@@ -71,7 +74,9 @@ namespace LegendOfCube.Engine.Graphics
 			// Lights
 			this.dirLight0ViewSpaceDirParam = effect.Parameters["DirLight0ViewSpaceDir"];
 			this.dirLight0ColorParam = effect.Parameters["DirLight0Color"];
-			this.dirLight0ShadowMatrixParam = effect.Parameters["DirLight0ShadowMatrix"];
+			this.applyShadowsParam = effect.Parameters["ApplyShadows"];
+			this.dirLight0ShadowMatrix0Param = effect.Parameters["DirLight0ShadowMatrix0"];
+			this.dirLight0ShadowMatrix1Param = effect.Parameters["DirLight0ShadowMatrix1"];
 
 			this.pointLight0ViewSpacePosParam = effect.Parameters["PointLight0ViewSpacePos"];
 			this.pointLight0ColorParam = effect.Parameters["PointLight0Color"];
@@ -116,11 +121,14 @@ namespace LegendOfCube.Engine.Graphics
 		public void PrepareRendering()
 		{
 			// Reset sampler states each frame
-			for (int i = DIFFUSE_TEXTURE_INDEX; i < SHADOW_TEXTURE_INDEX; i++)
+			for (int i = DIFFUSE_TEXTURE_INDEX; i <= NORMAL_TEXTURE_INDEX; i++)
 			{
 				effect.GraphicsDevice.SamplerStates[i] = standardSamplerState;
 			}
-			effect.GraphicsDevice.SamplerStates[SHADOW_TEXTURE_INDEX] = shadowSamplerState;
+			for (int i = SHADOW_TEXTURE_0_INDEX; i <= SHADOW_TEXTURE_1_INDEX; i++)
+			{
+				effect.GraphicsDevice.SamplerStates[i] = shadowSamplerState;
+			} 
 		}
 
 		public void SetViewProjection(ref Matrix view, ref Matrix projection)
@@ -143,14 +151,29 @@ namespace LegendOfCube.Engine.Graphics
 			pointLight0ColorParam.SetValue(lightColor);
 		}
 
-		public void SetDirLight0ShadowMap(Texture shadowMap)
+		public void SetApplyShadows(bool applyShadows)
 		{
-			effect.GraphicsDevice.Textures[SHADOW_TEXTURE_INDEX] = shadowMap;
+			applyShadowsParam.SetValue(applyShadows);
 		}
 
-		public void SetDirLight0ShadowMatrix(ref Matrix shadowMatrix)
+		public void SetDirLight0ShadowMap0(Texture shadowMap)
 		{
-			dirLight0ShadowMatrixParam.SetValue(shadowMatrix);
+			effect.GraphicsDevice.Textures[SHADOW_TEXTURE_0_INDEX] = shadowMap;
+		}
+
+		public void SetDirLight0ShadowMatrix0(ref Matrix shadowMatrix)
+		{
+			dirLight0ShadowMatrix0Param.SetValue(shadowMatrix);
+		}
+
+		public void SetDirLight0ShadowMap1(Texture shadowMap)
+		{
+			effect.GraphicsDevice.Textures[SHADOW_TEXTURE_1_INDEX] = shadowMap;
+		}
+
+		public void SetDirLight0ShadowMatrix1(ref Matrix shadowMatrix)
+		{
+			dirLight0ShadowMatrix1Param.SetValue(shadowMatrix);
 		}
 
 		public void SetWorld(ref Matrix world)
@@ -250,13 +273,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		public void ApplyOnModel(Model model)
 		{
-			foreach (var mesh in model.Meshes)
-			{
-				foreach (var meshPart in mesh.MeshParts)
-				{
-					meshPart.Effect = effect;
-				}
-			}
+			GraphicsUtils.ApplyEffectOnModel(model, effect);
 		}
 
 		public static StandardEffect LoadEffect(ContentManager contentManager)

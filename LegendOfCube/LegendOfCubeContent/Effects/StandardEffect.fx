@@ -13,7 +13,9 @@ float4x4 NormalMatrix;
 // Light properties for diffuse and specular illumination
 float3 DirLight0ViewSpaceDir;
 float4 DirLight0Color = WHITE_COLOR;
-float4x4 DirLight0ShadowMatrix;
+bool ApplyShadows;
+float4x4 DirLight0ShadowMatrix0;
+float4x4 DirLight0ShadowMatrix1;
 
 float3 PointLight0ViewSpacePos;
 float4 PointLight0Color = WHITE_COLOR;
@@ -40,7 +42,8 @@ sampler DiffuseTextureSampler  : register(ps, s0);
 sampler SpecularTextureSampler : register(ps, s1);
 sampler EmissiveTextureSampler : register(ps, s2);
 sampler NormalTextureSampler   : register(ps, s3);
-sampler ShadowMapSampler       : register(ps, s4);
+sampler ShadowMapSampler0      : register(ps, s4);
+sampler ShadowMapSampler1      : register(ps, s5);
 
 struct VertexShaderInput
 {
@@ -53,9 +56,10 @@ struct VertexShaderOutput
 {
 	float4 Position : POSITION0;
 	float2 TextureCoordinate : TEXCOORD0;
-	float4 DirLight0ShadowMapCoord : TEXCOORD1;
-	float3 ViewSpacePos : TEXCOORD2; // Using TEXCOORD looks incorrect, not sure if there is alternative
-	float3 ViewSpaceNormal : TEXCOORD3;
+	float4 DirLight0ShadowMapCoord0 : TEXCOORD1;
+	float4 DirLight0ShadowMapCoord1 : TEXCOORD2;
+	float3 ViewSpacePos : TEXCOORD3; // Using TEXCOORD looks incorrect, not sure if there is alternative
+	float3 ViewSpaceNormal : TEXCOORD4;
 };
 
 // Separate structs with additional information needed for normal map calculation
@@ -73,11 +77,12 @@ struct NormalTexVertexShaderOutput
 {
 	float4 Position : POSITION0;
 	float2 TextureCoordinate : TEXCOORD0;
-	float4 DirLight0ShadowMapCoord : TEXCOORD1;
-	float3 ViewSpacePos : TEXCOORD2;
-	float3 ViewSpaceNormal : TEXCOORD3;
-	float3 ViewSpaceTangent : TEXCOORD4;
-	float3 ViewSpaceBinormal : TEXCOORD5;
+	float4 DirLight0ShadowMapCoord0 : TEXCOORD1;
+	float4 DirLight0ShadowMapCoord1 : TEXCOORD2;
+	float3 ViewSpacePos : TEXCOORD3;
+	float3 ViewSpaceNormal : TEXCOORD4;
+	float3 ViewSpaceTangent : TEXCOORD5;
+	float3 ViewSpaceBinormal : TEXCOORD6;
 };
 
 struct ShadowMapVertexShaderInput
@@ -100,7 +105,8 @@ VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
 	float4 viewPosition = mul(worldPosition, View);
 	float4 projectPosition = mul(viewPosition, Projection);
 	float4 viewSpaceNormal = normalize(mul(input.Normal, NormalMatrix));
-	output.DirLight0ShadowMapCoord = mul(worldPosition, DirLight0ShadowMatrix);
+	output.DirLight0ShadowMapCoord0 = mul(worldPosition, DirLight0ShadowMatrix0);
+	output.DirLight0ShadowMapCoord1 = mul(worldPosition, DirLight0ShadowMatrix1);
 
 	// Pass along to pixel shader
 	output.Position = projectPosition;
@@ -120,7 +126,8 @@ NormalTexVertexShaderOutput NormalTexVertexShaderFunction(NormalTexVertexShaderI
 	float4 viewPosition = mul(worldPosition, View);
 	float4 projectPosition = mul(viewPosition, Projection);
 	float4 viewSpaceNormal = normalize(mul(input.Normal, NormalMatrix));
-	output.DirLight0ShadowMapCoord = mul(worldPosition, DirLight0ShadowMatrix);
+	output.DirLight0ShadowMapCoord0 = mul(worldPosition, DirLight0ShadowMatrix0);
+	output.DirLight0ShadowMapCoord1 = mul(worldPosition, DirLight0ShadowMatrix1);
 
 	// Pass along to pixel shader
 	output.ViewSpacePos = viewPosition.xyz;
@@ -164,7 +171,8 @@ float4 CalculateLightContribution(
 // Calculate the contribution of a directional light
 // TODO: Group properties by structs to make it more readable
 float4 CalculateDirLightContribution(
-	float4 lightSpacePos,
+	float4 lightSpacePos0,
+	float4 lightSpacePos1,
 	float3 lightDir,
 	float4x4 shadowMatrix,
 	float3 normal,
@@ -174,33 +182,50 @@ float4 CalculateDirLightContribution(
 	float4 specularColor)
 {
 	// Determine sample coord from light space position
-	float2 shadowMapCoord = 0.5 * lightSpacePos.xy / lightSpacePos.w + float2(0.5, 0.5);
-	shadowMapCoord.y = 1.0 - shadowMapCoord.y;
+	float2 shadowMapCoord0 = 0.5 * lightSpacePos0.xy / lightSpacePos0.w + float2(0.5, 0.5);
+	shadowMapCoord0.y = 1.0 - shadowMapCoord0.y;
 
 	// Default to objects being lit, might want to do opposite if scene is dark
 	float visibility = 1.0;
+	if (ApplyShadows) {
 
-	// Sample shadow map if inside
-	// (setting border color on sampler seems to be deprecated)
-	float shadowLookupMin = PCF_SPACING;
-	float shadowLookupMax = 1.0 - PCF_SPACING;
+		// Sample shadow map if inside
+		// (setting border color on sampler seems to be deprecated)
+		float shadowLookupMin = PCF_SPACING;
+		float shadowLookupMax = 1.0 - PCF_SPACING;
 
-	if (shadowMapCoord.x >= shadowLookupMin && shadowMapCoord.x <= shadowLookupMax &&
-	    shadowMapCoord.y >= shadowLookupMin && shadowMapCoord.y <= shadowLookupMax)
-	{
-		visibility = 0.0;
-		// Sample 9 points around actual coordinate, 3x3 grid
-		for (int x = -1; x <= 1; x++)
+		if (shadowMapCoord0.x >= shadowLookupMin && shadowMapCoord0.x <= shadowLookupMax &&
+			shadowMapCoord0.y >= shadowLookupMin && shadowMapCoord0.y <= shadowLookupMax)
 		{
-			for (int y = -1; y <= 1; y++)
+			visibility = 0.0;
+			// Sample 9 points around actual coordinate, 3x3 grid
+			for (int x = -1; x <= 1; x++)
 			{
-				float2 offset = PCF_SPACING * float2(x, y);
-				float shadowMapDepth = tex2D(ShadowMapSampler, shadowMapCoord + offset).x;
-				float lightSpaceDepth = lightSpacePos.z / lightSpacePos.w;
-				float sampleContribution = 1.0 / 9.0;
-				visibility += ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? sampleContribution : 0.0;
+				for (int y = -1; y <= 1; y++)
+				{
+					float2 offset = PCF_SPACING * float2(x, y);
+					float shadowMapDepth = tex2D(ShadowMapSampler0, shadowMapCoord0 + offset).x;
+					float lightSpaceDepth = lightSpacePos0.z / lightSpacePos0.w;
+					float sampleContribution = 1.0 / 9.0;
+					visibility += ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? sampleContribution : 0.0;
+				}
 			}
 		}
+		else
+		{
+			// Check if fragment is covered by the less detailed shadow map
+			float2 shadowMapCoord1 = 0.5 * lightSpacePos1.xy / lightSpacePos1.w + float2(0.5, 0.5);
+			shadowMapCoord1.y = 1.0 - shadowMapCoord1.y;
+
+			if (shadowMapCoord1.x >= shadowLookupMin && shadowMapCoord1.x <= shadowLookupMax &&
+				shadowMapCoord1.y >= shadowLookupMin && shadowMapCoord1.y <= shadowLookupMax)
+			{
+				float shadowMapDepth = tex2D(ShadowMapSampler1, shadowMapCoord1).x;
+				float lightSpaceDepth = lightSpacePos1.z / lightSpacePos1.w;
+				visibility = ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? 1.0 : 0.0;
+			}
+		}
+
 	}
 	return visibility * CalculateLightContribution(normal, normalize(-lightDir), directionToEye, lightColor, diffuseColor, specularColor);
 }
@@ -226,7 +251,7 @@ float4 CalculatePointLightContribution(
 	return lightDistanceFactor * CalculateLightContribution(normal, normalize(lightDifference), directionToEye, lightColor, diffuseColor, specularColor);
 }
 
-float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 viewSpacePos, float3 normal)
+float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos0, float4 lightSpacePos1, float3 viewSpacePos, float3 normal)
 {
 	// Determine material color, from texture if available
 	float4 diffuseColor = MaterialDiffuseColor;
@@ -235,7 +260,7 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 v
 		diffuseColor *= tex2D(DiffuseTextureSampler, textureCoordinate);
 	}
 	float4 specularColor = MaterialSpecularColor;
-	if (UseSpecularTexture);
+	if (UseSpecularTexture)
 	{
 		specularColor *= tex2D(SpecularTextureSampler, textureCoordinate);
 	}
@@ -246,9 +271,8 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos, float3 v
 	}
 
 	float3 directionToEye = normalize(-viewSpacePos);
-
 	// Calculate light contribution
-	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos, DirLight0ViewSpaceDir, DirLight0ShadowMatrix, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
+	float4 dirLight0Contribution = CalculateDirLightContribution(lightSpacePos0, lightSpacePos1, DirLight0ViewSpaceDir, DirLight0ShadowMatrix0, normal, directionToEye, DirLight0Color, diffuseColor, specularColor);
 	float4 pointLight0Contribution = CalculatePointLightContribution(viewSpacePos, PointLight0ViewSpacePos, PointLight0Reach, normal, directionToEye, PointLight0Color, diffuseColor, specularColor);
 
 	float4 totalLightContribution = dirLight0Contribution + pointLight0Contribution;
@@ -267,7 +291,7 @@ float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
 {
 	// Interpolation can denormalize the normal, need to renormalize
 	float3 normal = normalize(input.ViewSpaceNormal);
-	return MainPixelShading(input.TextureCoordinate, input.DirLight0ShadowMapCoord, input.ViewSpacePos, normal);
+	return MainPixelShading(input.TextureCoordinate, input.DirLight0ShadowMapCoord0, input.DirLight0ShadowMapCoord1, input.ViewSpacePos, normal);
 }
 
 float4 NormalTexPixelShaderFunction(NormalTexVertexShaderOutput input) : COLOR0
@@ -284,7 +308,7 @@ float4 NormalTexPixelShaderFunction(NormalTexVertexShaderOutput input) : COLOR0
 		normalTexVec.z * normalize(input.ViewSpaceNormal)
 	);
 
-	return MainPixelShading(input.TextureCoordinate, input.DirLight0ShadowMapCoord, input.ViewSpacePos, normal);
+	return MainPixelShading(input.TextureCoordinate, input.DirLight0ShadowMapCoord0, input.DirLight0ShadowMapCoord1, input.ViewSpacePos, normal);
 }
 
 ShadowMapVertexShaderOutput ShadowMapVertexShaderFunction(ShadowMapVertexShaderInput input)

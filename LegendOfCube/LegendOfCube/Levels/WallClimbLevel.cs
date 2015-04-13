@@ -5,9 +5,11 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Levels
 {
-	class WallClimbLevelFactory : ILevelFactory
+	class WallClimbLevel : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public WallClimbLevel() : base("Wall Climb Level") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 			world.SpawnPoint = new Vector3(-30.0f, 5.0f, 0.0f);
@@ -18,8 +20,8 @@ namespace LegendOfCube.Levels
 			world.Player = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
-				.WithVelocity(Vector3.Zero, 15)
-				.WithAcceleration(Vector3.Zero, 30)
+				.WithVelocity(Vector3.Zero, 20)
+				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 				.AddToWorld(world);
 

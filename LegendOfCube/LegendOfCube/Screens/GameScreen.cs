@@ -12,13 +12,19 @@ namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
+		private Level level;
+		private World world;
+
 		private InputSystem inputSystem;
 		private MovementSystem movementSystem;
 		private PhysicsSystem physicsSystem;
 		private CameraSystem cameraSystem;
 		private AISystem aiSystem;
 		private AnimationSystem animationSystem;
-		private ContentCollection contentCollection;
+		private RenderSystem renderSystem;
+
+		private readonly GraphicsDeviceManager graphicsManager;
+		private readonly ContentCollection contentCollection;
 
 		private Texture2D winScreen1;
 		private Texture2D winScreen2;
@@ -26,108 +32,108 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		public GameScreen(Game game, ContentCollection contentCollection) : base(game)
+		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
+			: base(game, screenSystem, true)
 		{
+			this.level = level;
 			this.contentCollection = contentCollection;
+			this.graphicsManager = graphicsManager;
 		}
 
-		protected internal override void Update(GameTime gameTime, ScreenSystem switcher)
+		internal override void Update(GameTime gameTime)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 			//GameOver update
-			if (!World.WinState)
+			if (!world.WinState)
 			{
-				World.GameStats.GameTime += delta;
+				world.GameStats.GameTime += delta;
 			}
-			if (World.WinState)
+			if (world.WinState)
 			{
-				inputSystem.ApplyInput(gameTime, World, switcher);
-				physicsSystem.ApplyPhysics(World, delta);
+				inputSystem.ApplyInput(gameTime, world);
+				physicsSystem.ApplyPhysics(world, delta);
 
 				//Small delay before score screen.
-				if (World.TimeSinceGameOver < 1)
+				if (world.TimeSinceGameOver < 1)
 				{
-					World.TimeSinceGameOver += delta;
+					world.TimeSinceGameOver += delta;
 				}
 			}
 			//Normal update
 			else
 			{
-				inputSystem.ApplyInput(gameTime, World, switcher);
-				aiSystem.Update(World, delta);
-				movementSystem.ProcessInputData(World, delta);
-				physicsSystem.ApplyPhysics(World, delta); // Note, delta should be fixed time step.
-				EventSystem.CalculateCubeState(World);
-				EventSystem.HandleEvents(World);
-				animationSystem.OnUpdate(World, delta);
-				cameraSystem.OnUpdate(World, delta);
+				inputSystem.ApplyInput(gameTime, world);
+				aiSystem.Update(world, delta);
+				movementSystem.ProcessInputData(world, delta);
+				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
+				EventSystem.CalculateCubeState(world);
+				EventSystem.HandleEvents(world);
+				animationSystem.OnUpdate(world, delta);
+				cameraSystem.OnUpdate(world, delta);
 			}
 		}
 
-		protected internal override void Draw(GameTime gameTime, RenderSystem renderSystem)
+		internal override void Draw(GameTime gameTime)
 		{
 			Game.GraphicsDevice.Clear(Color.CornflowerBlue);
 			Game.GraphicsDevice.BlendState = BlendState.Opaque;
 			Game.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
 
-			renderSystem.RenderWorld(World);
+			renderSystem.RenderWorld(world);
 
 			spriteBatch.Begin();
-			if (World.DebugState.ShowDebugOverlay)
+			if (world.DebugState.ShowDebugOverlay)
 			{
 				StringBuilder text = new StringBuilder();
 				text.Append("FPS: ");
 				text.AppendLine(UIFormat(1.0f/(float) gameTime.ElapsedGameTime.TotalSeconds));
 				text.Append("CamPos: ");
-				text.AppendLine(UIFormat(World.CameraPosition));
+				text.AppendLine(UIFormat(world.CameraPosition));
 				text.Append("CamDir: ");
-				text.AppendLine(UIFormat(Vector3.Normalize(World.Transforms[World.Player.Id].Translation - World.CameraPosition)));
+				text.AppendLine(UIFormat(Vector3.Normalize(world.Transforms[world.Player.Id].Translation - world.CameraPosition)));
 				text.Append("CubePos: ");
-				text.AppendLine(UIFormat(World.Transforms[World.Player.Id].Translation));
+				text.AppendLine(UIFormat(world.Transforms[world.Player.Id].Translation));
 				text.Append("CubeVel: ");
-				text.AppendLine(UIFormat(World.Velocities[World.Player.Id]));
+				text.AppendLine(UIFormat(world.Velocities[world.Player.Id]));
 				text.Append("CubeAcc: ");
-				text.AppendLine(UIFormat(World.Accelerations[World.Player.Id]));
+				text.AppendLine(UIFormat(world.Accelerations[world.Player.Id]));
 				text.Append("OnGround: ");
-				text.AppendLine(World.PlayerCubeState.OnGround.ToString());
+				text.AppendLine(world.PlayerCubeState.OnGround.ToString());
 				text.Append("OnWall: ");
-				text.AppendLine(World.PlayerCubeState.OnWall.ToString());
+				text.AppendLine(world.PlayerCubeState.OnWall.ToString());
 
 				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
 			}
 
 			//Gameover screen
-			if (World.TimeSinceGameOver >= 1 && World.WinState)
+			if (world.TimeSinceGameOver >= 1 && world.WinState)
 			{
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
-				spriteBatch.DrawString(font, World.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
-				spriteBatch.DrawString(font, UIFormat(World.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, world.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
+				spriteBatch.DrawString(font, UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
 			}
 			spriteBatch.End();
 		}
 
 		internal override void LoadContent()
 		{
+			world = level.CreateWorld(Game, contentCollection);
 
-			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
-			//World = new TestLevel1().CreateWorld(Game, contentCollection);
-			//World = new DemoLevel().CreateWorld(Game, contentCollection);
-			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
-			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
-			World = new AnotherLevel().CreateWorld(Game, contentCollection);
-
-			inputSystem = new InputSystem(Game);
+			inputSystem = new InputSystem(Game, ScreenSystem);
 			movementSystem = new MovementSystem();
-			physicsSystem = new PhysicsSystem(World.MaxNumEntities);
+			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			aiSystem = new AISystem();
 			animationSystem = new AnimationSystem();
-
+			renderSystem = new RenderSystem(Game, graphicsManager);
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
 			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
 			font = Game.Content.Load<SpriteFont>("Arial");
+
+			renderSystem.LoadContent();
+
 			fontPos = new Vector2(0, 0);
 		}
 

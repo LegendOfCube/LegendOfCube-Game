@@ -14,7 +14,6 @@ namespace LegendOfCube.Engine
 		private Vector3 velocity;
 		private Vector3 acceleration;
 		private Matrix transform = Matrix.Identity;
-		private float maxAcceleration;
 		private float maxSpeed;
 		private Model model;
 		private StandardEffectParams sep;
@@ -100,11 +99,10 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		/// <param name="acceleration">The initial acceleration for the entity</param>
 		/// <returns>An instance of this, for chaining</returns>
-		public EntityBuilder WithAcceleration(Vector3 acceleration, float maxAcceleration)
+		public EntityBuilder WithAcceleration(Vector3 acceleration)
 		{
 			properties.Add(Properties.ACCELERATION);
 			this.acceleration = acceleration;
-			this.maxAcceleration = maxAcceleration;
 			return this;
 		}
 
@@ -134,9 +132,22 @@ namespace LegendOfCube.Engine
 
 		public EntityBuilder WithModelData(ModelData modelData)
 		{
-			return WithModel(modelData.Model)
-				  .WithBoundingVolume(modelData.Obb)
-				  .WithStandardEffectParams(modelData.EffectParams);
+			EntityBuilder result = this;
+
+			if (modelData.Model != null)
+			{
+				result = result.WithModel(modelData.Model);
+			}
+			if (modelData.HasObb)
+			{
+				result = result.WithBoundingVolume(modelData.Obb);
+			}
+			if (modelData.EffectParams != null)
+			{
+				result = result.WithStandardEffectParams(modelData.EffectParams);
+			}
+
+			return result;
 		}
 
 		public EntityBuilder Copy()
@@ -160,7 +171,6 @@ namespace LegendOfCube.Engine
 			if (properties.Satisfies(Properties.ACCELERATION))
 			{
 				world.Accelerations[entity.Id] = acceleration;
-				world.MaxAcceleration[entity.Id] = maxAcceleration;
 			}
 			if (properties.Satisfies(Properties.VELOCITY))
 			{

@@ -133,7 +133,7 @@ namespace LegendOfCube.Engine
 			PushOutEntityCollisionAxis(world, i, 15);
 			PushOutEntityFixedAxis(world, i, Vector3.UnitY, 25);
 
-			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+			TransformFromOBBs(ref world.ModelSpaceBVs[i], ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
 		private void MoveStaticWithCollisionChecking(World world, UInt32 i, float delta)
@@ -164,7 +164,7 @@ namespace LegendOfCube.Engine
 			}
 
 			// Update translation in transform
-			TransformFromOBBs(ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
+			TransformFromOBBs(ref world.ModelSpaceBVs[i], ref oldObb, ref worldSpaceOBBs[i], ref world.Transforms[i]);
 		}
 
 		private void MoveWithoutCollisionChecking(World world, UInt32 i, float delta)
@@ -295,15 +295,11 @@ namespace LegendOfCube.Engine
 			}
 		}
 
-		private void TransformFromOBBs(ref OBB oldOBB, ref OBB newOBB, ref Matrix transformOut)
+		private void TransformFromOBBs(ref OBB msOBB, ref OBB oldWSOBB, ref OBB newWSOBB, ref Matrix transformOut)
 		{
-			// Update translation in transform
-			Vector3 obbDiff = newOBB.Position - oldOBB.Position;
-			transformOut.Translation += obbDiff;
-			// Update rotation: This is probably a really stupid way.
-			transformOut.Backward = newOBB.AxisZ * transformOut.Forward.Length();
-			transformOut.Right = newOBB.AxisX * transformOut.Left.Length();
-			transformOut.Up = newOBB.AxisY * transformOut.Up.Length();
+			Vector3 oldTransl = transformOut.Translation;
+			transformOut = OBB.TransformFromOBBs(ref msOBB, ref newWSOBB);
+			transformOut.Translation = oldTransl + (newWSOBB.Position - oldWSOBB.Position);
 		}
 	}
 }

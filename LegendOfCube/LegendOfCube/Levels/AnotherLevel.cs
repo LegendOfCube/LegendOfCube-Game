@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine;
+﻿using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class AnotherLevel : ILevelFactory
+	class AnotherLevel : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public AnotherLevel() : base("Another Level") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 
@@ -34,7 +31,7 @@ namespace LegendOfCube.Levels
 				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 30)
-				.WithAcceleration(Vector3.Zero, 60)
+				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(
 					new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG));
 
