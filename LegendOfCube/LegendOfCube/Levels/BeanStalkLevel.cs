@@ -43,7 +43,7 @@ namespace LegendOfCube.Levels
 
 			// Add a lot of platforms building upwards
 			var rnd = new Random(0);
-			for (float y = 5.0f; y < 500.0f; y += 7)
+			for (float y = 5.0f; y < 500.0f; y += 6.25f)
 			{
 				platformBuilder
 					.WithPosition(new Vector3(rnd.Next(-15, 15), y, rnd.Next(-15, 15)))
