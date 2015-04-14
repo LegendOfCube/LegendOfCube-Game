@@ -12,7 +12,7 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		// Movement constants
-		private const float MAX_SPEED = 20.0f; //subject to change untill next meeting
+		private const float MAX_SPEED = 15.0f; //subject to change untill next meeting
 		private const float MOVEMENT_ACCELERATION = 40.0f;
 		private const float MOVEMENT_AIR_ACCELERATION = 15.0f;
 		private const float WALL_ANTI_GRAVITY_FACTOR_DOWN = 0.50f;

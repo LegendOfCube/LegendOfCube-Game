@@ -175,9 +175,13 @@ namespace LegendOfCube.Levels
 
 			// TEST GEOMETRY
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-100, 0, 50).AddToWorld(world);
-
-
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-100, -40, 50).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(100, -40, 50).AddToWorld(world);							
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(20, -40, -20).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(20, -40, 100).AddToWorld(world);
 
 
 
