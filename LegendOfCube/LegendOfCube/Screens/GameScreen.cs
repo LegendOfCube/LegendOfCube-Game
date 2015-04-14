@@ -119,19 +119,7 @@ namespace LegendOfCube.Screens
 		internal override void LoadContent()
 		{
 			world = level.CreateWorld(Game, contentCollection);
-
-/*<<<<<<< HEAD
-			//World = new ConceptLevel().CreateWorld(Game, contentCollection);
-			//World = new TestLevel1().CreateWorld(Game, contentCollection);
-			//World = new DemoLevel().CreateWorld(Game, contentCollection);
-			//World = new BeanStalkLevelFactory().CreateWorld(Game, contentCollection);
-			//World = new WallClimbLevelFactory().CreateWorld(Game, contentCollection);
-			World = new Level1().CreateWorld(Game, contentCollection);
-
-			inputSystem = new InputSystem(Game);
-=======*/
 			inputSystem = new InputSystem(Game, ScreenSystem);
-//>>>>>>> development
 			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();
