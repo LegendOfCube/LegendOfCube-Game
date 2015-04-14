@@ -7,6 +7,10 @@ namespace LegendOfCube.Levels
 {
 	class WallClimbLevel : Level
 	{
+		private const int WALL_HEIGHT = 600;
+		private const int NUM_PLATFORMS = 600;
+		private const int RANDOM_SEED = 0;
+
 		public WallClimbLevel() : base("Wall Climb Level") {}
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
@@ -33,6 +37,10 @@ namespace LegendOfCube.Levels
 			{
 				DiffuseColor = Color.BlueViolet.ToVector4()
 			};
+			var wallTopEffect = new StandardEffectParams
+			{
+				DiffuseColor = Color.DarkSlateBlue.ToVector4()
+			};
 			var platformEffect = new StandardEffectParams
 			{
 				DiffuseColor = Color.LightBlue.ToVector4()
@@ -49,7 +57,7 @@ namespace LegendOfCube.Levels
 			new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCubePlain)
 				.WithStandardEffectParams(massiveWallEffect)
-				.WithTransform(Matrix.CreateScale(10.0f, 600.0f, 200.0f))
+				.WithTransform(Matrix.CreateScale(10.0f, WALL_HEIGHT, 200.0f))
 				.WithPosition(new Vector3(5.0f, 0.0f, 0.0f))
 				.AddToWorld(world);
 
@@ -60,13 +68,22 @@ namespace LegendOfCube.Levels
 				.WithStandardEffectParams(platformEffect);
 
 			// Add platforms randomly located on the wall
-			var rnd = new Random(0);
-			for (int i = 0; i < 600; i++)
+			var rnd = new Random(RANDOM_SEED);
+			for (int i = 0; i < NUM_PLATFORMS; i++)
 			{
 				platformBuilder
-					.WithPosition(new Vector3(-5.0f, rnd.Next(5, 600), rnd.Next(-100, 100)))
+					.WithPosition(new Vector3(-5.0f, rnd.Next(5, WALL_HEIGHT), rnd.Next(-100, 100)))
 					.AddToWorld(world);
 			}
+
+			// Add top of wall win area (would use invisible area if there was no-collide flag)
+			new EntityBuilder()
+				.WithModelData(contentCollection.PlayerCubePlain)
+				.WithStandardEffectParams(wallTopEffect)
+				.WithTransform(Matrix.CreateScale(10.0f, 0.5f, 200.0f))
+				.WithPosition(new Vector3(5.0f, WALL_HEIGHT, 0.0f))
+				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
+				.AddToWorld(world);
 
 			return world;
 		}
