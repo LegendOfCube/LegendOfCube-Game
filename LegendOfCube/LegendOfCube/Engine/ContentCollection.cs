@@ -38,6 +38,9 @@ namespace LegendOfCube.Engine
 		public ModelData SignTrampoline { get; private set; }
 		public ModelData WindowBars { get; private set; }
 
+		// Placeholders
+		public ModelData placeholderWall { get; private set; }
+
 
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
@@ -87,6 +90,17 @@ namespace LegendOfCube.Engine
 			Ground50x50 = cm.Load<Model>("Models/Ground/ground_50x50");
 			BrickWallWindowModel = cm.Load<Model>("Models/Brick_Wall/brick_wall_window_no_bars");
 			WindowBarsModel = cm.Load<Model>("Models/Brick_Wall/window_bars");
+
+			placeholderWall = new ModelData
+			{
+				Model = Ground50x50,
+				//Obb = OBB.CreateAxisAligned(Vector3.Zero, 100, 50, 1),
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseColor = Color.DarkGray.ToVector4(),
+					
+				}
+			};
 
 			PlayerCube = new ModelData
 			{

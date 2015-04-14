@@ -41,6 +41,7 @@ namespace LegendOfCube.Levels
 			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
 			var ductBuilder = new EntityBuilder().WithModelData(contentCollection.Duct);
 			var trussBuilder = new EntityBuilder().WithModelData(contentCollection.Truss);
+			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
 
@@ -170,8 +171,8 @@ namespace LegendOfCube.Levels
 
 
 			// TEST GEOMETRY
-			//groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(10) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
-			//	* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-100, 20, 50).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-100, 0, 50).AddToWorld(world);
 
 
 
