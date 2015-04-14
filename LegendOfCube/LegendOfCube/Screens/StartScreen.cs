@@ -18,7 +18,7 @@ namespace LegendOfCube.Screens
 		{
 			base.LoadContent();
 			AddItemBelow("Start Game", () =>
-				ScreenSystem.AddGameScreen(LevelConstants.DEMO_LEVEL)
+				ScreenSystem.AddGameScreen(LevelConstants.LEVEL_1)
 			);
 
 			AddItemBelow("Select Level", () => 
