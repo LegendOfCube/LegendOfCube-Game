@@ -8,7 +8,10 @@ namespace LegendOfCube.Levels
 {
 	class Level1 : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+
+		public Level1() : base("Level 1") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 
