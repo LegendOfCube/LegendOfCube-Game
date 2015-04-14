@@ -98,7 +98,6 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseColor = Color.DarkGray.ToVector4(),
-					
 				}
 			};
 
