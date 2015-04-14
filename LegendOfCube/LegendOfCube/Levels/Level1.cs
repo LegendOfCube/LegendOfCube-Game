@@ -129,9 +129,18 @@ namespace LegendOfCube.Levels
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -39.5f, 65).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -39, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -39.5f, 25).AddToWorld(world);
+			
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -52, 65).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -51.5f, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -52, 25).AddToWorld(world);
+			
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -64.5f, 65).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -64, 45).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -64.5f, 25).AddToWorld(world);
+			
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -77, 65).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -76.5f, 45).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -77, 25).AddToWorld(world);
 				//Support Pipes
 			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -13, 65).AddToWorld(world);
 			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 65).AddToWorld(world);
@@ -185,8 +194,10 @@ namespace LegendOfCube.Levels
 				.WithPosition(20, -40, -20).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(20, -40, 100).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
-				//FLOOR
-			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(20, -80, 50)
+				//FLOOR and ROOF
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(20, -70, 50)
+				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(0, 30, 40)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
 
 
