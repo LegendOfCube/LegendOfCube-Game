@@ -8,11 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class DemoLevel : ILevelFactory
+	public class DemoLevel : Level
 	{
-		private static Entity playerEntity;
+		public DemoLevel() : base("Demo Level") {}
 
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 			world.SpawnPoint = new Vector3(0, 0, 0);
@@ -187,10 +187,10 @@ namespace LegendOfCube.Levels
 				//SpecularColor = Color.Purple.ToVector4()
 			};
 
-			playerEntity =
+			var playerEntity =
 				new EntityBuilder().WithModel(cubeModel)
 					.WithPosition(world.SpawnPoint)
-					.WithVelocity(Vector3.Zero, 20)
+					.WithVelocity(Vector3.Zero, 0)
 					.WithAcceleration(Vector3.Zero)
 					.WithStandardEffectParams(playerEffect)
 					.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ,

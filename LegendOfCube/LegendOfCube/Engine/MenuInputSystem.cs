@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendOfCube.Screens;
@@ -17,6 +18,8 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private Game game;
+		private ScreenSystem screenSystem;
+
 		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
 
@@ -29,9 +32,11 @@ namespace LegendOfCube.Engine
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public MenuInputSystem(Game game)
+		public MenuInputSystem(Game game, ScreenSystem screenSystem)
 		{
 			this.game = game;
+			this.screenSystem = screenSystem;
+			
 			// TODO: settings for inverted y axis
 			oldKeyState = Keyboard.GetState();
 			oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
@@ -41,16 +46,13 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		
-		public void ApplyInput(GameTime gameTime, World world, ScreenSystem switcher, MenuScreen currentScreen, ref int selection)
+		public void ApplyInput(GameTime gameTime, List<MenuItem> menuItems, ref int selection)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
 			mouseState = Mouse.GetState();
-			Vector2 directionInput = Vector2.Zero;
 
-			Rectangle playRect = new Rectangle(100, 20, 398, 59);
-			Rectangle levelSelectRect = new Rectangle(100, 110, 462, 59);
-			Rectangle exitRect = new Rectangle(100, 200, 151, 59);
+			game.IsMouseVisible = true;
 
 			if (!gamePadState.IsConnected)
 			{
@@ -58,73 +60,53 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape) || ButtonWasJustPressed(Buttons.Back))
+			if (KeyWasJustPressed(Keys.Back) || ButtonWasJustPressed(Buttons.Back))
 			{
-				switcher.MoveToPreviousScreen();
-				//game.Exit();
-			}	
-
-			if (MouseClickWithinRectangle(playRect))
-			{	
-				switcher.SwitchScreen(Screens.ScreenTypes.GAME);
+				screenSystem.RemoveCurrentScreen();
 			}
 
-			if (MouseClickWithinRectangle(exitRect))
-			{
-				game.Exit();
-			}
 
 			if (KeyWasJustPressed(Keys.W) || ButtonWasJustPressed(Buttons.DPadUp))
 			{
-				switch (selection)
-				{
-					case 2:
-						selection = 1;
-						break;
-					case 1:
-						selection = 0;
-						break;
-				}
+				selection = ((selection + menuItems.Count - 1) % menuItems.Count);
 			}
 
 			if (KeyWasJustPressed(Keys.S) || ButtonWasJustPressed(Buttons.DPadDown))
 			{
-				switch (selection)
+				selection = ((selection + 1) % menuItems.Count);
+			}
+
+			Vector2 directionInput =  gamePadState.ThumbSticks.Left;
+			if (directionInput.Length() > 0.05)
+			{
+				var xPos = mouseState.X + 10 * directionInput.X;
+				var yPos = mouseState.Y - 10 * directionInput.Y;
+				Mouse.SetPosition((int)xPos, (int)yPos);
+			}
+			if (MouseWasMoved())
+			{
+				for (int i = 0; i < menuItems.Count; i++)
 				{
-					case 0:
-						selection = 1;
+					MenuItem menuItem = menuItems[i];
+					if (MouseWithinRectangle(menuItem.Rectangle))
+					{
+						selection = i;
 						break;
-					case 1:
-						selection = 2;
-						break;
+					}
 				}
 			}
 
-			if (KeyWasJustPressed(Keys.Space) || ButtonWasJustPressed(Buttons.A))
+			for (int i = 0; i < menuItems.Count; i++)
 			{
-				currentScreen.PerformSelection();
+				MenuItem menuItem = menuItems[i];
+				menuItem.Selected = i == selection;
 			}
 
-			// Normalize the vector to our needs, then set direction
-			directionInput = !directionInput.Equals(Vector2.Zero) ? Vector2.Normalize(directionInput) : gamePadState.ThumbSticks.Left;
+			MenuItem selectedItem = menuItems[selection];
 
-			var xPos = mouseState.X + 10*directionInput.X;
-			var yPos = mouseState.Y - 10*directionInput.Y;
-			Mouse.SetPosition((int)xPos, (int)yPos);
-			if (oldMouseState.X != mouseState.X || oldMouseState.Y != mouseState.Y)
+			if (KeyWasJustPressed(Keys.Space) || ButtonWasJustPressed(Buttons.A) || MouseClickWithinRectangle(selectedItem.Rectangle))
 			{
-				if (playRect.Contains(mouseState.X, mouseState.Y))
-				{
-					selection = 0;
-				} 
-				else if (levelSelectRect.Contains(mouseState.X, mouseState.Y))
-				{
-					selection = 1;
-				} 
-				else if (exitRect.Contains(mouseState.X, mouseState.Y))
-				{
-					selection = 2;
-				}
+				selectedItem.OnClick();
 			}
 
 			oldMouseState = mouseState;
@@ -142,14 +124,24 @@ namespace LegendOfCube.Engine
 			return keyState.IsKeyDown(key) && oldKeyState.IsKeyUp(key);
 		}
 
-		private bool MouseWasJustPressed()
+		private bool MouseLeftWasJustPressed()
 		{
 			return (mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton != ButtonState.Pressed);
 		}
 
+		private bool MouseWasMoved()
+		{
+			return (mouseState.X != oldMouseState.X) || (mouseState.Y != oldMouseState.Y);
+		}
+
 		private bool MouseClickWithinRectangle(Rectangle rect)
 		{
-			return (MouseWasJustPressed() || ButtonWasJustPressed(Buttons.A)) && rect.Contains(mouseState.X, mouseState.Y);
+			return MouseLeftWasJustPressed() && rect.Contains(mouseState.X, mouseState.Y);
+		}
+
+		private bool MouseWithinRectangle(Rectangle rect)
+		{
+			return rect.Contains(mouseState.X, mouseState.Y);
 		}
 	}
 }

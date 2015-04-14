@@ -16,7 +16,10 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
+		private GlobalConfig cfg = GlobalConfig.Instance;
+
 		private Game game;
+		private ScreenSystem screenSystem;
 		private KeyboardState keyState;
 		private KeyboardState oldKeyState;
 
@@ -26,9 +29,11 @@ namespace LegendOfCube.Engine
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game)
+		public InputSystem(Game game, ScreenSystem screenSystem)
 		{
 			this.game = game;
+			this.screenSystem = screenSystem;
+
 			// TODO: settings for inverted y axis
 			oldKeyState = Keyboard.GetState();
 			oldGamePadState = GamePad.GetState(PlayerIndex.One); //Assuming single player game
@@ -37,12 +42,13 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public void ApplyInput(GameTime gameTime, World world, ScreenSystem switcher)
+		public void ApplyInput(GameTime gameTime, World world)
 		{
 			keyState = Keyboard.GetState();
 			gamePadState = GamePad.GetState(PlayerIndex.One);
 			Vector2 directionInput = new Vector2(0, 0);
 
+			game.IsMouseVisible = false;
 
 			if (!gamePadState.IsConnected)
 			{
@@ -57,7 +63,7 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
-				switcher.SwitchScreen(Screens.ScreenTypes.PAUSE);	
+				screenSystem.AddScreen(new PauseScreen(game, screenSystem));
 			}
 
 			if (KeyWasJustPressed(Keys.F1))
@@ -128,16 +134,16 @@ namespace LegendOfCube.Engine
 
 				Vector2 cameraDirection = new Vector2(0,0);
 				// Camera movement
-				if (keyState.IsKeyDown(Keys.Up) ) cameraDirection.Y++;
-
-				if (keyState.IsKeyDown(Keys.Down)) cameraDirection.Y--;
-
-				if (keyState.IsKeyDown(Keys.Left)) cameraDirection.X--;
-
-				if (keyState.IsKeyDown(Keys.Right)) cameraDirection.X++;
+				if (keyState.IsKeyDown(Keys.Up)) cameraDirection.Y = 1.0f;
+				if (keyState.IsKeyDown(Keys.Down)) cameraDirection.Y = -1.0f;
+				if (keyState.IsKeyDown(Keys.Left)) cameraDirection.X = -1.0f;
+				if (keyState.IsKeyDown(Keys.Right)) cameraDirection.X = 1.0f;
 
 				// Normalize the vector to our needs, then set direction
 				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : gamePadState.ThumbSticks.Right;
+
+				if (cfg.RightStickInvertedY) cameraDirection.Y = -cameraDirection.Y;
+				if (cfg.RightStickInvertedX) cameraDirection.X = -cameraDirection.X;
 
 				inputData.SetCameraDirection(cameraDirection);
 

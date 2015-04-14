@@ -29,6 +29,8 @@ namespace LegendOfCube.Engine
 		public const UInt64 CHECKPOINT_FLAG = 1 << 12;
 		public const UInt64 DYNAMIC_VELOCITY_FLAG = 1 << 13;
 		public const UInt64 WIN_ZONE_FLAG = 1 << 14;
+		public const UInt64 NO_SHADOW_CAST_FLAG = 1 << 15;
+		public const UInt64 NO_SHADOW_RECEIVE_FLAG = 1 << 16;
 		
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

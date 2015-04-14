@@ -30,7 +30,7 @@ namespace LegendOfCube.Engine
 			else newColor = new Color(255, 246, 0);
 
 			float speed = world.Velocities[e.Id].Length();
-			float brightness = MathUtils.ClampLerp(speed, 0.6f, 1.0f, 0.0f, world.MaxSpeed[e.Id]);
+			float brightness = MathUtils.ClampLerp(speed, 0.6f, 1.0f, 0.0f, 20);
 
 			Vector4 vecColor = (newColor * brightness).ToVector4();
 			newEffect.EmissiveColor = vecColor;

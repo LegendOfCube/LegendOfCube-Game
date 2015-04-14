@@ -1,71 +1,77 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Graphics;
 
 namespace LegendOfCube.Screens
 {
-	public enum ScreenTypes{ START, GAME, PAUSE, LEVEL_SELECT, NULL };
-
 	public class ScreenSystem
 	{
-		private Screen[] screens;
-		private ScreenTypes currentScreen = ScreenTypes.NULL;
-		private readonly LegendOfCubeGame game;
-		private int[] screenStack;
-		private readonly ContentCollection collection;
+		private readonly List<Screen> screens;
+		private readonly Game game;
+		private readonly ContentCollection contentCollection;
+		private readonly GraphicsDeviceManager graphicsManager;
 
-		public ScreenSystem(LegendOfCubeGame game, ContentCollection collection)
+		public ScreenSystem(LegendOfCubeGame game, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
 		{
 			this.game = game;
-			this.collection = collection;
-			screens = new Screen[5];
-
-			AddScreen(new StartScreen(game, this), ScreenTypes.START);
-			AddScreen(new GameScreen(game, collection), ScreenTypes.GAME);
-			//screenSystem.AddScreen(new LevelSelectScreen(this), ScreenTypes.LEVEL_SELECT);
-			AddScreen(new PauseScreen(game, this), ScreenTypes.PAUSE);
+			this.contentCollection = contentCollection;
+			this.graphicsManager = graphicsManager;
+			screens = new List<Screen>(3);
 		}
 
-		public void AddScreen(Screen screen, ScreenTypes type)
+		public void AddScreen(Screen screen)
 		{
-			if (currentScreen == ScreenTypes.NULL)
-			{
-				currentScreen = type;
-			}
-			screens[(int)type] = screen;
+			screen.LoadContent();
+			screens.Add(screen);
 		}
 
-		public void SwitchScreen(ScreenTypes indicator)
+		public void AddGameScreen(Level level)
 		{
-			if (screens[(int)indicator] != null)
-			{
-				currentScreen = indicator;
-			} // Else: Just deny change
+			Screen s = new GameScreen(level, game, this, contentCollection, graphicsManager);
+			AddScreen(s);
+		}
+
+		public void RemoveCurrentScreen()
+		{
+			screens.RemoveAt(screens.Count - 1);
+		}
+
+		public void SetScreen(Screen screen)
+		{
+			screens.Clear();
+			AddScreen(screen);
 		}
 
 		public Screen GetCurrentScreen()
 		{
-			return screens[(int)currentScreen];
+			return screens[screens.Count - 1];
 		}
 
-		public void LoadAllContent()
+		public void Update(GameTime gameTime)
 		{
-			foreach (var screen in screens)
+			screens[screens.Count - 1].Update(gameTime);
+		}
+
+		public void Draw(GameTime gameTime)
+		{
+			for(int i = 0; i < screens.Count - 1; i++)
 			{
-				if (screen != null)
-				screen.LoadContent();
+				Screen s = screens[i];
+				if (s.BackgroundRender)
+				{
+					s.Draw(gameTime);
+				}
 			}
+			GetCurrentScreen().Draw(gameTime);
 		}
-
-		public World GetCurrentWorld()
+		public void LoadContent()
 		{
-				return screens[(int)ScreenTypes.GAME].World;
+			AddScreen(new StartScreen(game, this));
 		}
 
-		internal void MoveToPreviousScreen()
-		{
-
-		}
 	}
 }

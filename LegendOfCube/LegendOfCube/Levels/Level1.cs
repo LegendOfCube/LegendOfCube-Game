@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class Level1 : ILevelFactory
+	class Level1 : Level
 	{
 		public World CreateWorld(Game game, ContentCollection contentCollection)
 		{
