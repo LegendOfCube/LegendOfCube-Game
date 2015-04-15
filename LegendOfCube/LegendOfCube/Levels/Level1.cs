@@ -206,15 +206,26 @@ namespace LegendOfCube.Levels
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(0, 30, 40)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
 
-			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -30, -15.3f)).AddToWorld(world); //(-5.3f)
-			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -30, -15.3f)).AddToWorld(world);
-			catWalkEndBuilder.Copy().WithPosition(new Vector3(20, -30, -15.3f)).AddToWorld(world);
+			// Catwalk lower
+			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -40, -15.3f)).AddToWorld(world);
+			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -40, -15.3f)).AddToWorld(world);
+			catWalkEndBuilder.Copy().WithPosition(new Vector3(20, -40, -15.3f)).AddToWorld(world);
 			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(0, -29.5f,-20)).AddToWorld(world);
+				.WithPosition(new Vector3(0, -39.5f,-20)).AddToWorld(world);
 			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(20, -29.5f, -20)).AddToWorld(world);
-			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -25, -20)).AddToWorld(world);
-			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -25, -20)).AddToWorld(world);
+				.WithPosition(new Vector3(20, -39.5f, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -35, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -35, -20)).AddToWorld(world);
+			// Catwalk upper
+			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -20, -15.3f)).AddToWorld(world);
+			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -20, -15.3f)).AddToWorld(world);
+			catWalkEndBuilder.Copy().WithPosition(new Vector3(20, -20, -15.3f)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, -19.5f, -20)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, -19.5f, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -15, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -15, -20)).AddToWorld(world);
 
 			return world;
 		}
