@@ -44,6 +44,12 @@ namespace LegendOfCube.Levels
 			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
 			var ductBuilder = new EntityBuilder().WithModelData(contentCollection.Duct);
 			var trussBuilder = new EntityBuilder().WithModelData(contentCollection.Truss);
+			var catWalkStartBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkStart);
+			var catWalkMiddleBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkMiddle);
+			var catWalkEndBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkEnd);
+			var doorBuilder = new EntityBuilder().WithModelData(contentCollection.Door);
+			var exitSignBuilder = new EntityBuilder().WithModelData(contentCollection.ExitSign);
+
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
@@ -200,7 +206,15 @@ namespace LegendOfCube.Levels
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(0, 30, 40)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
 
-
+			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -30, -15.3f)).AddToWorld(world); //(-5.3f)
+			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -30, -15.3f)).AddToWorld(world);
+			catWalkEndBuilder.Copy().WithPosition(new Vector3(20, -30, -15.3f)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, -29.5f,-20)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, -29.5f, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -25, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -25, -20)).AddToWorld(world);
 
 			return world;
 		}
