@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine.CubeMath
 {
-	public class MathUtils
+	public static class MathUtils
 	{
 		public static bool ApproxEqu(float lhs, float rhs, float epsilon)
 		{
@@ -46,9 +46,46 @@ namespace LegendOfCube.Engine.CubeMath
 			return true;
 		}
 
-		public static float ClampLerp(float value, float minOut, float maxOut, float minIn, float maxIn)
+		/// <summary>
+		/// Map a value in one range to value in another, with linear interpolation and clamping at the ends.
+		/// </summary>
+		public static float MapRangeToRange(float valueIn, float startIn, float endIn, float startOut, float endOut)
 		{
-			return MathHelper.Clamp(MathHelper.Lerp(minOut, maxOut, minIn + value / (maxIn - minIn)), minOut, maxOut);
+			float inFraction = (valueIn - startIn) / (endIn - startIn);
+			return ClampLerp(inFraction, startOut, endOut);
 		}
+
+		/// <summary>
+		/// Perform linear interpolation.
+		/// </summary>
+		public static float Lerp(float amount, float start, float end)
+		{
+			return MathHelper.Lerp(start, end, amount);
+		}
+
+		/// <summary>
+		/// Perform linear interpolation.
+		/// </summary>
+		public static Vector3 Lerp(float amount, Vector3 start, Vector3 end)
+		{
+			return start + (end - start) * amount;
+		}
+
+		/// <summary>
+		/// Perform linear interpolation with clamping at the ends.
+		/// </summary>
+		public static float ClampLerp(float amount, float start, float end)
+		{
+			return Lerp(MathHelper.Clamp(amount, 0.0f, 1.0f), start, end);
+		}
+
+		/// <summary>
+		/// Perform linear interpolation with clamping at the ends.
+		/// </summary>
+		public static Vector3 ClampLerp(float amount, Vector3 start, Vector3 end)
+		{
+			return Lerp(MathHelper.Clamp(amount, 0.0f, 1.0f), start, end);
+		}
+
 	}
 }
