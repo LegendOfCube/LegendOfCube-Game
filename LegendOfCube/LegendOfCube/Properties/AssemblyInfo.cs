@@ -30,4 +30,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
+// Will automatically be appended with .0 for unspecified numbers
 [assembly: AssemblyVersion("0.1")]
+
+// Free-form version name (example: "1.0 RC1")
+[assembly: AssemblyInformationalVersion("0.1")]
