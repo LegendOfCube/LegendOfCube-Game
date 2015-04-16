@@ -86,8 +86,10 @@
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\GameStats.cs" />
+    <Compile Include="Engine\GlobalConfig.cs" />
     <Compile Include="Engine\Graphics\GraphicsUtils.cs" />
     <Compile Include="Engine\Graphics\PointLight.cs" />
+    <Compile Include="Levels\Level13.cs" />
     <Compile Include="Levels\LevelConstants.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItem.cs" />
@@ -97,7 +99,7 @@
     <Compile Include="Engine\MenuInputSystem.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevel.cs" />
-    <Compile Include="Levels\BeanStalkLevel.cs" />
+    <Compile Include="Levels\BeanstalkLevel.cs" />
     <Compile Include="Engine\ModelData.cs" />
     <Compile Include="Engine\Level.cs" />
     <Compile Include="Levels\DemoLevel.cs" />

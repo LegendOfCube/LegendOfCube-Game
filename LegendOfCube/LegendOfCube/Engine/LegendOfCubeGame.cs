@@ -15,6 +15,8 @@ namespace LegendOfCube.Engine
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ScreenSystem screenSystem;
 		private readonly ContentCollection contentCollection;
+
+		private readonly GlobalConfig cfg = GlobalConfig.Instance;
 	
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -26,12 +28,14 @@ namespace LegendOfCube.Engine
 			contentCollection = new ContentCollection();
 
 			graphicsManager = new GraphicsDeviceManager(this);
-			graphicsManager.PreferredBackBufferHeight = 600;
-			graphicsManager.PreferredBackBufferWidth = 800;
+			graphicsManager.PreferredBackBufferWidth = cfg.InternalResX;
+			graphicsManager.PreferredBackBufferHeight = cfg.InternalResY;
+			graphicsManager.IsFullScreen = cfg.Fullscreen;
 
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
 			// that could be disposed and reused
 			Window.AllowUserResizing = true;
+
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
