@@ -3,28 +3,48 @@ using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Engine
-{	class CameraSystem
+{
+	class CameraSystem
 	{
-		private const float UP_OFFSET = 1.0f;
+		// Difines how much camera can look up/down
+		private const float MAX_TILT = MathHelper.PiOver2 - 0.2f;
 
+		// The distance above player to actually look at
+		private const float TARGET_Y_OFFSET = 0.8f;
+
+		// Scale input
 		private const float X_SCALE = 4.0f;
 		private const float Y_SCALE = -4.0f;
 
-		private const float MIN_DISTANCE = 2.0f;
-		private const float MAX_DISTANCE = 10.0f;
+		// How close camera can be to target without correcting
+		private const float MIN_DISTANCE = 3.0f;
+		private const float MAX_DISTANCE = 8.0f;
 
-		private const float MIN_ANGLE = -MathHelper.PiOver4;
-		private const float MAX_ANGLE = MathHelper.Pi / 3.0f;
+		private const float CATCH_UP_SPEED = 10.0f;
+		private const float BACKING_OFF_SPEED = 8.0f;
+		private const float TILT_CORRECT_SPEED = 3.0f;
 
-		private const float BASE_TILT = 10.0f;
-		private const float BASE_DISTANCE = 8.0f;
+		// Defines to what tilt the camera will aim to see target from
+		private const float BASE_TILT = 30.0f;
 
+		// Time in seconds until manual adjustments starts to reset
+		private const double CAMERA_RESET_TIME = 0.8;
+
+		// UNUSED: Angles to view player from at different zoom levels
+		private const float ZOOM_MIN_ANGLE = -MathHelper.PiOver4;
+		private const float ZOOM_MAX_ANGLE = MathHelper.Pi / 3.0f;
+
+		// UNUSED: Remember zoom level user has chosen
 		private float distanceFactor = 0.5f;
 
+		private double lastManualAdjustTime = double.MinValue;
 		private Vector3 lastKnownDirection = Vector3.Down;
+		private bool movedSinceManualControl = false;
 
-		public void OnUpdate(World world, float delta)
+		public void OnUpdate(World world, GameTime gameTime, float delta)
 		{
+			double now = gameTime.TotalGameTime.Seconds;
+
 			// Make various variables related to camera easily accessible
 			var oldCamera = world.Camera;
 			Vector3 oldPosition = oldCamera.Position;
@@ -33,65 +53,102 @@ namespace LegendOfCube.Engine
 			Matrix playerTransform = world.Transforms[world.Player.Id];
 			Vector3 playerPosition = playerTransform.Translation;
 
+			float oldDistance, oldTiltAngle, oldGroundAngle;
+			ToSpherical(oldPosRelOldTarget, out oldDistance, out oldTiltAngle, out oldGroundAngle);
+
 			// Fetch input data
 			var inputData = world.InputData[world.Player.Id];
 			Vector2 cameraModifierInput = inputData.GetCameraDirection();
+			bool inputOverThreshold = cameraModifierInput.Length() > 0.05f;
 
 			// Set what's to be the target
-			Vector3 cameraTarget = playerPosition + 0.5f * playerTransform.Up + UP_OFFSET * Vector3.Up;
-			Vector3 oldPosRelNewTarget = oldPosition - cameraTarget;
+			Vector3 newTarget = playerPosition + 0.5f * playerTransform.Up + TARGET_Y_OFFSET * Vector3.Up;
 
-			// Check which direction we appear to be travelling in, only update if above a certain limit
+			// Now fetch position relative to new target
+			Vector3 oldRelNewTargetPos = oldPosition - newTarget;
+			float oldRelNewTargetDistance, oldRelNewTargetTiltAngle, oldRelNewTargetGroundAngle;
+			ToSpherical(oldRelNewTargetPos, out oldRelNewTargetDistance, out oldRelNewTargetTiltAngle, out oldRelNewTargetGroundAngle);
+
+			// Determine direction player appears to be heading in
+			Vector3 targetCameraDirection;
 			Vector3 movementDirection = world.Velocities[world.Player.Id];
-			if (movementDirection.Length() < 0.5f)
+			// If under threshold, use previous value
+			if (movementDirection.Length() > 0.5f)
 			{
-				movementDirection = lastKnownDirection;
-			}
-
-			// Two modes for the camera, one where the player is activelly adjusting 
-			// camera, and one where it drifts back to behind the player
-			Vector3 newPosition;
-			if (cameraModifierInput.Length() < 0.01f)
-			{
-				// Drift toward point opposite of movement direction
-				
-				Vector3 targetCameraDirection = -movementDirection;
-
-				// Determine point where camera will rest
-				float targetTiltAngle = MathHelper.ToRadians(BASE_TILT) + MathHelper.ToRadians(BASE_TILT) + (float)Math.Asin(targetCameraDirection.Y / targetCameraDirection.Length());
-				float targetGroundAngle = (float)Math.Atan2(targetCameraDirection.Z, targetCameraDirection.X);
-
-				Vector3 targetCamPos = cameraTarget + new Vector3(
-					(float)(BASE_DISTANCE * Math.Cos(targetTiltAngle) * Math.Cos(targetGroundAngle)),
-					(float)(BASE_DISTANCE * Math.Sin(targetTiltAngle)),
-					(float)(BASE_DISTANCE * Math.Cos(targetTiltAngle) * Math.Sin(targetGroundAngle))
-				);
-
-				// Interpolate toward the target, will cause the camera to catch up faster when far away
-				newPosition = MathUtils.Lerp(2 * delta, oldPosition, targetCamPos);
+				targetCameraDirection = movementDirection;
+				movedSinceManualControl = true;
 			}
 			else
 			{
-				// Full manual control of camera around player
-
-				float distance = oldPosRelOldTarget.Length();
-				float tiltAngle = (float)Math.Asin(oldPosRelOldTarget.Y / oldPosRelOldTarget.Length());
-				float groundAngle = (float)Math.Atan2(oldPosRelOldTarget.Z, oldPosRelOldTarget.X);
-
-				// Modify angles depending on input
-				tiltAngle = MathHelper.Clamp(tiltAngle + delta * Y_SCALE * cameraModifierInput.Y, -MathHelper.PiOver2 + 0.1f, MathHelper.PiOver2 - 0.1f);
-				groundAngle += (delta * X_SCALE * cameraModifierInput.X) % (MathHelper.TwoPi);
-
-				newPosition = cameraTarget + new Vector3(
-					(float)(distance * Math.Cos(tiltAngle) * Math.Cos(groundAngle)),
-					(float)(distance * Math.Sin(tiltAngle)),
-					(float)(distance * Math.Cos(tiltAngle) * Math.Sin(groundAngle))
-				);
+				targetCameraDirection = lastKnownDirection;
 			}
 
-			Camera newCamera = new Camera(newPosition, cameraTarget);
+			// Ugly way to check if camera shouldn't try to catch up, as when going through teleport portal or respawning
+			bool playerTeleport = (oldTarget - newTarget).Length() > 5.0f;
+
+			// Determine point where camera will rest
+			float targetTiltAngle = ClampTilt(MathHelper.ToRadians(BASE_TILT) - GetTiltAngle(targetCameraDirection));
+			float targetGroundAngle = (float)Math.Atan2(targetCameraDirection.Z, targetCameraDirection.X);
+
+			// Smoothly change distance from target
+			float newDistance;
+			if (playerTeleport)
+			{
+				newDistance = MIN_DISTANCE;
+			}
+			else if (oldRelNewTargetDistance > MAX_DISTANCE)
+			{
+				newDistance = MathUtils.ClampLerp(CATCH_UP_SPEED * delta, oldRelNewTargetDistance, MAX_DISTANCE);
+			}
+			else if (oldRelNewTargetDistance < MIN_DISTANCE)
+			{
+				newDistance = MathUtils.ClampLerp(BACKING_OFF_SPEED * delta, oldRelNewTargetDistance, MIN_DISTANCE);
+			}
+			else
+			{
+				newDistance = oldRelNewTargetDistance;
+			}
+
+			// Check if camera should stay at the manually set position
+			bool manualControlLock = ((now - lastManualAdjustTime) < CAMERA_RESET_TIME) || !movedSinceManualControl;
+
+			float newGroundAngle;
+			float newTiltAngle;
+			if (inputOverThreshold)
+			{
+				// Full manual control relative to player
+				newTiltAngle = ClampTilt(oldTiltAngle + delta * Y_SCALE * cameraModifierInput.Y);
+				newGroundAngle = (oldGroundAngle + delta * X_SCALE * cameraModifierInput.X) % MathHelper.TwoPi;
+
+				lastManualAdjustTime = now;
+				movedSinceManualControl = false;
+			}
+			else if (manualControlLock || playerTeleport)
+			{
+				// Keep manually set position for a while
+				newTiltAngle = oldTiltAngle;
+				newGroundAngle = oldGroundAngle;
+			}
+			else
+			{
+				if (world.PlayerCubeState.OnGround)
+				{
+					// Drift toward target tilt angle
+					newTiltAngle = MathUtils.ClampLerp(TILT_CORRECT_SPEED * delta, oldRelNewTargetTiltAngle, targetTiltAngle);
+				}
+				else
+				{
+					newTiltAngle = oldRelNewTargetTiltAngle;
+				}
+				newGroundAngle = oldRelNewTargetGroundAngle;
+			}
+
+			// Set new camera in world
+			var newPosition = newTarget + ToCartesian(newDistance, newTiltAngle, newGroundAngle);
+			Camera newCamera = new Camera(newPosition, newTarget);
 			world.Camera = newCamera;
-			lastKnownDirection = movementDirection;
+
+			lastKnownDirection = targetCameraDirection;
 		}
 
 		/// <summary>
@@ -102,8 +159,36 @@ namespace LegendOfCube.Engine
 		/// <param name="tiltAngle">the inclination angle, 0.0  means parallel to ground plane</param>
 		private static void CalcZoomTrejectory(float t, out float distance, out float tiltAngle)
 		{
-			distance = MathHelper.Lerp(MIN_DISTANCE, MAX_DISTANCE, t);
-			tiltAngle = MathHelper.Lerp(MIN_ANGLE, MAX_ANGLE, t);
+			distance = MathUtils.ClampLerp(t, MIN_DISTANCE, MAX_DISTANCE);
+			tiltAngle = MathUtils.ClampLerp(t, ZOOM_MIN_ANGLE, ZOOM_MAX_ANGLE);
 		}
+
+		private static float ClampTilt(float tiltAngle)
+		{
+			return MathHelper.Clamp(tiltAngle, -MAX_TILT, MAX_TILT);
+		}
+
+		private static void ToSpherical(Vector3 vector, out float radius, out float tiltAngle, out float groundAngle)
+		{
+			radius = vector.Length();
+			tiltAngle = GetTiltAngle(vector);
+			groundAngle = (float)Math.Atan2(vector.Z, vector.X);
+		}
+
+		private static float GetTiltAngle(Vector3 vector)
+		{
+			return (float)Math.Asin(vector.Y / vector.Length());
+		}
+
+		private static Vector3 ToCartesian(float radius, float tiltAngle, float groundAngle)
+		{
+			return new Vector3
+			{
+				X = (float)(radius * Math.Cos(tiltAngle) * Math.Cos(groundAngle)),
+				Y = (float)(radius * Math.Sin(tiltAngle)),
+				Z = (float)(radius * Math.Cos(tiltAngle) * Math.Sin(groundAngle))
+			};
+		}
+
 	}
 }

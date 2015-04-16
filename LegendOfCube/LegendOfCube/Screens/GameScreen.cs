@@ -70,7 +70,7 @@ namespace LegendOfCube.Screens
 				EventSystem.CalculateCubeState(world);
 				EventSystem.HandleEvents(world);
 				animationSystem.OnUpdate(world, delta);
-				cameraSystem.OnUpdate(world, delta);
+				cameraSystem.OnUpdate(world, gameTime, delta);
 			}
 		}
 
