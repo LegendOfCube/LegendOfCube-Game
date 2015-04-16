@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine
 
 		public void OnUpdate(World world, GameTime gameTime, float delta)
 		{
-			double now = gameTime.TotalGameTime.Seconds;
+			double now = gameTime.TotalGameTime.TotalSeconds;
 
 			// Make various variables related to camera easily accessible
 			var oldCamera = world.Camera;
