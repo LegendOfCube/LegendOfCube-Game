@@ -56,12 +56,7 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape))
-			{
-				game.Exit();
-			}
-
-			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
+			if (KeyWasJustPressed(Keys.Escape) || KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
 				screenSystem.AddScreen(new PauseScreen(game, screenSystem));
 			}
@@ -79,7 +74,7 @@ namespace LegendOfCube.Engine
 			{
 				if (world.WinState)
 				{
-					EventSystem.ResetLevel(world);
+					screenSystem.ResetGameScreen();
 				}
 				else
 				{
@@ -89,7 +84,7 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Back))
 			{
-				EventSystem.ResetLevel(world);
+				screenSystem.ResetGameScreen();
 			}
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {

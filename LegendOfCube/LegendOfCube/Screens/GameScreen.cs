@@ -12,7 +12,7 @@ namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
-		private Level level;
+		public readonly Level level;
 		private World world;
 
 		private InputSystem inputSystem;
