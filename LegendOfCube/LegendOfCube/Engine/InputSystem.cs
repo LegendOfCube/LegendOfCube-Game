@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Policy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendOfCube.Screens;
@@ -89,7 +91,7 @@ namespace LegendOfCube.Engine
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {
 
-				InputDataImpl inputData = (InputDataImpl)world.InputData[e.Id];
+				InputData inputData = world.InputData[e.Id];
 
 				if (keyState.IsKeyDown(Keys.W) || gamePadState.DPad.Up == ButtonState.Pressed) directionInput.Y++;
 
@@ -109,12 +111,18 @@ namespace LegendOfCube.Engine
 
 				inputData.SetDirection(directionInput);
 
-				if ( keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed )
+				if ( keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
 				{
+					inputData.BufferedJump = true;
 					inputData.SetStateOfJumping(true);
 					if (!oldKeyState.IsKeyDown(Keys.Space) && !(oldGamePadState.Buttons.A == ButtonState.Pressed) )
 					{
 						inputData.SetNewJump(true);
+					}
+					else if ( inputData.BufferedJump && world.PlayerCubeState.OnGround )
+					{
+						inputData.SetNewJump(true);
+						inputData.BufferedJump = false;
 					}
 					else
 					{
@@ -123,8 +131,17 @@ namespace LegendOfCube.Engine
 				}
 				else
 				{
-					inputData.SetStateOfJumping(false);
-					inputData.SetNewJump(false);
+					if (world.PlayerCubeState.OnGround && inputData.BufferedJump)
+					{
+						inputData.SetStateOfJumping(true);
+						inputData.SetNewJump(true);
+						inputData.BufferedJump = false;
+					}
+					else
+					{
+						inputData.SetStateOfJumping(false);
+						inputData.SetNewJump(false);
+					}
 				}
 
 				Vector2 cameraDirection = new Vector2(0,0);
