@@ -70,6 +70,7 @@ namespace LegendOfCube.Engine
 		public void LoadContent(ContentManager cm)
 		{
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
+			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
 			PlatformModel = cm.Load<Model>("Models/Platform/platform");
 			BrickWallModel = cm.Load<Model>("Models/Brick_Wall/brick_wall");
 			DropSignModel = cm.Load<Model>("Models/Sign_Drop/danger_drop");
