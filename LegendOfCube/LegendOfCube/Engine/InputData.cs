@@ -10,6 +10,8 @@ namespace LegendOfCube.Engine
 		private Vector2 cameraDirection;
 		private bool isJumping, newJump;
 		public bool BufferedJump { get; set; }
+		public readonly float BufferTime = 200;
+		public float BufferTimeElapsed = 0;
 
 		public Vector2 GetDirection()
 		{

@@ -113,16 +113,11 @@ namespace LegendOfCube.Engine
 
 				if ( keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
 				{
-					inputData.BufferedJump = true;
 					inputData.SetStateOfJumping(true);
 					if (!oldKeyState.IsKeyDown(Keys.Space) && !(oldGamePadState.Buttons.A == ButtonState.Pressed) )
 					{
 						inputData.SetNewJump(true);
-					}
-					else if ( inputData.BufferedJump && world.PlayerCubeState.OnGround )
-					{
-						inputData.SetNewJump(true);
-						inputData.BufferedJump = false;
+						inputData.BufferedJump = true;
 					}
 					else
 					{
@@ -131,16 +126,23 @@ namespace LegendOfCube.Engine
 				}
 				else
 				{
-					if (world.PlayerCubeState.OnGround && inputData.BufferedJump)
+					inputData.SetStateOfJumping(false);
+					inputData.SetNewJump(false);
+				}
+
+				if (inputData.BufferedJump)
+				{
+					inputData.BufferTimeElapsed += gameTime.ElapsedGameTime.Milliseconds;
+					if (inputData.BufferTimeElapsed >= inputData.BufferTime)
 					{
-						inputData.SetStateOfJumping(true);
+						inputData.BufferedJump = false;
+						inputData.BufferTimeElapsed = 0;
+					}
+					else if (world.PlayerCubeState.OnGround && inputData.BufferedJump)
+					{
 						inputData.SetNewJump(true);
 						inputData.BufferedJump = false;
-					}
-					else
-					{
-						inputData.SetStateOfJumping(false);
-						inputData.SetNewJump(false);
+						inputData.BufferTimeElapsed = 0;
 					}
 				}
 
