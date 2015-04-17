@@ -8,9 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class DemoLevel : ILevelFactory
+	public class DemoLevel : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public DemoLevel() : base("Demo Level") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 			world.SpawnPoint = new Vector3(0, 0, 0);

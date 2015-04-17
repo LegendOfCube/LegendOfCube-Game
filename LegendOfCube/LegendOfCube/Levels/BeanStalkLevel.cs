@@ -5,9 +5,11 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Levels
 {
-	class BeanStalkLevelFactory : ILevelFactory
+	class BeanStalkLevel : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+		public BeanStalkLevel() : base("Bean Stalk Level") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000) { SpawnPoint = new Vector3(0, 0, 0) };
 			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
@@ -17,7 +19,7 @@ namespace LegendOfCube.Levels
 			var player = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube)
 				.WithPosition(world.SpawnPoint)
-				.WithVelocity(Vector3.Zero, 15)
+				.WithVelocity(Vector3.Zero, 0)
 				.WithAcceleration(Vector3.Zero)
 				.WithAdditionalProperties(new Properties(Properties.INPUT | Properties.GRAVITY_FLAG | Properties.DYNAMIC_VELOCITY_FLAG))
 				.AddToWorld(world);
@@ -41,7 +43,7 @@ namespace LegendOfCube.Levels
 
 			// Add a lot of platforms building upwards
 			var rnd = new Random(0);
-			for (float y = 5.0f; y < 500.0f; y += 7)
+			for (float y = 5.0f; y < 500.0f; y += 6.25f)
 			{
 				platformBuilder
 					.WithPosition(new Vector3(rnd.Next(-15, 15), y, rnd.Next(-15, 15)))

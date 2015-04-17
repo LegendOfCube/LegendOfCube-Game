@@ -12,10 +12,11 @@ namespace LegendOfCube.Engine
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private readonly RenderSystem renderSystem;
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ScreenSystem screenSystem;
 		private readonly ContentCollection contentCollection;
+
+		private readonly GlobalConfig cfg = GlobalConfig.Instance;
 	
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -27,17 +28,18 @@ namespace LegendOfCube.Engine
 			contentCollection = new ContentCollection();
 
 			graphicsManager = new GraphicsDeviceManager(this);
-			graphicsManager.PreferredBackBufferHeight = 600;
-			graphicsManager.PreferredBackBufferWidth = 800;
-			renderSystem = new RenderSystem(this, graphicsManager);
+			graphicsManager.PreferredBackBufferWidth = cfg.InternalResX;
+			graphicsManager.PreferredBackBufferHeight = cfg.InternalResY;
+			graphicsManager.IsFullScreen = cfg.Fullscreen;
 
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
 			// that could be disposed and reused
 			Window.AllowUserResizing = true;
+
 			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
-			screenSystem = new ScreenSystem(this, contentCollection);
+			screenSystem = new ScreenSystem(this, contentCollection, graphicsManager);
 
 		}
 
@@ -52,8 +54,6 @@ namespace LegendOfCube.Engine
 		/// </summary>
 		protected override void Initialize()
 		{
-			renderSystem.Initialize();
-			
 			base.Initialize();
 		}
 
@@ -64,8 +64,7 @@ namespace LegendOfCube.Engine
 		protected override void LoadContent()
 		{
 			contentCollection.LoadContent(Content);
-			renderSystem.LoadContent();
-			screenSystem.LoadAllContent();
+			screenSystem.LoadContent();
 		}
 
 		/// <summary>
@@ -84,7 +83,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			screenSystem.GetCurrentScreen().Update(gameTime, screenSystem);
+			screenSystem.Update(gameTime);
 			base.Update(gameTime);
 		}
 
@@ -94,27 +93,11 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
-			screenSystem.GetCurrentScreen().Draw(gameTime, renderSystem);
+			GraphicsDevice.Clear(Color.CornflowerBlue);
+
+			screenSystem.Draw(gameTime);
 			base.Draw(gameTime);
 		}
 
-		// Helper methods
-		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		/*public void SwitchScreen()
-		{
-			if (currentScreen is GameScreen)
-			{
-				this.IsMouseVisible = true;
-				screens[1].SetWorld(currentScreen.World);
-				currentScreen = screens[1];
-			}
-			else if (currentScreen is PauseScreen)
-			{
-
-				this.IsMouseVisible = false;
-				currentScreen = screens[0];
-			}
-		}*/
 	}
 }

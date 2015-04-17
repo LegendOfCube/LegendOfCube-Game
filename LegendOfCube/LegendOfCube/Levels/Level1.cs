@@ -6,9 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	class Level1 : ILevelFactory
+	class Level1 : Level
 	{
-		public World CreateWorld(Game game, ContentCollection contentCollection)
+
+		public Level1() : base("Level 1") {}
+
+		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000);
 
@@ -41,9 +44,15 @@ namespace LegendOfCube.Levels
 			var groundAsphaltBuilder = new EntityBuilder().WithModelData(contentCollection.GroundAsphalt);
 			var ductBuilder = new EntityBuilder().WithModelData(contentCollection.Duct);
 			var trussBuilder = new EntityBuilder().WithModelData(contentCollection.Truss);
+			var catWalkStartBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkStart);
+			var catWalkMiddleBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkMiddle);
+			var catWalkEndBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkEnd);
+			var doorBuilder = new EntityBuilder().WithModelData(contentCollection.Door);
+			var exitSignBuilder = new EntityBuilder().WithModelData(contentCollection.ExitSign);
+
+			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
-
 
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
@@ -126,12 +135,25 @@ namespace LegendOfCube.Levels
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -39.5f, 65).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -39, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -39.5f, 25).AddToWorld(world);
+			
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -52, 65).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -51.5f, 45).AddToWorld(world);
 			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -52, 25).AddToWorld(world);
+			
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -64.5f, 65).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -64, 45).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -64.5f, 25).AddToWorld(world);
+			
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -77, 65).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-45, -76.5f, 45).AddToWorld(world);
+			brickWallBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -77, 25).AddToWorld(world);
+				//Support Pipes
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -13, 65).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 65).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -13, 25).AddToWorld(world);
+			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 25).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
-			
 			hangingPlatformBuilder.Copy().WithPosition(-15, -28, 0).AddToWorld(world);
 
 			//2 story climb
@@ -144,13 +166,19 @@ namespace LegendOfCube.Levels
 
 			hangingPlatformBuilder.Copy().WithPosition(38, 0, 12).AddToWorld(world);
 
+			/*
 			new EntityBuilder()
-				.WithTransform(Matrix.CreateScale(8, 0.1f, 8))
-				.WithPosition(38, 0.5f, 12)
+				.WithTransform(Matrix.CreateScale(9.8f, 0.1f, 9.8f))
+				.WithPosition(38, 0.001f, 12)
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
+			*/
 
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f)).WithPosition(85, -14.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73.5f, -28, 20.5f).AddToWorld(world);
+			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 3) * Matrix.CreateRotationZ(MathHelper.ToRadians(-45))).WithPosition(72, -14.5f, 20.5f).AddToWorld(world);
 			//Falling death
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(1900))
@@ -159,6 +187,46 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
+			
+			// TEST GEOMETRY
+				//WALLS
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG))
+				.WithPosition(-100, -40, 50).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG))
+				.WithPosition(100, -40, 50).AddToWorld(world);							
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(20, -40, -20).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithPosition(20, -40, 100).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
+				//FLOOR and ROOF
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(20, -70, 50)
+				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
+			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(0, 30, 40)
+				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
+
+			// Catwalk lower
+			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -40, -15.3f)).AddToWorld(world);
+			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -40, -15.3f)).AddToWorld(world);
+			catWalkEndBuilder.Copy().WithPosition(new Vector3(20, -40, -15.3f)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, -39.5f,-20)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, -39.5f, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -35, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -35, -20)).AddToWorld(world);
+			// Catwalk upper
+			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -20, -15.3f)).AddToWorld(world);
+			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -20, -15.3f)).AddToWorld(world);
+			catWalkEndBuilder.Copy().WithPosition(new Vector3(20, -20, -15.3f)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(0, -19.5f, -20)).AddToWorld(world);
+			doorBuilder.Copy().WithTransform(Matrix.CreateScale(2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(new Vector3(20, -19.5f, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -15, -20)).AddToWorld(world);
+			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -15, -20)).AddToWorld(world);
+			
 			return world;
 		}
 	}

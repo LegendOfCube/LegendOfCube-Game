@@ -19,8 +19,10 @@ namespace LegendOfCube.Engine.Graphics
 		                                                                Properties.MODEL |
 		                                                                Properties.TRANSFORM |
 		                                                                Properties.STANDARD_EFFECT);
-	
+
 		private static readonly Properties HAS_OBB = new Properties(Properties.MODEL_SPACE_BV);
+		private static readonly Properties NO_SHADOW_CAST = new Properties(Properties.NO_SHADOW_CAST_FLAG);
+		private static readonly Properties NO_SHADOW_RECEIVE = new Properties(Properties.NO_SHADOW_RECEIVE_FLAG);
 
 		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 		private const int SHADOW_MAP_SIZE = 2048;
@@ -58,10 +60,7 @@ namespace LegendOfCube.Engine.Graphics
 			this.graphicsManager = graphicsDeviceManager;
 		}
 
-		// Public methods
-		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-		public void Initialize()
+		public void LoadContent()
 		{
 			this.graphicsDevice = game.GraphicsDevice;
 			obbRenderer = new OBBRenderer(graphicsDevice);
@@ -85,10 +84,7 @@ namespace LegendOfCube.Engine.Graphics
 				VertexColorEnabled = false,
 				TextureEnabled = false,
 			};
-		}
 
-		public void LoadContent()
-		{
 			this.standardEffect = StandardEffect.LoadEffect(game.Content);
 		}
 
@@ -164,7 +160,7 @@ namespace LegendOfCube.Engine.Graphics
 			RenderTargetBinding[] origRenderTargets = new RenderTargetBinding[game.GraphicsDevice.GetRenderTargets().Length];
 			game.GraphicsDevice.GetRenderTargets().CopyTo(origRenderTargets, 0);
 			game.GraphicsDevice.SetRenderTarget(renderTarget);
-			game.GraphicsDevice.Clear(Color.Black);
+			game.GraphicsDevice.Clear(Color.White);
 			standardEffect.SetShadowMapRendering(true);
 
 			// The shadow map is based on an orthographic projection that could
@@ -183,7 +179,8 @@ namespace LegendOfCube.Engine.Graphics
 
 			foreach (var entity in entities)
 			{
-				if (!world.EntityProperties[entity.Id].Satisfies(STANDARD_EFFECT_COMPATIBLE))
+				Properties properties = world.EntityProperties[entity.Id];
+				if (!properties.Satisfies(STANDARD_EFFECT_COMPATIBLE) || properties.Satisfies(NO_SHADOW_CAST))
 				{
 					continue;
 				}
@@ -313,6 +310,9 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetEmissiveTexture(sep.EmissiveTexture);
 			standardEffect.SetSpecularTexture(sep.SpecularTexture);
 			standardEffect.SetNormalTexture(sep.NormalTexture);
+
+			bool noShadowReceive = world.EntityProperties[entity.Id].Satisfies(NO_SHADOW_RECEIVE);
+			standardEffect.SetApplyShadows(!noShadowReceive);
 
 			RenderModelWithStandardEffect(entity, model, transforms, ref worldTransform);
 		}
