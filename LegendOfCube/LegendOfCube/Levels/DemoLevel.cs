@@ -291,18 +291,18 @@ namespace LegendOfCube.Levels
 
 			//Wall jump puzzle
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(210, -10, -7.5f)).AddToWorld(world);
+				.WithPosition(new Vector3(210, -15, -7.5f)).AddToWorld(world);
 
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationZ(MathHelper.ToRadians(180)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(240, 5, 7.5f)).AddToWorld(world);
+				.WithPosition(new Vector3(240, 0, 7.5f)).AddToWorld(world);
 
 			brickWallArrowsHBuilder.WithTransform(Matrix.CreateScale(3.5f, 6, 4) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(new Vector3(270, -10, -7.5f)).AddToWorld(world);
+				.WithPosition(new Vector3(270, -15, -7.5f)).AddToWorld(world);
 
 			platformBuilder.Copy().WithTransform(Matrix.CreateScale(2))
-				.WithPosition(new Vector3(300, -10, 0)).WithStandardEffectParams(platformCheckpointEffect)
+				.WithPosition(new Vector3(300, -15, 0)).WithStandardEffectParams(platformCheckpointEffect)
 				.WithAdditionalProperties(new Properties(Properties.CHECKPOINT_FLAG)).AddToWorld(world);
-			pillarBuilder.Copy().WithPosition(300, -10, 0).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(300, -15, 0).AddToWorld(world);
 
 			//Climbpuzzle
 			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateScale(0.75f))
