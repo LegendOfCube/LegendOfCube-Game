@@ -156,22 +156,5 @@ namespace LegendOfCube.Engine
 			world.TimeSinceGameOver = 0;
 			world.GameStats.PlayerDeaths += 1;
 		}
-
-		public static void ResetLevel(World world)
-		{
-			//TODO: Should probably reload entire level instead of just resetting spawnpoints and stats
-			world.SpawnPoint = new Vector3(0,1,0);
-			world.GameStats.PlayerDeaths = 0;
-			world.GameStats.GameTime = 0;
-			world.WinState = false;
-			world.TimeSinceGameOver = 0;
-
-			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
-			world.Velocities[world.Player.Id] = Vector3.Zero;
-
-			world.CameraPosition = world.SpawnPoint;
-			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
-			world.CameraPosition.X -= 2;
-		}
 	}
 }
