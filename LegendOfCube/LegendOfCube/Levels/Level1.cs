@@ -187,7 +187,7 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
-
+			
 			// TEST GEOMETRY
 				//WALLS
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))
@@ -226,7 +226,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(new Vector3(20, -19.5f, -20)).AddToWorld(world);
 			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -15, -20)).AddToWorld(world);
 			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -15, -20)).AddToWorld(world);
-
+			
 			return world;
 		}
 	}
