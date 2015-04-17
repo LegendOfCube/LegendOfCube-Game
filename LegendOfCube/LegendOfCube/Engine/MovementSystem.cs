@@ -150,8 +150,6 @@ namespace LegendOfCube.Engine
 				currentMovementVelocity -= wallAxisCurVel * world.PlayerCubeState.WallAxis;
 				float wallAxisTargetVel = Vector3.Dot(targetMovementVelocity, world.PlayerCubeState.WallAxis);
 				targetMovementVelocity -= wallAxisTargetVel * world.PlayerCubeState.WallAxis;
-
-				world.Velocities[i] -= 2.5f * world.PlayerCubeState.WallAxis;
 			}
 
 			// WALL ANTI-GRAVITY HACK
