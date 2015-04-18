@@ -49,6 +49,9 @@ namespace LegendOfCube.Levels
 			var catWalkEndBuilder = new EntityBuilder().WithModelData(contentCollection.CatwalkEnd);
 			var doorBuilder = new EntityBuilder().WithModelData(contentCollection.Door);
 			var exitSignBuilder = new EntityBuilder().WithModelData(contentCollection.ExitSign);
+			var fenceBuilder = new EntityBuilder().WithModelData(contentCollection.Fence);
+			var barbsBuilder = new EntityBuilder().WithModelData(contentCollection.Barbs);
+
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
@@ -178,7 +181,11 @@ namespace LegendOfCube.Levels
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f)).WithPosition(85, -14.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73.5f, -28, 20.5f).AddToWorld(world);
-			platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 3) * Matrix.CreateRotationZ(MathHelper.ToRadians(-45))).WithPosition(72, -14.5f, 20.5f).AddToWorld(world);
+
+			fenceBuilder.Copy().WithPosition(72.5f, -15, 20).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(72.5f, -5, 20).AddToWorld(world);
+			
+			//platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 3) * Matrix.CreateRotationZ(MathHelper.ToRadians(-45))).WithPosition(72, -14.5f, 20.5f).AddToWorld(world);
 			//Falling death
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(1900))

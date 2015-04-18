@@ -37,6 +37,8 @@ namespace LegendOfCube.Engine
 		public ModelData SignArrowUp { get; private set; }
 		public ModelData SignTrampoline { get; private set; }
 		public ModelData WindowBars { get; private set; }
+		public ModelData Fence { get; private set; }
+		public ModelData Barbs { get; private set; }
 
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
@@ -65,6 +67,8 @@ namespace LegendOfCube.Engine
 		public Model Ground100x50 { get; private set; }
 		public Model SignModel { get; private set; }
 		public Model WindowBarsModel { get; private set; }
+		public Model FenceModel { get; private set; }
+		public Model BarbsModel { get; private set; }
 
 
 		public void LoadContent(ContentManager cm)
@@ -91,6 +95,8 @@ namespace LegendOfCube.Engine
 			Ground50x50 = cm.Load<Model>("Models/Ground/ground_50x50");
 			BrickWallWindowModel = cm.Load<Model>("Models/Brick_Wall/brick_wall_window_no_bars");
 			WindowBarsModel = cm.Load<Model>("Models/Brick_Wall/window_bars");
+			FenceModel = cm.Load<Model>("Models/Fence/fence");
+			BarbsModel = cm.Load<Model>("Models/Fence/barbs_no_rotation");
 
 			placeholderWall = new ModelData
 			{
@@ -419,6 +425,28 @@ namespace LegendOfCube.Engine
 					DiffuseTexture = cm.Load<Texture>("Models/Signs/trampoline"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
+			};
+
+			Fence = new ModelData
+			{
+				Model = FenceModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Fence/fence_d"),
+					NormalTexture = cm.Load<Texture>("Models/Fence/Metall_Rost_Normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0,5,0), 0.3f, 10, 10)
+			};
+			Barbs = new ModelData
+			{
+				Model = BarbsModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Fence/fence_d"),
+					NormalTexture = cm.Load<Texture>("Models/Fence/Metall_Rost_Normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 1.949f, 0), 0.3f, 3.898f, 10)
+				
 			};
 		}
 	}
