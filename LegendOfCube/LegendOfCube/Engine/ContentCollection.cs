@@ -435,7 +435,7 @@ namespace LegendOfCube.Engine
 					DiffuseTexture = cm.Load<Texture>("Models/Fence/fence_d"),
 					NormalTexture = cm.Load<Texture>("Models/Fence/Metall_Rost_Normal")
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0,5,0), 0.3f, 10, 10)
+				Obb = OBB.CreateAxisAligned(new Vector3(0,5,0), 0.4f, 10, 10)
 			};
 			Barbs = new ModelData
 			{

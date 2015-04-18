@@ -178,12 +178,16 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 			*/
 
-			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f)).WithPosition(85, -14.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
-			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f)).WithPosition(86, -15.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
+			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73.5f, -28, 20.5f).AddToWorld(world);
 
-			fenceBuilder.Copy().WithPosition(72.5f, -15, 20).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(72.5f, -5, 20).AddToWorld(world);
+			fenceBuilder.Copy().WithPosition(73, -20, 10.5f).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(73, -10, 10.5f).AddToWorld(world);
+			fenceBuilder.Copy().WithPosition(73, -20, 20.5f).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(73, -10, 20.5f).AddToWorld(world);
+			fenceBuilder.Copy().WithPosition(73, -20, 30.5f).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(73, -10, 30.5f).AddToWorld(world);
 			
 			//platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 3) * Matrix.CreateRotationZ(MathHelper.ToRadians(-45))).WithPosition(72, -14.5f, 20.5f).AddToWorld(world);
 			//Falling death
