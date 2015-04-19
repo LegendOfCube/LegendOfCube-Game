@@ -21,7 +21,7 @@ namespace LegendOfCube.Levels
 			world.AmbientIntensity = 0.45f;
 
 			var playerBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.PlayerCube)
+				.WithModelData(contentCollection.PlayerCube2)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero)

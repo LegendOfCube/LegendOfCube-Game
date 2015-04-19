@@ -8,6 +8,7 @@ namespace LegendOfCube.Engine
 {
 	public class ContentCollection
 	{
+		public ModelData PlayerCube2 { get; private set; }
 		public ModelData PlayerCube { get; private set; }
 		public ModelData PlayerCubePlain { get; private set; }
 		public ModelData RustPlatform { get; private set; }
@@ -43,7 +44,7 @@ namespace LegendOfCube.Engine
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
-
+		public Model CubeModel2 { get; private set; }
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
 		public Model PlatformModel { get; private set; }
@@ -73,6 +74,7 @@ namespace LegendOfCube.Engine
 
 		public void LoadContent(ContentManager cm)
 		{
+			CubeModel2 = cm.Load<Model>("Models/Cube/newcube_ep");
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
 			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
 			PlatformModel = cm.Load<Model>("Models/Platform/platform");
@@ -105,6 +107,19 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseColor = Color.DarkGray.ToVector4(),
+				}
+			};
+
+			PlayerCube2 = new ModelData
+			{
+				Model = CubeModel2,
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Cube/testdiff"),
+					EmissiveTexture = cm.Load<Texture>("Models/Cube/testemissive"),
+					//SpecularColor = Color.Gray.ToVector4(),
+					//EmissiveColor = Color.Black.ToVector4()
 				}
 			};
 
