@@ -60,11 +60,6 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(0, -40, 20).AddToWorld(world);
-			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(30, -40, 20).AddToWorld(world);
-			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(180))).WithPosition(30, -40, 20).AddToWorld(world);
-
-
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
@@ -109,6 +104,18 @@ namespace LegendOfCube.Levels
 
 			brickWallArrowsVBuilder.Copy().WithTransform(Matrix.CreateScale(2, 4, 2)
 				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(65, -34.9f, 88).AddToWorld(world);
+
+			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.5f)* Matrix.CreateRotationX(MathHelper.ToRadians(-13))
+				 * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(43.5f, -38.2f, 89.5f).AddToWorld(world);
+
+			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-10, -45, 90).AddToWorld(world);
+			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(20, -45, 90).AddToWorld(world);
+			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(180))).WithPosition(20, -45, 90).AddToWorld(world);
+			new EntityBuilder()
+				.WithTransform(Matrix.CreateScale(6, 6, 12))
+				.WithPosition(49, -48.34f, 99)
+				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+				.AddToWorld(world);
 
 			//Hanging platforms
 			hangingPlatformBuilder.Copy().WithPosition(43, -27, 88).AddToWorld(world);
@@ -251,7 +258,7 @@ namespace LegendOfCube.Levels
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(20, -40, -20).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
-				.WithPosition(20, -40, 100).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
+				.WithPosition(20, -40, 110.5f).WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);
 				//FLOOR and ROOF
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(5, 3, 3)).WithPosition(20, -70, 50)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG)).AddToWorld(world);

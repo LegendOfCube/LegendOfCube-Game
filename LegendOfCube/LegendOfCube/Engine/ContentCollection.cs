@@ -503,7 +503,7 @@ namespace LegendOfCube.Engine
 					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipe_d"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 6, 6, 5.8f)
+				Obb = OBB.CreateAxisAligned(new Vector3(-22.5f, 0.35f, 0), 15, 6, 5.8f)
 
 			};
 		}
