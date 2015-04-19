@@ -206,24 +206,24 @@ namespace LegendOfCube.Levels
 				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(87.5f, -78, 4.5f).AddToWorld(world);
 				//Centre fences
 			fenceBuilder.Copy().WithPosition(73, -20, 10.5f).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(73, -10, 10.5f).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73, -10, 10.5f).AddToWorld(world);
 			fenceBuilder.Copy().WithPosition(73, -20, 20.5f).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(73, -10, 20.5f).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73, -10, 20.5f).AddToWorld(world);
 			fenceBuilder.Copy().WithPosition(73, -20, 30.5f).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45))).WithPosition(73, -10, 30.5f).AddToWorld(world);
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(73, -10, 30.5f).AddToWorld(world);
 				//Left fences
 			fenceBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(78, -20, 5).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45)) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(78, -10, 5).AddToWorld(world);
 			fenceBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(88, -20, 5).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45)) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(88, -10, 5).AddToWorld(world);
 				//Right fences
 			fenceBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(78, -20, 36).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
 				.WithPosition(78, -10, 36).AddToWorld(world);
 			fenceBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(88, -20, 36).AddToWorld(world);
-			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(45)) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
 				.WithPosition(88, -10, 36).AddToWorld(world);
 			
 			//platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 3) * Matrix.CreateRotationZ(MathHelper.ToRadians(-45))).WithPosition(72, -14.5f, 20.5f).AddToWorld(world);
