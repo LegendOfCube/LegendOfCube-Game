@@ -40,6 +40,7 @@ namespace LegendOfCube.Engine
 		public ModelData WindowBars { get; private set; }
 		public ModelData Fence { get; private set; }
 		public ModelData Barbs { get; private set; }
+		public ModelData PipeWalk { get; private set; }
 
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
@@ -70,6 +71,7 @@ namespace LegendOfCube.Engine
 		public Model WindowBarsModel { get; private set; }
 		public Model FenceModel { get; private set; }
 		public Model BarbsModel { get; private set; }
+		public Model PipeWalkModel { get; private set; }
 
 
 		public void LoadContent(ContentManager cm)
@@ -99,6 +101,7 @@ namespace LegendOfCube.Engine
 			WindowBarsModel = cm.Load<Model>("Models/Brick_Wall/window_bars");
 			FenceModel = cm.Load<Model>("Models/Fence/fence");
 			BarbsModel = cm.Load<Model>("Models/Fence/barbs_no_rotation");
+			PipeWalkModel = cm.Load<Model>("Models/Pipe/pipe_walk");
 
 			placeholderWall = new ModelData
 			{
@@ -118,6 +121,7 @@ namespace LegendOfCube.Engine
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Cube/testdiff"),
 					EmissiveTexture = cm.Load<Texture>("Models/Cube/testemissive"),
+					SpecularTexture = cm.Load<Texture>("Models/Cube/cubespec"),
 					//SpecularColor = Color.Gray.ToVector4(),
 					//EmissiveColor = Color.Black.ToVector4()
 				}
@@ -462,6 +466,18 @@ namespace LegendOfCube.Engine
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 1.949f, 0), 0.3f, 3.898f, 10)
 				
+			};
+
+			PipeWalk = new ModelData
+			{
+				Model = PipeWalkModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
+
 			};
 		}
 	}
