@@ -484,10 +484,9 @@ namespace LegendOfCube.Engine
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
 
 			};
-
 			Pipe = new ModelData
 			{
-				Model = PipeWalkModel,
+				Model = PipeModel,
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
@@ -496,16 +495,15 @@ namespace LegendOfCube.Engine
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
 
 			};
-
 			PipeTurn = new ModelData
 			{
-				Model = PipeWalkModel,
+				Model = PipeTurnModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipe_d"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 6, 6, 5.8f)
 
 			};
 		}

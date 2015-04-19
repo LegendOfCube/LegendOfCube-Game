@@ -52,14 +52,18 @@ namespace LegendOfCube.Levels
 			var fenceBuilder = new EntityBuilder().WithModelData(contentCollection.Fence);
 			var barbsBuilder = new EntityBuilder().WithModelData(contentCollection.Barbs);
 			var pipeWalkBuilder = new EntityBuilder().WithModelData(contentCollection.PipeWalk);
+			var pipeBuilder = new EntityBuilder().WithModelData(contentCollection.Pipe);
+			var pipeTurnBuilder = new EntityBuilder().WithModelData(contentCollection.PipeTurn);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-			pipeWalkBuilder.Copy().WithPosition(0, -40, 20).AddToWorld(world);
-			pipeWalkBuilder.Copy().WithPosition(30, -40, 20).AddToWorld(world);
+			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(0, -40, 20).AddToWorld(world);
+			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(30, -40, 20).AddToWorld(world);
+			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(180))).WithPosition(30, -40, 20).AddToWorld(world);
+
 
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
