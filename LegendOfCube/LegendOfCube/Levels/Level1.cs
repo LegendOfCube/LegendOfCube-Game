@@ -108,12 +108,12 @@ namespace LegendOfCube.Levels
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.5f)* Matrix.CreateRotationX(MathHelper.ToRadians(-13))
 				 * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(43.5f, -38.2f, 89.5f).AddToWorld(world);
 
-			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-10, -45, 90).AddToWorld(world);
-			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(20, -45, 90).AddToWorld(world);
-			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(180))).WithPosition(20, -45, 90).AddToWorld(world);
+			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-10, -44.5f, 90).AddToWorld(world);
+			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(20, -44.5f, 90).AddToWorld(world);
+			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(180))).WithPosition(20, -44.5f, 90).AddToWorld(world);
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(6, 6, 12))
-				.WithPosition(49, -48.34f, 99)
+				.WithPosition(49, -47.84f, 99)
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.AddToWorld(world);
 
