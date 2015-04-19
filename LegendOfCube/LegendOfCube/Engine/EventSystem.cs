@@ -57,7 +57,7 @@ namespace LegendOfCube.Engine
 			}
 
 			// Wall queries
-			float WALL_QUERY_EPSILON = 0.1f;
+			float WALL_QUERY_EPSILON = 0.025f;
 			if (lastCubeState.OnGround && !world.PlayerCubeState.OnGround)
 			{
 				OBB wsCubeOBB = physicsSystem.WorldSpaceOBBs[world.Player.Id];
