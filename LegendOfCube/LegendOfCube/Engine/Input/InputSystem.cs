@@ -45,10 +45,10 @@ namespace LegendOfCube.Engine
 
 			game.IsMouseVisible = false;
 
-			if (!iH.gamePadState.IsConnected)
+			if (!iH.GamePadState.IsConnected)
 			{
 				//Only writes message once when controller was disconnected
-				if (iH.oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
+				if (iH.OldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
 			if (iH.KeyWasJustPressed(Keys.Escape) || iH.KeyWasJustPressed(Keys.Tab) || iH.ButtonWasJustPressed(Buttons.Start))
@@ -86,28 +86,28 @@ namespace LegendOfCube.Engine
 
 				InputData inputData = world.InputData[e.Id];
 
-				if (iH.keyState.IsKeyDown(Keys.W) || iH.gamePadState.DPad.Up == ButtonState.Pressed) directionInput.Y++;
+				if (iH.KeyState.IsKeyDown(Keys.W) || iH.GamePadState.DPad.Up == ButtonState.Pressed) directionInput.Y++;
 
-				if (iH.keyState.IsKeyDown(Keys.S) || iH.gamePadState.DPad.Down == ButtonState.Pressed) directionInput.Y--;
+				if (iH.KeyState.IsKeyDown(Keys.S) || iH.GamePadState.DPad.Down == ButtonState.Pressed) directionInput.Y--;
 
-				if (iH.keyState.IsKeyDown(Keys.A) || iH.gamePadState.DPad.Left == ButtonState.Pressed) directionInput.X--;
+				if (iH.KeyState.IsKeyDown(Keys.A) || iH.GamePadState.DPad.Left == ButtonState.Pressed) directionInput.X--;
 
-				if (iH.keyState.IsKeyDown(Keys.D) || iH.gamePadState.DPad.Right == ButtonState.Pressed) directionInput.X++;
+				if (iH.KeyState.IsKeyDown(Keys.D) || iH.GamePadState.DPad.Right == ButtonState.Pressed) directionInput.X++;
 
 				// Normalize the vector to our needs, then set direction
-				directionInput = !directionInput.Equals(Vector2.Zero) ? Vector2.Normalize(directionInput) : iH.gamePadState.ThumbSticks.Left;
+				directionInput = !directionInput.Equals(Vector2.Zero) ? Vector2.Normalize(directionInput) : iH.GamePadState.ThumbSticks.Left;
 
-				if (iH.keyState.IsKeyDown(Keys.LeftShift) || iH.gamePadState.Triggers.Left > 0)
+				if (iH.KeyState.IsKeyDown(Keys.LeftShift) || iH.GamePadState.Triggers.Left > 0)
 				{
 					directionInput *= 0.5f;
 				}
 
 				inputData.SetDirection(directionInput);
 
-				if (iH.keyState.IsKeyDown(Keys.Space) || iH.gamePadState.Buttons.A == ButtonState.Pressed)
+				if (iH.KeyState.IsKeyDown(Keys.Space) || iH.GamePadState.Buttons.A == ButtonState.Pressed)
 				{
 					inputData.SetStateOfJumping(true);
-					if (!iH.oldKeyState.IsKeyDown(Keys.Space) && !(iH.oldGamePadState.Buttons.A == ButtonState.Pressed))
+					if (!iH.OldKeyState.IsKeyDown(Keys.Space) && !(iH.OldGamePadState.Buttons.A == ButtonState.Pressed))
 					{
 						inputData.SetNewJump(true);
 						inputData.BufferedJump = true;
@@ -141,13 +141,13 @@ namespace LegendOfCube.Engine
 
 				Vector2 cameraDirection = new Vector2(0,0);
 				// Camera movement
-				if (iH.keyState.IsKeyDown(Keys.Up)) cameraDirection.Y = 1.0f;
-				if (iH.keyState.IsKeyDown(Keys.Down)) cameraDirection.Y = -1.0f;
-				if (iH.keyState.IsKeyDown(Keys.Left)) cameraDirection.X = -1.0f;
-				if (iH.keyState.IsKeyDown(Keys.Right)) cameraDirection.X = 1.0f;
+				if (iH.KeyState.IsKeyDown(Keys.Up)) cameraDirection.Y = 1.0f;
+				if (iH.KeyState.IsKeyDown(Keys.Down)) cameraDirection.Y = -1.0f;
+				if (iH.KeyState.IsKeyDown(Keys.Left)) cameraDirection.X = -1.0f;
+				if (iH.KeyState.IsKeyDown(Keys.Right)) cameraDirection.X = 1.0f;
 
 				// Normalize the vector to our needs, then set direction
-				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : iH.gamePadState.ThumbSticks.Right;
+				cameraDirection = !cameraDirection.Equals(Vector2.Zero) ? Vector2.Normalize(cameraDirection) : iH.GamePadState.ThumbSticks.Right;
 
 				if (cfg.RightStickInvertedY) cameraDirection.Y = -cameraDirection.Y;
 				if (cfg.RightStickInvertedX) cameraDirection.X = -cameraDirection.X;

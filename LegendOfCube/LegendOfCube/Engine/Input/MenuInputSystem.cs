@@ -40,10 +40,10 @@ namespace LegendOfCube.Engine
 		{
 			game.IsMouseVisible = true;
 
-			if (!iH.gamePadState.IsConnected)
+			if (!iH.GamePadState.IsConnected)
 			{
 				//Only writes message once when controller was disconnected
-				if (iH.oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
+				if (iH.OldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
 			if (iH.KeyWasJustPressed(Keys.Back) || iH.ButtonWasJustPressed(Buttons.Back))
@@ -62,11 +62,11 @@ namespace LegendOfCube.Engine
 				selection = ((selection + 1) % menuItems.Count);
 			}
 
-			Vector2 directionInput = iH.gamePadState.ThumbSticks.Left;
+			Vector2 directionInput = iH.GamePadState.ThumbSticks.Left;
 			if (directionInput.Length() > 0.05)
 			{
-				var xPos = iH.mouseState.X + 10 * directionInput.X;
-				var yPos = iH.mouseState.Y - 10 * directionInput.Y;
+				var xPos = iH.MouseState.X + 10 * directionInput.X;
+				var yPos = iH.MouseState.Y - 10 * directionInput.Y;
 				Mouse.SetPosition((int)xPos, (int)yPos);
 			}
 			if (iH.MouseWasMoved())

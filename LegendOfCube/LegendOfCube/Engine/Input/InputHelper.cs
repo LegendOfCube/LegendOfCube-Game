@@ -9,63 +9,63 @@ namespace LegendOfCube.Engine.Input
 {
 	public class InputHelper
 	{
-		public KeyboardState keyState { get; private set; }
-		public KeyboardState oldKeyState { get; private set; }
-		public GamePadState gamePadState { get; private set; }
-		public GamePadState oldGamePadState { get; private set; }
-		public MouseState mouseState { get; private set; }
-		public MouseState oldMouseState { get; private set; }
+		public KeyboardState KeyState { get; private set; }
+		public KeyboardState OldKeyState { get; private set; }
+		public GamePadState GamePadState { get; private set; }
+		public GamePadState OldGamePadState { get; private set; }
+		public MouseState MouseState { get; private set; }
+		public MouseState OldMouseState { get; private set; }
 
 		public InputHelper()
 		{
-			oldKeyState = Keyboard.GetState();
-			oldGamePadState = GamePad.GetState(PlayerIndex.One);
-			oldMouseState = Mouse.GetState();
+			OldKeyState = Keyboard.GetState();
+			OldGamePadState = GamePad.GetState(PlayerIndex.One);
+			OldMouseState = Mouse.GetState();
 
-			keyState = Keyboard.GetState();
-			gamePadState = GamePad.GetState(PlayerIndex.One);
-			mouseState = Mouse.GetState();
+			KeyState = Keyboard.GetState();
+			GamePadState = GamePad.GetState(PlayerIndex.One);
+			MouseState = Mouse.GetState();
 		}
 
 		public void UpdateInputStates()
 		{
-			oldKeyState = keyState;
-			oldMouseState = mouseState;
-			oldGamePadState = gamePadState;
+			OldKeyState = KeyState;
+			OldMouseState = MouseState;
+			OldGamePadState = GamePadState;
 
-			keyState = Keyboard.GetState();
-			gamePadState = GamePad.GetState(PlayerIndex.One);
-			mouseState = Mouse.GetState();
+			KeyState = Keyboard.GetState();
+			GamePadState = GamePad.GetState(PlayerIndex.One);
+			MouseState = Mouse.GetState();
 		}
 
 		public bool ButtonWasJustPressed(Buttons button)
 		{
-			return gamePadState.IsButtonDown(button) && oldGamePadState.IsButtonUp(button);
+			return GamePadState.IsButtonDown(button) && OldGamePadState.IsButtonUp(button);
 		}
 
 		public bool KeyWasJustPressed(Keys key)
 		{
-			return keyState.IsKeyDown(key) && oldKeyState.IsKeyUp(key);
+			return KeyState.IsKeyDown(key) && OldKeyState.IsKeyUp(key);
 		}
 
 		public bool MouseLeftWasJustPressed()
 		{
-			return (mouseState.LeftButton == ButtonState.Pressed) && (oldMouseState.LeftButton != ButtonState.Pressed);
+			return (MouseState.LeftButton == ButtonState.Pressed) && (OldMouseState.LeftButton != ButtonState.Pressed);
 		}
 
 		public bool MouseWasMoved()
 		{
-			return (mouseState.X != oldMouseState.X) || (mouseState.Y != oldMouseState.Y);
+			return (MouseState.X != OldMouseState.X) || (MouseState.Y != OldMouseState.Y);
 		}
 
 		public bool MouseClickWithinRectangle(Rectangle rect)
 		{
-			return MouseLeftWasJustPressed() && rect.Contains(mouseState.X, mouseState.Y);
+			return MouseLeftWasJustPressed() && rect.Contains(MouseState.X, MouseState.Y);
 		}
 
 		public bool MouseWithinRectangle(Rectangle rect)
 		{
-			return rect.Contains(mouseState.X, mouseState.Y);
+			return rect.Contains(MouseState.X, MouseState.Y);
 		}
 	}
 }
