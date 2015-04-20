@@ -105,6 +105,10 @@ namespace LegendOfCube.Levels
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.6f)* Matrix.CreateRotationX(MathHelper.ToRadians(-5)))
 				.WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
 
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
+
 			//Wall jump to hanging platform
 			railingBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 0.9f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(55.5f, -34.9f, 92.9f).AddToWorld(world);
@@ -148,6 +152,10 @@ namespace LegendOfCube.Levels
 			railingBuilder.Copy().WithPosition(-49.3f, -25.99f, 40).AddToWorld(world);
 			platformBuilder.Copy().WithPosition(-54.2f, -25.99f, 45).AddToWorld(world);
 
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
+
 			//Hanging platforms
 			hangingPlatformBuilder.Copy().WithPosition(43, -27, 88).AddToWorld(world);
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
@@ -176,7 +184,7 @@ namespace LegendOfCube.Levels
 				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-87.5f, -18, 76.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-87.5f, -18, 14.5f).AddToWorld(world);
-			//LV -1
+				//LV -1
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -43, 30.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
@@ -185,7 +193,7 @@ namespace LegendOfCube.Levels
 				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-87.5f, -43, 76.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-87.5f, -43, 14.5f).AddToWorld(world);
-			//LV -2
+				//LV -2
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -68, 30.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
@@ -194,6 +202,10 @@ namespace LegendOfCube.Levels
 				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-87.5f, -68, 76.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-87.5f, -68, 14.5f).AddToWorld(world);
+
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
 
 			//Wall jump x3
 			brickWallArrowsHBuilder.Copy().WithTransform(Matrix.CreateScale(5)).WithPosition(-60, -27, 65).AddToWorld(world);
@@ -232,6 +244,10 @@ namespace LegendOfCube.Levels
 			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -13, 25).AddToWorld(world);
 			pillarBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(-60.5f, -33, 25).AddToWorld(world);
 
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
+
 			hangingPlatformBuilder.Copy().WithPosition(-35, -27, 0).AddToWorld(world);
 			hangingPlatformBuilder.Copy().WithPosition(-15, -28, 0).AddToWorld(world);
 
@@ -244,6 +260,10 @@ namespace LegendOfCube.Levels
 			hangingPlatformBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(13, -6, 9).AddToWorld(world);
 
 			hangingPlatformBuilder.Copy().WithPosition(38, 0, 12).AddToWorld(world);
+
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
 
 			//Win zone building
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f)).WithPosition(86, -15.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
