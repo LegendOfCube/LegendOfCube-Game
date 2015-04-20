@@ -82,9 +82,10 @@
     <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\DebugState.cs" />
-    <Compile Include="Engine\EventSystem.cs" />
+    <Compile Include="Engine\Events\EventSystem.cs" />
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
+    <Compile Include="Engine\Events\EventUtils.cs" />
     <Compile Include="Engine\GameStats.cs" />
     <Compile Include="Engine\GlobalConfig.cs" />
     <Compile Include="Engine\Graphics\GraphicsUtils.cs" />

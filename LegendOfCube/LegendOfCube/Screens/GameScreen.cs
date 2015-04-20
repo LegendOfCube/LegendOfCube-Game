@@ -22,6 +22,7 @@ namespace LegendOfCube.Screens
 		private AISystem aiSystem;
 		private AnimationSystem animationSystem;
 		private RenderSystem renderSystem;
+		private AudioSystem audioSystem;
 
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ContentCollection contentCollection;
@@ -69,6 +70,7 @@ namespace LegendOfCube.Screens
 				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
 				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
+				audioSystem.Update(world);
 				animationSystem.OnUpdate(world, delta);
 				cameraSystem.OnUpdate(world, delta);
 			}
@@ -118,6 +120,7 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
+			audioSystem = new AudioSystem(Game.Content);
 			world = level.CreateWorld(Game, contentCollection);
 
 			inputSystem = new InputSystem(Game, ScreenSystem);
