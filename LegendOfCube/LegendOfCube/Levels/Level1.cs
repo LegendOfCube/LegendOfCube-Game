@@ -13,8 +13,7 @@ namespace LegendOfCube.Levels
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-			World world = new World(1000);
-
+			World world = new World(1000);			
 			world.SpawnPoint = new Vector3(0, -40, 0);
 			world.LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f));
 			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
@@ -121,6 +120,11 @@ namespace LegendOfCube.Levels
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.5f)* Matrix.CreateRotationX(MathHelper.ToRadians(-13))
 				 * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(43.5f, -38.2f, 89.5f).AddToWorld(world);
 
+			/*
+			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
+			 */
+
+			//Lower level Easy road
 			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-10, -44.5f, 90).AddToWorld(world);
 			pipeWalkBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(20, -44.5f, 90).AddToWorld(world);
 			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(180))).WithPosition(20, -44.5f, 90).AddToWorld(world);
@@ -136,7 +140,6 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.AddToWorld(world);
 
-			//Lower level Easy road
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.5f) * Matrix.CreateRotationX(MathHelper.ToRadians(-13))
 				 * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-37.2f, -38.7f, 90).AddToWorld(world);
 			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-59.2f, -36.18f, 94.9f).AddToWorld(world);
@@ -177,31 +180,31 @@ namespace LegendOfCube.Levels
 
 			//Background building
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -18, 30.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-82.5f, -18, 30.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -18, 60.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-82.5f, -18, 60.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-87.5f, -18, 76.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-97.5f, -18, 76.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-87.5f, -18, 14.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-97.5f, -18, 14.5f).AddToWorld(world);
 				//LV -1
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -43, 30.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-82.5f, -43, 30.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -43, 60.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-82.5f, -43, 60.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-87.5f, -43, 76.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-97.5f, -43, 76.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-87.5f, -43, 14.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-97.5f, -43, 14.5f).AddToWorld(world);
 				//LV -2
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -68, 30.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-82.5f, -68, 30.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-72.5f, -68, 60.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(180))).WithPosition(-82.5f, -68, 60.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-87.5f, -68, 76.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-97.5f, -68, 76.5f).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
-				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-87.5f, -68, 14.5f).AddToWorld(world);
+				* Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-97.5f, -68, 14.5f).AddToWorld(world);
 
 			/*
 			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
