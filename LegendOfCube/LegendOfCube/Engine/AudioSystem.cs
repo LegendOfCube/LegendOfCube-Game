@@ -10,30 +10,18 @@ namespace LegendOfCube.Engine
 {
 	class AudioSystem
 	{
-
-		private readonly SoundEffect respawn;
-		private readonly SoundEffect oldJump;
-		private readonly SoundEffect jump;
-		private readonly SoundEffect wallJump;
-		private readonly SoundEffect bounce;
-		private readonly SoundEffect hit;
-
 		private PlayerCubeState oldPlayerCubeState;
 
 		private float pitch;
+		private int oldSelection;
+		private readonly ContentCollection cc;
 
-		public AudioSystem(ContentManager cm)
+		public AudioSystem(ContentCollection contentCollection)
 		{
-			respawn = cm.Load<SoundEffect>("SoundEffects/bwiip");
-			oldJump = cm.Load<SoundEffect>("SoundEffects/waom");
-			wallJump = cm.Load<SoundEffect>("SoundEffects/waom2");
-			jump = cm.Load<SoundEffect>("SoundEffects/waom3");
-			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
-			hit = cm.Load<SoundEffect>("SoundEffects/hit");
-
 			oldPlayerCubeState = new PlayerCubeState();
-
 			pitch = 0;
+			oldSelection = 0;
+			cc = contentCollection;
 		}
 
 		public void Update(World world)
@@ -42,24 +30,25 @@ namespace LegendOfCube.Engine
 			{
 				var collider = collisionEvent.Collider.Id;
 				var collidedWith = collisionEvent.CollidedWith.Id;
+
+				if (world.PlayerHasRespawned)
+				{
+					cc.respawn.Play(0.15f, 0f, 0f);
+					world.PlayerHasRespawned = false;
+				}
 				if (collider == world.Player.Id || collidedWith == world.Player.Id)
 				{
 					//Player specific events
 					if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
 					{
-						bounce.Play(0.15f, 0f, 0f);
+						cc.bounce.Play(0.15f, 0f, 0f);
 					}
 					if (world.PlayerCubeState.OnGround && !oldPlayerCubeState.OnGround
 						|| world.PlayerCubeState.OnWall && !oldPlayerCubeState.OnWall)
 					{
-						hit.Play();
+						cc.hit.Play();
 					}
 				}
-			}
-			if (world.PlayerHasRespawned)
-			{
-				respawn.Play(0.15f, 0f, 0f);
-				world.PlayerHasRespawned = false;
 			}
 			if (!world.PlayerCubeState.OnGround && oldPlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping())
 			{
@@ -68,7 +57,7 @@ namespace LegendOfCube.Engine
 				{
 					pitch = 0;
 				}
-				jump.Play(1, pitch, 0);
+				cc.jump.Play(1, pitch, 0);
 			}
 			else if (!world.PlayerCubeState.OnWall && oldPlayerCubeState.OnWall && !world.PlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping())
 			{
@@ -77,7 +66,7 @@ namespace LegendOfCube.Engine
 				{
 					pitch = 0;
 				}
-				wallJump.Play(1, pitch, 0);
+				cc.wallJump.Play(1, pitch, 0);
 			}
 
 			oldPlayerCubeState = world.PlayerCubeState;
