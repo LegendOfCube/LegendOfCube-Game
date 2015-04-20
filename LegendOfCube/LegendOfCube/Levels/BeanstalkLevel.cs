@@ -5,14 +5,17 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Levels
 {
-	class BeanStalkLevel : Level
+	class BeanstalkLevel : Level
 	{
-		public BeanStalkLevel() : base("Bean Stalk Level") {}
+		private const float HEIGHT = 500;
+		private const int RANDOM_SEED = 0;
+
+		public BeanstalkLevel() : base("Beanstalk Level") {}
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
 			World world = new World(1000) { SpawnPoint = new Vector3(0, 0, 0) };
-			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 2.0f, 0.0f);
+			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 3.0f, 0.0f);
 			world.LightDirection = Vector3.Normalize(new Vector3(1, -1, 1));
 			world.AmbientIntensity = 0.3f;
 
@@ -42,8 +45,8 @@ namespace LegendOfCube.Levels
 				.WithModelData(contentCollection.RustPlatform);
 
 			// Add a lot of platforms building upwards
-			var rnd = new Random(0);
-			for (float y = 5.0f; y < 500.0f; y += 6.25f)
+			var rnd = new Random(RANDOM_SEED);
+			for (float y = 5.0f; y < HEIGHT; y += 6.25f)
 			{
 				platformBuilder
 					.WithPosition(new Vector3(rnd.Next(-15, 15), y, rnd.Next(-15, 15)))
@@ -54,6 +57,7 @@ namespace LegendOfCube.Levels
 			platformBuilder
 				.WithTransform(Matrix.CreateScale(4.0f))
 				.WithPosition(new Vector3(-0.0f, 500.0f, -40.0f))
+				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
 				.AddToWorld(world);
 
 			return world;

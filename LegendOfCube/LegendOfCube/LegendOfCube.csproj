@@ -99,7 +99,7 @@
     <Compile Include="Engine\MenuInputSystem.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevel.cs" />
-    <Compile Include="Levels\BeanStalkLevel.cs" />
+    <Compile Include="Levels\BeanstalkLevel.cs" />
     <Compile Include="Engine\ModelData.cs" />
     <Compile Include="Engine\Level.cs" />
     <Compile Include="Levels\DemoLevel.cs" />

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Policy;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendOfCube.Screens;
@@ -56,12 +58,7 @@ namespace LegendOfCube.Engine
 				if (oldGamePadState.IsConnected) Console.WriteLine("Controller disconnected");
 			}
 
-			if (KeyWasJustPressed(Keys.Escape))
-			{
-				game.Exit();
-			}
-
-			if (KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
+			if (KeyWasJustPressed(Keys.Escape) || KeyWasJustPressed(Keys.Tab) || ButtonWasJustPressed(Buttons.Start))
 			{
 				screenSystem.AddScreen(new PauseScreen(game, screenSystem));
 			}
@@ -79,7 +76,7 @@ namespace LegendOfCube.Engine
 			{
 				if (world.WinState)
 				{
-					EventSystem.ResetLevel(world);
+					screenSystem.ResetGameScreen();
 				}
 				else
 				{
@@ -89,12 +86,12 @@ namespace LegendOfCube.Engine
 
 			if (KeyWasJustPressed(Keys.Back))
 			{
-				EventSystem.ResetLevel(world);
+				screenSystem.ResetGameScreen();
 			}
 
 			foreach (var e in world.EnumerateEntities(MOVEMENT_INPUT)) {
 
-				InputDataImpl inputData = (InputDataImpl)world.InputData[e.Id];
+				InputData inputData = world.InputData[e.Id];
 
 				if (keyState.IsKeyDown(Keys.W) || gamePadState.DPad.Up == ButtonState.Pressed) directionInput.Y++;
 
@@ -114,12 +111,13 @@ namespace LegendOfCube.Engine
 
 				inputData.SetDirection(directionInput);
 
-				if ( keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed )
+				if ( keyState.IsKeyDown(Keys.Space) || gamePadState.Buttons.A == ButtonState.Pressed)
 				{
 					inputData.SetStateOfJumping(true);
 					if (!oldKeyState.IsKeyDown(Keys.Space) && !(oldGamePadState.Buttons.A == ButtonState.Pressed) )
 					{
 						inputData.SetNewJump(true);
+						inputData.BufferedJump = true;
 					}
 					else
 					{
@@ -130,6 +128,22 @@ namespace LegendOfCube.Engine
 				{
 					inputData.SetStateOfJumping(false);
 					inputData.SetNewJump(false);
+				}
+
+				if (inputData.BufferedJump)
+				{
+					inputData.BufferTimeElapsed += gameTime.ElapsedGameTime.Milliseconds;
+					if (inputData.BufferTimeElapsed >= inputData.BufferTime)
+					{
+						inputData.BufferedJump = false;
+						inputData.BufferTimeElapsed = 0;
+					}
+					else if (world.PlayerCubeState.OnGround && inputData.BufferedJump)
+					{
+						inputData.SetNewJump(true);
+						inputData.BufferedJump = false;
+						inputData.BufferTimeElapsed = 0;
+					}
 				}
 
 				Vector2 cameraDirection = new Vector2(0,0);

@@ -18,7 +18,9 @@ namespace LegendOfCube.Engine
 		private static readonly float ON_WALL_LIMIT = (float)Math.Sin(GROUND_WALL_ANGLE);
 		private static readonly float ON_GROUND_LIMIT = (float)Math.Cos(GROUND_WALL_ANGLE);
 
-		public static void CalculateCubeState(World world)
+		private static PlayerCubeState lastCubeState;
+
+		public static void CalculateCubeState(World world, PhysicsSystem physicsSystem)
 		{
 			// Defaults to not being on the ground or on the wall
 			world.PlayerCubeState.OnGround = false;
@@ -53,6 +55,33 @@ namespace LegendOfCube.Engine
 				world.PlayerCubeState.OnWall = false;
 				world.PlayerCubeState.WallAxis = Vector3.Zero;
 			}
+
+			// Wall queries
+			float WALL_QUERY_EPSILON = 0.025f;
+			if (lastCubeState.OnGround && !world.PlayerCubeState.OnGround)
+			{
+				OBB wsCubeOBB = physicsSystem.WorldSpaceOBBs[world.Player.Id];
+				wsCubeOBB.Position = wsCubeOBB.Position - lastCubeState.GroundAxis * WALL_QUERY_EPSILON;
+				UInt32 colId = FindIntersection(world, world.Player.Id, ref wsCubeOBB, physicsSystem);
+				if (colId != UInt32.MaxValue)
+				{
+					world.PlayerCubeState.OnGround = true;
+					world.PlayerCubeState.GroundAxis = lastCubeState.GroundAxis; // TODO: Disgusting, ugly hack. Fix plx.
+				}
+			}
+			else if (lastCubeState.OnWall && !world.PlayerCubeState.OnGround && !world.PlayerCubeState.OnWall)
+			{
+				OBB wsCubeOBB = physicsSystem.WorldSpaceOBBs[world.Player.Id];
+				wsCubeOBB.Position = wsCubeOBB.Position - lastCubeState.WallAxis * WALL_QUERY_EPSILON;
+				UInt32 colId = FindIntersection(world, world.Player.Id, ref wsCubeOBB, physicsSystem);
+				if (colId != UInt32.MaxValue)
+				{
+					world.PlayerCubeState.OnWall = true;
+					world.PlayerCubeState.WallAxis = lastCubeState.WallAxis; // TODO: Disgusting, ugly hack. Fix plx.
+				}
+			}
+
+			lastCubeState = world.PlayerCubeState;
 		}
 
 		private static bool IsPairCombination(CollisionEvent c, Func<Entity, bool> entity1Satisfies, Func<Entity, bool> entity2Satisfies)
@@ -157,21 +186,19 @@ namespace LegendOfCube.Engine
 			world.GameStats.PlayerDeaths += 1;
 		}
 
-		public static void ResetLevel(World world)
+		// Precondition: param entity must satisfy MOVABLE
+		// Returns UInt32.MaxValue if no intersections are found, otherwise index of entity collided with.
+		private static UInt32 FindIntersection(World world, UInt32 entity, ref OBB entityOBB, PhysicsSystem physicsSystem)
 		{
-			//TODO: Should probably reload entire level instead of just resetting spawnpoints and stats
-			world.SpawnPoint = new Vector3(0,1,0);
-			world.GameStats.PlayerDeaths = 0;
-			world.GameStats.GameTime = 0;
-			world.WinState = false;
-			world.TimeSinceGameOver = 0;
+			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
+			{
+				if (!world.EntityProperties[i].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
+				if (i == entity) continue;
+				if (physicsSystem.WorldSpaceOBBs[i].Intersects(ref entityOBB)) return i;
+			}
 
-			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
-			world.Velocities[world.Player.Id] = Vector3.Zero;
-
-			world.CameraPosition = world.SpawnPoint;
-			world.CameraPosition.Y = world.SpawnPoint.Y + 2.0f;
-			world.CameraPosition.X -= 2;
+			// No collisions found.
+			return UInt32.MaxValue;
 		}
 	}
 }

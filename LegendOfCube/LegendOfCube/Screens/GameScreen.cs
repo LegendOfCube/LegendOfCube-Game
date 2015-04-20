@@ -12,7 +12,7 @@ namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
-		private Level level;
+		public readonly Level level;
 		private World world;
 
 		private InputSystem inputSystem;
@@ -67,7 +67,7 @@ namespace LegendOfCube.Screens
 				aiSystem.Update(world, delta);
 				movementSystem.ProcessInputData(world, delta);
 				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
-				EventSystem.CalculateCubeState(world);
+				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
 				animationSystem.OnUpdate(world, delta);
 				cameraSystem.OnUpdate(world, delta);

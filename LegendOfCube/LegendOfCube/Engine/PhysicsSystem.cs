@@ -13,6 +13,13 @@ namespace LegendOfCube.Engine
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		private readonly OBB[] worldSpaceOBBs;
+		public OBB[] WorldSpaceOBBs
+		{
+			get
+			{
+				return worldSpaceOBBs;
+			}
+		}
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -181,8 +188,8 @@ namespace LegendOfCube.Engine
 		{
 			for (UInt32 i = 0; i <= world.HighestOccupiedId; i++)
 			{
-				if (i == entity) continue;
 				if (!world.EntityProperties[i].Satisfies(Properties.MODEL_SPACE_BV | Properties.TRANSFORM)) continue;
+				if (i == entity) continue;
 				if (worldSpaceOBBs[i].Intersects(ref worldSpaceOBBs[entity])) return i;
 			}
 

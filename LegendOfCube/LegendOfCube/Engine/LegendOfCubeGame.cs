@@ -31,12 +31,13 @@ namespace LegendOfCube.Engine
 			graphicsManager.PreferredBackBufferWidth = cfg.InternalResX;
 			graphicsManager.PreferredBackBufferHeight = cfg.InternalResY;
 			graphicsManager.IsFullScreen = cfg.Fullscreen;
+			graphicsManager.SynchronizeWithVerticalRetrace = cfg.VSync;
+			graphicsManager.PreferMultiSampling = cfg.MultiSampling;
 
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
 			// that could be disposed and reused
 			Window.AllowUserResizing = true;
 
-			graphicsManager.PreferMultiSampling = true;
 			graphicsManager.ApplyChanges();
 
 			screenSystem = new ScreenSystem(this, contentCollection, graphicsManager);

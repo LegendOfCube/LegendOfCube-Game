@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("LegendOfCube")]
-[assembly: AssemblyProduct("LegendOfCube")]
+[assembly: AssemblyTitle("Legend of Cube")]
+[assembly: AssemblyProduct("Legend of Cube")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
@@ -30,4 +30,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("1.0.0.0")]
+// Will automatically be appended with .0 for unspecified numbers
+[assembly: AssemblyVersion("0.1")]
+
+// Free-form version name (example: "1.0 RC1")
+[assembly: AssemblyInformationalVersion("0.1")]

@@ -187,7 +187,7 @@ namespace LegendOfCube.Engine
 			}
 			if (properties.Satisfies(Properties.INPUT))
 			{
-				world.InputData[entity.Id] = new InputDataImpl();
+				world.InputData[entity.Id] = new InputData();
 			}
 			if (properties.Satisfies(Properties.MODEL_SPACE_BV))
 			{
