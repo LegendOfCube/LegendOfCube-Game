@@ -18,7 +18,7 @@ namespace LegendOfCube.Levels
 			world.SpawnPoint = new Vector3(0, -40, 0);
 			world.LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f));
 			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
-			world.AmbientIntensity = 0.35f;
+			world.AmbientIntensity = 0.25f;
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)
@@ -125,6 +125,12 @@ namespace LegendOfCube.Levels
 				.WithPosition(49, -47.84f, 99)
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.AddToWorld(world);
+			pipeTurnBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(0))).WithPosition(-10, -44.5f, 90).AddToWorld(world);
+			new EntityBuilder()
+				.WithTransform(Matrix.CreateScale(6, 6, 12))
+				.WithPosition(-38, -47.15f, 99)
+				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
+				.AddToWorld(world);
 
 			//Hanging platforms
 			hangingPlatformBuilder.Copy().WithPosition(43, -27, 88).AddToWorld(world);
@@ -193,15 +199,6 @@ namespace LegendOfCube.Levels
 
 			hangingPlatformBuilder.Copy().WithPosition(38, 0, 12).AddToWorld(world);
 
-			/*
-			new EntityBuilder()
-				.WithTransform(Matrix.CreateScale(9.8f, 0.1f, 9.8f))
-				.WithPosition(38, 0.001f, 12)
-				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
-				.WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG))
-				.AddToWorld(world);
-			*/
-
 			//Win zone building
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f)).WithPosition(86, -15.5f, 20.5f).WithAdditionalProperties(new Properties(Properties.WIN_ZONE_FLAG)).AddToWorld(world);
 			groundConcreteBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f, 0.5f, 0.6f) * Matrix.CreateRotationZ(MathHelper.ToRadians(90))
@@ -246,7 +243,6 @@ namespace LegendOfCube.Levels
 			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
 				.WithPosition(88, -10, 36).AddToWorld(world);
 			
-			//platformBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 3) * Matrix.CreateRotationZ(MathHelper.ToRadians(-45))).WithPosition(72, -14.5f, 20.5f).AddToWorld(world);
 			//Falling death
 			new EntityBuilder()
 				.WithTransform(Matrix.CreateScale(1900))
@@ -255,7 +251,6 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 
-			
 			// TEST GEOMETRY
 				//WALLS
 			placeholderWallBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90))

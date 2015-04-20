@@ -490,7 +490,8 @@ namespace LegendOfCube.Engine
 				Model = PipeWalkModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					DiffuseColor = Color.WhiteSmoke.ToVector4(),
+					//DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
@@ -501,7 +502,8 @@ namespace LegendOfCube.Engine
 				Model = PipeModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					DiffuseColor = Color.WhiteSmoke.ToVector4(),
+					//DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
@@ -512,7 +514,8 @@ namespace LegendOfCube.Engine
 				Model = PipeTurnModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipe_d"),
+					DiffuseColor = Color.WhiteSmoke.ToVector4(),
+					//DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipe_d"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(-22.5f, 0.35f, 0), 15, 6, 5.8f)
