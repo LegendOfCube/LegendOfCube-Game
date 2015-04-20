@@ -12,9 +12,16 @@ namespace LegendOfCube.Engine
 	{
 
 		private readonly SoundEffect respawn;
+		private readonly SoundEffect jump;
+
+		private PlayerCubeState oldPlayerCubeState;
+
 		public AudioSystem(ContentManager cm)
 		{
 			respawn = cm.Load<SoundEffect>("SoundEffects/bwiip");
+			jump = cm.Load<SoundEffect>("SoundEffects/waom");
+
+			oldPlayerCubeState = new PlayerCubeState();
 		}
 
 		public void Update(World world)
@@ -23,13 +30,20 @@ namespace LegendOfCube.Engine
 			{
 				if (collisionEvent.Collider.Id == world.Player.Id || collisionEvent.CollidedWith.Id == world.Player.Id)
 				{
-					if (world.PlayerHasRespawned)
-					{
-						respawn.Play(0.5f ,0.0f, 0.0f);
-						world.PlayerHasRespawned = false;
-					} 
+					//Player specific events
 				}
 			}
+			if (world.PlayerHasRespawned)
+			{
+				respawn.Play(0.5f, 0.0f, 0.0f);
+				world.PlayerHasRespawned = false;
+			}
+			if (!world.PlayerCubeState.OnGround && oldPlayerCubeState.OnGround)
+			{
+				jump.Play();
+			}
+
+			oldPlayerCubeState = world.PlayerCubeState;
 		}
 	}
 }
