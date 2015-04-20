@@ -43,7 +43,7 @@ namespace LegendOfCube.Engine
 		public ModelData PipeWalk { get; private set; }
 		public ModelData Pipe { get; private set; }
 		public ModelData PipeTurn { get; private set; }
-
+		public ModelData Railing { get; private set; }
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
@@ -76,6 +76,7 @@ namespace LegendOfCube.Engine
 		public Model PipeWalkModel { get; private set; }
 		public Model PipeModel { get; private set; }
 		public Model PipeTurnModel { get; private set; }
+		public Model RailingModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -107,6 +108,7 @@ namespace LegendOfCube.Engine
 			PipeWalkModel = cm.Load<Model>("Models/Pipe/pipe_walk");
 			PipeModel = cm.Load<Model>("Models/Pipe/pipe");
 			PipeTurnModel = cm.Load<Model>("Models/Pipe/pipe_turn");
+			RailingModel = cm.Load<Model>("Models/Railing/railing");
 
 			placeholderWall = new ModelData
 			{
@@ -504,6 +506,18 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(-22.5f, 0.35f, 0), 15, 6, 5.8f)
+
+			};
+
+			Railing = new ModelData
+			{
+				Model = RailingModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.3f, 5), 0.15f, 0.55f, 10)
 
 			};
 		}
