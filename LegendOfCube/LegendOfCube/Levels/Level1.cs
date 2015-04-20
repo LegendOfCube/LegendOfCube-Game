@@ -132,6 +132,14 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.AddToWorld(world);
 
+			//Lower level Easy road
+			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.5f) * Matrix.CreateRotationX(MathHelper.ToRadians(-13))
+				 * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-37.2f, -38.7f, 90).AddToWorld(world);
+			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-59.2f, -36.18f, 94.9f).AddToWorld(world);
+			railingBuilder.Copy().WithPosition(-59.1f, -36.18f, 85).AddToWorld(world);
+			platformBuilder.Copy().WithPosition(-54.2f, -36.18f, 90).AddToWorld(world);
+			pillarBuilder.Copy().WithPosition(-54.2f, -36.18f, 90).AddToWorld(world);
+
 			//Hanging platforms
 			hangingPlatformBuilder.Copy().WithPosition(43, -27, 88).AddToWorld(world);
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
