@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Text;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework.Audio;
@@ -13,14 +14,12 @@ namespace LegendOfCube.Engine
 		private PlayerCubeState oldPlayerCubeState;
 
 		private float pitch;
-		private int oldSelection;
 		private readonly ContentCollection cc;
 
 		public AudioSystem(ContentCollection contentCollection)
 		{
 			oldPlayerCubeState = new PlayerCubeState();
 			pitch = 0;
-			oldSelection = 0;
 			cc = contentCollection;
 		}
 
