@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
 using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
@@ -15,12 +16,14 @@ namespace LegendOfCube.Screens
 		private readonly Game game;
 		private readonly ContentCollection contentCollection;
 		private readonly GraphicsDeviceManager graphicsManager;
+		private readonly InputHelper inputHelper;
 
-		public ScreenSystem(LegendOfCubeGame game, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
+		public ScreenSystem(LegendOfCubeGame game, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager, InputHelper inputHelper)
 		{
 			this.game = game;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
+			this.inputHelper = inputHelper;
 			screens = new List<Screen>(3);
 		}
 
@@ -32,7 +35,7 @@ namespace LegendOfCube.Screens
 
 		public void AddGameScreen(Level level)
 		{
-			Screen s = new GameScreen(level, game, this, contentCollection, graphicsManager);
+			Screen s = new GameScreen(level, game, this, contentCollection, graphicsManager, inputHelper);
 			AddScreen(s);
 		}
 
@@ -71,7 +74,7 @@ namespace LegendOfCube.Screens
 		}
 		public void LoadContent()
 		{
-			AddScreen(new StartScreen(game, this));
+			AddScreen(new StartScreen(game, this, inputHelper));
 		}
 
 		public void ResetGameScreen()

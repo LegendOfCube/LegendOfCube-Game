@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Events;
+using LegendOfCube.Engine.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,16 +12,19 @@ namespace LegendOfCube.Screens
 	{
 		private readonly MenuInputSystem menuInputSystem;
 		private readonly List<MenuItem> menuItems;
+		private MenuAudioSystem menuAudioSystem;
+		protected readonly InputHelper InputHelper;
 
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
 		private int selection;
 		private Vector2 nextItemPos = new Vector2(40, 40);
 
-		protected MenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false)
+		protected MenuScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, false)
 		{
 			menuItems = new List<MenuItem>();
-			menuInputSystem = new MenuInputSystem(game, screenSystem);
+			menuInputSystem = new MenuInputSystem(game, screenSystem, inputHelper);
+			this.InputHelper = inputHelper;
 			selection = 0;
 		}
 
@@ -39,6 +44,7 @@ namespace LegendOfCube.Screens
 		internal override void Update(GameTime gameTime)
 		{
 			menuInputSystem.ApplyInput(gameTime, menuItems, ref selection);
+			menuAudioSystem.Update(selection, menuInputSystem);
 		}
 
 		internal override void Draw(GameTime gameTime)
@@ -53,6 +59,7 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
+			menuAudioSystem = new MenuAudioSystem(Game.Content);
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
 		}

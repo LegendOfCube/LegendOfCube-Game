@@ -2,12 +2,13 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
 	class PauseScreen : MenuScreen
 	{
-		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
+		public PauseScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper) {}
 
 		internal override void LoadContent()
 		{
