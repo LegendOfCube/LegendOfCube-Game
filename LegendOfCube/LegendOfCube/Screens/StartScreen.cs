@@ -26,7 +26,7 @@ namespace LegendOfCube.Screens
 			);
 
 			AddItemBelow("Options", () =>
-				{ }
+				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem))
 			);
 
 			AddItemBelow("Exit",
