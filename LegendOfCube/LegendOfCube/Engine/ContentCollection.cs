@@ -188,7 +188,7 @@ namespace LegendOfCube.Engine
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
 					DiffuseColor = Color.White.ToVector4(),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -199,9 +199,9 @@ namespace LegendOfCube.Engine
 				Model = BrickWallModel,
 				EffectParams = new StandardEffectParams
 				{
-					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
-					DiffuseColor = Color.White.ToVector4(),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
+					//DiffuseColor = Color.White.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -214,7 +214,7 @@ namespace LegendOfCube.Engine
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
 					DiffuseColor = Color.White.ToVector4(),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -226,7 +226,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -503,7 +503,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseColor = Color.WhiteSmoke.ToVector4(),
-					//DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
