@@ -61,8 +61,6 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-			railingBuilder.Copy().WithPosition(0, -40, 5).AddToWorld(world);
-
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
@@ -95,11 +93,13 @@ namespace LegendOfCube.Levels
 
 			trussBuilder.Copy().WithPosition(65, -30, 58).AddToWorld(world);
 
+			railingBuilder.Copy().WithPosition(55.1f, -37, 45).AddToWorld(world);
+			railingBuilder.Copy().WithPosition(64.9f, -37, 45).AddToWorld(world);
 			platformBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60, -37, 50).AddToWorld(world);
 
-			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.6f) * Matrix.CreateRotationY(MathHelper.ToRadians(0))
-				* Matrix.CreateRotationX(MathHelper.ToRadians(-5))).WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
+			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.6f)* Matrix.CreateRotationX(MathHelper.ToRadians(-5)))
+				.WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
 
 			//Wall jump to hanging platform
 			platformBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
