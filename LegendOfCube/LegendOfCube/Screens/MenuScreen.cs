@@ -44,7 +44,7 @@ namespace LegendOfCube.Screens
 		internal override void Update(GameTime gameTime)
 		{
 			menuInputSystem.ApplyInput(gameTime, menuItems, ref selection);
-			menuAudioSystem.Update(selection, menuInputSystem);
+			menuAudioSystem.Update(selection);
 		}
 
 		internal override void Draw(GameTime gameTime)
@@ -59,7 +59,7 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-			menuAudioSystem = new MenuAudioSystem(Game.Content);
+			menuAudioSystem = new MenuAudioSystem(Game.Content, InputHelper);
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
 		}
