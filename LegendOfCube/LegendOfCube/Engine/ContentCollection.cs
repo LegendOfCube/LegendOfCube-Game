@@ -173,7 +173,8 @@ namespace LegendOfCube.Engine
 				Model = PlatformModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Platform/rusted metal-d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Platform/rusted metal-d"),
+					DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Platform/platform-normal"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -185,7 +186,8 @@ namespace LegendOfCube.Engine
 				Model = BrickWallModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
+					DiffuseColor = Color.DarkGray.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
@@ -197,7 +199,8 @@ namespace LegendOfCube.Engine
 				Model = BrickWallModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
+					DiffuseColor = Color.DarkGray.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
@@ -209,7 +212,8 @@ namespace LegendOfCube.Engine
 				Model = BrickWallModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
+					DiffuseColor = Color.DarkGray.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
@@ -303,7 +307,8 @@ namespace LegendOfCube.Engine
 				Model = PillarModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+					DiffuseColor = Color.Gray.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Platform/pipe_normal"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -326,7 +331,8 @@ namespace LegendOfCube.Engine
 				Model = Cube10Model,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
+					DiffuseColor = Color.LightGray.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -358,7 +364,8 @@ namespace LegendOfCube.Engine
 				Model = HangingPlatformModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-normal"),
 					SpecularTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-spec"),
 					SpecularColor = Color.Gray.ToVector4()
@@ -394,7 +401,8 @@ namespace LegendOfCube.Engine
 				Model = Ground50x50,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Ground/concrete_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Ground/concrete_d"),
+					DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Ground/concrete_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -416,7 +424,8 @@ namespace LegendOfCube.Engine
 				Model = Ground50x50,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Ground/planks_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Ground/planks_d"),
+					DiffuseColor = Color.Red.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Ground/planks_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -427,7 +436,8 @@ namespace LegendOfCube.Engine
 				Model = Ground50x50,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Ground/stone_d"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Ground/stone_d"),
+					DiffuseColor = Color.Black.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Ground/stone_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -514,7 +524,8 @@ namespace LegendOfCube.Engine
 				Model = RailingModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					DiffuseColor = Color.Blue.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.3f, 5), 0.15f, 0.55f, 10)

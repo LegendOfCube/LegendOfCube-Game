@@ -66,9 +66,13 @@ namespace LegendOfCube.Levels
 			arrowDownBuilder.Copy().WithTransform(Matrix.CreateScale(3, 3, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(90))
 				* Matrix.CreateRotationZ(MathHelper.ToRadians(-90))).WithPosition(4, -40, 0).AddToWorld(world);
 
+			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(25, -43, -4.9f).AddToWorld(world);
+			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(25, -43, 4.9f).AddToWorld(world);
 			platformBuilder.Copy().WithPosition(30, -43, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(30, -43, 0).AddToWorld(world);
 
+			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(50, -37, -4.9f).AddToWorld(world);
+			railingBuilder.Copy().WithPosition(59.9f, -37, -5).AddToWorld(world);
 			platformBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(55, -37, 0).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(55, -37, 0).AddToWorld(world);
 
@@ -102,6 +106,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
 
 			//Wall jump to hanging platform
+			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(60.5f, -34.9f, -93).AddToWorld(world);
 			platformBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 
