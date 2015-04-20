@@ -39,7 +39,7 @@ namespace LegendOfCube.Engine
 
 		// Player state
 		public PlayerCubeState PlayerCubeState;
-		public bool PlayerHasRespawned;
+		public bool PlayerRespawAudioCue;
 
 		//GameOver state
 		public bool WinState;
@@ -108,7 +108,7 @@ namespace LegendOfCube.Engine
 			PlayerCubeState.WallAxis = Vector3.Zero;
 			PlayerCubeState.GroundAxis = Vector3.Zero;
 
-			PlayerHasRespawned = true;
+			PlayerRespawAudioCue = true;
 
 			WinState = false;
 			TimeSinceGameOver = 0;

@@ -30,10 +30,10 @@ namespace LegendOfCube.Engine
 				var collider = collisionEvent.Collider.Id;
 				var collidedWith = collisionEvent.CollidedWith.Id;
 
-				if (world.PlayerHasRespawned)
+				if (world.PlayerRespawAudioCue)
 				{
 					cc.respawn.Play(0.15f, 0f, 0f);
-					world.PlayerHasRespawned = false;
+					world.PlayerRespawAudioCue = false;
 				}
 				if (collider == world.Player.Id || collidedWith == world.Player.Id)
 				{

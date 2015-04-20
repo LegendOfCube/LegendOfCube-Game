@@ -158,7 +158,7 @@ namespace LegendOfCube.Engine
 			world.WinState = false;
 			world.TimeSinceGameOver = 0;
 			world.GameStats.PlayerDeaths += 1;
-			world.PlayerHasRespawned = true;
+			world.PlayerRespawAudioCue = true;
 		}
 
 		// Precondition: param entity must satisfy MOVABLE
