@@ -187,7 +187,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
-					DiffuseColor = Color.DarkGray.ToVector4(),
+					DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
@@ -200,7 +200,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
-					DiffuseColor = Color.DarkGray.ToVector4(),
+					DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
@@ -213,7 +213,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
-					DiffuseColor = Color.DarkGray.ToVector4(),
+					DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
