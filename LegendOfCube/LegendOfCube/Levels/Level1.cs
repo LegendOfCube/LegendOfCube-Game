@@ -106,7 +106,8 @@ namespace LegendOfCube.Levels
 				.WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
 
 			//Wall jump to hanging platform
-			railingBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(60.5f, -34.9f, -93).AddToWorld(world);
+			railingBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 0.9f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(55.5f, -34.9f, 92.9f).AddToWorld(world);
 			platformBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 
