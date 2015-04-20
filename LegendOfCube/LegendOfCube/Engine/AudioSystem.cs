@@ -47,7 +47,7 @@ namespace LegendOfCube.Engine
 					//Player specific events
 					if (world.EntityProperties[collidedWith].Satisfies(Properties.BOUNCE_FLAG))
 					{
-						bounce.Play(1f, 0f, 0f);
+						bounce.Play(0.15f, 0f, 0f);
 					}
 					if (world.PlayerCubeState.OnGround && !oldPlayerCubeState.OnGround
 						|| world.PlayerCubeState.OnWall && !oldPlayerCubeState.OnWall)
