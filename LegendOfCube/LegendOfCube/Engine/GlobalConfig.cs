@@ -28,7 +28,7 @@ namespace LegendOfCube.Engine
 		// Private members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private const string INI_PATH = "LegendOfCube.ini";
+		private const string INI_PATH = "Config.ini";
 		private IniFile iniFile = new IniFile(INI_PATH);
 
 		// Settings
@@ -48,16 +48,32 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public bool LoadFromFile()
+		public void LoadFromFile()
 		{
-			// TODO: Not yet implemented.
-			return false;
+			// Graphics
+			this.Fullscreen = SanitizeIniBool("Graphics", "Fullscreen", false);
+			this.VSync = SanitizeIniBool("Graphics", "VSync", true);
+			this.MultiSampling = SanitizeIniBool("Graphics", "MultiSampling", true);
+			this.InternalResX = SanitizeIniInt("Graphics", "InternalResX", 320, 15360, 1280);
+			this.InternalResY = SanitizeIniInt("Graphics", "InternalResY", 240, 8640, 800);
+
+			// Controls
+			this.RightStickInvertedX = SanitizeIniBool("Controls", "RightStickInvertedX", false);
+			this.RightStickInvertedY = SanitizeIniBool("Controls", "RightStickInvertedY", false);
 		}
 
-		public bool SaveToFile()
+		public void SaveToFile()
 		{
-			// TODO: Not yet implemented.
-			return false;
+			// Graphics
+			iniFile.WriteBool("Graphics", "Fullscreen", Fullscreen);
+			iniFile.WriteBool("Graphics", "VSync", VSync);
+			iniFile.WriteBool("Graphics", "MultiSampling", MultiSampling);
+			iniFile.WriteInt("Graphics", "InternalResX", InternalResX);
+			iniFile.WriteInt("Graphics", "InternalResY", InternalResY);
+
+			// Controls
+			iniFile.WriteBool("Controls", "RightStickInvertedX", RightStickInvertedX);
+			iniFile.WriteBool("Controls", "RightStickInvertedY", RightStickInvertedY);
 		}
 
 		// Constructor
@@ -65,31 +81,57 @@ namespace LegendOfCube.Engine
 
 		private GlobalConfig()
 		{
-			// TODO: Hack. Should actually check if each single item exists and add default if it doesn't.
-			if (!File.Exists(INI_PATH))
+			LoadFromFile();
+			SaveToFile(); // TODO: Maybe unnecessary, but will ensure that we generate .ini file when first run.
+		}
+
+		// Private Methods
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private int SanitizeIniInt(string section, string key, int minVal, int maxVal, int defaultVal)
+		{
+			int i;
+			try
 			{
-				// Graphics
-				iniFile.WriteBool("Graphics", "Fullscreen", false);
-				iniFile.WriteBool("Graphics", "VSync", true);
-				iniFile.WriteBool("Graphics", "MultiSampling", true);
-				iniFile.WriteInt("Graphics", "InternalResX", 1280);
-				iniFile.WriteInt("Graphics", "InternalResY", 720);
-
-				// Controls
-				iniFile.WriteBool("Controls", "RightStickInvertedX", false);
-				iniFile.WriteBool("Controls", "RightStickInvertedY", false);
+				i = iniFile.ReadInt(section, key);
+				if (i < minVal) i = minVal;
+				if (i > maxVal) i = maxVal;
 			}
+			catch (Exception e)
+			{
+				i = defaultVal;
+			}
+			return i;
+		}
 
-			// Graphics
-			this.Fullscreen = iniFile.ReadBool("Graphics", "Fullscreen");
-			this.VSync = iniFile.ReadBool("Graphics", "VSync");
-			this.MultiSampling = iniFile.ReadBool("Graphics", "MultiSampling");
-			this.InternalResX = iniFile.ReadInt("Graphics", "InternalResX");
-			this.InternalResY = iniFile.ReadInt("Graphics", "InternalResY");
+		private float SanitizeIniFloat(string section, string key, float minVal, float maxVal, float defaultVal)
+		{
+			float f;
+			try
+			{
+				f = iniFile.ReadFloat(section, key);
+				if (f < minVal) f = minVal;
+				if (f > maxVal) f = maxVal;
+			}
+			catch (Exception)
+			{
+				f = defaultVal;
+			}
+			return f;
+		}
 
-			// Controls
-			this.RightStickInvertedX = iniFile.ReadBool("Controls", "RightStickInvertedX");
-			this.RightStickInvertedY = iniFile.ReadBool("Controls", "RightStickInvertedY");
+		private bool SanitizeIniBool(string section, string key, bool defaultVal)
+		{
+			bool b;
+			try
+			{
+				b = iniFile.ReadBool(section, key);
+			}
+			catch (Exception)
+			{
+				b = defaultVal;
+			}
+			return b;
 		}
 	}
 }
