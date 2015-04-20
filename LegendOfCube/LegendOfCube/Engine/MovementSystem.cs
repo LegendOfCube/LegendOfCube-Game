@@ -154,6 +154,12 @@ namespace LegendOfCube.Engine
 				world.Velocities[i] -= world.PlayerCubeState.WallAxis * 1.0f;
 			}
 
+			// GROUND SUCK HACK
+			if (world.PlayerCubeState.OnGround)
+			{
+				world.Velocities[i] -= world.PlayerCubeState.GroundAxis * 0.6f;
+			}
+
 			// WALL ANTI-GRAVITY HACK
 			if (world.PlayerCubeState.OnWall)
 			{
