@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace LegendOfCube.Engine
 {
@@ -24,6 +25,11 @@ namespace LegendOfCube.Engine
 			}
 		}
 
+		// Private members
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private const string INI_PATH = "LegendOfCube.ini";
+		private IniFile iniFile = new IniFile(INI_PATH);
 
 		// Settings
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -59,16 +65,31 @@ namespace LegendOfCube.Engine
 
 		private GlobalConfig()
 		{
+			// TODO: Hack. Should actually check if each single item exists and add default if it doesn't.
+			if (!File.Exists(INI_PATH))
+			{
+				// Graphics
+				iniFile.WriteBool("Graphics", "Fullscreen", false);
+				iniFile.WriteBool("Graphics", "VSync", true);
+				iniFile.WriteBool("Graphics", "MultiSampling", true);
+				iniFile.WriteInt("Graphics", "InternalResX", 1280);
+				iniFile.WriteInt("Graphics", "InternalResY", 720);
+
+				// Controls
+				iniFile.WriteBool("Controls", "RightStickInvertedX", false);
+				iniFile.WriteBool("Controls", "RightStickInvertedY", false);
+			}
+
 			// Graphics
-			this.Fullscreen = false;
-			this.VSync = true;
-			this.MultiSampling = true;
-			this.InternalResX = 1280;
-			this.InternalResY = 720;
+			this.Fullscreen = iniFile.ReadBool("Graphics", "Fullscreen");
+			this.VSync = iniFile.ReadBool("Graphics", "VSync");
+			this.MultiSampling = iniFile.ReadBool("Graphics", "MultiSampling");
+			this.InternalResX = iniFile.ReadInt("Graphics", "InternalResX");
+			this.InternalResY = iniFile.ReadInt("Graphics", "InternalResY");
 
 			// Controls
-			this.RightStickInvertedX = false;
-			this.RightStickInvertedY = false;
+			this.RightStickInvertedX = iniFile.ReadBool("Controls", "RightStickInvertedX");
+			this.RightStickInvertedY = iniFile.ReadBool("Controls", "RightStickInvertedY");
 		}
 	}
 }

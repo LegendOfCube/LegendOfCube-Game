@@ -88,6 +88,7 @@
     <Compile Include="Engine\GlobalConfig.cs" />
     <Compile Include="Engine\Graphics\GraphicsUtils.cs" />
     <Compile Include="Engine\Graphics\PointLight.cs" />
+    <Compile Include="Engine\IniFile.cs" />
     <Compile Include="Levels\Level13.cs" />
     <Compile Include="Levels\LevelConstants.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
