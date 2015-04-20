@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Engine\AIComponent.cs" />
     <Compile Include="Engine\AnimationSystem.cs" />
+    <Compile Include="Engine\AudioSystem.cs" />
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
     <Compile Include="Engine\AISystem.cs" />
@@ -81,13 +82,16 @@
     <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
     <Compile Include="Engine\DebugState.cs" />
-    <Compile Include="Engine\EventSystem.cs" />
+    <Compile Include="Engine\Events\EventSystem.cs" />
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
+    <Compile Include="Engine\Events\EventUtils.cs" />
+    <Compile Include="Engine\Events\MenuAudioSystem.cs" />
     <Compile Include="Engine\GameStats.cs" />
     <Compile Include="Engine\GlobalConfig.cs" />
     <Compile Include="Engine\Graphics\GraphicsUtils.cs" />
     <Compile Include="Engine\Graphics\PointLight.cs" />
+    <Compile Include="Engine\Input\InputHelper.cs" />
     <Compile Include="Levels\Level13.cs" />
     <Compile Include="Levels\LevelConstants.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
@@ -95,7 +99,7 @@
     <Compile Include="Screens\MenuScreen.cs" />
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
-    <Compile Include="Engine\MenuInputSystem.cs" />
+    <Compile Include="Engine\Input\MenuInputSystem.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevel.cs" />
     <Compile Include="Levels\BeanstalkLevel.cs" />
@@ -109,10 +113,10 @@
     <Compile Include="Engine\PlayerCubeState.cs" />
     <Compile Include="Engine\EntityBuilder.cs" />
     <Compile Include="Engine\MovementSystem.cs" />
-    <Compile Include="Engine\InputData.cs" />
+    <Compile Include="Engine\Input\InputData.cs" />
     <Compile Include="Engine\Properties.cs" />
     <Compile Include="Engine\Entity.cs" />
-    <Compile Include="Engine\InputSystem.cs" />
+    <Compile Include="Engine\Input\InputSystem.cs" />
     <Compile Include="Engine\LegendOfCubeGame.cs" />
     <Compile Include="Engine\PhysicsSystem.cs" />
     <Compile Include="Engine\Program.cs" />
