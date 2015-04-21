@@ -29,8 +29,7 @@ namespace LegendOfCube.Screens
 				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem, InputHelper));
 			};
 
-			AddItemBelow("// Graphics", () => { } );
-			AddItemBelow("// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *", () => { });
+			AddTitleBelow("// Graphics", () => { } );
 
 			if (cfg.Fullscreen)
 			{
@@ -87,8 +86,7 @@ namespace LegendOfCube.Screens
 
 
 
-			AddItemBelow("// Controls", () => { });
-			AddItemBelow("// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *", () => { });
+			AddTitleBelow("// Controls", () => { });
 
 			if (cfg.RightStickInvertedX)
 			{

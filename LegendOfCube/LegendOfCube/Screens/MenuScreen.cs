@@ -38,7 +38,13 @@ namespace LegendOfCube.Screens
 		protected void AddItemBelow(String text, Action onClick)
 		{
 			Vector2 size = font.MeasureString(text);
-			AddMenuItem(new MenuItem(text, new Rectangle((int)nextItemPos.X, (int)nextItemPos.Y, (int)size.X, (int)size.Y), onClick));
+			AddMenuItem(new MenuItem(text, new Rectangle((int)nextItemPos.X, (int)nextItemPos.Y, (int)size.X, (int)size.Y), onClick, false));
+		}
+
+		protected void AddTitleBelow(String text, Action onClick)
+		{
+			Vector2 size = font.MeasureString(text) * 1.5f;
+			AddMenuItem(new MenuItem(text, new Rectangle((int)nextItemPos.X, (int)nextItemPos.Y, (int)size.X, (int)size.Y), onClick, true));
 		}
 
 		protected void AddSpaceBelow(float amount)
