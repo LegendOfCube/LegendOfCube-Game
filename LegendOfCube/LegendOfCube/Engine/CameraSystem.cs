@@ -136,7 +136,7 @@ namespace LegendOfCube.Engine
 			}
 			else
 			{
-				if (world.PlayerCubeState.OnGround)
+				if (world.PlayerCubeState.OnGround || world.PlayerCubeState.OnWall)
 				{
 					// Drift toward target tilt angle
 					newTiltAngle = MathUtils.ClampLerp(TILT_CORRECT_SPEED * delta, oldRelNewTargetTiltAngle, targetTiltAngle);
