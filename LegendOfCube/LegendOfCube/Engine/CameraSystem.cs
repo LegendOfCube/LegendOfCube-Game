@@ -7,7 +7,7 @@ namespace LegendOfCube.Engine
 	class CameraSystem
 	{
 		// Difines how much camera can look up/down
-		private const float MAX_TILT = MathHelper.PiOver2 - 0.2f;
+		private const float MAX_TILT = MathHelper.PiOver2 - 0.3f;
 
 		// The distance above player to actually look at
 		private const float TARGET_Y_OFFSET = 0.0f;
