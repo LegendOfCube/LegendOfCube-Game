@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Media;
 using System.Text;
+using LegendOfCube.Engine.CubeMath;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -45,7 +46,7 @@ namespace LegendOfCube.Engine
 					if (world.PlayerCubeState.OnGround && !oldPlayerCubeState.OnGround
 						|| world.PlayerCubeState.OnWall && !oldPlayerCubeState.OnWall)
 					{
-						cc.hit.Play();
+						cc.hit.Play(MathUtils.MapRangeToRange(Math.Abs(collisionEvent.ColliderVelocity.Y), 0, 50, 0, 1), 0f, 0f);
 					}
 				}
 			}
@@ -56,7 +57,7 @@ namespace LegendOfCube.Engine
 				{
 					pitch = 0;
 				}
-				cc.jump.Play(1, pitch, 0);
+				cc.whoopJump2.Play(1, pitch, 0);
 			}
 			else if (!world.PlayerCubeState.OnWall && oldPlayerCubeState.OnWall && !world.PlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping())
 			{
@@ -65,7 +66,7 @@ namespace LegendOfCube.Engine
 				{
 					pitch = 0;
 				}
-				cc.wallJump.Play(1, pitch, 0);
+				cc.whoopJump.Play(1, pitch, 0);
 			}
 
 			oldPlayerCubeState = world.PlayerCubeState;

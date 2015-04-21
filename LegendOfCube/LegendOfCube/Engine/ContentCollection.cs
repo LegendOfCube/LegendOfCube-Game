@@ -14,6 +14,8 @@ namespace LegendOfCube.Engine
 		public SoundEffect oldJump { get; private set; }
 		public SoundEffect jump { get; private set; }
 		public SoundEffect wallJump { get; private set; }
+		public SoundEffect whoopJump { get; private set; }
+		public SoundEffect whoopJump2 { get; private set; }
 		public SoundEffect bounce { get; private set; }
 		public SoundEffect hit { get; private set; }
 		public SoundEffect select { get; private set; }
@@ -36,6 +38,8 @@ namespace LegendOfCube.Engine
 			oldJump = cm.Load<SoundEffect>("SoundEffects/waom");
 			wallJump = cm.Load<SoundEffect>("SoundEffects/waom2");
 			jump = cm.Load<SoundEffect>("SoundEffects/waom3");
+			whoopJump = cm.Load<SoundEffect>("SoundEffects/whoop");
+			whoopJump2 = cm.Load<SoundEffect>("SoundEffects/whoopShort");
 			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
 			hit = cm.Load<SoundEffect>("SoundEffects/hit");
 			select = cm.Load<SoundEffect>("SoundEffects/select");
