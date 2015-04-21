@@ -117,6 +117,7 @@ namespace LegendOfCube.Screens
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
 				spriteBatch.DrawString(font, world.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
 				spriteBatch.DrawString(font, UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, "Highscore: " + UIFormat(Highscore.Instance.GetHighScoresForLevel("Level")[0]), new Vector2(300, 360), Color.Red);
 			}
 			spriteBatch.End();
 		}
