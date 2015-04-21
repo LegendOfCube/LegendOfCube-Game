@@ -18,6 +18,8 @@ namespace LegendOfCube.Engine
 		private static readonly float ON_WALL_LIMIT = (float)Math.Sin(GROUND_WALL_ANGLE);
 		private static readonly float ON_GROUND_LIMIT = (float)Math.Cos(GROUND_WALL_ANGLE);
 
+		private const float WALL_QUERY_EPSILON = 0.035f;
+
 		private static PlayerCubeState lastCubeState;
 
 		public static void CalculateCubeState(World world, PhysicsSystem physicsSystem)
@@ -57,7 +59,6 @@ namespace LegendOfCube.Engine
 			}
 
 			// Wall queries
-			float WALL_QUERY_EPSILON = 0.025f;
 			if (lastCubeState.OnGround && !world.PlayerCubeState.OnGround)
 			{
 				OBB wsCubeOBB = physicsSystem.WorldSpaceOBBs[world.Player.Id];
