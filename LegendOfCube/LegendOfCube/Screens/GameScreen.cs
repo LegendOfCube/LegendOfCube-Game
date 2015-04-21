@@ -7,12 +7,13 @@ using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
-		private Level level;
+		public readonly Level level;
 		private World world;
 
 		private InputSystem inputSystem;
@@ -22,9 +23,11 @@ namespace LegendOfCube.Screens
 		private AISystem aiSystem;
 		private AnimationSystem animationSystem;
 		private RenderSystem renderSystem;
+		private AudioSystem audioSystem;
 
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ContentCollection contentCollection;
+		private readonly InputHelper inputHelper;
 
 		private Texture2D winScreen1;
 		private Texture2D winScreen2;
@@ -32,12 +35,13 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
+		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager, InputHelper inputHelper)
 			: base(game, screenSystem, true)
 		{
 			this.level = level;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
+			this.inputHelper = inputHelper;
 		}
 
 		internal override void Update(GameTime gameTime)
@@ -67,8 +71,9 @@ namespace LegendOfCube.Screens
 				aiSystem.Update(world, delta);
 				movementSystem.ProcessInputData(world, delta);
 				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
-				EventSystem.CalculateCubeState(world);
+				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
+				audioSystem.Update(world);
 				animationSystem.OnUpdate(world, delta);
 				cameraSystem.OnUpdate(world, gameTime, delta);
 			}
@@ -118,9 +123,10 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
+			audioSystem = new AudioSystem(contentCollection);
 			world = level.CreateWorld(Game, contentCollection);
 
-			inputSystem = new InputSystem(Game, ScreenSystem);
+			inputSystem = new InputSystem(Game, ScreenSystem, inputHelper);
 			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();

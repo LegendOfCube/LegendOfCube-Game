@@ -2,21 +2,16 @@
 
 namespace LegendOfCube.Engine
 {
-
-	public interface InputData
-	{
-		Vector2 GetDirection();
-		Vector2 GetCameraDirection();
-		bool IsJumping();
-		bool NewJump();
-	}
-	public class InputDataImpl : InputData
+	public class InputData
 	{
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		private Vector2 direction;
 		private Vector2 cameraDirection;
 		private bool isJumping, newJump;
+		public bool BufferedJump { get; set; }
+		public readonly float BufferTime = 100;
+		public float BufferTimeElapsed = 0;
 
 		public Vector2 GetDirection()
 		{

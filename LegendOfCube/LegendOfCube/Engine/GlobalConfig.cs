@@ -24,6 +24,7 @@ namespace LegendOfCube.Engine
 			}
 		}
 
+
 		// Settings
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
@@ -31,6 +32,8 @@ namespace LegendOfCube.Engine
 		public bool Fullscreen;
 		public int InternalResX;
 		public int InternalResY;
+		public bool VSync;
+		public bool MultiSampling;
 
 		// Controls
 		public bool RightStickInvertedX;
@@ -58,8 +61,10 @@ namespace LegendOfCube.Engine
 		{
 			// Graphics
 			this.Fullscreen = false;
+			this.VSync = true;
+			this.MultiSampling = true;
 			this.InternalResX = 1280;
-			this.InternalResY = 800;
+			this.InternalResY = 720;
 
 			// Controls
 			this.RightStickInvertedX = false;
