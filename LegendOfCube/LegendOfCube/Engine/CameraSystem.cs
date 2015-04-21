@@ -76,7 +76,8 @@ namespace LegendOfCube.Engine
 			Vector3 targetCameraDirection;
 			Vector3 movementDirection = world.Velocities[world.Player.Id];
 			// If under threshold, use previous value
-			if (movementDirection.Length() > 0.5f)
+			bool moveAlongGround = Math.Abs(movementDirection.X) > 0.1f || Math.Abs(movementDirection.Z) > 0.1f;
+			if (moveAlongGround)
 			{
 				targetCameraDirection = movementDirection;
 				movedSinceManualControl = true;
