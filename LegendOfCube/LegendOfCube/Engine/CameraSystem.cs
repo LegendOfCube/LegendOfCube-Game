@@ -10,25 +10,25 @@ namespace LegendOfCube.Engine
 		private const float MAX_TILT = MathHelper.PiOver2 - 0.2f;
 
 		// The distance above player to actually look at
-		private const float TARGET_Y_OFFSET = 0.8f;
+		private const float TARGET_Y_OFFSET = 0.0f;
 
 		// Scale input
 		private const float X_SCALE = 4.0f;
 		private const float Y_SCALE = -4.0f;
 
 		// How close camera can be to target without correcting
-		private const float MIN_DISTANCE = 3.0f;
+		private const float MIN_DISTANCE = 5.0f;
 		private const float MAX_DISTANCE = 8.0f;
 
-		private const float CATCH_UP_SPEED = 10.0f;
-		private const float BACKING_OFF_SPEED = 8.0f;
 		private const float TILT_CORRECT_SPEED = 3.0f;
 
 		// Defines to what tilt the camera will aim to see target from
 		private const float BASE_TILT = 30.0f;
 
 		// Time in seconds until manual adjustments starts to reset
-		private const double CAMERA_RESET_TIME = 0.8;
+		private const double CAMERA_RESET_TIME = 0.1;
+
+		private const float TARGET_Y_SPEED = 7.0f;
 
 		// UNUSED: Angles to view player from at different zoom levels
 		private const float ZOOM_MIN_ANGLE = -MathHelper.PiOver4;
@@ -64,6 +64,8 @@ namespace LegendOfCube.Engine
 			// Set what's to be the target
 			Vector3 newTarget = playerPosition + 0.5f * playerTransform.Up + TARGET_Y_OFFSET * Vector3.Up;
 
+			newTarget.Y = MathUtils.ClampLerp(TARGET_Y_SPEED * delta, oldTarget.Y, newTarget.Y);
+
 			// Now fetch position relative to new target
 			Vector3 oldRelNewTargetPos = oldPosition - newTarget;
 			float oldRelNewTargetDistance, oldRelNewTargetTiltAngle, oldRelNewTargetGroundAngle;
@@ -98,11 +100,11 @@ namespace LegendOfCube.Engine
 			}
 			else if (oldRelNewTargetDistance > MAX_DISTANCE)
 			{
-				newDistance = MathUtils.ClampLerp(CATCH_UP_SPEED * delta, oldRelNewTargetDistance, MAX_DISTANCE);
+				newDistance = MAX_DISTANCE;
 			}
 			else if (oldRelNewTargetDistance < MIN_DISTANCE)
 			{
-				newDistance = MathUtils.ClampLerp(BACKING_OFF_SPEED * delta, oldRelNewTargetDistance, MIN_DISTANCE);
+				newDistance = MIN_DISTANCE;
 			}
 			else
 			{
