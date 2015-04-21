@@ -18,6 +18,8 @@ namespace LegendOfCube.Engine
 		private static readonly float ON_WALL_LIMIT = (float)Math.Sin(GROUND_WALL_ANGLE);
 		private static readonly float ON_GROUND_LIMIT = (float)Math.Cos(GROUND_WALL_ANGLE);
 
+		private const float WALL_QUERY_EPSILON = 0.035f;
+
 		private static PlayerCubeState lastCubeState;
 
 		public static void CalculateCubeState(World world, PhysicsSystem physicsSystem)
@@ -57,7 +59,6 @@ namespace LegendOfCube.Engine
 			}
 
 			// Wall queries
-			float WALL_QUERY_EPSILON = 0.025f;
 			if (lastCubeState.OnGround && !world.PlayerCubeState.OnGround)
 			{
 				OBB wsCubeOBB = physicsSystem.WorldSpaceOBBs[world.Player.Id];
@@ -84,35 +85,9 @@ namespace LegendOfCube.Engine
 			lastCubeState = world.PlayerCubeState;
 		}
 
-		private static bool IsPairCombination(CollisionEvent c, Func<Entity, bool> entity1Satisfies, Func<Entity, bool> entity2Satisfies)
-		{
-			if (entity1Satisfies(c.Collider))
-			{
-				return entity2Satisfies(c.CollidedWith);
-			}
-			if (entity2Satisfies(c.CollidedWith))
-			{
-				return entity1Satisfies(c.Collider);
-			}
-			return false;
-		}
-
-		private static bool PlayerShouldWin(World world, CollisionEvent c)
-		{
-			return IsPairCombination(c,
-				e => e.Id == world.Player.Id,
-				e => world.EntityProperties[e.Id].Satisfies((Properties.WIN_ZONE_FLAG)));
-		}
-
-		private static bool PlayerShouldDie(World world, CollisionEvent c)
-		{
-			return IsPairCombination(c,
-				e => e.Id == world.Player.Id,
-				e => world.EntityProperties[e.Id].Satisfies((Properties.DEATH_ZONE_FLAG)));
-		}
-
 		public static void HandleEvents(World world)
 		{
+
 			EventBuffer eventBuffer = world.EventBuffer;
 
 			foreach (var collisionEvent in eventBuffer.CollisionEvents)
@@ -151,13 +126,13 @@ namespace LegendOfCube.Engine
 				}
 			}
 
-			if (eventBuffer.CollisionEvents.Any(c => PlayerShouldWin(world, c)))
+			if (eventBuffer.CollisionEvents.Any(c => EventUtils.PlayerShouldWin(world, c)))
 			{
 				world.WinState = true;
 				return;
 			}
 
-			if (eventBuffer.CollisionEvents.Any(c => PlayerShouldDie(world, c)))
+			if (eventBuffer.CollisionEvents.Any(c => EventUtils.PlayerShouldDie(world, c)))
 			{
 				RespawnPlayer(world);
 			}
@@ -184,6 +159,7 @@ namespace LegendOfCube.Engine
 			world.WinState = false;
 			world.TimeSinceGameOver = 0;
 			world.GameStats.PlayerDeaths += 1;
+			world.PlayerRespawAudioCue = true;
 		}
 
 		// Precondition: param entity must satisfy MOVABLE

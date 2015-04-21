@@ -109,26 +109,44 @@ namespace LegendOfCube.Engine
 
 				// Calculate collision axis and rotate collider
 				Vector3 collisionAxis = FindCollisionAxis(ref worldSpaceOBBs[intersectionId], ref oldObb);
-				RotateOBB(ref worldSpaceOBBs[i], ref collisionAxis);
+
+				// STAIRCASE HACK
+				// Override CollisionAxis and manually push out along ground axis and check if that solves collision
+				bool collisionSolved = false;
+				if (i == world.Player.Id && world.PlayerCubeState.OnGround && Math.Abs(Vector3.Dot(collisionAxis, world.PlayerCubeState.GroundAxis)) < 0.3)
+				{
+					const float MAX_STEP_HEIGHT = 0.35f;
+					collisionSolved = PushFromEnitityWithMax(world, i, intersectionId, world.PlayerCubeState.GroundAxis, 0.05f, 15, MAX_STEP_HEIGHT);
+					if (collisionSolved)
+					{
+						collisionAxis = world.PlayerCubeState.GroundAxis;
+						timeLeft = 0.0f;
+					}
+				}
 
 				// Add Collision Event to EventBuffer
 				CollisionEvent ce = new CollisionEvent(new Entity(i), new Entity(intersectionId), collisionAxis, world.Velocities[i]);
 				world.EventBuffer.AddEvent(ref ce);
 
-				// Move OBB to collision point
-				worldSpaceOBBs[i].Position -= diff;
-				float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
-									 ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
-				diff = world.Velocities[i] * timeUntilCol;
-				worldSpaceOBBs[i].Position += diff;
+				if (!collisionSolved) {
+					RotateOBB(ref worldSpaceOBBs[i], ref collisionAxis);
 
-				// Update timeLeft
-				timeLeft -= timeUntilCol;
-				if (timeLeft <= 0.0f) break;
+					// Move OBB to collision point
+					worldSpaceOBBs[i].Position -= diff;
+					float timeUntilCol = FindTimeUntilIntersection(ref worldSpaceOBBs[intersectionId],
+					                     ref worldSpaceOBBs[i], world.Velocities[i], timeLeft, 2);
+					diff = world.Velocities[i] * timeUntilCol;
+					worldSpaceOBBs[i].Position += diff;
+
+					// Update timeLeft
+					timeLeft -= timeUntilCol;
+				}
 
 				// Remove velocity in colliding axis
 				float collidingSum = Vector3.Dot(world.Velocities[i], collisionAxis);
 				world.Velocities[i] -= (collidingSum * collisionAxis);
+
+				if (timeLeft <= 0.0f) break;
 
 				// Move in remaining velocity for the remaining time and then check for more intersections
 				diff = world.Velocities[i] * timeLeft;
@@ -274,6 +292,58 @@ namespace LegendOfCube.Engine
 				PushOut(ref worldSpaceOBBs[i], ref worldSpaceOBBs[intersectionId], ref axis);
 				intersectionId = FindIntersection(world, i);
 			}
+		}
+
+		/// <summary>
+		/// Push out entity in a direction with a max distance.
+		/// </summary>
+		private bool PushFromEnitityWithMax(World world, UInt32 entityId, UInt32 collidedWithId, Vector3 axis, float epsilon, int maxIterations, float maxDist)
+		{
+			OBB original = worldSpaceOBBs[entityId];
+			OBB collideOBB = WorldSpaceOBBs[collidedWithId];
+
+			// Check if moving out to max distance would solve collision,
+			// then abort right away
+			worldSpaceOBBs[entityId].Position += axis * maxDist;
+			bool collides = worldSpaceOBBs[entityId].Intersects(ref collideOBB);
+			if (collides)
+			{
+				worldSpaceOBBs[entityId] = original;
+				return false;
+			}
+
+			// Now do a binary search with known initial min and max values
+			float minFree = maxDist;
+			float maxCollides = 0;
+			for (int iterations = 0; iterations < maxIterations; iterations++)
+			{
+				float dist = (minFree + maxCollides) / 2;
+
+				worldSpaceOBBs[entityId].Position = original.Position + (axis * dist);
+				collides = worldSpaceOBBs[entityId].Intersects(ref collideOBB);
+				
+				if (!collides)
+				{
+					minFree = dist;
+					if (minFree - maxCollides < epsilon)
+					{
+						// Do a full check with all entities before accepting new position
+						bool collidesWithAnything = (FindIntersection(world, entityId) != UInt32.MaxValue);
+						if (collidesWithAnything)
+						{
+							worldSpaceOBBs[entityId] = original;
+							return false;
+						}
+						return true;
+					}
+				}
+				else
+				{
+					maxCollides = dist;
+				}
+			}
+			worldSpaceOBBs[entityId] = original;
+			return false;
 		}
 
 		private void RotateOBB(ref OBB obbOut, ref Vector3 axis)

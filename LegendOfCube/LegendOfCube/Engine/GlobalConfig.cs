@@ -28,8 +28,7 @@ namespace LegendOfCube.Engine
 		// Private members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private const string INI_PATH = "Config.ini";
-		private IniFile iniFile = new IniFile(INI_PATH);
+		private readonly IniFile iniFile;
 
 		// Settings
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -64,6 +63,8 @@ namespace LegendOfCube.Engine
 
 		public void SaveToFile()
 		{
+			Directory.CreateDirectory(Path.GetDirectoryName(iniFile.INIPath));
+
 			// Graphics
 			iniFile.WriteBool("Graphics", "Fullscreen", Fullscreen);
 			iniFile.WriteBool("Graphics", "VSync", VSync);
@@ -81,6 +82,10 @@ namespace LegendOfCube.Engine
 
 		private GlobalConfig()
 		{
+			var iniPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+			              @"\My Games\Legend of Cube\Config.ini";
+			iniFile = new IniFile(iniPath);
+
 			LoadFromFile();
 			SaveToFile(); // TODO: Maybe unnecessary, but will ensure that we generate .ini file when first run.
 		}
