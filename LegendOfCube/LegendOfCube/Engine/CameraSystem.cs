@@ -23,7 +23,7 @@ namespace LegendOfCube.Engine
 		private const float TILT_CORRECT_SPEED = 3.0f;
 
 		// Modify how fast it takes for camera to center on player in y-direction
-		private const float TARGET_TRACK_Y_SPEED = 5.0f;
+		private const float TARGET_UP_TRACK_SPEED = 8.0f;
 
 		// Defines to what tilt the camera will aim to see target from
 		private const float BASE_TILT = 30.0f;
@@ -65,7 +65,7 @@ namespace LegendOfCube.Engine
 			// Set what's to be the target
 			Vector3 newTarget = playerPosition + 0.5f * playerTransform.Up + TARGET_Y_OFFSET * Vector3.Up;
 
-			newTarget.Y = MathUtils.ClampLerp(TARGET_TRACK_Y_SPEED * delta, oldTarget.Y, newTarget.Y);
+			newTarget.Y = MathUtils.ClampLerp(TARGET_UP_TRACK_SPEED * delta, oldTarget.Y, newTarget.Y);
 
 			// Now fetch position relative to new target
 			Vector3 oldRelNewTargetPos = oldPosition - newTarget;
