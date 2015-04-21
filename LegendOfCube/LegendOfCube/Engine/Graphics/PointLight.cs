@@ -8,15 +8,15 @@ namespace LegendOfCube.Engine.Graphics
 {
 	public struct PointLight
 	{
-		public float reach;
-		public Vector4 color;
-		public Vector3 lightPosition;
+		public readonly float Reach;
+		public readonly Vector4 Color;
+		public readonly Vector3 LightPosition;
 
 		public PointLight(float reach, Vector4 color, Vector3 lightPosition)
 		{
-			this.reach = reach;
-			this.color = color;
-			this.lightPosition = lightPosition;
+			this.Reach = reach;
+			this.Color = color;
+			this.LightPosition = lightPosition;
 		}
 	}
 }
