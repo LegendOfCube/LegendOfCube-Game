@@ -107,6 +107,11 @@ namespace LegendOfCube.Levels
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.6f)* Matrix.CreateRotationX(MathHelper.ToRadians(-5)))
 				.WithPosition(60, -36.01f, 68.2f).AddToWorld(world);
 
+			grassSmallBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
+				.WithPosition(64.8f, -37, 54.9f).AddToWorld(world);
+			grassSmallBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
+				.WithPosition(64.8f, -37, 49.9f).AddToWorld(world);
+
 			/*
 			 * ¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸¸.·´¯`·.´¯`·.¸¸.·´¯`·.¸><(((º>
 			 */
