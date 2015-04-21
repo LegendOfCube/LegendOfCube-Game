@@ -54,6 +54,9 @@ namespace LegendOfCube.Levels
 			var pipeBuilder = new EntityBuilder().WithModelData(contentCollection.Pipe);
 			var pipeTurnBuilder = new EntityBuilder().WithModelData(contentCollection.PipeTurn);
 			var railingBuilder = new EntityBuilder().WithModelData(contentCollection.Railing);
+			var grassSmallBuilder = new EntityBuilder().WithModelData(contentCollection.GrassSmall);
+			var grassRoundBuilder = new EntityBuilder().WithModelData(contentCollection.GrassRound);
+			var grassLongBuilder = new EntityBuilder().WithModelData(contentCollection.GrassLong);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
@@ -111,6 +114,9 @@ namespace LegendOfCube.Levels
 			//Wall jump to hanging platform
 			railingBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 0.9f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(55.5f, -34.9f, 92.9f).AddToWorld(world);
+
+			grassRoundBuilder.Copy().WithPosition(60, -34.9f, 90).AddToWorld(world);
+
 			platformBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 

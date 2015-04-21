@@ -44,6 +44,9 @@ namespace LegendOfCube.Engine
 		public ModelData Pipe { get; private set; }
 		public ModelData PipeTurn { get; private set; }
 		public ModelData Railing { get; private set; }
+		public ModelData GrassSmall { get; private set; }
+		public ModelData GrassRound { get; private set; }
+		public ModelData GrassLong { get; private set; }
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
@@ -77,6 +80,9 @@ namespace LegendOfCube.Engine
 		public Model PipeModel { get; private set; }
 		public Model PipeTurnModel { get; private set; }
 		public Model RailingModel { get; private set; }
+		public Model GrassSmallModel { get; private set; }
+		public Model GrassRoundModel { get; private set; }
+		public Model GrassLongModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -109,6 +115,10 @@ namespace LegendOfCube.Engine
 			PipeModel = cm.Load<Model>("Models/Pipe/pipe");
 			PipeTurnModel = cm.Load<Model>("Models/Pipe/pipe_turn");
 			RailingModel = cm.Load<Model>("Models/Railing/railing");
+			GrassSmallModel = cm.Load<Model>("Models/Vegetation/small_grass");
+			GrassRoundModel = cm.Load<Model>("Models/Vegetation/grass_round");
+			GrassLongModel = cm.Load<Model>("Models/Vegetation/grass_long");
+
 
 			placeholderWall = new ModelData
 			{
@@ -533,6 +543,40 @@ namespace LegendOfCube.Engine
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.3f, 5), 0.15f, 0.55f, 10)
 
+			};
+
+			GrassSmall = new ModelData
+			{
+				Model = GrassSmallModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+				}
+			};
+			GrassRound = new ModelData
+			{
+				Model = GrassRoundModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					DiffuseColor = Color.Blue.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					//SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+				}
+			};
+			GrassLong = new ModelData
+			{
+				Model = GrassLongModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+				}
 			};
 		}
 	}
