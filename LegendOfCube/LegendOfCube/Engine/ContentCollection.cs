@@ -561,10 +561,10 @@ namespace LegendOfCube.Engine
 				Model = GrassRoundModel,
 				EffectParams = new StandardEffectParams
 				{
-					//DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
-					DiffuseColor = Color.Blue.ToVector4(),
-					//NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
-					//SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+					DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
 				}
 			};
 			GrassLong = new ModelData

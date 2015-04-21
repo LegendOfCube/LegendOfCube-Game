@@ -115,7 +115,8 @@ namespace LegendOfCube.Levels
 			railingBuilder.Copy().WithTransform(Matrix.CreateScale(1, 1, 0.9f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(55.5f, -34.9f, 92.9f).AddToWorld(world);
 
-			grassRoundBuilder.Copy().WithPosition(60, -34.9f, 90).AddToWorld(world);
+			grassLongBuilder.Copy().WithTransform(Matrix.CreateScale(2.5f, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
+				.WithPosition(64.2f, -34.9f, 88).AddToWorld(world);
 
 			platformBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(60.5f, -34.9f, 88).AddToWorld(world);
