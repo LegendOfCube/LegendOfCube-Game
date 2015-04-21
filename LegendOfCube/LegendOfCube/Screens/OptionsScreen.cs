@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using LegendOfCube.Engine;
 using Microsoft.Xna.Framework;
+using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
@@ -11,7 +12,7 @@ namespace LegendOfCube.Screens
 	{
 		private GlobalConfig cfg;
 
-		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
+		public OptionsScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper)
 		{
 			cfg = GlobalConfig.Instance;
 			cfg.LoadFromFile();
@@ -25,10 +26,11 @@ namespace LegendOfCube.Screens
 			{
 				cfg.SaveToFile();
 				ScreenSystem.RemoveCurrentScreen();
-				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem));
+				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem, InputHelper));
 			};
 
-			AddItemBelow("Graphics", () => { } );
+			AddItemBelow("// Graphics", () => { } );
+			AddItemBelow("// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *", () => { });
 
 			if (cfg.Fullscreen)
 			{
@@ -85,7 +87,8 @@ namespace LegendOfCube.Screens
 
 
 
-			AddItemBelow("Controls", () => { } );
+			AddItemBelow("// Controls", () => { });
+			AddItemBelow("// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *", () => { });
 
 			if (cfg.RightStickInvertedX)
 			{
