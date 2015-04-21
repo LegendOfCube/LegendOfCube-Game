@@ -41,6 +41,11 @@ namespace LegendOfCube.Screens
 			AddMenuItem(new MenuItem(text, new Rectangle((int)nextItemPos.X, (int)nextItemPos.Y, (int)size.X, (int)size.Y), onClick));
 		}
 
+		protected void AddSpaceBelow(float amount)
+		{
+			nextItemPos.Y += amount;
+		}
+
 		internal override void Update(GameTime gameTime)
 		{
 			menuInputSystem.ApplyInput(gameTime, menuItems, ref selection);

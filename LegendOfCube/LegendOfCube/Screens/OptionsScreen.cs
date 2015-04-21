@@ -83,7 +83,7 @@ namespace LegendOfCube.Screens
 				});
 			}
 
-			AddItemBelow("I", () => { }); // Empty line bro
+			AddSpaceBelow(35.0f);
 
 
 
@@ -123,8 +123,8 @@ namespace LegendOfCube.Screens
 					herp();
 				});
 			}
-			
-			AddItemBelow("I", () => { } ); // Empty line bro
+
+			AddSpaceBelow(35.0f);
 
 
 
