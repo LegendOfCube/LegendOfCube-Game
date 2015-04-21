@@ -159,9 +159,14 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(-54.2f, -36.18f, 90).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(-54.2f, -36.18f, 90).AddToWorld(world);
 
+			grassSmallBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(125)))
+				.WithPosition(-59.1f, -36.18f, 94.9f).AddToWorld(world);
+
 			railingBuilder.Copy().WithPosition(-49.3f, -31.18f, 60).AddToWorld(world);
 			platformBuilder.Copy().WithPosition(-54.2f, -31.18f, 65).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(-54.2f, -31.18f, 65).AddToWorld(world);
+			grassLongBuilder.Copy().WithTransform(Matrix.CreateScale(2.5f, 2, 2) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(-58.5f, -31.18f, 65).AddToWorld(world);
 
 			railingBuilder.Copy().WithPosition(-59.1f, -25.99f, 40).AddToWorld(world);
 			railingBuilder.Copy().WithPosition(-49.3f, -25.99f, 40).AddToWorld(world);
