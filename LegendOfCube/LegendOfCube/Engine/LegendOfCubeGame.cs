@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using LegendOfCube.Engine.Graphics;
+using LegendOfCube.Engine.Input;
 using Microsoft.Xna.Framework;
 using LegendOfCube.Screens;
 
@@ -15,6 +16,7 @@ namespace LegendOfCube.Engine
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ScreenSystem screenSystem;
 		private readonly ContentCollection contentCollection;
+		private readonly InputHelper inputHelper;
 
 		private readonly GlobalConfig cfg = GlobalConfig.Instance;
 	
@@ -27,12 +29,14 @@ namespace LegendOfCube.Engine
 
 			contentCollection = new ContentCollection();
 
-			graphicsManager = new GraphicsDeviceManager(this);
-			graphicsManager.PreferredBackBufferWidth = cfg.InternalResX;
-			graphicsManager.PreferredBackBufferHeight = cfg.InternalResY;
-			graphicsManager.IsFullScreen = cfg.Fullscreen;
-			graphicsManager.SynchronizeWithVerticalRetrace = cfg.VSync;
-			graphicsManager.PreferMultiSampling = cfg.MultiSampling;
+			graphicsManager = new GraphicsDeviceManager(this)
+			{
+				PreferredBackBufferWidth = cfg.InternalResX,
+				PreferredBackBufferHeight = cfg.InternalResY,
+				IsFullScreen = cfg.Fullscreen,
+				SynchronizeWithVerticalRetrace = cfg.VSync,
+				PreferMultiSampling = cfg.MultiSampling
+			};
 
 			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
 			// that could be disposed and reused
@@ -40,7 +44,8 @@ namespace LegendOfCube.Engine
 
 			graphicsManager.ApplyChanges();
 
-			screenSystem = new ScreenSystem(this, contentCollection, graphicsManager);
+			inputHelper = new InputHelper();
+			screenSystem = new ScreenSystem(this, contentCollection, graphicsManager, inputHelper);
 
 		}
 
@@ -84,6 +89,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+			inputHelper.UpdateInputStates();
 			screenSystem.Update(gameTime);
 			base.Update(gameTime);
 		}
