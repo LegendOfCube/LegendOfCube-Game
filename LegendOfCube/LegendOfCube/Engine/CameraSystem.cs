@@ -75,8 +75,9 @@ namespace LegendOfCube.Engine
 			// Determine direction player appears to be heading in
 			Vector3 targetCameraDirection;
 			Vector3 movementDirection = world.Velocities[world.Player.Id];
+			Vector2 groundMovement = new Vector2(movementDirection.X, movementDirection.Z);
 			// If under threshold, use previous value
-			bool moveAlongGround = Math.Abs(movementDirection.X) > 0.1f || Math.Abs(movementDirection.Z) > 0.1f;
+			bool moveAlongGround = groundMovement.Length() > 0.5f;
 			if (moveAlongGround)
 			{
 				targetCameraDirection = movementDirection;
