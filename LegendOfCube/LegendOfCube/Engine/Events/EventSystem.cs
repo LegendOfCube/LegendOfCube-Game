@@ -123,7 +123,6 @@ namespace LegendOfCube.Engine
 			if (eventBuffer.CollisionEvents.Any(c => EventUtils.PlayerShouldWin(world, c)))
 			{
 				world.WinState = true;
-				Highscore.Instance.AddHighScore("Level", world.GameStats.GameTime);
 				return;
 			}
 
