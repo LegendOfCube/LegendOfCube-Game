@@ -19,7 +19,10 @@ namespace LegendOfCube.Engine
 
 		public Highscore()
 		{
-			highScores = new Dictionary<string, List<float>>();
+			if (!LoadFromFile())
+			{
+				highScores = new Dictionary<string, List<float>>();
+			}
 		}
 
 		public void AddHighScore(string name, float time)
@@ -45,6 +48,16 @@ namespace LegendOfCube.Engine
 				return results;
 			}
 			return null;
-		} 
+		}
+
+		public void SaveToFile()
+		{
+			
+		}
+
+		public bool LoadFromFile()
+		{
+			return false;
+		}
 	}
 }
