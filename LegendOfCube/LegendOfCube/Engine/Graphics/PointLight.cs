@@ -8,9 +8,9 @@ namespace LegendOfCube.Engine.Graphics
 {
 	public struct PointLight
 	{
-		public readonly float Reach;
-		public readonly Vector4 Color;
-		public readonly Vector3 LightPosition;
+		public float Reach;
+		public Vector4 Color;
+		public Vector3 LightPosition;
 
 		public PointLight(float reach, Vector4 color, Vector3 lightPosition)
 		{
