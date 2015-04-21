@@ -94,6 +94,7 @@
     <Compile Include="Engine\Input\InputHelper.cs" />
     <Compile Include="Levels\Level13.cs" />
     <Compile Include="Levels\LevelConstants.cs" />
+    <Compile Include="Levels\StairwayLevel.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItem.cs" />
     <Compile Include="Screens\MenuScreen.cs" />
