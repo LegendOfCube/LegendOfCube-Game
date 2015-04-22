@@ -54,8 +54,8 @@ namespace LegendOfCube.Screens
 			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
 			Color shadowColor = Color.Black;
 			Color color = Color.White;
-			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, text, position, color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, position, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 	}
 
@@ -97,13 +97,94 @@ namespace LegendOfCube.Screens
 			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
 			Color shadowColor = Color.Black;
 			Color color = isSelected ? Color.DarkOrange : Color.White;
-			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, text, position, color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, position, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
 		public sealed override void Update(MenuItemAction menuAction)
 		{
 			if (menuAction == MenuItemAction.ACTIVATE) this.text = func();
+		}
+		
+		public sealed override Rectangle ActivationHitBox()
+		{
+			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
+			             (int)Math.Round(spriteFontForMeasuring.MeasureString(text).X * scale), (int)Math.Round(ItemHeight()));
+		}
+	}
+
+	public class OnOffSelectorMenuItem : MenuItem2
+	{
+		private string text;
+		private float height;
+		private float scale;
+		private Vector2 position;
+		private Action<bool> setValue;
+		private bool currentValue;
+
+		private SpriteFont spriteFontForMeasuring;
+
+		public OnOffSelectorMenuItem(string text, SpriteFont spriteFont, Action<bool> setValue, bool currentValue) : base(true)
+		{
+			this.text = text + ":   ";
+			this.scale = 1.0f;
+			this.spriteFontForMeasuring = spriteFont;
+			this.height = spriteFont.MeasureString(text).Y;
+			this.setValue = setValue;
+			this.currentValue = currentValue;
+		}
+
+		public sealed override float ItemHeight() { return height; }
+
+		public sealed override void SetPosition(Vector2 position) { this.position = position; }
+
+		public sealed override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected)
+		{
+			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
+			Vector2 fontPos = position;
+			Color shadowColor = Color.Black;
+			Color normalColor = Color.White;
+			Color color = isSelected ? Color.DarkOrange : normalColor;
+			Color activatedColor = Color.DarkRed;
+
+			// Name
+			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, fontPos, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+
+			float nameWidth = spriteFontForMeasuring.MeasureString(text).X;
+			shadowFontPos.X += nameWidth;
+			fontPos.X += nameWidth;
+
+			// On
+			spriteBatch.DrawString(spriteFont, "On  ", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, "On  ", fontPos, currentValue ? activatedColor : color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+
+			float onWidth = spriteFontForMeasuring.MeasureString("On  ").X;
+			shadowFontPos.X += onWidth;
+			fontPos.X += onWidth;
+
+			// Off
+			spriteBatch.DrawString(spriteFont, "Off", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, "Off", fontPos, !currentValue ? activatedColor : color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+		}
+
+		public sealed override void Update(MenuItemAction menuAction)
+		{
+			if (menuAction == MenuItemAction.RIGHT && currentValue)
+			{
+				currentValue = false;
+				setValue(currentValue);
+			}
+			else if (menuAction == MenuItemAction.LEFT && !currentValue)
+			{
+				currentValue = true;
+				setValue(currentValue);
+			}
+			else if (menuAction == MenuItemAction.ACTIVATE)
+			{
+				currentValue = !currentValue;
+				setValue(currentValue);
+			}
 		}
 		
 		public sealed override Rectangle ActivationHitBox()
@@ -134,6 +215,7 @@ namespace LegendOfCube.Screens
 
 		public BaseMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) { }
 		internal abstract void InitializeScreen();
+		internal abstract void OnExit();
 
 		// Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -172,6 +254,11 @@ namespace LegendOfCube.Screens
 		protected void AddClickable(string text, Func<string> func)
 		{
 			AddMenuItem(new ClickableTextMenuItem(text, 1.0f, this.spriteFont, func));
+		}
+
+		protected void AddOnOffSelector(string name, bool currentValue, Action<bool> setValueFunc)
+		{
+			AddMenuItem(new OnOffSelectorMenuItem(name, this.spriteFont, setValueFunc, currentValue));
 		}
 
 		// Inherited functions from Screen
@@ -216,6 +303,7 @@ namespace LegendOfCube.Screens
 			}
 			else if (iH.MenuCancelPressed())
 			{
+				OnExit();
 				ScreenSystem.RemoveCurrentScreen();
 			}
 			else

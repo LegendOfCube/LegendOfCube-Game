@@ -24,18 +24,23 @@ namespace LegendOfCube.Screens
 			AddSpace(35.0f);
 			
 			AddHeading("Graphics");
-			AddClickable("Fullscreen: " + Parse(cfg.Fullscreen), () => { cfg.Fullscreen = !cfg.Fullscreen; cfg.SaveToFile(); return "Fullscreen: " + Parse(cfg.Fullscreen); });
-			AddClickable("VSync: " + Parse(cfg.VSync), () => { cfg.VSync = !cfg.VSync; cfg.SaveToFile(); return "VSync: " + Parse(cfg.VSync); });
-			AddClickable("MultiSampling: " + Parse(cfg.MultiSampling), () => { cfg.MultiSampling = !cfg.MultiSampling; return "MultiSampling: " + Parse(cfg.MultiSampling); });
+			AddOnOffSelector("Fullscreen", cfg.Fullscreen, (bool b) => { cfg.Fullscreen = b; });
+			AddOnOffSelector("VSync", cfg.VSync, (bool b) => { cfg.VSync = b; });
+			AddOnOffSelector("MultiSampling", cfg.MultiSampling, (bool b) => { cfg.MultiSampling = b; });
 			AddSpace(35.0f);
 
 			AddHeading("Controls");
-			AddClickable("InvertX: " + Parse(cfg.RightStickInvertedX), () => { cfg.RightStickInvertedX = !cfg.RightStickInvertedX; cfg.SaveToFile(); return "InvertX: " + Parse(cfg.RightStickInvertedX); });
-			AddClickable("InvertY: " + Parse(cfg.RightStickInvertedY), () => { cfg.RightStickInvertedY = !cfg.RightStickInvertedY; cfg.SaveToFile(); return "InvertY: " + Parse(cfg.RightStickInvertedY); });
+			AddOnOffSelector("InvertX", cfg.RightStickInvertedX, (bool b) => { cfg.RightStickInvertedX = b; });
+			AddOnOffSelector("InvertY", cfg.RightStickInvertedY, (bool b) => { cfg.RightStickInvertedY = b; });
 			AddSpace(35.0f);
 
-			AddClickable("Main Menu", () => { ScreenSystem.RemoveCurrentScreen(); return "null"; });
+			AddClickable("Main Menu", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "null"; });
 
+		}
+
+		internal sealed override void OnExit()
+		{
+			cfg.SaveToFile();
 		}
 
 		private static string Parse(bool b)
