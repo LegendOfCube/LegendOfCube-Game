@@ -16,12 +16,12 @@ namespace LegendOfCube.Engine
 		// Singleton instance
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private static readonly GlobalConfig instance = new GlobalConfig();
+		private static readonly GlobalConfig INSTANCE = new GlobalConfig();
 		public static GlobalConfig Instance
 		{
 			get
 			{
-				return instance;
+				return INSTANCE;
 			}
 		}
 
