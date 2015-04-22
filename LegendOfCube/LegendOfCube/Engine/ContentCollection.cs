@@ -47,6 +47,7 @@ namespace LegendOfCube.Engine
 		public ModelData GrassSmall { get; private set; }
 		public ModelData GrassRound { get; private set; }
 		public ModelData GrassLong { get; private set; }
+		public ModelData Container { get; private set; }
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
@@ -83,6 +84,7 @@ namespace LegendOfCube.Engine
 		public Model GrassSmallModel { get; private set; }
 		public Model GrassRoundModel { get; private set; }
 		public Model GrassLongModel { get; private set; }
+		public Model ContainerModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -116,8 +118,9 @@ namespace LegendOfCube.Engine
 			PipeTurnModel = cm.Load<Model>("Models/Pipe/pipe_turn");
 			RailingModel = cm.Load<Model>("Models/Railing/railing");
 			GrassSmallModel = cm.Load<Model>("Models/Vegetation/small_grass");
-			GrassRoundModel = cm.Load<Model>("Models/Vegetation/grass_round");
-			GrassLongModel = cm.Load<Model>("Models/Vegetation/grass_long");
+			//GrassRoundModel = cm.Load<Model>("Models/Vegetation/grass_round_optimized");
+			GrassLongModel = cm.Load<Model>("Models/Vegetation/grass_long_optimized");
+			ContainerModel = cm.Load<Model>("Models/Container/container");
 
 
 			placeholderWall = new ModelData
@@ -577,6 +580,16 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
 					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
 				}
+			};
+
+			Container = new ModelData
+			{
+				Model = ContainerModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseColor = Color.DarkBlue.ToVector4(),
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
 			};
 		}
 	}

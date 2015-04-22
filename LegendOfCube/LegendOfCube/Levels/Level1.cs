@@ -57,11 +57,14 @@ namespace LegendOfCube.Levels
 			var grassSmallBuilder = new EntityBuilder().WithModelData(contentCollection.GrassSmall);
 			var grassRoundBuilder = new EntityBuilder().WithModelData(contentCollection.GrassRound);
 			var grassLongBuilder = new EntityBuilder().WithModelData(contentCollection.GrassLong);
+			var containerBuilder = new EntityBuilder().WithModelData(contentCollection.Container);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
+
+			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f)).WithPosition(0, -40, 20).AddToWorld(world);
 
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
@@ -159,7 +162,7 @@ namespace LegendOfCube.Levels
 			platformBuilder.Copy().WithPosition(-54.2f, -36.18f, 90).AddToWorld(world);
 			pillarBuilder.Copy().WithPosition(-54.2f, -36.18f, 90).AddToWorld(world);
 
-			grassSmallBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(125)))
+			grassSmallBuilder.Copy().WithTransform(Matrix.CreateScale(1.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(125)))
 				.WithPosition(-59.1f, -36.18f, 94.9f).AddToWorld(world);
 
 			railingBuilder.Copy().WithPosition(-49.3f, -31.18f, 60).AddToWorld(world);
