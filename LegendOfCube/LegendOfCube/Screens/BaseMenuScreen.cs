@@ -121,17 +121,19 @@ namespace LegendOfCube.Screens
 		private Vector2 position;
 		private Action<bool> setValue;
 		private bool currentValue;
+		float onOffAlign;
 
 		private SpriteFont spriteFontForMeasuring;
 
-		public OnOffSelectorMenuItem(string text, SpriteFont spriteFont, Action<bool> setValue, bool currentValue) : base(true)
+		public OnOffSelectorMenuItem(string text, SpriteFont spriteFont, Action<bool> setValue, bool currentValue, float onOffAlign) : base(true)
 		{
-			this.text = text + ":   ";
+			this.text = text + ":";
 			this.scale = 1.0f;
 			this.spriteFontForMeasuring = spriteFont;
 			this.height = spriteFont.MeasureString(text).Y;
 			this.setValue = setValue;
 			this.currentValue = currentValue;
+			this.onOffAlign = onOffAlign;
 		}
 
 		public sealed override float ItemHeight() { return height; }
@@ -152,9 +154,11 @@ namespace LegendOfCube.Screens
 			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 			spriteBatch.DrawString(spriteFont, text, fontPos, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 
-			float nameWidth = spriteFontForMeasuring.MeasureString(text).X;
-			shadowFontPos.X += nameWidth;
-			fontPos.X += nameWidth;
+			//float nameWidth = spriteFontForMeasuring.MeasureString(text).X;
+			//shadowFontPos.X += nameWidth;
+			//fontPos.X += nameWidth;
+			shadowFontPos.X += onOffAlign;
+			fontPos.X += onOffAlign;
 
 			// On
 			spriteBatch.DrawString(spriteFont, "On  ", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
@@ -191,7 +195,7 @@ namespace LegendOfCube.Screens
 		public sealed override Rectangle ActivationHitBox()
 		{
 			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
-			             (int)Math.Round(spriteFontForMeasuring.MeasureString(text + ":   On  Off").X * scale), (int)Math.Round(ItemHeight()));
+			             (int)Math.Round((spriteFontForMeasuring.MeasureString(text + ":On  Off").X + onOffAlign) * scale), (int)Math.Round(ItemHeight()));
 		}
 	}
 
@@ -259,7 +263,7 @@ namespace LegendOfCube.Screens
 
 		protected void AddOnOffSelector(string name, bool currentValue, Action<bool> setValueFunc)
 		{
-			AddMenuItem(new OnOffSelectorMenuItem(name, this.spriteFont, setValueFunc, currentValue));
+			AddMenuItem(new OnOffSelectorMenuItem(name, this.spriteFont, setValueFunc, currentValue, 200.0f));
 		}
 
 		// Inherited functions from Screen
