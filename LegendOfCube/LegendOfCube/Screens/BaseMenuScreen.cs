@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LegendOfCube.Engine.Input;
+using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -209,6 +210,7 @@ namespace LegendOfCube.Screens
 
 		private SpriteBatch spriteBatch;
 		private SpriteFont spriteFont;
+		private MenuAudioSystem menuAudioSystem;
 
 		private List<MenuItem2> menuItems = new List<MenuItem2>();
 		private int selected = -1;
@@ -321,6 +323,8 @@ namespace LegendOfCube.Screens
 					}
 				}
 			}
+
+			menuAudioSystem.Update(selected);
 		}
 
 		internal sealed override void Draw(GameTime gameTime)
@@ -337,6 +341,7 @@ namespace LegendOfCube.Screens
 		{
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			spriteFont = Game.Content.Load<SpriteFont>("Arial");
+			menuAudioSystem = new MenuAudioSystem(Game.Content);
 			InitializeScreen();
 		}
 	}
