@@ -55,6 +55,10 @@ namespace LegendOfCube.Screens
 			}
 			if (world.WinState)
 			{
+				if (world.TimeSinceGameOver == 0)
+				{
+					Highscore.Instance.AddHighScore(level.Name, world.GameStats.GameTime);
+				}
 				inputSystem.ApplyInput(gameTime, world);
 				physicsSystem.ApplyPhysics(world, delta);
 
@@ -92,17 +96,17 @@ namespace LegendOfCube.Screens
 			{
 				StringBuilder text = new StringBuilder();
 				text.Append("FPS: ");
-				text.AppendLine(UIFormat(1.0f/(float) gameTime.ElapsedGameTime.TotalSeconds));
+				text.AppendLine(UiUtils.UIFormat(1.0f / (float)gameTime.ElapsedGameTime.TotalSeconds));
 				text.Append("CamPos: ");
-				text.AppendLine(UIFormat(world.Camera.Position));
+				text.AppendLine(UiUtils.UIFormat(world.Camera.Position));
 				text.Append("CamDir: ");
-				text.AppendLine(UIFormat(Vector3.Normalize(world.Camera.Target - world.Camera.Position)));
+				text.AppendLine(UiUtils.UIFormat(Vector3.Normalize(world.Camera.Target - world.Camera.Position)));
 				text.Append("CubePos: ");
-				text.AppendLine(UIFormat(world.Transforms[world.Player.Id].Translation));
+				text.AppendLine(UiUtils.UIFormat(world.Transforms[world.Player.Id].Translation));
 				text.Append("CubeVel: ");
-				text.AppendLine(UIFormat(world.Velocities[world.Player.Id]));
+				text.AppendLine(UiUtils.UIFormat(world.Velocities[world.Player.Id]));
 				text.Append("CubeAcc: ");
-				text.AppendLine(UIFormat(world.Accelerations[world.Player.Id]));
+				text.AppendLine(UiUtils.UIFormat(world.Accelerations[world.Player.Id]));
 				text.Append("OnGround: ");
 				text.AppendLine(world.PlayerCubeState.OnGround.ToString());
 				text.Append("OnWall: ");
@@ -116,7 +120,8 @@ namespace LegendOfCube.Screens
 			{
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
 				spriteBatch.DrawString(font, world.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
-				spriteBatch.DrawString(font, UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, UiUtils.UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[0]), new Vector2(300, 360), Color.Red);
 			}
 			spriteBatch.End();
 		}
@@ -141,16 +146,6 @@ namespace LegendOfCube.Screens
 			renderSystem.LoadContent();
 
 			fontPos = new Vector2(0, 0);
-		}
-
-		private static string UIFormat(Vector3 value)
-		{
-			return String.Format("(X: {0}, Y: {1}, Z: {2})", UIFormat(value.X), UIFormat(value.Y), UIFormat(value.Z));
-		}
-
-		private static string UIFormat(float value)
-		{
-			return String.Format(NumberFormatInfo.InvariantInfo, "{0:0.00}", value);
 		}
 	}
 }
