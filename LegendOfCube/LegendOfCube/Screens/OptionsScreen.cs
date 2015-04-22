@@ -10,9 +10,11 @@ namespace LegendOfCube.Screens
 {
 	public class OptionsScreen : BaseMenuScreen
 	{
-		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
-		{
+		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) { }
 
+		internal sealed override void InitializeScreen()
+		{
+			AddTitleBelow("Hello World");
 		}
 	}
 	/*class OptionsScreen : MenuScreen

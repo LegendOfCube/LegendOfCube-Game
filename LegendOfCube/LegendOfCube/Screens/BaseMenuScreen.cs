@@ -75,18 +75,23 @@ namespace LegendOfCube.Screens
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		public BaseMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) { }
+		internal abstract void InitializeScreen();
 
-		// Public functions
+		// Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		protected void AddMenuItemBelow(MenuItem2 menuItem)
+		{
+			menuItems.Add(menuItem);
+			if (selected == -1 && menuItem.IsSelectable)
+			{
+				selected = menuItems.Count - 1;
+			}
+		}
 
 		protected void AddTitleBelow(string text)
 		{
-
-		}
-
-		public void AddMenuItemBelow(MenuItem2 menuItem)
-		{
-			
+			AddMenuItemBelow(new TitleMenuItem(text, this.spriteFont));
 		}
 
 		// Inherited functions from Screen
@@ -98,11 +103,24 @@ namespace LegendOfCube.Screens
 
 			if (iH.MenuUpPressed())
 			{
-
+				if (selected != -1)
+				{
+					do {
+						selected--;
+						if (selected < 0) selected = menuItems.Count - 1;
+					} while (!menuItems.ElementAt(selected).IsSelectable);
+				}
 			}
 			else if (iH.MenuDownPressed())
 			{
-
+				if (selected != -1)
+				{
+					do
+					{
+						selected++;
+						if (selected >= menuItems.Count) selected = 0;
+					} while (!menuItems.ElementAt(selected).IsSelectable);
+				}
 			}
 			else if (iH.MenuLeftPressed())
 			{
@@ -136,6 +154,7 @@ namespace LegendOfCube.Screens
 		{
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			spriteFont = Game.Content.Load<SpriteFont>("Arial");
+			InitializeScreen();
 		}
 	}
 }
