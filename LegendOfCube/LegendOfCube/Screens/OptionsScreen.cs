@@ -8,7 +8,14 @@ using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
-	class OptionsScreen : MenuScreen
+	public class OptionsScreen : BaseMenuScreen
+	{
+		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
+		{
+
+		}
+	}
+	/*class OptionsScreen : MenuScreen
 	{
 		private GlobalConfig cfg;
 
@@ -131,5 +138,5 @@ namespace LegendOfCube.Screens
 				ScreenSystem.RemoveCurrentScreen();
 			});
 		}
-	}
+	}*/
 }
