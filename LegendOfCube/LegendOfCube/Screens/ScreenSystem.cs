@@ -16,14 +16,12 @@ namespace LegendOfCube.Screens
 		private readonly Game game;
 		private readonly ContentCollection contentCollection;
 		private readonly GraphicsDeviceManager graphicsManager;
-		private readonly InputHelper inputHelper;
 
-		public ScreenSystem(LegendOfCubeGame game, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager, InputHelper inputHelper)
+		public ScreenSystem(LegendOfCubeGame game, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
 		{
 			this.game = game;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
-			this.inputHelper = inputHelper;
 			screens = new List<Screen>(3);
 		}
 
@@ -35,7 +33,7 @@ namespace LegendOfCube.Screens
 
 		public void AddGameScreen(Level level)
 		{
-			Screen s = new GameScreen(level, game, this, contentCollection, graphicsManager, inputHelper);
+			Screen s = new GameScreen(level, game, this, contentCollection, graphicsManager);
 			AddScreen(s);
 		}
 
@@ -74,7 +72,7 @@ namespace LegendOfCube.Screens
 		}
 		public void LoadContent()
 		{
-			AddScreen(new StartScreen(game, this, inputHelper));
+			AddScreen(new StartScreen(game, this));
 		}
 
 		public void ResetGameScreen()

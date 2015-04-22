@@ -13,7 +13,7 @@ namespace LegendOfCube.Screens
 {
 	class StartScreen : MenuScreen
 	{
-		internal StartScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper) {}
+		internal StartScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
 		internal override void LoadContent()
 		{
@@ -23,11 +23,11 @@ namespace LegendOfCube.Screens
 			);
 
 			AddItemBelow("Select Level", () => 
-				ScreenSystem.AddScreen(new LevelSelectScreen(Game, ScreenSystem, InputHelper))
+				ScreenSystem.AddScreen(new LevelSelectScreen(Game, ScreenSystem))
 			);
 
 			AddItemBelow("Options", () =>
-				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem, InputHelper))
+				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem))
 			);
 
 			AddItemBelow("Exit",

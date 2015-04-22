@@ -16,7 +16,6 @@ namespace LegendOfCube.Engine
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ScreenSystem screenSystem;
 		private readonly ContentCollection contentCollection;
-		private readonly InputHelper inputHelper;
 
 		private readonly GlobalConfig cfg = GlobalConfig.Instance;
 	
@@ -44,8 +43,7 @@ namespace LegendOfCube.Engine
 
 			graphicsManager.ApplyChanges();
 
-			inputHelper = new InputHelper();
-			screenSystem = new ScreenSystem(this, contentCollection, graphicsManager, inputHelper);
+			screenSystem = new ScreenSystem(this, contentCollection, graphicsManager);
 
 		}
 
@@ -89,7 +87,7 @@ namespace LegendOfCube.Engine
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
-			inputHelper.UpdateInputStates();
+			InputHelper.Instance.UpdateInputStates();
 			screenSystem.Update(gameTime);
 			base.Update(gameTime);
 		}

@@ -35,13 +35,12 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager, InputHelper inputHelper)
+		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
 			: base(game, screenSystem, true)
 		{
 			this.level = level;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
-			this.inputHelper = inputHelper;
 		}
 
 		internal override void Update(GameTime gameTime)
@@ -126,7 +125,7 @@ namespace LegendOfCube.Screens
 			audioSystem = new AudioSystem(contentCollection);
 			world = level.CreateWorld(Game, contentCollection);
 
-			inputSystem = new InputSystem(Game, ScreenSystem, inputHelper);
+			inputSystem = new InputSystem(Game, ScreenSystem);
 			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();

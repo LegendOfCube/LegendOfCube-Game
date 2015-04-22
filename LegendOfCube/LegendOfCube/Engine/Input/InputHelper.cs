@@ -9,6 +9,15 @@ namespace LegendOfCube.Engine.Input
 {
 	public class InputHelper
 	{
+		private static readonly InputHelper instance = new InputHelper();
+		public static InputHelper Instance
+		{
+			get
+			{
+				return instance;
+			}
+		}
+
 		public KeyboardState KeyState { get; private set; }
 		public KeyboardState OldKeyState { get; private set; }
 		public GamePadState GamePadState { get; private set; }
@@ -16,7 +25,7 @@ namespace LegendOfCube.Engine.Input
 		public MouseState MouseState { get; private set; }
 		public MouseState OldMouseState { get; private set; }
 
-		public InputHelper()
+		private InputHelper()
 		{
 			OldKeyState = Keyboard.GetState();
 			OldGamePadState = GamePad.GetState(PlayerIndex.One);

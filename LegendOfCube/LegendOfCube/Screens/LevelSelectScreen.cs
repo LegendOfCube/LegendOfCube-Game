@@ -9,7 +9,7 @@ namespace LegendOfCube.Screens
 {
 	class LevelSelectScreen : MenuScreen
 	{
-		public LevelSelectScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper) {}
+		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
 		internal override void LoadContent()
 		{

@@ -20,17 +20,15 @@ namespace LegendOfCube.Engine
 
 		private Game game;
 		private ScreenSystem screenSystem;
-		private InputHelper iH;
+		private InputHelper iH = InputHelper.Instance;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public MenuInputSystem(Game game, ScreenSystem screenSystem, InputHelper inputHelper)
+		public MenuInputSystem(Game game, ScreenSystem screenSystem)
 		{
 			this.game = game;
 			this.screenSystem = screenSystem;
-
-			iH = inputHelper;
 		}
 
 		// Public methods

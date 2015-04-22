@@ -13,18 +13,16 @@ namespace LegendOfCube.Screens
 		private readonly MenuInputSystem menuInputSystem;
 		private readonly List<MenuItem> menuItems;
 		private MenuAudioSystem menuAudioSystem;
-		protected readonly InputHelper InputHelper;
 
 		private SpriteBatch spriteBatch;
 		private SpriteFont font;
 		private int selection;
 		private Vector2 nextItemPos = new Vector2(40, 40);
 
-		protected MenuScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, false)
+		protected MenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false)
 		{
 			menuItems = new List<MenuItem>();
-			menuInputSystem = new MenuInputSystem(game, screenSystem, inputHelper);
-			this.InputHelper = inputHelper;
+			menuInputSystem = new MenuInputSystem(game, screenSystem);
 			selection = 0;
 		}
 
@@ -70,7 +68,7 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-			menuAudioSystem = new MenuAudioSystem(Game.Content, InputHelper);
+			menuAudioSystem = new MenuAudioSystem(Game.Content);
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
 			font = Game.Content.Load<SpriteFont>("Arial");
 		}

@@ -12,7 +12,7 @@ namespace LegendOfCube.Screens
 	{
 		private GlobalConfig cfg;
 
-		public OptionsScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper)
+		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
 		{
 			cfg = GlobalConfig.Instance;
 			cfg.LoadFromFile();
@@ -26,7 +26,7 @@ namespace LegendOfCube.Screens
 			{
 				cfg.SaveToFile();
 				ScreenSystem.RemoveCurrentScreen();
-				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem, InputHelper));
+				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem));
 			};
 
 			AddTitleBelow("// Graphics", () => { } );
