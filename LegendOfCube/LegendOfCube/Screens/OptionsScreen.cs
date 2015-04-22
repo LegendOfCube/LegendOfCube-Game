@@ -25,23 +25,23 @@ namespace LegendOfCube.Screens
 				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem));
 			};
 
-			AddTitleBelow("Options");
-			AddDescriptionBelow("Options are stored in \"Documents/My Games/Legend of Cube/Config.ini\"");
-			AddDescriptionBelow("Legend of Cube needs to be restarted for some changes to take effect.");
-			AddSpaceBelow(35.0f);
+			AddTitle("Options");
+			AddDescription("Options are stored in \"Documents/My Games/Legend of Cube/Config.ini\"");
+			AddDescription("Legend of Cube needs to be restarted for some changes to take effect");
+			AddSpace(35.0f);
 			
-			AddHeadingBelow("Graphics");
-			AddClickableBelow("Fullscreen: " + Parse(cfg.Fullscreen), () => { cfg.Fullscreen = !cfg.Fullscreen; herp(); });
-			AddClickableBelow("VSync: " + Parse(cfg.VSync), () => { cfg.VSync = !cfg.VSync; herp(); });
-			AddClickableBelow("MultiSampling: " + Parse(cfg.MultiSampling), () => { cfg.MultiSampling = !cfg.MultiSampling; herp(); });
-			AddSpaceBelow(35.0f);
+			AddHeading("Graphics");
+			AddClickable("Fullscreen: " + Parse(cfg.Fullscreen), () => { cfg.Fullscreen = !cfg.Fullscreen; herp(); });
+			AddClickable("VSync: " + Parse(cfg.VSync), () => { cfg.VSync = !cfg.VSync; herp(); });
+			AddClickable("MultiSampling: " + Parse(cfg.MultiSampling), () => { cfg.MultiSampling = !cfg.MultiSampling; herp(); });
+			AddSpace(35.0f);
 
-			AddHeadingBelow("Controls");
-			AddClickableBelow("InvertX: " + Parse(cfg.RightStickInvertedX), () => { cfg.RightStickInvertedX = !cfg.RightStickInvertedX; herp(); });
-			AddClickableBelow("InvertY: " + Parse(cfg.RightStickInvertedY), () => { cfg.RightStickInvertedY = !cfg.RightStickInvertedY; herp(); });
-			AddSpaceBelow(35.0f);
+			AddHeading("Controls");
+			AddClickable("InvertX: " + Parse(cfg.RightStickInvertedX), () => { cfg.RightStickInvertedX = !cfg.RightStickInvertedX; herp(); });
+			AddClickable("InvertY: " + Parse(cfg.RightStickInvertedY), () => { cfg.RightStickInvertedY = !cfg.RightStickInvertedY; herp(); });
+			AddSpace(35.0f);
 
-			AddClickableBelow("Main Menu", () => { ScreenSystem.RemoveCurrentScreen(); });
+			AddClickable("Main Menu", () => { ScreenSystem.RemoveCurrentScreen(); });
 		}
 
 		private static string Parse(bool b)

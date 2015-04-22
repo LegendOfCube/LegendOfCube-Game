@@ -41,7 +41,7 @@ namespace LegendOfCube.Screens
 		{
 			this.text = text;
 			this.scale = scale;
-			this.height = spriteFont.MeasureString(text).Y;
+			this.height = spriteFont.MeasureString(text).Y * scale;
 		}
 
 		public override float ItemHeight() { return height; }
@@ -53,8 +53,8 @@ namespace LegendOfCube.Screens
 			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
 			Color shadowColor = Color.Black;
 			Color color = Color.White;
-			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.11f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, text, position, color, 0.11f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, position, color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 	}
 
@@ -93,8 +93,8 @@ namespace LegendOfCube.Screens
 			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
 			Color shadowColor = Color.Black;
 			Color color = isSelected ? Color.DarkOrange : Color.White;
-			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.11f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, text, position, color, 0.11f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, position, color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
 		public sealed override void Update(MenuItemAction menuAction)
@@ -133,7 +133,7 @@ namespace LegendOfCube.Screens
 		// Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		protected void AddMenuItemBelow(MenuItem2 menuItem)
+		protected void AddMenuItem(MenuItem2 menuItem)
 		{
 			menuItem.SetPosition(nextItemPos);
 			nextItemPos.Y += menuItem.ItemHeight();
@@ -144,29 +144,29 @@ namespace LegendOfCube.Screens
 			}
 		}
 
-		protected void AddTitleBelow(string text)
+		protected void AddTitle(string text)
 		{
-			AddMenuItemBelow(new TextMenuItem(text, 2.0f, this.spriteFont));
+			AddMenuItem(new TextMenuItem(text, 2.0f, this.spriteFont));
 		}
 
-		protected void AddHeadingBelow(string text)
+		protected void AddHeading(string text)
 		{
-			AddMenuItemBelow(new TextMenuItem(text, 1.5f, this.spriteFont));
+			AddMenuItem(new TextMenuItem(text, 1.5f, this.spriteFont));
 		}
 
-		protected void AddDescriptionBelow(string text)
+		protected void AddDescription(string text)
 		{
-			AddMenuItemBelow(new TextMenuItem(text, 0.8f, this.spriteFont));
+			AddMenuItem(new TextMenuItem(text, 0.9f, this.spriteFont));
 		}
 
-		protected void AddSpaceBelow(float amount)
+		protected void AddSpace(float amount)
 		{
-			AddMenuItemBelow(new EmptyMenuItem(amount));
+			AddMenuItem(new EmptyMenuItem(amount));
 		}
 
-		protected void AddClickableBelow(string text, Action action)
+		protected void AddClickable(string text, Action action)
 		{
-			AddMenuItemBelow(new ClickableTextMenuItem(text, 1.0f, this.spriteFont, action));
+			AddMenuItem(new ClickableTextMenuItem(text, 1.0f, this.spriteFont, action));
 		}
 
 		// Inherited functions from Screen
