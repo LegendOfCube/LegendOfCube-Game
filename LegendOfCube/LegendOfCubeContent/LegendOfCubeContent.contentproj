@@ -762,14 +762,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\Container\container.FBX">
-      <Name>container</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_GenerateTangentFrames>True</ProcessorParameters_GenerateTangentFrames>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\Container\container_mapped.FBX">
       <Name>container_mapped</Name>
       <Importer>FbxImporter</Importer>

@@ -587,8 +587,8 @@ namespace LegendOfCube.Engine
 				Model = ContainerModel,
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
-					//DiffuseColor = Color.DarkBlue.ToVector4(),
+					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					DiffuseColor = Color.DarkOrange.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
