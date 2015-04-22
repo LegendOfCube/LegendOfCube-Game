@@ -25,6 +25,8 @@ namespace LegendOfCube.Engine.Input
 		public MouseState MouseState { get; private set; }
 		public MouseState OldMouseState { get; private set; }
 
+		private bool MenuAlreadyReceivedStickInput = false;
+
 		private InputHelper()
 		{
 			OldKeyState = Keyboard.GetState();
@@ -86,11 +88,22 @@ namespace LegendOfCube.Engine.Input
 			Vector2 dirInp = GamePadState.ThumbSticks.Left;
 			if (dirInp.Length() > 0.05)
 			{
-				float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
-				if (angle < 0) angle += 2.0f * (float)Math.PI;
-				float MIN_ANGLE = MathHelper.ToRadians(45);
-				float MAX_ANGLE = MathHelper.ToRadians(90 + 45);
-				if (MIN_ANGLE < angle && angle < MAX_ANGLE) return true;
+				if (!MenuAlreadyReceivedStickInput)
+				{
+					float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
+					if (angle < 0) angle += 2.0f * (float)Math.PI;
+					float MIN_ANGLE = MathHelper.ToRadians(45);
+					float MAX_ANGLE = MathHelper.ToRadians(90 + 45);
+					if (MIN_ANGLE < angle && angle < MAX_ANGLE)
+					{
+						MenuAlreadyReceivedStickInput = true;
+						return true;
+					}
+				}
+			}
+			else
+			{
+				MenuAlreadyReceivedStickInput = false;
 			}
 
 			return false;
@@ -105,11 +118,22 @@ namespace LegendOfCube.Engine.Input
 			Vector2 dirInp = GamePadState.ThumbSticks.Left;
 			if (dirInp.Length() > 0.05)
 			{
-				float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
-				if (angle < 0) angle += 2.0f * (float)Math.PI;
-				float MIN_ANGLE = MathHelper.ToRadians(180 + 45);
-				float MAX_ANGLE = MathHelper.ToRadians(270 + 45);
-				if (MIN_ANGLE < angle && angle < MAX_ANGLE) return true;
+				if (!MenuAlreadyReceivedStickInput)
+				{
+					float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
+					if (angle < 0) angle += 2.0f * (float)Math.PI;
+					float MIN_ANGLE = MathHelper.ToRadians(180 + 45);
+					float MAX_ANGLE = MathHelper.ToRadians(270 + 45);
+					if (MIN_ANGLE < angle && angle < MAX_ANGLE)
+					{
+						MenuAlreadyReceivedStickInput = true;
+						return true;
+					}
+				}
+			}
+			else
+			{
+				MenuAlreadyReceivedStickInput = false;
 			}
 
 			return false;
@@ -124,11 +148,22 @@ namespace LegendOfCube.Engine.Input
 			Vector2 dirInp = GamePadState.ThumbSticks.Left;
 			if (dirInp.Length() > 0.05)
 			{
-				float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
-				if (angle < 0) angle += 2.0f * (float)Math.PI;
-				float MIN_ANGLE = MathHelper.ToRadians(90 + 45);
-				float MAX_ANGLE = MathHelper.ToRadians(180 + 45);
-				if (MIN_ANGLE < angle && angle < MAX_ANGLE) return true;
+				if (!MenuAlreadyReceivedStickInput)
+				{
+					float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
+					if (angle < 0) angle += 2.0f * (float)Math.PI;
+					float MIN_ANGLE = MathHelper.ToRadians(90 + 45);
+					float MAX_ANGLE = MathHelper.ToRadians(180 + 45);
+					if (MIN_ANGLE < angle && angle < MAX_ANGLE)
+					{
+						MenuAlreadyReceivedStickInput = true;
+						return true;
+					}
+				}
+			}
+			else
+			{
+				MenuAlreadyReceivedStickInput = false;
 			}
 
 			return false;
@@ -143,10 +178,21 @@ namespace LegendOfCube.Engine.Input
 			Vector2 dirInp = GamePadState.ThumbSticks.Left;
 			if (dirInp.Length() > 0.05)
 			{
-				float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
-				float MIN_ANGLE = MathHelper.ToRadians(-45);
-				float MAX_ANGLE = MathHelper.ToRadians(45);
-				if (MIN_ANGLE < angle && angle < MAX_ANGLE) return true;
+				if (!MenuAlreadyReceivedStickInput)
+				{
+					float angle = (float)Math.Atan2(dirInp.Y, dirInp.X);
+					float MIN_ANGLE = MathHelper.ToRadians(-45);
+					float MAX_ANGLE = MathHelper.ToRadians(45);
+					if (MIN_ANGLE < angle && angle < MAX_ANGLE)
+					{
+						MenuAlreadyReceivedStickInput = true;
+						return true;
+					}
+				}
+			}
+			else
+			{
+				MenuAlreadyReceivedStickInput = false;
 			}
 
 			return false;
