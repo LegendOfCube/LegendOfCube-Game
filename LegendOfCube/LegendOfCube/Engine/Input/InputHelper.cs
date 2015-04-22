@@ -152,11 +152,12 @@ namespace LegendOfCube.Engine.Input
 			return false;
 		}
 
-		public bool MenuActivatePressed()
+		public bool MenuActivatePressed(Rectangle hitBox)
 		{
 			if (KeyWasJustPressed(Keys.Enter)) return true;
 			if (KeyWasJustPressed(Keys.Space)) return true;
 			if (ButtonWasJustPressed(Buttons.A)) return true;
+			if (MouseClickWithinRectangle(hitBox)) return true;
 			return false;
 		}
 

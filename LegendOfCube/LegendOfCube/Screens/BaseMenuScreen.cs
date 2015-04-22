@@ -28,7 +28,7 @@ namespace LegendOfCube.Screens
 		public abstract void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected);
 		public bool IsSelectable { get; private set; }
 		public virtual void Update(MenuItemAction action) { throw new NotImplementedException(); }
-		public virtual Rectangle ActivationHitBox() { throw new NotImplementedException(); }
+		public virtual Rectangle ActivationHitBox() { return new Rectangle(-1000000, -1000000, 1, 1); }
 	}
 
 	public class TextMenuItem : MenuItem2
@@ -37,6 +37,7 @@ namespace LegendOfCube.Screens
 		private float height;
 		private float scale;
 		private Vector2 position;
+
 		public TextMenuItem(string text, float scale, SpriteFont spriteFont) : base(false)
 		{
 			this.text = text;
@@ -76,10 +77,13 @@ namespace LegendOfCube.Screens
 		private Vector2 position;
 		private Action action;
 
+		private SpriteFont spriteFontForMeasuring;
+
 		public ClickableTextMenuItem(string text, float scale, SpriteFont spriteFont, Action action) : base(true)
 		{
 			this.text = text;
 			this.scale = scale;
+			this.spriteFontForMeasuring = spriteFont;
 			this.height = spriteFont.MeasureString(text).Y;
 			this.action = action;
 		}
@@ -104,7 +108,8 @@ namespace LegendOfCube.Screens
 		
 		public sealed override Rectangle ActivationHitBox()
 		{
-			throw new NotImplementedException();
+			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
+			             (int)Math.Round(spriteFontForMeasuring.MeasureString(text).X * scale), (int)Math.Round(ItemHeight()));
 		}
 	}
 
@@ -205,13 +210,23 @@ namespace LegendOfCube.Screens
 			{
 				if (selected != -1) menuItems.ElementAt(selected).Update(MenuItemAction.RIGHT);
 			}
-			else if (iH.MenuActivatePressed())
+			else if (iH.MenuActivatePressed(menuItems.ElementAt(selected).ActivationHitBox()))
 			{
 				if (selected != -1) menuItems.ElementAt(selected).Update(MenuItemAction.ACTIVATE);
 			}
 			else if (iH.MenuCancelPressed())
 			{
 				ScreenSystem.RemoveCurrentScreen();
+			}
+			else
+			{
+				for (int i = 0; i < menuItems.Count; i++)
+				{
+					if (iH.MouseWithinRectangle(menuItems.ElementAt(i).ActivationHitBox()))
+					{
+						selected = i;
+					}
+				}
 			}
 		}
 
