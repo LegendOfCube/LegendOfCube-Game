@@ -10,26 +10,13 @@ namespace LegendOfCube.Screens
 {
 	public class OptionsScreen : BaseMenuScreen
 	{
+		private GlobalConfig cfg;
+
 		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) { }
 
 		internal sealed override void InitializeScreen()
 		{
-			AddTitleBelow("Hello World");
-		}
-	}
-	/*class OptionsScreen : MenuScreen
-	{
-		private GlobalConfig cfg;
-
-		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
-		{
 			cfg = GlobalConfig.Instance;
-			cfg.LoadFromFile();
-		}
-
-		internal override void LoadContent()
-		{
-			base.LoadContent();
 
 			Action herp = () =>
 			{
@@ -38,107 +25,28 @@ namespace LegendOfCube.Screens
 				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem));
 			};
 
-			AddTitleBelow("// Graphics", () => { } );
-
-			if (cfg.Fullscreen)
-			{
-				AddItemBelow("Fullscreen: ON", () =>
-				{
-					cfg.Fullscreen = false;
-					herp();
-				});
-			}
-			else
-			{
-				AddItemBelow("Fullscreen: OFF", () =>
-				{
-					cfg.Fullscreen = true;
-					herp();
-				});
-			}
-
-			if (cfg.VSync)
-			{
-				AddItemBelow("VSync: ON", () =>
-				{
-					cfg.VSync = false;
-					herp();
-				});
-			}
-			else
-			{
-				AddItemBelow("VSync: OFF", () =>
-				{
-					cfg.VSync = true;
-					herp();
-				});
-			}
-
-			if (cfg.MultiSampling)
-			{
-				AddItemBelow("MultiSampling: ON", () =>
-				{
-					cfg.MultiSampling = false;
-					herp();
-				});
-			}
-			else
-			{
-				AddItemBelow("MultiSampling: OFF", () =>
-				{
-					cfg.MultiSampling = true;
-					herp();
-				});
-			}
-
+			AddTitleBelow("Options");
+			AddDescriptionBelow("Options are stored in \"Documents/My Games/Legend of Cube/Config.ini\"");
+			AddDescriptionBelow("Legend of Cube needs to be restarted for some changes to take effect.");
+			AddSpaceBelow(35.0f);
+			
+			AddHeadingBelow("Graphics");
+			AddClickableBelow("Fullscreen: " + Parse(cfg.Fullscreen), () => { cfg.Fullscreen = !cfg.Fullscreen; herp(); });
+			AddClickableBelow("VSync: " + Parse(cfg.VSync), () => { cfg.VSync = !cfg.VSync; herp(); });
+			AddClickableBelow("MultiSampling: " + Parse(cfg.MultiSampling), () => { cfg.MultiSampling = !cfg.MultiSampling; herp(); });
 			AddSpaceBelow(35.0f);
 
-
-
-			AddTitleBelow("// Controls", () => { });
-
-			if (cfg.RightStickInvertedX)
-			{
-				AddItemBelow("Invert X: ON", () =>
-				{
-					cfg.RightStickInvertedX = false;
-					herp();
-				});
-			}
-			else
-			{
-				AddItemBelow("Invert X: OFF", () =>
-				{
-					cfg.RightStickInvertedX = true;
-					herp();
-				});
-			}
-
-			if (cfg.RightStickInvertedY)
-			{
-				AddItemBelow("Invert Y: ON", () =>
-				{
-					cfg.RightStickInvertedY = false;
-					herp();
-				});
-			}
-			else
-			{
-				AddItemBelow("Invert Y: OFF", () =>
-				{
-					cfg.RightStickInvertedY = true;
-					herp();
-				});
-			}
-
+			AddHeadingBelow("Controls");
+			AddClickableBelow("InvertX: " + Parse(cfg.RightStickInvertedX), () => { cfg.RightStickInvertedX = !cfg.RightStickInvertedX; herp(); });
+			AddClickableBelow("InvertY: " + Parse(cfg.RightStickInvertedY), () => { cfg.RightStickInvertedY = !cfg.RightStickInvertedY; herp(); });
 			AddSpaceBelow(35.0f);
 
-
-
-			AddItemBelow("Main Menu", () =>
-			{
-				ScreenSystem.RemoveCurrentScreen();
-			});
+			AddClickableBelow("Main Menu", () => { ScreenSystem.RemoveCurrentScreen(); });
 		}
-	}*/
+
+		private static string Parse(bool b)
+		{
+			return b ? "On" : "Off";
+		}
+	}
 }
