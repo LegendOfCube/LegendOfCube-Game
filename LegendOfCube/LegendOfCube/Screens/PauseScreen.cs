@@ -6,24 +6,23 @@ using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
-	class PauseScreen : MenuScreen
+	public class PauseScreen : BaseMenuScreen
 	{
 		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
-		internal override void LoadContent()
+		internal override void InitializeScreen()
 		{
-			base.LoadContent();
-			AddItemBelow("Return to Game", () =>
-				ScreenSystem.RemoveCurrentScreen()
-			);
-			AddItemBelow("Main Menu", () =>
-			{
-				ScreenSystem.RemoveCurrentScreen();
-				ScreenSystem.RemoveCurrentScreen();
-			});
-			AddItemBelow("Exit Game", () =>
-				Game.Exit()
-			);
+			AddTitle("Pause");
+			AddSpace(35.0f);
+
+			AddClickable("Return to game", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Return to game"; });
+			AddClickable("Main Menu", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); ScreenSystem.RemoveCurrentScreen(); return "Main Menu"; });
+			AddClickable("Exit Game", () => { this.OnExit(); Game.Exit(); return "Exit Game"; });
+		}
+
+		internal override void OnExit()
+		{
+			// Do nothing.
 		}
 	}
 }
