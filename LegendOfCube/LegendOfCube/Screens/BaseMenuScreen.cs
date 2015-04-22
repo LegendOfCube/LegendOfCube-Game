@@ -145,7 +145,8 @@ namespace LegendOfCube.Screens
 			Color shadowColor = Color.Black;
 			Color normalColor = Color.White;
 			Color color = isSelected ? Color.DarkOrange : normalColor;
-			Color activatedColor = Color.DarkRed;
+			Color activatedColor = Color.White;
+			Color nonActivatedColor = Color.Gray;
 
 			// Name
 			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
@@ -157,7 +158,7 @@ namespace LegendOfCube.Screens
 
 			// On
 			spriteBatch.DrawString(spriteFont, "On  ", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, "On  ", fontPos, currentValue ? activatedColor : color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, "On  ", fontPos, currentValue ? activatedColor : nonActivatedColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
 
 			float onWidth = spriteFontForMeasuring.MeasureString("On  ").X;
 			shadowFontPos.X += onWidth;
@@ -165,7 +166,7 @@ namespace LegendOfCube.Screens
 
 			// Off
 			spriteBatch.DrawString(spriteFont, "Off", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, "Off", fontPos, !currentValue ? activatedColor : color, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, "Off", fontPos, !currentValue ? activatedColor : nonActivatedColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
 		public sealed override void Update(MenuItemAction menuAction)
@@ -190,7 +191,7 @@ namespace LegendOfCube.Screens
 		public sealed override Rectangle ActivationHitBox()
 		{
 			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
-			             (int)Math.Round(spriteFontForMeasuring.MeasureString(text).X * scale), (int)Math.Round(ItemHeight()));
+			             (int)Math.Round(spriteFontForMeasuring.MeasureString(text + ":   On  Off").X * scale), (int)Math.Round(ItemHeight()));
 		}
 	}
 
