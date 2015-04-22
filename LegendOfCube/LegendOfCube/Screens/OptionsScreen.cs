@@ -18,30 +18,24 @@ namespace LegendOfCube.Screens
 		{
 			cfg = GlobalConfig.Instance;
 
-			Action herp = () =>
-			{
-				cfg.SaveToFile();
-				ScreenSystem.RemoveCurrentScreen();
-				ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem));
-			};
-
 			AddTitle("Options");
 			AddDescription("Options are stored in \"Documents/My Games/Legend of Cube/Config.ini\"");
 			AddDescription("Legend of Cube needs to be restarted for some changes to take effect");
 			AddSpace(35.0f);
 			
 			AddHeading("Graphics");
-			AddClickable("Fullscreen: " + Parse(cfg.Fullscreen), () => { cfg.Fullscreen = !cfg.Fullscreen; herp(); });
-			AddClickable("VSync: " + Parse(cfg.VSync), () => { cfg.VSync = !cfg.VSync; herp(); });
-			AddClickable("MultiSampling: " + Parse(cfg.MultiSampling), () => { cfg.MultiSampling = !cfg.MultiSampling; herp(); });
+			AddClickable("Fullscreen: " + Parse(cfg.Fullscreen), () => { cfg.Fullscreen = !cfg.Fullscreen; cfg.SaveToFile(); return "Fullscreen: " + Parse(cfg.Fullscreen); });
+			AddClickable("VSync: " + Parse(cfg.VSync), () => { cfg.VSync = !cfg.VSync; cfg.SaveToFile(); return "VSync: " + Parse(cfg.VSync); });
+			AddClickable("MultiSampling: " + Parse(cfg.MultiSampling), () => { cfg.MultiSampling = !cfg.MultiSampling; return "MultiSampling: " + Parse(cfg.MultiSampling); });
 			AddSpace(35.0f);
 
 			AddHeading("Controls");
-			AddClickable("InvertX: " + Parse(cfg.RightStickInvertedX), () => { cfg.RightStickInvertedX = !cfg.RightStickInvertedX; herp(); });
-			AddClickable("InvertY: " + Parse(cfg.RightStickInvertedY), () => { cfg.RightStickInvertedY = !cfg.RightStickInvertedY; herp(); });
+			AddClickable("InvertX: " + Parse(cfg.RightStickInvertedX), () => { cfg.RightStickInvertedX = !cfg.RightStickInvertedX; cfg.SaveToFile(); return "InvertX: " + Parse(cfg.RightStickInvertedX); });
+			AddClickable("InvertY: " + Parse(cfg.RightStickInvertedY), () => { cfg.RightStickInvertedY = !cfg.RightStickInvertedY; cfg.SaveToFile(); return "InvertY: " + Parse(cfg.RightStickInvertedY); });
 			AddSpace(35.0f);
 
-			AddClickable("Main Menu", () => { ScreenSystem.RemoveCurrentScreen(); });
+			AddClickable("Main Menu", () => { ScreenSystem.RemoveCurrentScreen(); return "null"; });
+
 		}
 
 		private static string Parse(bool b)

@@ -75,17 +75,17 @@ namespace LegendOfCube.Screens
 		private float height;
 		private float scale;
 		private Vector2 position;
-		private Action action;
+		private Func<string> func;
 
 		private SpriteFont spriteFontForMeasuring;
 
-		public ClickableTextMenuItem(string text, float scale, SpriteFont spriteFont, Action action) : base(true)
+		public ClickableTextMenuItem(string text, float scale, SpriteFont spriteFont, Func<String> func) : base(true)
 		{
 			this.text = text;
 			this.scale = scale;
 			this.spriteFontForMeasuring = spriteFont;
 			this.height = spriteFont.MeasureString(text).Y;
-			this.action = action;
+			this.func = func;
 		}
 
 		public sealed override float ItemHeight() { return height; }
@@ -103,7 +103,7 @@ namespace LegendOfCube.Screens
 
 		public sealed override void Update(MenuItemAction menuAction)
 		{
-			if (menuAction == MenuItemAction.ACTIVATE) action();
+			if (menuAction == MenuItemAction.ACTIVATE) this.text = func();
 		}
 		
 		public sealed override Rectangle ActivationHitBox()
@@ -169,9 +169,9 @@ namespace LegendOfCube.Screens
 			AddMenuItem(new EmptyMenuItem(amount));
 		}
 
-		protected void AddClickable(string text, Action action)
+		protected void AddClickable(string text, Func<string> func)
 		{
-			AddMenuItem(new ClickableTextMenuItem(text, 1.0f, this.spriteFont, action));
+			AddMenuItem(new ClickableTextMenuItem(text, 1.0f, this.spriteFont, func));
 		}
 
 		// Inherited functions from Screen
