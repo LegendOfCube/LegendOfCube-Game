@@ -62,7 +62,7 @@ namespace LegendOfCube.Engine
 				foreach (var time in highScores[level])
 				{
 					sb.Append(",");
-					sb.Append(time);
+					sb.Append(time.ToString("R"));
 				}
 				sb.Append("\n");
 			}
