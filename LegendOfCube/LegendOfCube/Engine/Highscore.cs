@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,9 @@ namespace LegendOfCube.Engine
 			get { return INSTANCE; }
 		}
 
-		private readonly Dictionary<string, List<float>> highScores; 
+		private readonly Dictionary<string, List<float>> highScores;
 
-		public Highscore()
+		private Highscore()
 		{
 			path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
 			           @"\My Games\Legend of Cube\HighScores.txt";
@@ -34,7 +35,8 @@ namespace LegendOfCube.Engine
 			{
 				results.Add(time);
 				results.Sort();
-				highScores[name] = results;
+				var range = results.Count < 5 ? results.Count : 5;
+				highScores[name] = results.GetRange(0, range);
 			}
 			else
 			{
@@ -53,7 +55,7 @@ namespace LegendOfCube.Engine
 			return null;
 		}
 
-		public void SaveToFile()
+		private void SaveToFile()
 		{
 			StringBuilder sb = new StringBuilder();
 			foreach (var level in highScores.Keys)
@@ -62,14 +64,14 @@ namespace LegendOfCube.Engine
 				foreach (var time in highScores[level])
 				{
 					sb.Append(",");
-					sb.Append(time.ToString("R"));
+					sb.Append(time.ToString(CultureInfo.InvariantCulture));
 				}
 				sb.Append("\n");
 			}
 			File.WriteAllText(path, sb.ToString());
 		}
 
-		public bool LoadFromFile()
+		private void LoadFromFile()
 		{
 			string textFromFile;
 			try
@@ -78,7 +80,7 @@ namespace LegendOfCube.Engine
 			}
 			catch (FileNotFoundException)
 			{
-				return false;
+				return;
 			}
 			var lines = textFromFile.Split('\n');
 			foreach (var line in lines)
@@ -86,10 +88,9 @@ namespace LegendOfCube.Engine
 				var scores = line.Split(',');
 				for (int i = 1; i < scores.Length; i++)
 				{
-					AddHighScore(scores[0],float.Parse(scores[i]));
+					AddHighScore(scores[0],float.Parse(scores[i], CultureInfo.InvariantCulture));
 				}
 			}
-			return true;
 		}
 	}
 }
