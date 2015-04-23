@@ -161,13 +161,13 @@ namespace LegendOfCube.Engine
 				float wallAxisTargetVel = Vector3.Dot(targetMovementVelocity, world.PlayerCubeState.WallAxis);
 				targetMovementVelocity -= wallAxisTargetVel * world.PlayerCubeState.WallAxis;
 
-				world.Velocities[i] -= world.PlayerCubeState.WallAxis * 1.0f;
+				world.Velocities[i] -= world.PlayerCubeState.WallAxis * 1.75f;
 			}
 
 			// GROUND SUCK HACK
 			if (world.PlayerCubeState.OnGround)
 			{
-				world.Velocities[i] -= world.PlayerCubeState.GroundAxis * 0.6f;
+				world.Velocities[i] -= world.PlayerCubeState.GroundAxis * 0.7f;
 			}
 
 			// WALL ANTI-GRAVITY HACK
