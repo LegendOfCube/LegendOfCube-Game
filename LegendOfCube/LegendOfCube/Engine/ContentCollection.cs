@@ -1,6 +1,7 @@
 ﻿using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,6 +9,17 @@ namespace LegendOfCube.Engine
 {
 	public class ContentCollection
 	{
+		public SoundEffect respawn { get; private set; }
+		public SoundEffect oldJump { get; private set; }
+		public SoundEffect jump { get; private set; }
+		public SoundEffect wallJump { get; private set; }
+		public SoundEffect whoopJump { get; private set; }
+		public SoundEffect whoopJump2 { get; private set; }
+		public SoundEffect bounce { get; private set; }
+		public SoundEffect hit { get; private set; }
+		public SoundEffect select { get; private set; }
+		public SoundEffect select2 { get; private set; }
+
 		public ModelData PlayerCube2 { get; private set; }
 		public ModelData PlayerCube { get; private set; }
 		public ModelData PlayerCubePlain { get; private set; }
@@ -89,6 +101,17 @@ namespace LegendOfCube.Engine
 		public void LoadContent(ContentManager cm)
 		{
 			CubeModel2 = cm.Load<Model>("Models/Cube/newcube_ep");
+			respawn = cm.Load<SoundEffect>("SoundEffects/bwiip");
+			oldJump = cm.Load<SoundEffect>("SoundEffects/waom");
+			wallJump = cm.Load<SoundEffect>("SoundEffects/waom2");
+			jump = cm.Load<SoundEffect>("SoundEffects/waom3");
+			whoopJump = cm.Load<SoundEffect>("SoundEffects/whoop");
+			whoopJump2 = cm.Load<SoundEffect>("SoundEffects/whoopShort");
+			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
+			hit = cm.Load<SoundEffect>("SoundEffects/hit");
+			select = cm.Load<SoundEffect>("SoundEffects/select");
+			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
 			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
 			PlatformModel = cm.Load<Model>("Models/Platform/platform");
@@ -531,7 +554,7 @@ namespace LegendOfCube.Engine
 					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipe_d"),
 					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(-22.5f, 0.35f, 0), 15, 6, 5.8f)
+				Obb = OBB.CreateAxisAligned(new Vector3(-22.5f, 0.35f, 0), 15, 5, 5.8f)
 
 			};
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Input;
 using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 
@@ -8,7 +9,7 @@ namespace LegendOfCube.Screens
 {
 	class LevelSelectScreen : MenuScreen
 	{
-		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
+		public LevelSelectScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper) {}
 
 		internal override void LoadContent()
 		{
@@ -19,7 +20,13 @@ namespace LegendOfCube.Screens
 			for (int i = 0; i < LevelConstants.LEVELS.Count(); i++)
 			{
 				Level level = LevelConstants.LEVELS[i];
-				AddItemBelow(level.Name, () =>
+				string highscore = "N/A";
+				var highscores = Highscore.Instance.GetHighScoresForLevel(level.Name);
+				if (highscores != null && highscores.Count > 0)
+				{
+					highscore = UiUtils.UIFormat(highscores[0]);
+				}
+				AddItemBelow(level.Name + " \nHighScore: " + highscore + "s\n", () =>
 					ScreenSystem.AddGameScreen(level)
 				);
 			}

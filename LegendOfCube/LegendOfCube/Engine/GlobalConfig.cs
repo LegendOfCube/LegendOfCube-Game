@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace LegendOfCube.Engine
 {
@@ -15,15 +16,19 @@ namespace LegendOfCube.Engine
 		// Singleton instance
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		private static readonly GlobalConfig instance = new GlobalConfig();
+		private static readonly GlobalConfig INSTANCE = new GlobalConfig();
 		public static GlobalConfig Instance
 		{
 			get
 			{
-				return instance;
+				return INSTANCE;
 			}
 		}
 
+		// Private members
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private readonly IniFile iniFile;
 
 		// Settings
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -42,16 +47,34 @@ namespace LegendOfCube.Engine
 		// Public methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public bool LoadFromFile()
+		public void LoadFromFile()
 		{
-			// TODO: Not yet implemented.
-			return false;
+			// Graphics
+			this.Fullscreen = SanitizeIniBool("Graphics", "Fullscreen", false);
+			this.VSync = SanitizeIniBool("Graphics", "VSync", true);
+			this.MultiSampling = SanitizeIniBool("Graphics", "MultiSampling", true);
+			this.InternalResX = SanitizeIniInt("Graphics", "InternalResX", 320, 15360, 1280);
+			this.InternalResY = SanitizeIniInt("Graphics", "InternalResY", 240, 8640, 800);
+
+			// Controls
+			this.RightStickInvertedX = SanitizeIniBool("Controls", "RightStickInvertedX", false);
+			this.RightStickInvertedY = SanitizeIniBool("Controls", "RightStickInvertedY", false);
 		}
 
-		public bool SaveToFile()
+		public void SaveToFile()
 		{
-			// TODO: Not yet implemented.
-			return false;
+			Directory.CreateDirectory(Path.GetDirectoryName(iniFile.INIPath));
+
+			// Graphics
+			iniFile.WriteBool("Graphics", "Fullscreen", Fullscreen);
+			iniFile.WriteBool("Graphics", "VSync", VSync);
+			iniFile.WriteBool("Graphics", "MultiSampling", MultiSampling);
+			iniFile.WriteInt("Graphics", "InternalResX", InternalResX);
+			iniFile.WriteInt("Graphics", "InternalResY", InternalResY);
+
+			// Controls
+			iniFile.WriteBool("Controls", "RightStickInvertedX", RightStickInvertedX);
+			iniFile.WriteBool("Controls", "RightStickInvertedY", RightStickInvertedY);
 		}
 
 		// Constructor
@@ -59,16 +82,61 @@ namespace LegendOfCube.Engine
 
 		private GlobalConfig()
 		{
-			// Graphics
-			this.Fullscreen = false;
-			this.VSync = true;
-			this.MultiSampling = true;
-			this.InternalResX = 1280;
-			this.InternalResY = 720;
+			var iniPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) +
+			              @"\My Games\Legend of Cube\Config.ini";
+			iniFile = new IniFile(iniPath);
 
-			// Controls
-			this.RightStickInvertedX = false;
-			this.RightStickInvertedY = false;
+			LoadFromFile();
+			SaveToFile(); // TODO: Maybe unnecessary, but will ensure that we generate .ini file when first run.
+		}
+
+		// Private Methods
+		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+		private int SanitizeIniInt(string section, string key, int minVal, int maxVal, int defaultVal)
+		{
+			int i;
+			try
+			{
+				i = iniFile.ReadInt(section, key);
+				if (i < minVal) i = minVal;
+				if (i > maxVal) i = maxVal;
+			}
+			catch (Exception e)
+			{
+				i = defaultVal;
+			}
+			return i;
+		}
+
+		private float SanitizeIniFloat(string section, string key, float minVal, float maxVal, float defaultVal)
+		{
+			float f;
+			try
+			{
+				f = iniFile.ReadFloat(section, key);
+				if (f < minVal) f = minVal;
+				if (f > maxVal) f = maxVal;
+			}
+			catch (Exception)
+			{
+				f = defaultVal;
+			}
+			return f;
+		}
+
+		private bool SanitizeIniBool(string section, string key, bool defaultVal)
+		{
+			bool b;
+			try
+			{
+				b = iniFile.ReadBool(section, key);
+			}
+			catch (Exception)
+			{
+				b = defaultVal;
+			}
+			return b;
 		}
 	}
 }

@@ -7,6 +7,7 @@ using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
@@ -22,9 +23,11 @@ namespace LegendOfCube.Screens
 		private AISystem aiSystem;
 		private AnimationSystem animationSystem;
 		private RenderSystem renderSystem;
+		private AudioSystem audioSystem;
 
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ContentCollection contentCollection;
+		private readonly InputHelper inputHelper;
 
 		private Texture2D winScreen1;
 		private Texture2D winScreen2;
@@ -32,12 +35,13 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 		private Vector2 fontPos;
 
-		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
+		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager, InputHelper inputHelper)
 			: base(game, screenSystem, true)
 		{
 			this.level = level;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
+			this.inputHelper = inputHelper;
 		}
 
 		internal override void Update(GameTime gameTime)
@@ -51,6 +55,10 @@ namespace LegendOfCube.Screens
 			}
 			if (world.WinState)
 			{
+				if (world.TimeSinceGameOver == 0)
+				{
+					Highscore.Instance.AddHighScore(level.Name, world.GameStats.GameTime);
+				}
 				inputSystem.ApplyInput(gameTime, world);
 				physicsSystem.ApplyPhysics(world, delta);
 
@@ -69,6 +77,7 @@ namespace LegendOfCube.Screens
 				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
 				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
+				audioSystem.Update(world);
 				animationSystem.OnUpdate(world, delta);
 				cameraSystem.OnUpdate(world, delta);
 			}
@@ -87,17 +96,17 @@ namespace LegendOfCube.Screens
 			{
 				StringBuilder text = new StringBuilder();
 				text.Append("FPS: ");
-				text.AppendLine(UIFormat(1.0f/(float) gameTime.ElapsedGameTime.TotalSeconds));
+				text.AppendLine(UiUtils.UIFormat(1.0f / (float)gameTime.ElapsedGameTime.TotalSeconds));
 				text.Append("CamPos: ");
-				text.AppendLine(UIFormat(world.CameraPosition));
+				text.AppendLine(UiUtils.UIFormat(world.CameraPosition));
 				text.Append("CamDir: ");
-				text.AppendLine(UIFormat(Vector3.Normalize(world.Transforms[world.Player.Id].Translation - world.CameraPosition)));
+				text.AppendLine(UiUtils.UIFormat(Vector3.Normalize(world.Transforms[world.Player.Id].Translation - world.CameraPosition)));
 				text.Append("CubePos: ");
-				text.AppendLine(UIFormat(world.Transforms[world.Player.Id].Translation));
+				text.AppendLine(UiUtils.UIFormat(world.Transforms[world.Player.Id].Translation));
 				text.Append("CubeVel: ");
-				text.AppendLine(UIFormat(world.Velocities[world.Player.Id]));
+				text.AppendLine(UiUtils.UIFormat(world.Velocities[world.Player.Id]));
 				text.Append("CubeAcc: ");
-				text.AppendLine(UIFormat(world.Accelerations[world.Player.Id]));
+				text.AppendLine(UiUtils.UIFormat(world.Accelerations[world.Player.Id]));
 				text.Append("OnGround: ");
 				text.AppendLine(world.PlayerCubeState.OnGround.ToString());
 				text.Append("OnWall: ");
@@ -111,15 +120,17 @@ namespace LegendOfCube.Screens
 			{
 				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
 				spriteBatch.DrawString(font, world.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
-				spriteBatch.DrawString(font, UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, UiUtils.UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
+				spriteBatch.DrawString(font, "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[0]), new Vector2(300, 360), Color.Red);
 			}
 			spriteBatch.End();
 		}
 
 		internal override void LoadContent()
 		{
+			audioSystem = new AudioSystem(contentCollection);
 			world = level.CreateWorld(Game, contentCollection);
-			inputSystem = new InputSystem(Game, ScreenSystem);
+			inputSystem = new InputSystem(Game, ScreenSystem, inputHelper);
 			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();
@@ -134,16 +145,6 @@ namespace LegendOfCube.Screens
 			renderSystem.LoadContent();
 
 			fontPos = new Vector2(0, 0);
-		}
-
-		private static string UIFormat(Vector3 value)
-		{
-			return String.Format("(X: {0}, Y: {1}, Z: {2})", UIFormat(value.X), UIFormat(value.Y), UIFormat(value.Z));
-		}
-
-		private static string UIFormat(float value)
-		{
-			return String.Format(NumberFormatInfo.InvariantInfo, "{0:0.00}", value);
 		}
 	}
 }

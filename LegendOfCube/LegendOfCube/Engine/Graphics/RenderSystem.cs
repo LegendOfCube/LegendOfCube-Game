@@ -237,7 +237,7 @@ namespace LegendOfCube.Engine.Graphics
 
 			if (world.PointLight0Enabled)
 			{
-				standardEffect.SetPointLight0Properties(ref world.PointLight0.lightPosition, ref world.PointLight0.reach, ref world.PointLight0.color);
+				standardEffect.SetPointLight0Properties(ref world.PointLight0.LightPosition, ref world.PointLight0.Reach, ref world.PointLight0.Color);
 			}
 
 			foreach (var entity in entities)
