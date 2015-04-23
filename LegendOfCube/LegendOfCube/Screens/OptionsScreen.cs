@@ -5,6 +5,7 @@ using System.Text;
 using LegendOfCube.Engine;
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine.Input;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Screens
 {
@@ -13,14 +14,16 @@ namespace LegendOfCube.Screens
 		private GlobalConfig cfg;
 
 		struct Res { public int x, y; public Res(int x, int y) { this.x = x; this.y = y; } }
-		private string[] resolutionStrs = { "480x240 (4:3)", "640x480 (4:3)", "1280x720 (16:9)", "1280x800 (16:10)", "1600x900 (16:9)", "1920x1080 (16:9)", "1920x1200 (16:10)", "2560x1440 (16:9)", "2560x1600 (16:10)" };
-		private Res[] resolutions = { new Res(480, 240), new Res(640, 480), new Res(1280, 720), new Res(1280, 800), new Res(1600, 900), new Res(1920, 1080), new Res(1920, 1200), new Res(2560, 1440), new Res(2560, 1600)};
+		private string[] resolutionStrs;
+		private Res[] resolutions;
+		int startRes = 0;
 
 		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) { }
 
 		internal sealed override void InitializeScreen()
 		{
 			cfg = GlobalConfig.Instance;
+			LoadAvailableResolutions();
 
 			AddTitle("Options");
 			AddDescription("Options are stored in \"Documents/My Games/Legend of Cube/Config.ini\"");
@@ -28,7 +31,7 @@ namespace LegendOfCube.Screens
 			AddSpace(35.0f);
 			
 			AddHeading("Graphics");
-			AddMultiChoiceSelector("Resolution", 0, resolutionStrs, (int i) => { cfg.InternalResX = resolutions[i].x; cfg.InternalResY = resolutions[i].y; });
+			AddMultiChoiceSelector("Resolution", startRes, resolutionStrs, (int i) => { cfg.InternalResX = resolutions[i].x; cfg.InternalResY = resolutions[i].y; });
 			AddOnOffSelector("Fullscreen", cfg.Fullscreen, (bool b) => { cfg.Fullscreen = b; });
 			AddOnOffSelector("VSync", cfg.VSync, (bool b) => { cfg.VSync = b; });
 			AddOnOffSelector("MultiSampling", cfg.MultiSampling, (bool b) => { cfg.MultiSampling = b; });
@@ -52,6 +55,26 @@ namespace LegendOfCube.Screens
 		private static string Parse(bool b)
 		{
 			return b ? "On" : "Off";
+		}
+
+		private void LoadAvailableResolutions()
+		{
+			List<Res> resolutionList = new List<Res>();
+			List<string> resolutionStrList = new List<string>();
+			int i = 0;
+			foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+			{
+				resolutionList.Add(new Res(mode.Width, mode.Height));
+				resolutionStrList.Add(mode.Width + "x" + mode.Height);
+				if (cfg.InternalResX == mode.Width
+					&& cfg.InternalResY == mode.Height)
+				{
+					this.startRes = i;
+				}
+				i++;
+			}
+			this.resolutions = resolutionList.ToArray();
+			this.resolutionStrs = resolutionStrList.ToArray();
 		}
 	}
 }
