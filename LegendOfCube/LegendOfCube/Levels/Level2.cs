@@ -8,9 +8,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace LegendOfCube.Levels
 {
-	public class DemoLevel : Level
+	public class Level2 : Level
 	{
-		public DemoLevel() : base("Demo Level") {}
+		public Level2() : base("Level 2") {}
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{

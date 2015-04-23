@@ -110,7 +110,7 @@
     <Compile Include="Levels\BeanstalkLevel.cs" />
     <Compile Include="Engine\ModelData.cs" />
     <Compile Include="Engine\Level.cs" />
-    <Compile Include="Levels\DemoLevel.cs" />
+    <Compile Include="Levels\Level2.cs" />
     <Compile Include="Levels\TestLevel1.cs" />
     <Compile Include="Screens\PauseScreen.cs" />
     <Compile Include="Engine\CameraSystem.cs" />
