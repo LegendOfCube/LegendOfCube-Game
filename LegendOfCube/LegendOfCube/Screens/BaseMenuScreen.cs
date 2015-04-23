@@ -126,9 +126,13 @@ namespace LegendOfCube.Screens
 			{
 				for (int i = 0; i < menuItems.Count; i++)
 				{
-					if (iH.MouseWasMoved() && iH.MouseWithinRectangle(menuItems.ElementAt(i).ActivationHitBox()))
+					if (iH.MouseWasMoved())
 					{
-						selected = i;
+						Game.IsMouseVisible = true;
+						if(iH.MouseWithinRectangle(menuItems.ElementAt(i).ActivationHitBox()))
+						{
+							selected = i;
+						}
 					}
 				}
 			}
