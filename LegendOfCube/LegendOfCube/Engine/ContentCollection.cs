@@ -1,6 +1,7 @@
 ﻿using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -8,6 +9,18 @@ namespace LegendOfCube.Engine
 {
 	public class ContentCollection
 	{
+		public SoundEffect respawn { get; private set; }
+		public SoundEffect oldJump { get; private set; }
+		public SoundEffect jump { get; private set; }
+		public SoundEffect wallJump { get; private set; }
+		public SoundEffect whoopJump { get; private set; }
+		public SoundEffect whoopJump2 { get; private set; }
+		public SoundEffect bounce { get; private set; }
+		public SoundEffect hit { get; private set; }
+		public SoundEffect select { get; private set; }
+		public SoundEffect select2 { get; private set; }
+
+		public ModelData PlayerCube2 { get; private set; }
 		public ModelData PlayerCube { get; private set; }
 		public ModelData PlayerCubePlain { get; private set; }
 		public ModelData RustPlatform { get; private set; }
@@ -37,11 +50,20 @@ namespace LegendOfCube.Engine
 		public ModelData SignArrowUp { get; private set; }
 		public ModelData SignTrampoline { get; private set; }
 		public ModelData WindowBars { get; private set; }
-
+		public ModelData Fence { get; private set; }
+		public ModelData Barbs { get; private set; }
+		public ModelData PipeWalk { get; private set; }
+		public ModelData Pipe { get; private set; }
+		public ModelData PipeTurn { get; private set; }
+		public ModelData Railing { get; private set; }
+		public ModelData GrassSmall { get; private set; }
+		public ModelData GrassRound { get; private set; }
+		public ModelData GrassLong { get; private set; }
+		public ModelData Container { get; private set; }
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
-
+		public Model CubeModel2 { get; private set; }
 		public Model CubeModel { get; private set; }
 		public Model PlainCubeModel { get; private set; }
 		public Model PlatformModel { get; private set; }
@@ -65,11 +87,33 @@ namespace LegendOfCube.Engine
 		public Model Ground100x50 { get; private set; }
 		public Model SignModel { get; private set; }
 		public Model WindowBarsModel { get; private set; }
-
+		public Model FenceModel { get; private set; }
+		public Model BarbsModel { get; private set; }
+		public Model PipeWalkModel { get; private set; }
+		public Model PipeModel { get; private set; }
+		public Model PipeTurnModel { get; private set; }
+		public Model RailingModel { get; private set; }
+		public Model GrassSmallModel { get; private set; }
+		public Model GrassRoundModel { get; private set; }
+		public Model GrassLongModel { get; private set; }
+		public Model ContainerModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
+			CubeModel2 = cm.Load<Model>("Models/Cube/newcube_ep");
+			respawn = cm.Load<SoundEffect>("SoundEffects/bwiip");
+			oldJump = cm.Load<SoundEffect>("SoundEffects/waom");
+			wallJump = cm.Load<SoundEffect>("SoundEffects/waom2");
+			jump = cm.Load<SoundEffect>("SoundEffects/waom3");
+			whoopJump = cm.Load<SoundEffect>("SoundEffects/whoop");
+			whoopJump2 = cm.Load<SoundEffect>("SoundEffects/whoopShort");
+			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
+			hit = cm.Load<SoundEffect>("SoundEffects/hit");
+			select = cm.Load<SoundEffect>("SoundEffects/select");
+			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
+			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
 			PlatformModel = cm.Load<Model>("Models/Platform/platform");
 			BrickWallModel = cm.Load<Model>("Models/Brick_Wall/brick_wall");
 			DropSignModel = cm.Load<Model>("Models/Sign_Drop/danger_drop");
@@ -90,6 +134,17 @@ namespace LegendOfCube.Engine
 			Ground50x50 = cm.Load<Model>("Models/Ground/ground_50x50");
 			BrickWallWindowModel = cm.Load<Model>("Models/Brick_Wall/brick_wall_window_no_bars");
 			WindowBarsModel = cm.Load<Model>("Models/Brick_Wall/window_bars");
+			FenceModel = cm.Load<Model>("Models/Fence/fence");
+			BarbsModel = cm.Load<Model>("Models/Fence/barbs_no_rotation");
+			PipeWalkModel = cm.Load<Model>("Models/Pipe/pipe_walk");
+			PipeModel = cm.Load<Model>("Models/Pipe/pipe");
+			PipeTurnModel = cm.Load<Model>("Models/Pipe/pipe_turn");
+			RailingModel = cm.Load<Model>("Models/Railing/railing");
+			GrassSmallModel = cm.Load<Model>("Models/Vegetation/small_grass");
+			//GrassRoundModel = cm.Load<Model>("Models/Vegetation/grass_round_optimized");
+			GrassLongModel = cm.Load<Model>("Models/Vegetation/grass_long_optimized");
+			ContainerModel = cm.Load<Model>("Models/Container/container_mapped");
+
 
 			placeholderWall = new ModelData
 			{
@@ -98,6 +153,20 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseColor = Color.DarkGray.ToVector4(),
+				}
+			};
+
+			PlayerCube2 = new ModelData
+			{
+				Model = CubeModel2,
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Cube/testdiff"),
+					EmissiveTexture = cm.Load<Texture>("Models/Cube/testemissive"),
+					SpecularTexture = cm.Load<Texture>("Models/Cube/cubespec"),
+					//SpecularColor = Color.Gray.ToVector4(),
+					//EmissiveColor = Color.Black.ToVector4()
 				}
 			};
 
@@ -141,6 +210,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Platform/rusted metal-d"),
+					//DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Platform/platform-normal"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -153,7 +223,8 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					//DiffuseColor = Color.White.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -165,7 +236,8 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					//DiffuseColor = Color.White.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -177,7 +249,8 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					//DiffuseColor = Color.White.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -189,7 +262,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_n_sharp"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -271,7 +344,8 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
-					NormalTexture = cm.Load<Texture>("Models/Platform/pipe_normal"),
+					//DiffuseColor = Color.Gray.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Platform/pipe_normal2"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, -39, 0), 4.5f, 77, 4.5f)
@@ -294,6 +368,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Duct/duct_d"),
+					//DiffuseColor = Color.LightGray.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Duct/duct_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -326,6 +401,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					//DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-normal"),
 					SpecularTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-spec"),
 					SpecularColor = Color.Gray.ToVector4()
@@ -362,6 +438,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Ground/concrete_d"),
+					//DiffuseColor = Color.White.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Ground/concrete_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -384,6 +461,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Ground/planks_d"),
+					//DiffuseColor = Color.Red.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Ground/planks_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -395,6 +473,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Ground/stone_d"),
+					//DiffuseColor = Color.Black.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Ground/stone_n"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
@@ -418,6 +497,124 @@ namespace LegendOfCube.Engine
 					DiffuseTexture = cm.Load<Texture>("Models/Signs/trampoline"),
 					SpecularColor = Color.Gray.ToVector4()
 				},
+			};
+
+			Fence = new ModelData
+			{
+				Model = FenceModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Fence/fence_d"),
+					NormalTexture = cm.Load<Texture>("Models/Fence/Metall_Rost_Normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0,5,0), 0.4f, 10, 10)
+			};
+			Barbs = new ModelData
+			{
+				Model = BarbsModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Fence/fence_d"),
+					NormalTexture = cm.Load<Texture>("Models/Fence/Metall_Rost_Normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 1.949f, 0), 0.3f, 3.898f, 10)
+				
+			};
+
+			PipeWalk = new ModelData
+			{
+				Model = PipeWalkModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseColor = Color.WhiteSmoke.ToVector4(),
+					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
+
+			};
+			Pipe = new ModelData
+			{
+				Model = PipeModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseColor = Color.WhiteSmoke.ToVector4(),
+					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipewalk_diffuse"),
+					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.35f, 0), 30, 6, 5.8f)
+
+			};
+			PipeTurn = new ModelData
+			{
+				Model = PipeTurnModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseColor = Color.WhiteSmoke.ToVector4(),
+					DiffuseTexture = cm.Load<Texture>("Models/Pipe/pipe_d"),
+					NormalTexture = cm.Load<Texture>("Models/Pipe/pipewalk_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(-22.5f, 0.35f, 0), 15, 5, 5.8f)
+
+			};
+
+			Railing = new ModelData
+			{
+				Model = RailingModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.3f, 5), 0.15f, 0.55f, 10)
+
+			};
+
+			GrassSmall = new ModelData
+			{
+				Model = GrassSmallModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+				}
+			};
+			GrassRound = new ModelData
+			{
+				Model = GrassRoundModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+				}
+			};
+			GrassLong = new ModelData
+			{
+				Model = GrassLongModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Vegetation/grass_d"),
+					//DiffuseColor = Color.Blue.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Vegetation/grass_n"),
+					SpecularTexture = cm.Load<Texture>("Models/Vegetation/grass_s")
+				}
+			};
+
+			Container = new ModelData
+			{
+				Model = ContainerModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					DiffuseColor = Color.DarkOrange.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
 			};
 		}
 	}
