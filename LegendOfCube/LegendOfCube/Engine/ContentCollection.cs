@@ -149,7 +149,7 @@ namespace LegendOfCube.Engine
 			placeholderWall = new ModelData
 			{
 				Model = Ground50x50,
-				//Obb = OBB.CreateAxisAligned(Vector3.Zero, 100, 50, 1),
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 50, 2, 50),
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseColor = Color.DarkGray.ToVector4(),
