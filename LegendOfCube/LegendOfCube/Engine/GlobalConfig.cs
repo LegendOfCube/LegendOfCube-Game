@@ -77,6 +77,12 @@ namespace LegendOfCube.Engine
 			iniFile.WriteBool("Controls", "RightStickInvertedY", RightStickInvertedY);
 		}
 
+		public void ResetToDefaults()
+		{
+			File.Delete(iniFile.INIPath);
+			LoadFromFile();
+		}
+
 		// Constructor
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
