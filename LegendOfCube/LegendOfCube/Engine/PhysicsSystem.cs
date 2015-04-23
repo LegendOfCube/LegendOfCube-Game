@@ -113,7 +113,10 @@ namespace LegendOfCube.Engine
 				// STAIRCASE HACK
 				// Override CollisionAxis and manually push out along ground axis and check if that solves collision
 				bool collisionSolved = false;
-				if (i == world.Player.Id && world.PlayerCubeState.OnGround && Math.Abs(Vector3.Dot(collisionAxis, world.PlayerCubeState.GroundAxis)) < 0.3)
+				if (i == world.Player.Id &&
+				    world.PlayerCubeState.OnGround &&
+				    !world.InputData[i].IsJumping() &&
+				    Math.Abs(Vector3.Dot(collisionAxis, world.PlayerCubeState.GroundAxis)) < 0.3)
 				{
 					const float MAX_STEP_HEIGHT = 0.35f;
 					collisionSolved = PushFromEnitityWithMax(world, i, intersectionId, world.PlayerCubeState.GroundAxis, 0.05f, 15, MAX_STEP_HEIGHT);
