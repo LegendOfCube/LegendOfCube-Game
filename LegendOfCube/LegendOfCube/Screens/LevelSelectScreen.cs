@@ -7,13 +7,14 @@ using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Screens
 {
-	class LevelSelectScreen : MenuScreen
+	public class LevelSelectScreen : BaseMenuScreen
 	{
-		public LevelSelectScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper) {}
+		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
-		internal override void LoadContent()
+		internal override void InitializeScreen()
 		{
-			base.LoadContent();
+			AddTitle("Select Level");
+			AddSpace(35.0f);
 
 			// Add entry for each level
 			// Not using foreach due to warning about using a foreach variable in closure
@@ -26,14 +27,17 @@ namespace LegendOfCube.Screens
 				{
 					highscore = UiUtils.UIFormat(highscores[0]);
 				}
-				AddItemBelow(level.Name + " \nHighScore: " + highscore + "s\n", () =>
-					ScreenSystem.AddGameScreen(level)
-				);
+				string name = level.Name + " \nHighScore: " + highscore + "s\n";
+				AddClickable(name, () => { ScreenSystem.AddGameScreen(level); return name; });
 			}
+			AddSpace(35.0f);
 
-			AddItemBelow("Back", () => 
-				ScreenSystem.RemoveCurrentScreen()
-			);
+			AddClickable("Main Menu", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "null"; });
+		}
+
+		internal override void OnExit()
+		{
+			// Do nothing.
 		}
 	}
 }

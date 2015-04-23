@@ -13,17 +13,15 @@ namespace LegendOfCube.Engine.Events
 	{
 		private int oldSelection;
 		private float pitch;
-		private InputHelper inputHelper;
+		private InputHelper inputHelper = InputHelper.Instance;
 
 		public SoundEffect select { get; private set; }
 		public SoundEffect select2 { get; private set; }
 
-		public MenuAudioSystem(ContentManager cm, InputHelper inputHelper)
+		public MenuAudioSystem(ContentManager cm)
 		{
 			oldSelection = 0;
 			pitch = 0;
-
-			this.inputHelper = inputHelper;
 
 			select = cm.Load<SoundEffect>("SoundEffects/select");
 			select2 = cm.Load<SoundEffect>("SoundEffects/select2");

@@ -11,28 +11,26 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LegendOfCube.Screens
 {
-	class StartScreen : MenuScreen
+	public class StartScreen : BaseMenuScreen
 	{
-		internal StartScreen(Game game, ScreenSystem screenSystem, InputHelper inputHelper) : base(game, screenSystem, inputHelper) {}
+		internal StartScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
-		internal override void LoadContent()
+		internal override void InitializeScreen()
 		{
-			base.LoadContent();
-			AddItemBelow("Start Game", () =>
-				ScreenSystem.AddGameScreen(LevelConstants.LEVEL_1)
-			);
+			AddTitle("Legend of Cube");
+			AddSpace(35.0f);
 
-			AddItemBelow("Select Level", () => 
-				ScreenSystem.AddScreen(new LevelSelectScreen(Game, ScreenSystem, InputHelper))
-			);
+			AddClickable("Start Game", () => { ScreenSystem.AddGameScreen(LevelConstants.LEVEL_1); return "Start Game"; });
+			AddClickable("Select Level", () => { ScreenSystem.AddScreen(new LevelSelectScreen(Game, ScreenSystem)); return "Select Level"; });
+			AddClickable("Options", () => { ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem)); return "Options"; });
+			AddSpace(35.0f);
 
-			AddItemBelow("Options", () =>
-				{ }
-			);
+			AddClickable("Exit Game", () => { this.OnExit(); return "null"; });
+		}
 
-			AddItemBelow("Exit",
-				() => Game.Exit()
-			);
+		internal override void OnExit()
+		{
+			Game.Exit();
 		}
 	}
 }
