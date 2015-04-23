@@ -182,7 +182,7 @@ namespace LegendOfCube.Screens
 
 			// On
 			spriteBatch.DrawString(spriteFont, "On  ", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, "On  ", fontPos, currentValue ? activatedColor : nonActivatedColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, "On  ", fontPos, currentValue ? activatedColor : nonActivatedColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 
 			float onWidth = spriteFontForMeasuring.MeasureString("On  ").X;
 			shadowFontPos.X += onWidth;
@@ -190,7 +190,7 @@ namespace LegendOfCube.Screens
 
 			// Off
 			spriteBatch.DrawString(spriteFont, "Off", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, "Off", fontPos, !currentValue ? activatedColor : nonActivatedColor, 0.03f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, "Off", fontPos, !currentValue ? activatedColor : nonActivatedColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
 		public sealed override void Update(MenuItemAction menuAction)
@@ -216,6 +216,86 @@ namespace LegendOfCube.Screens
 		{
 			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
 						 (int)Math.Round((spriteFontForMeasuring.MeasureString(text + ":On  Off").X + onOffAlign) * scale), (int)Math.Round(ItemHeight()));
+		}
+	}
+
+	// MultiChoiceSelectorMenuItem (For multichoice thingies)
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+	public class MultiChoiceSelectorMenuItem : MenuItem
+	{
+		private string text;
+		private float height;
+		private float scale;
+		private Vector2 position;
+		string[] options;
+		int currentValue;
+		Action<int> applyOption;
+		float optionsAlign;
+
+		private SpriteFont spriteFontForMeasuring;
+
+		public MultiChoiceSelectorMenuItem(string text, SpriteFont spriteFont, string[] options, int currentValue, Action<int> applyOption, float optionsAlign)
+			: base(true)
+		{
+			this.text = text + ":";
+			this.scale = 1.0f;
+			this.spriteFontForMeasuring = spriteFont;
+			this.height = spriteFont.MeasureString(text).Y;
+			this.options = options;
+			this.applyOption = applyOption;
+			this.currentValue = currentValue;
+			this.optionsAlign = optionsAlign;
+		}
+
+		public sealed override float ItemHeight() { return height; }
+
+		public sealed override void SetPosition(Vector2 position) { this.position = position; }
+
+		public sealed override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected)
+		{
+			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
+			Vector2 fontPos = position;
+			Color shadowColor = Color.Black;
+			Color normalColor = Color.White;
+			Color color = isSelected ? Color.DarkOrange : normalColor;
+
+			// Name
+			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, fontPos, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+
+			shadowFontPos.X += optionsAlign;
+			fontPos.X += optionsAlign;
+
+			// Option
+			spriteBatch.DrawString(spriteFont, options[currentValue], shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, options[currentValue], fontPos, normalColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+		}
+
+		public sealed override void Update(MenuItemAction menuAction)
+		{
+			if (menuAction == MenuItemAction.RIGHT && currentValue < options.Length - 1)
+			{
+				currentValue++;
+				applyOption(currentValue);
+			}
+			else if (menuAction == MenuItemAction.LEFT && currentValue > 0)
+			{
+				currentValue--;
+				applyOption(currentValue);
+			}
+			else if (menuAction == MenuItemAction.ACTIVATE)
+			{
+				currentValue++;
+				if (currentValue == options.Length) currentValue = 0;
+				applyOption(currentValue);
+			}
+		}
+
+		public sealed override Rectangle ActivationHitBox()
+		{
+			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
+						 (int)Math.Round((spriteFontForMeasuring.MeasureString(text + ":On  Off").X + optionsAlign) * scale), (int)Math.Round(ItemHeight()));
 		}
 	}
 }

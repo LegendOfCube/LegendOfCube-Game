@@ -77,6 +77,11 @@ namespace LegendOfCube.Screens
 			AddMenuItem(new OnOffSelectorMenuItem(name, this.spriteFont, setValueFunc, currentValue, 200.0f));
 		}
 
+		protected void AddMultiChoiceSelector(string name, int currentValue, string[] options, Action<int> applyOption)
+		{
+			AddMenuItem(new MultiChoiceSelectorMenuItem(name, this.spriteFont, options, currentValue, applyOption, 200.0f));
+		}
+
 		// Inherited functions from Screen
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
