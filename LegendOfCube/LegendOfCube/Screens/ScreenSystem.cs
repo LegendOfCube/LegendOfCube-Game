@@ -62,15 +62,21 @@ namespace LegendOfCube.Screens
 
 		public void Draw(GameTime gameTime)
 		{
-			for(int i = 0; i < screens.Count - 1; i++)
+			int firstRender= screens.Count - 1;
+			for (int i = firstRender - 1; i >= 0; i--)
 			{
 				Screen s = screens[i];
-				if (s.BackgroundRender)
+				if (!s.BackgroundRender)
 				{
-					s.Draw(gameTime);
+					firstRender = i + 1;
 				}
 			}
-			GetCurrentScreen().Draw(gameTime);
+
+			for (int i = firstRender; i < screens.Count; i++)
+			{
+				Screen s = screens[i];
+				s.Draw(gameTime);
+			}
 		}
 		public void LoadContent()
 		{

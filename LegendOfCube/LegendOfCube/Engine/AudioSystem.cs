@@ -50,7 +50,7 @@ namespace LegendOfCube.Engine
 					}
 				}
 			}
-			if (!world.PlayerCubeState.OnGround && oldPlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping())
+			if (!world.PlayerCubeState.OnGround && oldPlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping() && world.InputData[world.Player.Id].NewJump())
 			{
 				pitch += 0.1f;
 				if (pitch > 1)
@@ -59,7 +59,7 @@ namespace LegendOfCube.Engine
 				}
 				cc.whoopJump2.Play(1, pitch, 0);
 			}
-			else if (!world.PlayerCubeState.OnWall && oldPlayerCubeState.OnWall && !world.PlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping())
+			else if (!world.PlayerCubeState.OnWall && oldPlayerCubeState.OnWall && !world.PlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping() && world.InputData[world.Player.Id].NewJump())
 			{
 				pitch += 0.1f;
 				if (pitch > 1)
