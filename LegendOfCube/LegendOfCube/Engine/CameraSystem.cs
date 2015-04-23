@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 		private const float MAX_TILT = MathHelper.PiOver2 - 0.3f;
 
 		// The distance above player to actually look at
-		private const float TARGET_Y_OFFSET = 0.0f;
+		private const float TARGET_Y_OFFSET = 0.4f;
 
 		// Scale input
 		private const float X_SCALE = 4.0f;
@@ -76,6 +76,7 @@ namespace LegendOfCube.Engine
 			Vector3 targetCameraDirection;
 			Vector3 movementDirection = world.Velocities[world.Player.Id];
 			Vector2 groundMovement = new Vector2(movementDirection.X, movementDirection.Z);
+			bool moveTowardCamera = Vector3.Dot(oldRelNewTargetPos, movementDirection) > 0.0f;
 			// If under threshold, use previous value
 			bool moveAlongGround = groundMovement.Length() > 0.5f;
 			if (moveAlongGround)
@@ -92,8 +93,42 @@ namespace LegendOfCube.Engine
 			bool playerTeleport = (oldTarget - newTarget).Length() > 5.0f;
 
 			// Determine point where camera will rest
-			float targetTiltAngle = ClampTilt(MathHelper.ToRadians(BASE_TILT) - GetTiltAngle(targetCameraDirection));
+			float targetTiltAngle = world.PlayerCubeState.OnWall ? MathHelper.ToRadians(BASE_TILT) : ClampTilt(MathHelper.ToRadians(BASE_TILT) - GetTiltAngle(targetCameraDirection));
 			float targetGroundAngle = (float)Math.Atan2(targetCameraDirection.Z, targetCameraDirection.X);
+
+			// Check if camera should stay at the manually set position
+			bool manualControlLock = ((now - lastManualAdjustTime) < CAMERA_RESET_TIME) || !movedSinceManualControl;
+
+			float newGroundAngle;
+			float newTiltAngle;
+			if (inputOverThreshold)
+			{
+				// Full manual control relative to player
+				newTiltAngle = ClampTilt(oldTiltAngle + delta * Y_SCALE * cameraModifierInput.Y);
+				newGroundAngle = (oldGroundAngle + delta * X_SCALE * cameraModifierInput.X) % MathHelper.TwoPi;
+
+				lastManualAdjustTime = now;
+				movedSinceManualControl = false;
+			}
+			else if (moveTowardCamera || manualControlLock || playerTeleport)
+			{
+				// Keep manually set position for a while
+				newTiltAngle = oldTiltAngle;
+				newGroundAngle = oldGroundAngle;
+			}
+			else
+			{
+				if (world.PlayerCubeState.OnGround || world.PlayerCubeState.OnWall)
+				{
+					// Drift toward target tilt angle
+					newTiltAngle = MathUtils.ClampLerp(TILT_CORRECT_SPEED * delta, oldRelNewTargetTiltAngle, targetTiltAngle);
+				}
+				else
+				{
+					newTiltAngle = oldRelNewTargetTiltAngle;
+				}
+				newGroundAngle = oldRelNewTargetGroundAngle;
+			}
 
 			// Smoothly change distance from target
 			float newDistance;
@@ -112,40 +147,6 @@ namespace LegendOfCube.Engine
 			else
 			{
 				newDistance = oldRelNewTargetDistance;
-			}
-
-			// Check if camera should stay at the manually set position
-			bool manualControlLock = ((now - lastManualAdjustTime) < CAMERA_RESET_TIME) || !movedSinceManualControl;
-
-			float newGroundAngle;
-			float newTiltAngle;
-			if (inputOverThreshold)
-			{
-				// Full manual control relative to player
-				newTiltAngle = ClampTilt(oldTiltAngle + delta * Y_SCALE * cameraModifierInput.Y);
-				newGroundAngle = (oldGroundAngle + delta * X_SCALE * cameraModifierInput.X) % MathHelper.TwoPi;
-
-				lastManualAdjustTime = now;
-				movedSinceManualControl = false;
-			}
-			else if (manualControlLock || playerTeleport)
-			{
-				// Keep manually set position for a while
-				newTiltAngle = oldTiltAngle;
-				newGroundAngle = oldGroundAngle;
-			}
-			else
-			{
-				if (world.PlayerCubeState.OnGround || world.PlayerCubeState.OnWall)
-				{
-					// Drift toward target tilt angle
-					newTiltAngle = MathUtils.ClampLerp(TILT_CORRECT_SPEED * delta, oldRelNewTargetTiltAngle, targetTiltAngle);
-				}
-				else
-				{
-					newTiltAngle = oldRelNewTargetTiltAngle;
-				}
-				newGroundAngle = oldRelNewTargetGroundAngle;
 			}
 
 			// Set new camera in world
