@@ -86,7 +86,7 @@
     <Compile Include="Engine\Events\CollisionEvent.cs" />
     <Compile Include="Engine\Events\EventBuffer.cs" />
     <Compile Include="Engine\Events\EventUtils.cs" />
-    <Compile Include="Engine\Events\MenuAudioSystem.cs" />
+    <Compile Include="Engine\MenuAudioSystem.cs" />
     <Compile Include="Engine\GameStats.cs" />
     <Compile Include="Engine\GlobalConfig.cs" />
     <Compile Include="Engine\Graphics\GraphicsUtils.cs" />
