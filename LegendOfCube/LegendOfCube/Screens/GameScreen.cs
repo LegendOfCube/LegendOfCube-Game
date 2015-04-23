@@ -130,7 +130,6 @@ namespace LegendOfCube.Screens
 		{
 			audioSystem = new AudioSystem(contentCollection);
 			world = level.CreateWorld(Game, contentCollection);
-
 			inputSystem = new InputSystem(Game, ScreenSystem, inputHelper);
 			movementSystem = new MovementSystem();
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);

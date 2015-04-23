@@ -8,6 +8,7 @@ namespace LegendOfCube.Levels
 {
 	static class LevelConstants
 	{
+		public static readonly Level LEVEL_1 = new Level1();
 		public static readonly Level DEMO_LEVEL = new DemoLevel();
 		public static readonly Level CONCEPT_LEVEL = new ConceptLevel();
 		public static readonly Level TEST_LEVEL1 = new TestLevel1();
@@ -18,6 +19,7 @@ namespace LegendOfCube.Levels
 
 		public static readonly Level[] LEVELS =
 		{
+			LEVEL_1,
 			DEMO_LEVEL,
 			CONCEPT_LEVEL,
 			TEST_LEVEL1,
