@@ -18,8 +18,7 @@ namespace LegendOfCube.Screens
 			);
 			AddItemBelow("Main Menu", () =>
 			{
-				ScreenSystem.RemoveCurrentScreen();
-				ScreenSystem.RemoveCurrentScreen();
+				ScreenSystem.SetScreen(new StartScreen(Game, ScreenSystem, InputHelper));
 			});
 			AddItemBelow("Exit Game", () =>
 				Game.Exit()
