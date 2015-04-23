@@ -331,6 +331,10 @@ namespace LegendOfCube.Levels
 			fenceBuilder.Copy().WithTransform(Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(88, -20, 36).AddToWorld(world);
 			barbsBuilder.Copy().WithTransform(Matrix.CreateRotationZ(MathHelper.ToRadians(-45)) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
 				.WithPosition(88, -10, 36).AddToWorld(world);
+				//Back fences
+			fenceBuilder.Copy().WithPosition(93, -20, 10.5f).AddToWorld(world);
+			fenceBuilder.Copy().WithPosition(93, -20, 20.5f).AddToWorld(world);
+			fenceBuilder.Copy().WithPosition(93, -20, 30.5f).AddToWorld(world);
 			
 			//Falling death
 			new EntityBuilder()
