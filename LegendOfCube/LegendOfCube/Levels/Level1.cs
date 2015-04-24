@@ -13,11 +13,13 @@ namespace LegendOfCube.Levels
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-			World world = new World(1000);			
-			world.SpawnPoint = new Vector3(0, -40, 0);
-			world.LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f));
-			world.Camera.Position = world.SpawnPoint + new Vector3(-3, 0, 0);
-			world.AmbientIntensity = 0.25f;
+			World world = new World(1000)
+			{
+				SpawnPoint = new Vector3(0, -40, 0),
+				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
+				AmbientIntensity = 0.25f
+			};
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)

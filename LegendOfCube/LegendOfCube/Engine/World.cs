@@ -54,6 +54,8 @@ namespace LegendOfCube.Engine
 		// World variables
 
 		public Vector3 SpawnPoint;
+		public Vector3 InitialViewDirection;
+
 		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;

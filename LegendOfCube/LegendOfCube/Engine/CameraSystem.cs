@@ -31,18 +31,23 @@ namespace LegendOfCube.Engine
 		// Time in seconds until manual adjustments starts to reset
 		private const double CAMERA_RESET_TIME = 0.1;
 
-		// UNUSED: Angles to view player from at different zoom levels
-		private const float ZOOM_MIN_ANGLE = -MathHelper.PiOver4;
-		private const float ZOOM_MAX_ANGLE = MathHelper.Pi / 3.0f;
-
-		// UNUSED: Remember zoom level user has chosen
-		private float distanceFactor = 0.5f;
-
 		private double lastManualAdjustTime = double.MinValue;
-		private Vector3 lastKnownDirection = Vector3.Down;
+		private Vector3 lastKnownDirection;
 		private bool movedSinceManualControl = false;
 
-		public void OnUpdate(World world, GameTime gameTime, float delta)
+		public void OnStart(World world)
+		{
+			var target = GetPlayerTarget(world);
+			var viewDirection = world.InitialViewDirection;
+			if (viewDirection.Length() < 0.01f)
+			{
+				viewDirection = Vector3.Down;
+			}
+			lastKnownDirection = viewDirection;
+			world.Camera = new Camera(target - MAX_DISTANCE * viewDirection, target);
+		}
+
+		public void Update(World world, GameTime gameTime, float delta)
 		{
 			double now = gameTime.TotalGameTime.TotalSeconds;
 
@@ -63,7 +68,7 @@ namespace LegendOfCube.Engine
 			bool inputOverThreshold = cameraModifierInput.Length() > 0.05f;
 
 			// Set what's to be the target
-			Vector3 newTarget = playerPosition + 0.5f * playerTransform.Up + TARGET_Y_OFFSET * Vector3.Up;
+			Vector3 newTarget = GetPlayerTarget(world);
 
 			newTarget.Y = MathUtils.ClampLerp(TARGET_UP_TRACK_SPEED * delta, oldTarget.Y, newTarget.Y);
 
@@ -157,16 +162,10 @@ namespace LegendOfCube.Engine
 			lastKnownDirection = targetCameraDirection;
 		}
 
-		/// <summary>
-		/// Defines the trejectory of the camera moving closer to the player.
-		/// </summary>
-		/// <param name="t">a number between 0.0 and 1.0, where a higher number means further away from target</param>
-		/// <param name="distance">the distance from target, part of output</param>
-		/// <param name="tiltAngle">the inclination angle, 0.0  means parallel to ground plane</param>
-		private static void CalcZoomTrejectory(float t, out float distance, out float tiltAngle)
+		private static Vector3 GetPlayerTarget(World world)
 		{
-			distance = MathUtils.ClampLerp(t, MIN_DISTANCE, MAX_DISTANCE);
-			tiltAngle = MathUtils.ClampLerp(t, ZOOM_MIN_ANGLE, ZOOM_MAX_ANGLE);
+			var playerTransform = world.Transforms[world.Player.Id];
+			return playerTransform.Translation + 0.5f * playerTransform.Up + TARGET_Y_OFFSET * Vector3.Up;
 		}
 
 		private static float ClampTilt(float tiltAngle)

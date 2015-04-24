@@ -78,7 +78,7 @@ namespace LegendOfCube.Screens
 				EventSystem.HandleEvents(world);
 				audioSystem.Update(world);
 				animationSystem.OnUpdate(world, delta);
-				cameraSystem.OnUpdate(world, gameTime, delta);
+				cameraSystem.Update(world, gameTime, delta);
 			}
 		}
 
@@ -127,23 +127,26 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-			audioSystem = new AudioSystem(contentCollection);
 			world = level.CreateWorld(Game, contentCollection);
+
 			inputSystem = new InputSystem(Game, ScreenSystem);
 			movementSystem = new MovementSystem();
+			audioSystem = new AudioSystem(contentCollection);
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			aiSystem = new AISystem();
 			animationSystem = new AnimationSystem();
 			renderSystem = new RenderSystem(Game, graphicsManager);
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
-			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
-			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
-			font = Game.Content.Load<SpriteFont>("Arial");
 
 			renderSystem.LoadContent();
 
+			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
+			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
+			font = Game.Content.Load<SpriteFont>("Arial");
 			fontPos = new Vector2(0, 0);
+
+			cameraSystem.OnStart(world);
 		}
 	}
 }
