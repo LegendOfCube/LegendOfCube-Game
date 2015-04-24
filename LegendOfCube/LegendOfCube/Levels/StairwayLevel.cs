@@ -16,11 +16,11 @@ namespace LegendOfCube.Levels
 		{
 			World world = new World(1000)
 			{
-				SpawnPoint = new Vector3(0, 0, 0)
+				SpawnPoint = new Vector3(0, 0, 0),
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
+				LightDirection = Vector3.Normalize(new Vector3(1, -0.3f, 1)),
+				AmbientIntensity = 0.3f
 			};
-			world.CameraPosition = world.SpawnPoint + new Vector3(-1.0f, 3.0f, 0.0f);
-			world.LightDirection = Vector3.Normalize(new Vector3(1, -0.3f, 1));
-			world.AmbientIntensity = 0.3f;
 
 			var player = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube)

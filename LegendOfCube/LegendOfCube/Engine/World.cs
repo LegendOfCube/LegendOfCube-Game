@@ -55,10 +55,16 @@ namespace LegendOfCube.Engine
 
 		public int CheckpointsPassed;
 		public Vector3 SpawnPoint;
+		public Vector3 InitialViewDirection;
+
 		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
-		public Vector3 CameraPosition;
+		public readonly float AirMovement;
+		public readonly float StopTime;
+		public readonly float BaseJump;
+
+		public Camera Camera;
 
 		public Vector3 LightDirection;
 		public float AmbientIntensity;
@@ -123,6 +129,8 @@ namespace LegendOfCube.Engine
 			LightDirection = new Vector3(0, -1, 0);
 			AmbientIntensity = 0.5f;
 			PointLight0Enabled = false;
+
+			Camera = Camera.DEFAULT_CAMERA;
 
 			EventBuffer = new EventBuffer();
 		}
