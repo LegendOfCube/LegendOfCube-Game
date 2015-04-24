@@ -63,6 +63,7 @@ namespace LegendOfCube.Levels
 			var cart1Builder = new EntityBuilder().WithModelData(contentCollection.Cart1);
 			var cart2Builder = new EntityBuilder().WithModelData(contentCollection.Cart2);
 			var trainDoorBuilder = new EntityBuilder().WithModelData(contentCollection.TrainDoor);
+			var trainDoorClosedBuilder = new EntityBuilder().WithModelData(contentCollection.TrainDoorClosed);
 			var railsBuilder = new EntityBuilder().WithModelData(contentCollection.Rails);
 
 
@@ -404,9 +405,9 @@ namespace LegendOfCube.Levels
 			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -15, -20)).AddToWorld(world);
 			
 			//Floor decor
-			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 40).AddToWorld(world);
 			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
+				.WithPosition(30, -70, 40).AddToWorld(world);
+			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
 				.WithPosition(30, -59.9f, 40).AddToWorld(world);
 			containerBlueBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
 				.WithPosition(30, -70, 50).AddToWorld(world);

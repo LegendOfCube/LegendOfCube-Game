@@ -65,6 +65,7 @@ namespace LegendOfCube.Engine
 		public ModelData Cart1 { get; private set; }
 		public ModelData Cart2 { get; private set; }
 		public ModelData TrainDoor { get; private set; }
+		public ModelData TrainDoorClosed { get; private set; }
 		public ModelData Rails { get; private set; }
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
@@ -106,6 +107,7 @@ namespace LegendOfCube.Engine
 		public Model Cart1Model { get; private set; }
 		public Model Cart2Model { get; private set; }
 		public Model TrainDoorModel { get; private set; }
+		public Model TrainDoorClosedModel { get; private set; }
 		public Model RailsModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
@@ -157,6 +159,7 @@ namespace LegendOfCube.Engine
 			Cart1Model = cm.Load<Model>("Models/Train/cart1");
 			Cart2Model = cm.Load<Model>("Models/Train/cart2");
 			TrainDoorModel = cm.Load<Model>("Models/Train/dooropen_fix");
+			TrainDoorClosedModel = cm.Load<Model>("Models/Train/doorclosed");
 			RailsModel = cm.Load<Model>("Models/Train/rails");
 
 
@@ -676,6 +679,16 @@ namespace LegendOfCube.Engine
 			TrainDoor = new ModelData
 			{
 				Model = TrainDoorModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Train/traindoor_d"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			TrainDoorClosed = new ModelData
+			{
+				Model = TrainDoorClosedModel,
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Train/traindoor_d"),
