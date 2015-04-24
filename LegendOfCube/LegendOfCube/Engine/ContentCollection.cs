@@ -156,7 +156,7 @@ namespace LegendOfCube.Engine
 			ContainerModel = cm.Load<Model>("Models/Container/container_mapped");
 			Cart1Model = cm.Load<Model>("Models/Train/cart1");
 			Cart2Model = cm.Load<Model>("Models/Train/cart2");
-			TrainDoorModel = cm.Load<Model>("Models/Train/dooropen");
+			TrainDoorModel = cm.Load<Model>("Models/Train/dooropen_fix");
 			RailsModel = cm.Load<Model>("Models/Train/rails");
 
 
