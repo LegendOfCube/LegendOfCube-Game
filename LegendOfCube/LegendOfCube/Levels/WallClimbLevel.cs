@@ -18,7 +18,7 @@ namespace LegendOfCube.Levels
 			World world = new World(1000)
 			{
 				SpawnPoint = new Vector3(-30.0f, 5.0f, 0.0f),
-				InitialViewDirection = Vector3.Normalize(new Vector3(-1, 0, 0)),
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
 				LightDirection = Vector3.Normalize(new Vector3(1.0f, -1.0f, -1.0f)),
 				AmbientIntensity = 0.3f
 			};
