@@ -348,7 +348,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(new OBB(new Vector3(0, 0.5f, 0), new Vector3(1, 0, 0), new Vector3(0, 1, 0), new Vector3(0, 0, 1), new Vector3(1, 1, 1)))
 				.WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);*/
-
+			/*
 			// TEST GEOMETRY
 				//WALLS
 			placeholderWallBuilder.Copy()
@@ -382,7 +382,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(0, 30, 40)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG | Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
-			
+			*/
 			// Catwalk lower
 			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -40, -15.3f)).AddToWorld(world);
 			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -40, -15.3f)).AddToWorld(world);
@@ -423,20 +423,20 @@ namespace LegendOfCube.Levels
 			cart2Builder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -50), new Vector3(-10, -70, 167), new Vector3(-10, -150, 0) }, false)
-				.WithPosition(-10, -70, 120)
+				.WithAI(new[] { new Vector3(-10, -70, -80), new Vector3(-10, -70, 150), new Vector3(-10, -160, 0) }, false)
+				//.WithPosition(-10, -70, 120)
 				.AddToWorld(world);
 			containerGreenBuilder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -66, -50), new Vector3(-10, -66, 120), new Vector3(-10, -150, 0) }, false)
-				.WithPosition(-10, -66, 70)
-				.AddToWorld(world);/*
+				.WithAI(new[] { new Vector3(-10, -66, -80), new Vector3(-10, -66, 150), new Vector3(-10, -156, 0) }, false)
+				//.WithPosition(-10, -66, 70)
+				.AddToWorld(world);
 			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -50), new Vector3(-10, -70, 140), new Vector3(-10, -150, 0) }, false)
-				.WithPosition(-10, -70, 40)
-				.AddToWorld(world);
+				.WithAI(new[] { new Vector3(-10, -70, -55), new Vector3(-10, -70, 175), new Vector3(-10, -160, 25) }, false)
+				//.WithPosition(-10, -70, 40)
+				.AddToWorld(world);/*
 			cart2Builder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
