@@ -100,7 +100,11 @@ namespace LegendOfCube.Engine
 				{
 					if (collidedWith == world.Player.Id)
 					{
-						world.SpawnPoint = world.Transforms[collider].Translation;
+						if (world.Transforms != null && world.SpawnPoint != world.Transforms[collider].Translation)
+						{
+							world.SpawnPoint = world.Transforms[collider].Translation;
+							world.CheckpointsPassed += 1;
+						}
 					}
 				}
 

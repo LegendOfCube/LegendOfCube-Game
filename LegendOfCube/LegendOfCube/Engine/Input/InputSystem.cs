@@ -67,7 +67,7 @@ namespace LegendOfCube.Engine
 
 			if (iH.KeyWasJustPressed(Keys.R) || iH.ButtonWasJustPressed(Buttons.Back))
 			{
-				if (world.WinState)
+				if (world.WinState || world.CheckpointsPassed == 0)
 				{
 					screenSystem.ResetGameScreen();
 				}
