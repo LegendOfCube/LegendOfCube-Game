@@ -59,7 +59,13 @@ namespace LegendOfCube.Engine
 		public ModelData GrassSmall { get; private set; }
 		public ModelData GrassRound { get; private set; }
 		public ModelData GrassLong { get; private set; }
-		public ModelData Container { get; private set; }
+		public ModelData ContainerBlue { get; private set; }
+		public ModelData ContainerRed { get; private set; }
+		public ModelData ContainerGreen { get; private set; }
+		public ModelData Cart1 { get; private set; }
+		public ModelData Cart2 { get; private set; }
+		public ModelData TrainDoor { get; private set; }
+		public ModelData Rails { get; private set; }
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
@@ -97,6 +103,10 @@ namespace LegendOfCube.Engine
 		public Model GrassRoundModel { get; private set; }
 		public Model GrassLongModel { get; private set; }
 		public Model ContainerModel { get; private set; }
+		public Model Cart1Model { get; private set; }
+		public Model Cart2Model { get; private set; }
+		public Model TrainDoorModel { get; private set; }
+		public Model RailsModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -144,6 +154,10 @@ namespace LegendOfCube.Engine
 			//GrassRoundModel = cm.Load<Model>("Models/Vegetation/grass_round_optimized");
 			GrassLongModel = cm.Load<Model>("Models/Vegetation/grass_long_optimized");
 			ContainerModel = cm.Load<Model>("Models/Container/container_mapped");
+			Cart1Model = cm.Load<Model>("Models/Train/cart1");
+			Cart2Model = cm.Load<Model>("Models/Train/cart2");
+			TrainDoorModel = cm.Load<Model>("Models/Train/dooropen");
+			RailsModel = cm.Load<Model>("Models/Train/rails");
 
 
 			placeholderWall = new ModelData
@@ -605,16 +619,79 @@ namespace LegendOfCube.Engine
 				}
 			};
 
-			Container = new ModelData
+			ContainerRed = new ModelData
 			{
 				Model = ContainerModel,
 				EffectParams = new StandardEffectParams
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
-					DiffuseColor = Color.DarkOrange.ToVector4(),
+					DiffuseColor = Color.DarkRed.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+			};
+			ContainerBlue = new ModelData
+			{
+				Model = ContainerModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					//DiffuseColor = Color.DarkRed.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+			};
+			ContainerGreen = new ModelData
+			{
+				Model = ContainerModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					DiffuseColor = Color.DarkGreen.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+			};
+
+			Cart1 = new ModelData
+			{
+				Model = Cart1Model,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			Cart2 = new ModelData
+			{
+				Model = Cart2Model,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			TrainDoor = new ModelData
+			{
+				Model = TrainDoorModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Train/traindoor_d"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			Rails = new ModelData
+			{
+				Model = RailsModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
 			};
 		}
 	}

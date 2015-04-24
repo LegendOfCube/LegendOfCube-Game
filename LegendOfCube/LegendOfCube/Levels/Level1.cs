@@ -57,25 +57,18 @@ namespace LegendOfCube.Levels
 			var grassSmallBuilder = new EntityBuilder().WithModelData(contentCollection.GrassSmall);
 			var grassRoundBuilder = new EntityBuilder().WithModelData(contentCollection.GrassRound);
 			var grassLongBuilder = new EntityBuilder().WithModelData(contentCollection.GrassLong);
-			var containerBuilder = new EntityBuilder().WithModelData(contentCollection.Container);
+			var containerRedBuilder = new EntityBuilder().WithModelData(contentCollection.ContainerRed);
+			var containerBlueBuilder = new EntityBuilder().WithModelData(contentCollection.ContainerBlue);
+			var containerGreenBuilder = new EntityBuilder().WithModelData(contentCollection.ContainerGreen);
+			var cart1Builder = new EntityBuilder().WithModelData(contentCollection.Cart1);
+			var cart2Builder = new EntityBuilder().WithModelData(contentCollection.Cart2);
+			var trainDoorBuilder = new EntityBuilder().WithModelData(contentCollection.TrainDoor);
+			var railsBuilder = new EntityBuilder().WithModelData(contentCollection.Rails);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
-
-			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 40).AddToWorld(world);
-			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -62, 40).AddToWorld(world);
-			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 50).AddToWorld(world);
-			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -62, 50).AddToWorld(world);
-			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 60).AddToWorld(world);
-			containerBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(30)))
-				.WithPosition(15, -70, 25).AddToWorld(world);
 
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
@@ -410,6 +403,31 @@ namespace LegendOfCube.Levels
 			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(0, -15, -20)).AddToWorld(world);
 			exitSignBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(new Vector3(20, -15, -20)).AddToWorld(world);
 			
+			//Floor decor
+			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
+				.WithPosition(30, -70, 40).AddToWorld(world);
+			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
+				.WithPosition(30, -59.9f, 40).AddToWorld(world);
+			containerBlueBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
+				.WithPosition(30, -70, 50).AddToWorld(world);
+			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
+				.WithPosition(30, -59.9f, 50).AddToWorld(world);
+			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
+				.WithPosition(30, -70, 60).AddToWorld(world);
+			containerBlueBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(30)))
+				.WithPosition(15, -70, 25).AddToWorld(world);
+
+			railsBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 10).AddToWorld(world);
+			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 70).AddToWorld(world);
+			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(-10, -66, 70).AddToWorld(world);
+			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 40).AddToWorld(world);
+			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 10).AddToWorld(world);
+			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithPosition(-10, -66, 10).AddToWorld(world);
+			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, -20).AddToWorld(world);
+			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-10, -70, 105).AddToWorld(world);
+
 			return world;
 		}
 	}
