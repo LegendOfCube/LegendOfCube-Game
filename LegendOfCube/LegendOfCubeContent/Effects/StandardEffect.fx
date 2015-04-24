@@ -1,9 +1,9 @@
 #define WHITE_COLOR float4(1.0, 1.0, 1.0, 1.0)
-#define DEPTH_BIAS 0.0005
 
 // Will determine the bluriness of shadows, it's the distance between
 // sampled shadow map coordinates in a 3x3 grid
-#define PCF_SPACING 1.0 / 2000.0
+#define LEVEL_0_PCF_SPACING 1.0 / 2000.0
+#define LEVEL_1_PCF_SPACING 1.0 / 3000.0
 
 float4x4 World;
 float4x4 View;
@@ -141,6 +141,31 @@ NormalTexVertexShaderOutput NormalTexVertexShaderFunction(NormalTexVertexShaderI
 	return output;
 }
 
+bool CoveredByShadowMap(float2 shadowMapCoord, float pcfSpacing)
+{
+	float shadowLookupMin = pcfSpacing;
+	float shadowLookupMax = 1.0 - pcfSpacing;
+	return shadowMapCoord.x >= shadowLookupMin && shadowMapCoord.x <= shadowLookupMax &&
+		shadowMapCoord.y >= shadowLookupMin && shadowMapCoord.y <= shadowLookupMax;
+}
+
+float SampleShadowMapPCF(sampler ShadowMapSampler, float2 shadowMapCoord, float4 lightSpacePos, float pcfSpacing)
+{
+	float visibility = 0.0;
+	for (int x = -1; x <= 1; x++)
+	{
+		for (int y = -1; y <= 1; y++)
+		{
+			float2 offset = pcfSpacing * float2(x, y);
+			float shadowMapDepth = tex2D(ShadowMapSampler, shadowMapCoord + offset).x;
+			float lightSpaceDepth = lightSpacePos.z / lightSpacePos.w;
+			float sampleContribution = 1.0 / 9.0;
+			visibility += (shadowMapDepth > lightSpaceDepth) ? sampleContribution : 0.0;
+		}
+	}
+	return visibility;
+}
+
 // General light constribution function, used by different types of lights
 float4 CalculateLightContribution(
 	float3 normal,
@@ -191,25 +216,10 @@ float4 CalculateDirLightContribution(
 
 		// Sample shadow map if inside
 		// (setting border color on sampler seems to be deprecated)
-		float shadowLookupMin = PCF_SPACING;
-		float shadowLookupMax = 1.0 - PCF_SPACING;
-
-		if (shadowMapCoord0.x >= shadowLookupMin && shadowMapCoord0.x <= shadowLookupMax &&
-			shadowMapCoord0.y >= shadowLookupMin && shadowMapCoord0.y <= shadowLookupMax)
+		if (CoveredByShadowMap(shadowMapCoord0, LEVEL_0_PCF_SPACING))
 		{
-			visibility = 0.0;
 			// Sample 9 points around actual coordinate, 3x3 grid
-			for (int x = -1; x <= 1; x++)
-			{
-				for (int y = -1; y <= 1; y++)
-				{
-					float2 offset = PCF_SPACING * float2(x, y);
-					float shadowMapDepth = tex2D(ShadowMapSampler0, shadowMapCoord0 + offset).x;
-					float lightSpaceDepth = lightSpacePos0.z / lightSpacePos0.w;
-					float sampleContribution = 1.0 / 9.0;
-					visibility += ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? sampleContribution : 0.0;
-				}
-			}
+			visibility = SampleShadowMapPCF(ShadowMapSampler0, shadowMapCoord0, lightSpacePos0, LEVEL_0_PCF_SPACING);
 		}
 		else
 		{
@@ -217,12 +227,9 @@ float4 CalculateDirLightContribution(
 			float2 shadowMapCoord1 = 0.5 * lightSpacePos1.xy / lightSpacePos1.w + float2(0.5, 0.5);
 			shadowMapCoord1.y = 1.0 - shadowMapCoord1.y;
 
-			if (shadowMapCoord1.x >= shadowLookupMin && shadowMapCoord1.x <= shadowLookupMax &&
-				shadowMapCoord1.y >= shadowLookupMin && shadowMapCoord1.y <= shadowLookupMax)
+			if (CoveredByShadowMap(shadowMapCoord1, LEVEL_1_PCF_SPACING))
 			{
-				float shadowMapDepth = tex2D(ShadowMapSampler1, shadowMapCoord1).x;
-				float lightSpaceDepth = lightSpacePos1.z / lightSpacePos1.w;
-				visibility = ((shadowMapDepth + DEPTH_BIAS) > lightSpaceDepth) ? 1.0 : 0.0;
+				visibility = SampleShadowMapPCF(ShadowMapSampler1, shadowMapCoord1, lightSpacePos1, LEVEL_1_PCF_SPACING);
 			}
 		}
 

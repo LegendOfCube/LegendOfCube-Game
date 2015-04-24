@@ -43,6 +43,7 @@ namespace LegendOfCube.Engine.Graphics
 		private RenderTarget2D shadowRenderTarget0;
 		private RenderTarget2D shadowRenderTarget1;
 
+		private RasterizerState shadowMapRasterizerState;
 
 		// Store an array that's reused for each entity
 		// (very high allocation count when profiling otherwise)
@@ -83,6 +84,13 @@ namespace LegendOfCube.Engine.Graphics
 				DiffuseColor = new Color(0x09, 0xCD, 0xDA).ToVector3(),
 				VertexColorEnabled = false,
 				TextureEnabled = false,
+			};
+
+			// For front-face culling when rendering shadow map, which
+			// is one method for alleviating precision problems
+			shadowMapRasterizerState = new RasterizerState
+			{
+				CullMode = CullMode.CullClockwiseFace
 			};
 
 			this.standardEffect = StandardEffect.LoadEffect(game.Content);
@@ -157,9 +165,11 @@ namespace LegendOfCube.Engine.Graphics
 		private void RenderShadowMap(World world, List<Entity> entities, float width, float height, RenderTarget2D renderTarget, out Matrix shadowMatrix)
 		{
 			RenderTargetBinding[] origRenderTargets = new RenderTargetBinding[game.GraphicsDevice.GetRenderTargets().Length];
+			RasterizerState origRasterizerState = game.GraphicsDevice.RasterizerState;
 			game.GraphicsDevice.GetRenderTargets().CopyTo(origRenderTargets, 0);
 			game.GraphicsDevice.SetRenderTarget(renderTarget);
 			game.GraphicsDevice.Clear(Color.White);
+			game.GraphicsDevice.RasterizerState = shadowMapRasterizerState;
 			standardEffect.SetShadowMapRendering(true);
 
 			// The shadow map is based on an orthographic projection that could
@@ -167,8 +177,8 @@ namespace LegendOfCube.Engine.Graphics
 			// from the player with its normal parallel to the light direction
 			// and pointed toward the player
 			Vector3 lightTarget = world.Transforms[world.Player.Id].Translation;
-			Matrix lightView = Matrix.CreateLookAt(lightTarget - 300 * world.LightDirection, lightTarget, Vector3.Forward);
-			Matrix lightProjection = Matrix.CreateOrthographic(width, height, 100.0f, 1000.0f);
+			Matrix lightView = Matrix.CreateLookAt(lightTarget - 1500.0f * world.LightDirection, lightTarget, Vector3.Forward);
+			Matrix lightProjection = Matrix.CreateOrthographic(width, height, 100.0f, 3000.0f);
 
 			standardEffect.SetViewProjection(ref lightView, ref lightProjection);
 
@@ -206,6 +216,7 @@ namespace LegendOfCube.Engine.Graphics
 					RenderEntityWithBasicEffect(entity, model, transforms, world, ref worldTransform, ref lightView, ref lightProjection);
 				}
 			}
+			game.GraphicsDevice.RasterizerState = origRasterizerState;
 			game.GraphicsDevice.SetRenderTargets(origRenderTargets);
 			standardEffect.SetShadowMapRendering(false);
 			shadowMatrix = lightView * lightProjection;
