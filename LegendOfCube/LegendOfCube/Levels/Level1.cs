@@ -382,7 +382,7 @@ namespace LegendOfCube.Levels
 				.WithPosition(0, 30, 40)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG | Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
-
+			
 			// Catwalk lower
 			catWalkStartBuilder.Copy().WithPosition(new Vector3(0, -40, -15.3f)).AddToWorld(world);
 			catWalkMiddleBuilder.Copy().WithPosition(new Vector3(10, -40, -15.3f)).AddToWorld(world);
@@ -420,13 +420,34 @@ namespace LegendOfCube.Levels
 
 			// Active trains
 			railsBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 10).AddToWorld(world);
-			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 70).AddToWorld(world);
-			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(-10, -66, 70).AddToWorld(world);
-			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 40).AddToWorld(world);
-			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 10).AddToWorld(world);
+			cart2Builder.Copy()
+				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithVelocity(Vector3.UnitY * 20, 0)
+				.WithAI(new[] { new Vector3(-10, -70, -50), new Vector3(-10, -70, 167), new Vector3(-10, -150, 0) }, false)
+				.WithPosition(-10, -70, 120)
+				.AddToWorld(world);
+			containerGreenBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithVelocity(Vector3.UnitY * 20, 0)
+				.WithAI(new[] { new Vector3(-10, -66, -50), new Vector3(-10, -66, 120), new Vector3(-10, -150, 0) }, false)
+				.WithPosition(-10, -66, 70)
+				.AddToWorld(world);/*
+			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithVelocity(Vector3.UnitY * 20, 0)
+				.WithAI(new[] { new Vector3(-10, -70, -50), new Vector3(-10, -70, 140), new Vector3(-10, -150, 0) }, false)
+				.WithPosition(-10, -70, 40)
+				.AddToWorld(world);
+			cart2Builder.Copy()
+				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithVelocity(Vector3.UnitY * 20, 0)
+				.WithAI(new[] { new Vector3(-10, -70, -40), new Vector3(-10, -70, 130), new Vector3(-10, -150, 0) }, false)
+				.WithPosition(-10, -70, 20)
+				.AddToWorld(world);/*
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(-10, -66, 10).AddToWorld(world);
+				.WithVelocity(Vector3.UnitY * 20, 0)
+				.WithAI(new[] { new Vector3(-10, -70, -40), new Vector3(-10, -70, 120), new Vector3(-10, -100, 0) }, false)
+				.WithPosition(-10, -66, 10)
+				.AddToWorld(world);*/
 			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, -20).AddToWorld(world);
 			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-10, -70, 104).AddToWorld(world);
 
@@ -439,8 +460,8 @@ namespace LegendOfCube.Levels
 			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, 10).AddToWorld(world);
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithPosition(-30, -66, 10).AddToWorld(world);
-			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, -20).AddToWorld(world);
-			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-30, -70, 104).AddToWorld(world);
+			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, -20).AddToWorld(world);
+			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-30, -70, 104).AddToWorld(world);
 			return world;
 		}
 	}

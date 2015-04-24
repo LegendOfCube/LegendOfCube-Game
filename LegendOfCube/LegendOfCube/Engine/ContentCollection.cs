@@ -653,7 +653,7 @@ namespace LegendOfCube.Engine
 					DiffuseColor = Color.DarkGreen.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+				//Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
 			};
 
 			Cart1 = new ModelData
