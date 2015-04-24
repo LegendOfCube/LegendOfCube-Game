@@ -11,12 +11,13 @@ namespace LegendOfCube.Levels
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-			World world = new World(1000);
-
-			world.SpawnPoint = new Vector3(0, 2, 0);
-			world.LightDirection = Vector3.Normalize(new Vector3(3.0f, -1.0f, -3.0f));
-			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 0, 0);
-			world.AmbientIntensity = 0.45f;
+			World world = new World(1000)
+			{
+				SpawnPoint = new Vector3(0, 2, 0),
+				LightDirection = Vector3.Normalize(new Vector3(3.0f, -1.0f, -3.0f)),
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
+				AmbientIntensity = 0.45f
+			};
 
 			var wallDeathEffect = contentCollection.BrickWall.EffectParams.ShallowCopy();
 			wallDeathEffect.DiffuseColor = Color.Red.ToVector4();

@@ -78,6 +78,7 @@
     <Compile Include="Engine\BoundingVolumes\AABB.cs" />
     <Compile Include="Engine\BoundingVolumes\IntersectionTests.cs" />
     <Compile Include="Engine\AISystem.cs" />
+    <Compile Include="Engine\Camera.cs" />
     <Compile Include="Engine\CubeMath\MathUtils.cs" />
     <Compile Include="Engine\CubeMath\Matrix3x3.cs" />
     <Compile Include="Engine\BoundingVolumes\OBB.cs" />
@@ -99,12 +100,12 @@
     <Compile Include="Levels\Level13.cs" />
     <Compile Include="Levels\LevelConstants.cs" />
     <Compile Include="Levels\StairwayLevel.cs" />
+    <Compile Include="Screens\BaseMenuScreen.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
-    <Compile Include="Screens\MenuItem.cs" />
-    <Compile Include="Screens\MenuScreen.cs" />
+    <Compile Include="Screens\MenuItems.cs" />
+    <Compile Include="Screens\OptionsScreen.cs" />
     <Compile Include="Screens\StartScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
-    <Compile Include="Engine\Input\MenuInputSystem.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevel.cs" />
     <Compile Include="Levels\BeanstalkLevel.cs" />

@@ -28,12 +28,12 @@ namespace LegendOfCube.Engine
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public InputSystem(Game game, ScreenSystem screenSystem, InputHelper inputHelper)
+		public InputSystem(Game game, ScreenSystem screenSystem)
 		{
 			this.game = game;
 			this.screenSystem = screenSystem;
 
-			iH = inputHelper;
+			iH = InputHelper.Instance;
 		}
 
 		// Public methods
@@ -53,7 +53,7 @@ namespace LegendOfCube.Engine
 
 			if (iH.KeyWasJustPressed(Keys.Escape) || iH.KeyWasJustPressed(Keys.Tab) || iH.ButtonWasJustPressed(Buttons.Start))
 			{
-				screenSystem.AddScreen(new PauseScreen(game, screenSystem, iH));
+				screenSystem.AddScreen(new PauseScreen(game, screenSystem));
 			}
 
 			if (iH.KeyWasJustPressed(Keys.F1))
@@ -67,7 +67,7 @@ namespace LegendOfCube.Engine
 
 			if (iH.KeyWasJustPressed(Keys.R) || iH.ButtonWasJustPressed(Buttons.Back))
 			{
-				if (world.WinState)
+				if (world.WinState || world.CheckpointsPassed == 0)
 				{
 					screenSystem.ResetGameScreen();
 				}

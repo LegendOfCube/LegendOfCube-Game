@@ -162,7 +162,7 @@ namespace LegendOfCube.Engine
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 0.5f, 0.0f), 1, 1, 1),
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseTexture = cm.Load<Texture>("Models/Cube/testdiff"),
+					DiffuseColor = new Vector4(new Vector3(0.3f), 1.0f),
 					EmissiveTexture = cm.Load<Texture>("Models/Cube/testemissive"),
 					SpecularTexture = cm.Load<Texture>("Models/Cube/cubespec"),
 					//SpecularColor = Color.Gray.ToVector4(),

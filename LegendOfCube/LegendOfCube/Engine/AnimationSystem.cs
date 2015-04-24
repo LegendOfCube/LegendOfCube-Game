@@ -27,10 +27,16 @@ namespace LegendOfCube.Engine
 			Color newColor;
 			if (cubeState.OnWall) newColor = new Color(255, 108, 0);
 			else if (cubeState.OnGround) newColor = new Color(0, 247, 255);
-			else newColor = new Color(255, 246, 0);
+			else newColor = new Color(243, 243, 21);//(255, 246, 0);
+
+			var maxspeed = 15;
+			if (!cubeState.OnGround && !cubeState.OnWall)
+			{
+				maxspeed = 20;
+			}
 
 			float speed = world.Velocities[e.Id].Length();
-			float brightness = MathUtils.MapRangeToRange(speed, 0.0f, 20.0f, 0.6f, 1.0f);
+			float brightness = MathUtils.MapRangeToRange(speed, 0.0f, maxspeed, 0.3f, 1.0f);
 
 			Vector4 vecColor = (newColor * brightness).ToVector4();
 			newEffect.EmissiveColor = vecColor;
