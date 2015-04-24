@@ -53,6 +53,7 @@ namespace LegendOfCube.Engine
 
 		// World variables
 
+		public int CheckpointsPassed;
 		public Vector3 SpawnPoint;
 		public Vector3 InitialViewDirection;
 
@@ -123,6 +124,7 @@ namespace LegendOfCube.Engine
 
 			Gravity = new Vector3(0.0f, -20f, 0.0f);
 			SpawnPoint = new Vector3(0, 25, 0);
+			CheckpointsPassed = 0;
 
 			LightDirection = new Vector3(0, -1, 0);
 			AmbientIntensity = 0.5f;
