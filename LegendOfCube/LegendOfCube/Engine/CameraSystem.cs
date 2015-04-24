@@ -76,7 +76,7 @@ namespace LegendOfCube.Engine
 			Vector3 targetCameraDirection;
 			Vector3 movementDirection = world.Velocities[world.Player.Id];
 			Vector2 groundMovement = new Vector2(movementDirection.X, movementDirection.Z);
-			bool moveTowardCamera = Vector3.Dot(oldRelNewTargetPos, movementDirection) > 0.0f;
+			bool moveTowardCamera = Vector2.Dot(new Vector2(oldRelNewTargetPos.X, oldRelNewTargetPos.Z), new Vector2(movementDirection.X, movementDirection.Z)) > 0.0f;
 			// If under threshold, use previous value
 			bool moveAlongGround = groundMovement.Length() > 0.5f;
 			if (moveAlongGround)
@@ -125,7 +125,7 @@ namespace LegendOfCube.Engine
 				}
 				else
 				{
-					newTiltAngle = oldRelNewTargetTiltAngle;
+					newTiltAngle = MathUtils.ClampLerp(TILT_CORRECT_SPEED/3 * delta, oldRelNewTargetTiltAngle, MathHelper.ToRadians(BASE_TILT));
 				}
 				newGroundAngle = oldRelNewTargetGroundAngle;
 			}
