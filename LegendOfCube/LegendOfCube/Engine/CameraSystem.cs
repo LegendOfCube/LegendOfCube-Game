@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 
@@ -27,6 +28,9 @@ namespace LegendOfCube.Engine
 
 		// Defines to what tilt the camera will aim to see target from
 		private const float BASE_TILT = 30.0f;
+
+		// Define what part of a semicircle in which the camera won't adjust when moving backwards, in [0, 180]
+		private const float REVERSE_LOCK_ANGLE = 30.0f;
 
 		// Time in seconds until manual adjustments starts to reset
 		private const double CAMERA_RESET_TIME = 0.1;
@@ -81,7 +85,10 @@ namespace LegendOfCube.Engine
 			Vector3 targetCameraDirection;
 			Vector3 movementDirection = world.Velocities[world.Player.Id];
 			Vector2 groundMovement = new Vector2(movementDirection.X, movementDirection.Z);
-			bool moveTowardCamera = Vector2.Dot(new Vector2(oldRelNewTargetPos.X, oldRelNewTargetPos.Z), new Vector2(movementDirection.X, movementDirection.Z)) > 0.0f;
+			Vector2 groundMovementDirection = Vector2.Normalize(groundMovement);
+			Vector2 oldCameraRelNewTargetDir = Vector2.Normalize(new Vector2(oldRelNewTargetPos.X, oldRelNewTargetPos.Z));
+			bool moveTowardCamera = Vector2.Dot(oldCameraRelNewTargetDir, groundMovementDirection) > Math.Cos(MathHelper.ToRadians(REVERSE_LOCK_ANGLE / 2.0f));
+			
 			// If under threshold, use previous value
 			bool moveAlongGround = groundMovement.Length() > 0.5f;
 			if (moveAlongGround)
