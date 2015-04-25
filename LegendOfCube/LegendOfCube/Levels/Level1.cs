@@ -65,6 +65,7 @@ namespace LegendOfCube.Levels
 			var trainDoorBuilder = new EntityBuilder().WithModelData(contentCollection.TrainDoor);
 			var trainDoorClosedBuilder = new EntityBuilder().WithModelData(contentCollection.TrainDoorClosed);
 			var railsBuilder = new EntityBuilder().WithModelData(contentCollection.Rails);
+			var locomotiveBuilder = new EntityBuilder().WithModelData(contentCollection.Locomotive);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
@@ -423,26 +424,30 @@ namespace LegendOfCube.Levels
 			cart2Builder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -80), new Vector3(-10, -70, 170), new Vector3(-10, -170, 0) }, false)
+				.WithAI(new[] { new Vector3(-10, -70, -95), new Vector3(-10, -70, 170), new Vector3(-10, -170, 0) }, false)
 				.AddToWorld(world);
 			containerGreenBuilder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -66, -80), new Vector3(-10, -66, 170), new Vector3(-10, -166, 0) }, false)
+				.WithAI(new[] { new Vector3(-10, -66, -95), new Vector3(-10, -66, 170), new Vector3(-10, -166, 0) }, false)
 				.AddToWorld(world);
 			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -55), new Vector3(-10, -70, 195), new Vector3(-10, -170, 25) }, false)
+				.WithAI(new[] { new Vector3(-10, -70, -70), new Vector3(-10, -70, 195), new Vector3(-10, -170, 25) }, false)
 				.AddToWorld(world);
 			cart2Builder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -105), new Vector3(-10, -70, 145), new Vector3(-10, -170, -25) }, false)
+				.WithAI(new[] { new Vector3(-10, -70, -120), new Vector3(-10, -70, 145), new Vector3(-10, -170, -25) }, false)
 				.AddToWorld(world);
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -66, -105), new Vector3(-10, -66, 145), new Vector3(-10, -166, -25) }, false)
-				.WithPosition(-10, -66, 10)
+				.WithAI(new[] { new Vector3(-10, -66, -120), new Vector3(-10, -66, 145), new Vector3(-10, -166, -25) }, false)
+				.AddToWorld(world);
+			locomotiveBuilder.Copy()
+				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90)))
+				.WithVelocity(Vector3.UnitY * 20, 0)
+				.WithAI(new[] { new Vector3(-10, -70, -42), new Vector3(-10, -70, 223), new Vector3(-10, -170, 53) }, false)
 				.AddToWorld(world);
 			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, -20).AddToWorld(world);
 			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-10, -70, 104).AddToWorld(world);
