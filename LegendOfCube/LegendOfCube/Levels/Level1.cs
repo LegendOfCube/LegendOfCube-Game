@@ -423,25 +423,25 @@ namespace LegendOfCube.Levels
 			cart2Builder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -80), new Vector3(-10, -70, 150), new Vector3(-10, -170, 0) }, false)
+				.WithAI(new[] { new Vector3(-10, -70, -80), new Vector3(-10, -70, 170), new Vector3(-10, -170, 0) }, false)
 				.AddToWorld(world);
 			containerGreenBuilder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -66, -80), new Vector3(-10, -66, 150), new Vector3(-10, -166, 0) }, false)
+				.WithAI(new[] { new Vector3(-10, -66, -80), new Vector3(-10, -66, 170), new Vector3(-10, -166, 0) }, false)
 				.AddToWorld(world);
 			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -55), new Vector3(-10, -70, 175), new Vector3(-10, -170, 25) }, false)
+				.WithAI(new[] { new Vector3(-10, -70, -55), new Vector3(-10, -70, 195), new Vector3(-10, -170, 25) }, false)
 				.AddToWorld(world);
 			cart2Builder.Copy()
 				.WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -70, -105), new Vector3(-10, -70, 125), new Vector3(-10, -170, -25) }, false)
+				.WithAI(new[] { new Vector3(-10, -70, -105), new Vector3(-10, -70, 145), new Vector3(-10, -170, -25) }, false)
 				.AddToWorld(world);
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
 				.WithVelocity(Vector3.UnitY * 20, 0)
-				.WithAI(new[] { new Vector3(-10, -66, -105), new Vector3(-10, -66, 125), new Vector3(-10, -166, -25) }, false)
+				.WithAI(new[] { new Vector3(-10, -66, -105), new Vector3(-10, -66, 145), new Vector3(-10, -166, -25) }, false)
 				.WithPosition(-10, -66, 10)
 				.AddToWorld(world);
 			trainDoorBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, -20).AddToWorld(world);
@@ -458,6 +458,7 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(-30, -66, 10).AddToWorld(world);
 			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, -20).AddToWorld(world);
 			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-30, -70, 104).AddToWorld(world);
+			
 			return world;
 		}
 	}
