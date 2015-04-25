@@ -62,7 +62,7 @@ namespace LegendOfCube.Screens
 			List<Res> resolutionList = new List<Res>();
 			List<string> resolutionStrList = new List<string>();
 			int i = 0;
-			foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+			foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes.OrderBy(mode => mode.Width).ThenBy(mode => mode.Height))
 			{
 				resolutionList.Add(new Res(mode.Width, mode.Height));
 				resolutionStrList.Add(mode.Width + "x" + mode.Height);
