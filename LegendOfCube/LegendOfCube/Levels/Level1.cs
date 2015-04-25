@@ -406,17 +406,17 @@ namespace LegendOfCube.Levels
 			
 			//Floor decor
 			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 40).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(30, -70, 40).AddToWorld(world);
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -59.9f, 40).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(30, -59.9f, 40).AddToWorld(world);
 			containerBlueBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 50).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(30, -70, 50).AddToWorld(world);
 			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -59.9f, 50).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(30, -59.9f, 50).AddToWorld(world);
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-30)))
-				.WithPosition(30, -70, 60).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(30, -70, 60).AddToWorld(world);
 			containerBlueBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(30)))
-				.WithPosition(15, -70, 25).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(15, -70, 25).AddToWorld(world);
 
 			// Active trains
 			railsBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-10, -70, 10).AddToWorld(world);
@@ -450,12 +450,12 @@ namespace LegendOfCube.Levels
 			// Passive trains
 			railsBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, 10).AddToWorld(world);
 			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, 70).AddToWorld(world);
-			containerGreenBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(-30, -66, 70).AddToWorld(world);
+			containerBlueBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(-30, -66, 70).AddToWorld(world);
 			cart1Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, 40).AddToWorld(world);
 			cart2Builder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, 10).AddToWorld(world);
 			containerRedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(-30, -66, 10).AddToWorld(world);
+				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(-30, -66, 10).AddToWorld(world);
 			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, -20).AddToWorld(world);
 			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-30, -70, 104).AddToWorld(world);
 			return world;
