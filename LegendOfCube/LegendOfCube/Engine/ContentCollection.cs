@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Engine
 {
@@ -19,6 +20,9 @@ namespace LegendOfCube.Engine
 		public SoundEffect hit { get; private set; }
 		public SoundEffect select { get; private set; }
 		public SoundEffect select2 { get; private set; }
+		public Song music { get; private set; }
+		public Song level1amb { get; private set; }
+		public Song level1full { get; private set; }
 
 		public ModelData PlayerCube2 { get; private set; }
 		public ModelData PlayerCube { get; private set; }
@@ -125,6 +129,8 @@ namespace LegendOfCube.Engine
 			hit = cm.Load<SoundEffect>("SoundEffects/hit");
 			select = cm.Load<SoundEffect>("SoundEffects/select");
 			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+			music = cm.Load<Song>("SoundEffects/LoC_music");
+			level1amb = cm.Load<Song>("SoundEffects/LoC_level1_amb");
 
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
 			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
