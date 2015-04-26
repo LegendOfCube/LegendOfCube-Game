@@ -67,6 +67,7 @@ namespace LegendOfCube.Screens
 				if (!s.BackgroundRender)
 				{
 					firstRender = i + 1;
+					break;
 				}
 			}
 
