@@ -43,7 +43,7 @@ namespace LegendOfCube.Screens
 			AddSpace(35.0f);
 
 			AddClickable("Reset to defaults", () => { cfg.ResetToDefaults(); this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Reset to defaults"; });
-			AddClickable("Main Menu", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "null"; });
+			AddClickable("Back", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Back"; });
 
 		}
 
