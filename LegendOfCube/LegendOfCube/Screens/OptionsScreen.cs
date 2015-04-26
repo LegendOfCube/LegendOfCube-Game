@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine.Input;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,12 +19,17 @@ namespace LegendOfCube.Screens
 		private Res[] resolutions;
 		int startRes = 0;
 
+		private int[] fovValues;
+		private string[] fovStrings;
+		private int startFovIndex;
+
 		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) { }
 
 		internal sealed override void InitializeScreen()
 		{
 			cfg = GlobalConfig.Instance;
 			LoadAvailableResolutions();
+			LoadFovs();
 
 			AddTitle("Options");
 			AddDescription("Options are stored in \"Documents/My Games/Legend of Cube/Config.ini\"");
@@ -35,6 +41,7 @@ namespace LegendOfCube.Screens
 			AddOnOffSelector("Fullscreen", cfg.Fullscreen, (bool b) => { cfg.Fullscreen = b; });
 			AddOnOffSelector("VSync", cfg.VSync, (bool b) => { cfg.VSync = b; });
 			AddOnOffSelector("MultiSampling", cfg.MultiSampling, (bool b) => { cfg.MultiSampling = b; });
+			AddMultiChoiceSelector("FOV", startFovIndex, fovStrings, (int i) => { cfg.Fov = fovValues[i]; });
 			AddSpace(35.0f);
 
 			AddHeading("Controls");
@@ -45,6 +52,22 @@ namespace LegendOfCube.Screens
 			AddClickable("Reset to defaults", () => { cfg.ResetToDefaults(); this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Reset to defaults"; });
 			AddClickable("Back", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Back"; });
 
+		}
+
+		private void LoadFovs()
+		{
+			const int UI_MIN = 40;
+			const int UI_MAX = 120;
+			const int SPACING = 5;
+			fovValues = new int[(UI_MAX - UI_MIN) / SPACING + 1];
+			int i = 0;
+			for (int fov = UI_MIN; fov <= UI_MAX; fov += SPACING)
+			{
+				fovValues[i] = fov;
+				i++;
+			}
+			startFovIndex = MathUtils.Clamp((int)((GlobalConfig.Instance.Fov - UI_MIN) / SPACING), 0, fovValues.Length);
+			fovStrings = fovValues.Select(fov => fov.ToString()).ToArray();
 		}
 
 		internal sealed override void OnExit()

@@ -39,6 +39,7 @@ namespace LegendOfCube.Engine
 		public int InternalResY;
 		public bool VSync;
 		public bool MultiSampling;
+		public float Fov;
 
 		// Controls
 		public bool RightStickInvertedX;
@@ -55,6 +56,7 @@ namespace LegendOfCube.Engine
 			this.MultiSampling = SanitizeIniBool("Graphics", "MultiSampling", true);
 			this.InternalResX = SanitizeIniInt("Graphics", "InternalResX", 320, 15360, 1280);
 			this.InternalResY = SanitizeIniInt("Graphics", "InternalResY", 240, 8640, 800);
+			this.Fov = SanitizeIniFloat("Graphics", "FOV", 40.0f, 120.0f, 70.0f);
 
 			// Controls
 			this.RightStickInvertedX = SanitizeIniBool("Controls", "RightStickInvertedX", false);
@@ -71,6 +73,7 @@ namespace LegendOfCube.Engine
 			iniFile.WriteBool("Graphics", "MultiSampling", MultiSampling);
 			iniFile.WriteInt("Graphics", "InternalResX", InternalResX);
 			iniFile.WriteInt("Graphics", "InternalResY", InternalResY);
+			iniFile.WriteFloat("Graphics", "FOV", Fov);
 
 			// Controls
 			iniFile.WriteBool("Controls", "RightStickInvertedX", RightStickInvertedX);
