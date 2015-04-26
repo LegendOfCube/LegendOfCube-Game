@@ -59,14 +59,15 @@ namespace LegendOfCube.Screens
 			const int UI_MIN = 40;
 			const int UI_MAX = 120;
 			const int SPACING = 5;
-			fovValues = new int[(UI_MAX - UI_MIN) / SPACING + 1];
+			int lastIndex = (UI_MAX - UI_MIN) / SPACING;
+			fovValues = new int[lastIndex + 1];
 			int i = 0;
 			for (int fov = UI_MIN; fov <= UI_MAX; fov += SPACING)
 			{
 				fovValues[i] = fov;
 				i++;
 			}
-			startFovIndex = MathUtils.Clamp((int)((GlobalConfig.Instance.Fov - UI_MIN) / SPACING), 0, fovValues.Length);
+			startFovIndex = MathUtils.Clamp((int)((GlobalConfig.Instance.Fov - UI_MIN) / SPACING), 0, lastIndex);
 			fovStrings = fovValues.Select(fov => fov.ToString()).ToArray();
 		}
 
