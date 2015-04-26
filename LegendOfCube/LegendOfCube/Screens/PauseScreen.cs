@@ -17,6 +17,8 @@ namespace LegendOfCube.Screens
 
 			AddClickable("Resume", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Return to game"; });
 			AddClickable("Options", () => { ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem)); return "Options"; });
+			AddSpace(20.0f);
+	
 			AddClickable("Main Menu", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); ScreenSystem.RemoveCurrentScreen(); return "Main Menu"; });
 			AddClickable("Exit Game", () => { this.OnExit(); Game.Exit(); return "Exit Game"; });
 		}
