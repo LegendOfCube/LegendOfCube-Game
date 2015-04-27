@@ -74,7 +74,7 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-			MediaPlayer.Play(contentCollection.level1amb);
+			MediaPlayer.Play(contentCollection.level1full);
 			//MediaPlayer.Play(contentCollection.music);
 			MediaPlayer.IsRepeating = true;
 

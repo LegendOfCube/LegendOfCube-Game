@@ -131,6 +131,7 @@ namespace LegendOfCube.Engine
 			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
 			music = cm.Load<Song>("SoundEffects/LoC_music");
 			level1amb = cm.Load<Song>("SoundEffects/LoC_level1_amb");
+			level1full = cm.Load<Song>("SoundEffects/LoC_full");
 
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
 			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
