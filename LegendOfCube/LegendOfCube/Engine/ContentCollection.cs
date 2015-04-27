@@ -744,6 +744,7 @@ namespace LegendOfCube.Engine
 					NormalTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-n"),
 					SpecularTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-s")
 				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.5f, 0), 1.5f, 1.3f, 3.3f)
 			};
 			
 			WoodenPlatform = new ModelData
