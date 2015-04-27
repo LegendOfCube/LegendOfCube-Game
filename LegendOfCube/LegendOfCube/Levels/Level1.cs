@@ -68,6 +68,8 @@ namespace LegendOfCube.Levels
 			var trainDoorClosedBuilder = new EntityBuilder().WithModelData(contentCollection.TrainDoorClosed);
 			var railsBuilder = new EntityBuilder().WithModelData(contentCollection.Rails);
 			var locomotiveBuilder = new EntityBuilder().WithModelData(contentCollection.Locomotive);
+			var woodenPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.WoodenPlatform);
+			var woodPileBuilder = new EntityBuilder().WithModelData(contentCollection.WoodPile);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
@@ -469,7 +471,9 @@ namespace LegendOfCube.Levels
 				.WithBoundingVolume(OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)).WithPosition(-30, -66, 10).AddToWorld(world);
 			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-30, -70, -20).AddToWorld(world);
 			trainDoorClosedBuilder.Copy().WithTransform(Matrix.CreateScale(0.5f) * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-30, -70, 104).AddToWorld(world);
-			
+
+			woodPileBuilder.Copy().WithTransform(Matrix.CreateScale(3)).WithPosition(10, -70, -3).AddToWorld(world);
+
 			return world;
 		}
 	}

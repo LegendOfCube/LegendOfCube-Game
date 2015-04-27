@@ -72,6 +72,9 @@ namespace LegendOfCube.Engine
 		public ModelData TrainDoorClosed { get; private set; }
 		public ModelData Rails { get; private set; }
 		public ModelData Locomotive { get; private set; }
+		public ModelData WoodPile { get; private set; }
+		public ModelData WoodenPlatform { get; private set; }
+
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
@@ -115,6 +118,8 @@ namespace LegendOfCube.Engine
 		public Model TrainDoorClosedModel { get; private set; }
 		public Model RailsModel { get; private set; }
 		public Model LocomotiveModel { get; private set; }
+		public Model WoodPileModel { get; private set; }
+		public Model WoodenPlatformModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -171,6 +176,8 @@ namespace LegendOfCube.Engine
 			TrainDoorClosedModel = cm.Load<Model>("Models/Train/doorclosed");
 			RailsModel = cm.Load<Model>("Models/Train/rails");
 			LocomotiveModel = cm.Load<Model>("Models/Train/locomotive");
+			WoodPileModel = cm.Load<Model>("Models/Wood_Stack/wood_pile");
+			WoodenPlatformModel = cm.Load<Model>("Models/Wooden_Platform/wood_platform");
 
 
 			placeholderWall = new ModelData
@@ -179,7 +186,8 @@ namespace LegendOfCube.Engine
 				Obb = OBB.CreateAxisAligned(Vector3.Zero, 50, 2, 50),
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseColor = Color.DarkGray.ToVector4(),
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/groundconcrete_d"),
+					//DiffuseColor = Color.DarkGray.ToVector4(),
 				}
 			};
 
@@ -726,6 +734,29 @@ namespace LegendOfCube.Engine
 					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
 				},
 			};
+			
+			WoodPile = new ModelData
+			{
+				Model = WoodPileModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-d"),
+					NormalTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-n"),
+					SpecularTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-s")
+				},
+			};
+			
+			WoodenPlatform = new ModelData
+			{
+				Model = WoodenPlatformModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Wooden_Platform/defuse"),
+					NormalTexture = cm.Load<Texture>("Models/Wooden_Platform/normals"),
+					SpecularTexture = cm.Load<Texture>("Models/Wooden_Platform/spec"),
+				},
+			};
+
 		}
 	}
 }
