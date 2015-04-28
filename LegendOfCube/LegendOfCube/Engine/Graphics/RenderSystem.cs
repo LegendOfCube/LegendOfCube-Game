@@ -344,7 +344,8 @@ namespace LegendOfCube.Engine.Graphics
 			}
 			foreach (var mesh in model.Meshes)
 			{
-				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
+				Matrix worldMatrix;
+				Matrix.Multiply(ref transforms[mesh.ParentBone.Index], ref worldTransform, out worldMatrix);
 				standardEffect.SetWorld(ref worldMatrix);
 				mesh.Draw();
 			}
