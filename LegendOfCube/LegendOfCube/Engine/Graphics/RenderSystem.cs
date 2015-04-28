@@ -51,6 +51,8 @@ namespace LegendOfCube.Engine.Graphics
 
 		private readonly List<Entity> renderableEntities = new List<Entity>();
 		private readonly List<Entity> visibleEntities = new List<Entity>();
+		private bool[] standardEffectApplied;
+
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -139,6 +141,11 @@ namespace LegendOfCube.Engine.Graphics
 					visibleEntities.Add(entity);
 				}*/
 				visibleEntities.Add(entity);
+			}
+
+			if (standardEffectApplied == null || standardEffectApplied.Length < world.MaxNumEntities)
+			{
+				standardEffectApplied = new bool[world.MaxNumEntities];
 			}
 
 			standardEffect.PrepareRendering();
@@ -278,6 +285,7 @@ namespace LegendOfCube.Engine.Graphics
 
 			// Draw with solid color BasicEffect what will be seen through walls
 			GraphicsUtils.ApplyEffectOnModel(model, occludedEffect);
+			standardEffectApplied[world.Player.Id] = false;
 			foreach (var mesh in model.Meshes)
 			{
 				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
@@ -329,7 +337,11 @@ namespace LegendOfCube.Engine.Graphics
 
 		private void RenderModelWithStandardEffect(Entity entity, Model model, Matrix[] transforms, ref Matrix worldTransform)
 		{
-			standardEffect.ApplyOnModel(model);
+			if (!standardEffectApplied[entity.Id])
+			{
+				standardEffect.ApplyOnModel(model);
+				standardEffectApplied[entity.Id] = true;
+			}
 			foreach (var mesh in model.Meshes)
 			{
 				var worldMatrix = transforms[mesh.ParentBone.Index] * worldTransform;
