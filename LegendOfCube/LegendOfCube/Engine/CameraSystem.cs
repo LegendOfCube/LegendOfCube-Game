@@ -48,7 +48,9 @@ namespace LegendOfCube.Engine
 				viewDirection = Vector3.Down;
 			}
 			lastKnownDirection = viewDirection;
-			world.Camera = new Camera(target - MAX_DISTANCE * viewDirection, target);
+			var camera = new Camera(target - MAX_DISTANCE * viewDirection, target);
+			camera.Fov = GlobalConfig.Instance.Fov;
+			world.Camera = camera;
 		}
 
 		public void Update(World world, GameTime gameTime, float delta)
@@ -164,6 +166,7 @@ namespace LegendOfCube.Engine
 			// Set new camera in world
 			var newPosition = newTarget + ToCartesian(newDistance, newTiltAngle, newGroundAngle);
 			Camera newCamera = new Camera(newPosition, newTarget);
+			newCamera.Fov = GlobalConfig.Instance.Fov;
 			world.Camera = newCamera;
 
 			lastKnownDirection = targetCameraDirection;

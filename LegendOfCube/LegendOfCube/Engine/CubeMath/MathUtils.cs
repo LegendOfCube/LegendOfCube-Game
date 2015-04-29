@@ -87,5 +87,23 @@ namespace LegendOfCube.Engine.CubeMath
 			return Lerp(MathHelper.Clamp(amount, 0.0f, 1.0f), start, end);
 		}
 
+		/// <summary>
+		/// Clamps an int value between a min and a max value.
+		/// </summary>
+		public static int Clamp(int value, int min, int max)
+		{
+			if (value < min)
+			{
+				return min;
+			}
+			else if (value > max)
+			{
+				return max;
+			}
+			else
+			{
+				return value;
+			}
+		}
 	}
 }
