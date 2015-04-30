@@ -38,8 +38,8 @@ namespace LegendOfCube.Screens
 
 		protected void AddMenuItem(MenuItem menuItem)
 		{
-			menuItem.SetPosition(nextItemPos);
-			nextItemPos.Y += menuItem.ItemHeight();
+			menuItem.Position = nextItemPos;
+			nextItemPos.Y += menuItem.Height;
 			menuItems.Add(menuItem);
 			if (selected == -1 && menuItem.IsSelectable)
 			{
@@ -49,17 +49,17 @@ namespace LegendOfCube.Screens
 
 		protected void AddTitle(string text)
 		{
-			AddMenuItem(new TextMenuItem(text, 2.0f, this.spriteFont));
+			AddMenuItem(new TextMenuItem(text, 44.0f, this.spriteFont));
 		}
 
 		protected void AddHeading(string text)
 		{
-			AddMenuItem(new TextMenuItem(text, 1.5f, this.spriteFont));
+			AddMenuItem(new TextMenuItem(text, 33.0f, this.spriteFont));
 		}
 
 		protected void AddDescription(string text)
 		{
-			AddMenuItem(new TextMenuItem(text, 0.9f, this.spriteFont));
+			AddMenuItem(new TextMenuItem(text, 20.0f, this.spriteFont));
 		}
 
 		protected void AddSpace(float amount)
@@ -69,17 +69,17 @@ namespace LegendOfCube.Screens
 
 		protected void AddClickable(string text, Func<string> func)
 		{
-			AddMenuItem(new ClickableTextMenuItem(text, 1.0f, this.spriteFont, func));
+			AddMenuItem(new ClickableTextMenuItem(text, 22.0f, this.spriteFont, func));
 		}
 
 		protected void AddOnOffSelector(string name, bool currentValue, Action<bool> setValueFunc)
 		{
-			AddMenuItem(new OnOffSelectorMenuItem(name, this.spriteFont, setValueFunc, currentValue, 200.0f));
+			AddMenuItem(new OnOffSelectorMenuItem(name, 22.0f, this.spriteFont, setValueFunc, currentValue, 200.0f));
 		}
 
 		protected void AddMultiChoiceSelector(string name, int currentValue, string[] options, Action<int> applyOption)
 		{
-			AddMenuItem(new MultiChoiceSelectorMenuItem(name, this.spriteFont, options, currentValue, applyOption, 200.0f));
+			AddMenuItem(new MultiChoiceSelectorMenuItem(name, 22.0f, this.spriteFont, options, currentValue, applyOption, 200.0f));
 		}
 
 		// Inherited functions from Screen
@@ -112,15 +112,15 @@ namespace LegendOfCube.Screens
 			}
 			else if (iH.MenuLeftPressed())
 			{
-				if (selected != -1) menuItems.ElementAt(selected).Update(MenuItemAction.LEFT);
+				if (selected != -1) menuItems.ElementAt(selected).OnAction(MenuItemAction.LEFT);
 			}
 			else if (iH.MenuRightPressed())
 			{
-				if (selected != -1) menuItems.ElementAt(selected).Update(MenuItemAction.RIGHT);
+				if (selected != -1) menuItems.ElementAt(selected).OnAction(MenuItemAction.RIGHT);
 			}
-			else if (iH.MenuActivatePressed(menuItems.ElementAt(selected).ActivationHitBox()))
+			else if (menuItems.ElementAt(selected).IsSelectable && iH.MenuActivatePressed(menuItems.ElementAt(selected).ActivationHitBox()))
 			{
-				if (selected != -1) menuItems.ElementAt(selected).Update(MenuItemAction.ACTIVATE);
+				if (selected != -1) menuItems.ElementAt(selected).OnAction(MenuItemAction.ACTIVATE);
 			}
 			else if (iH.MenuCancelPressed())
 			{
