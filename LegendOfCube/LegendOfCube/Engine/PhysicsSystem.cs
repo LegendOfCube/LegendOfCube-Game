@@ -119,7 +119,7 @@ namespace LegendOfCube.Engine
 				    Math.Abs(Vector3.Dot(collisionAxis, world.PlayerCubeState.GroundAxis)) < 0.3)
 				{
 					const float MAX_STEP_HEIGHT = 0.35f;
-					collisionSolved = PushFromEnitityWithMax(world, i, intersectionId, world.PlayerCubeState.GroundAxis, 0.05f, 15, MAX_STEP_HEIGHT);
+					collisionSolved = PushFromEnitityWithMax(world, i, intersectionId, world.PlayerCubeState.GroundAxis, 0.005f, 15, MAX_STEP_HEIGHT);
 					if (collisionSolved)
 					{
 						collisionAxis = world.PlayerCubeState.GroundAxis;
