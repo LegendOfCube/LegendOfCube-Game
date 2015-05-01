@@ -33,7 +33,6 @@ namespace LegendOfCube.Screens
 		private Texture2D winScreen2;
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
-		private Vector2 fontPos;
 
 		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
 			: base(game, screenSystem, true)
@@ -111,7 +110,8 @@ namespace LegendOfCube.Screens
 				text.Append("OnWall: ");
 				text.AppendLine(world.PlayerCubeState.OnWall.ToString());
 
-				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+				spriteBatch.DrawString(font, text, Vector2.One, Color.Black, 0, Vector2.Zero, 22.0f / font.LineSpacing, SpriteEffects.None, 0);
+				spriteBatch.DrawString(font, text, Vector2.Zero, Color.White, 0, Vector2.Zero, 22.0f / font.LineSpacing, SpriteEffects.None, 0);
 			}
 
 			//Gameover screen
@@ -144,7 +144,6 @@ namespace LegendOfCube.Screens
 			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
 			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
 			font = Game.Content.Load<SpriteFont>("Arial");
-			fontPos = new Vector2(0, 0);
 
 			cameraSystem.OnStart(world);
 		}
