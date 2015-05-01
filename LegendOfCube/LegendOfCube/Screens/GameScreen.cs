@@ -58,7 +58,7 @@ namespace LegendOfCube.Screens
 					Highscore.Instance.AddHighScore(level.Name, world.GameStats.GameTime);
 				}
 				inputSystem.ApplyInput(gameTime, world);
-				animationSystem.OnUpdate(world, delta);
+				animationSystem.Update(world, delta);
 				physicsSystem.ApplyPhysics(world, delta);
 
 				//Small delay before score screen.
@@ -77,7 +77,7 @@ namespace LegendOfCube.Screens
 				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
 				audioSystem.Update(world);
-				animationSystem.OnUpdate(world, delta);
+				animationSystem.Update(world, delta);
 				cameraSystem.Update(world, gameTime, delta);
 			}
 		}

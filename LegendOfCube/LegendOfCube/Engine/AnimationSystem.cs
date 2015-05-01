@@ -10,7 +10,7 @@ namespace LegendOfCube.Engine
 {
 	class AnimationSystem
 	{
-		public void OnUpdate(World world, float delta)
+		public void Update(World world, float delta)
 		{
 			SetCubeColor(world, world.Player);
 		}
