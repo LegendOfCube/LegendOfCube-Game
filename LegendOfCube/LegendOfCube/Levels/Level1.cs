@@ -15,11 +15,13 @@ namespace LegendOfCube.Levels
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
-			World world = new World(1000);			
-			world.SpawnPoint = new Vector3(0, -40, 0);
-			world.LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f));
-			world.CameraPosition = world.SpawnPoint + new Vector3(-3, 3, 0);
-			world.AmbientIntensity = 0.25f;
+			World world = new World(1000)
+			{
+				SpawnPoint = new Vector3(0, -40, 0),
+				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
+				AmbientIntensity = 0.25f
+			};
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)
@@ -70,7 +72,7 @@ namespace LegendOfCube.Levels
 			var locomotiveBuilder = new EntityBuilder().WithModelData(contentCollection.Locomotive);
 			var woodenPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.WoodenPlatform);
 			var woodPileBuilder = new EntityBuilder().WithModelData(contentCollection.WoodPile);
-			var roofBuilder = new EntityBuilder().WithModelData(contentCollection.Roof);
+			//var roofBuilder = new EntityBuilder().WithModelData(contentCollection.Roof);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);

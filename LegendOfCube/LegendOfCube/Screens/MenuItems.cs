@@ -23,17 +23,31 @@ namespace LegendOfCube.Screens
 
 	public abstract class MenuItem
 	{
-		public MenuItem(bool isSelectable)
+		public bool IsSelectable { get; private set; }
+
+		public float Height { get; private set; }
+
+		public Vector2 Position { get; set; }
+
+		public MenuItem(bool isSelectable, float height)
 		{
-			this.IsSelectable = isSelectable;
+			IsSelectable = isSelectable;
+			Height = height;
 		}
 
-		public abstract float ItemHeight();
-		public abstract void SetPosition(Vector2 position);
 		public abstract void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected);
-		public bool IsSelectable { get; private set; }
-		public virtual void Update(MenuItemAction action) { throw new NotImplementedException(); }
-		public virtual Rectangle ActivationHitBox() { return new Rectangle(-1000000, -1000000, 1, 1); }
+		public virtual Rectangle ActivationHitBox() { return new Rectangle(); }
+		public virtual void OnAction(MenuItemAction action) { }
+
+		protected static float GetScale(float fontHeight, SpriteFont spriteFont)
+		{
+			return fontHeight / spriteFont.LineSpacing;
+		}
+
+		protected static float GetScaledHeight(string text, float fontHeight, SpriteFont spriteFont)
+		{
+			return GetScale(fontHeight, spriteFont) * spriteFont.MeasureString(text).Y;
+		}
 	}
 
 	// TextMenuItem (Titles, headings, etc)
@@ -41,30 +55,23 @@ namespace LegendOfCube.Screens
 
 	public class TextMenuItem : MenuItem
 	{
-		private string text;
-		private float height;
+		private readonly string text;
 		private float scale;
-		private Vector2 position;
 
-		public TextMenuItem(string text, float scale, SpriteFont spriteFont)
-			: base(false)
+		public TextMenuItem(string text, float fontHeight, SpriteFont spriteFont)
+			: base(false, GetScaledHeight(text, fontHeight, spriteFont))
 		{
 			this.text = text;
-			this.scale = scale;
-			this.height = spriteFont.MeasureString(text).Y * scale;
+			this.scale = GetScale(fontHeight, spriteFont);
 		}
-
-		public override float ItemHeight() { return height; }
-
-		public override void SetPosition(Vector2 position) { this.position = position; }
 
 		public override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool unused)
 		{
-			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
+			Vector2 shadowFontPos = new Vector2(Position.X + 1, Position.Y + 1);
 			Color shadowColor = Color.Black;
 			Color color = Color.White;
 			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, text, position, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, Position, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 	}
 
@@ -73,11 +80,7 @@ namespace LegendOfCube.Screens
 
 	public class EmptyMenuItem : MenuItem
 	{
-		private float height;
-		private Vector2 position;
-		public EmptyMenuItem(float height) : base(false) { this.height = height; }
-		public override float ItemHeight() { return height; }
-		public override void SetPosition(Vector2 position) { this.position = position; }
+		public EmptyMenuItem(float height) : base(false, height) {}
 		public override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool unused) { }
 	}
 
@@ -87,45 +90,40 @@ namespace LegendOfCube.Screens
 	public class ClickableTextMenuItem : MenuItem
 	{
 		private string text;
-		private float height;
 		private float scale;
-		private Vector2 position;
-		private Func<string> func;
+		private readonly Func<string> onClickAction;
 
 		private SpriteFont spriteFontForMeasuring;
 
-		public ClickableTextMenuItem(string text, float scale, SpriteFont spriteFont, Func<String> func)
-			: base(true)
+		public ClickableTextMenuItem(string text, float fontHeight, SpriteFont spriteFont, Func<String> onClickAction)
+			: base(true, GetScaledHeight(text, fontHeight, spriteFont))
 		{
 			this.text = text;
-			this.scale = scale;
+			this.scale = GetScale(fontHeight, spriteFont);
+			this.onClickAction = onClickAction;
 			this.spriteFontForMeasuring = spriteFont;
-			this.height = spriteFont.MeasureString(text).Y;
-			this.func = func;
 		}
-
-		public sealed override float ItemHeight() { return height; }
-
-		public sealed override void SetPosition(Vector2 position) { this.position = position; }
 
 		public sealed override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected)
 		{
-			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
+			Vector2 shadowFontPos = new Vector2(Position.X + 1, Position.Y + 1);
 			Color shadowColor = Color.Black;
 			Color color = isSelected ? Color.DarkOrange : Color.White;
 			spriteBatch.DrawString(spriteFont, text, shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
-			spriteBatch.DrawString(spriteFont, text, position, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
+			spriteBatch.DrawString(spriteFont, text, Position, color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
-		public sealed override void Update(MenuItemAction menuAction)
+		public sealed override void OnAction(MenuItemAction menuAction)
 		{
-			if (menuAction == MenuItemAction.ACTIVATE) this.text = func();
+			if (menuAction == MenuItemAction.ACTIVATE) this.text = onClickAction();
 		}
 
 		public sealed override Rectangle ActivationHitBox()
 		{
-			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
-						 (int)Math.Round(spriteFontForMeasuring.MeasureString(text).X * scale), (int)Math.Round(ItemHeight()));
+			return new Rectangle((int)Math.Round(Position.X),
+			                     (int)Math.Round(Position.Y),
+			                     (int)Math.Round(spriteFontForMeasuring.MeasureString(text).X * scale),
+			                     (int)Math.Round(Height));
 		}
 	}
 
@@ -135,35 +133,28 @@ namespace LegendOfCube.Screens
 	public class OnOffSelectorMenuItem : MenuItem
 	{
 		private string text;
-		private float height;
 		private float scale;
-		private Vector2 position;
-		private Action<bool> setValue;
+		private Action<bool> onSettingChanged;
 		private bool currentValue;
-		float onOffAlign;
+		private readonly float onOffAlign;
 
 		private SpriteFont spriteFontForMeasuring;
 
-		public OnOffSelectorMenuItem(string text, SpriteFont spriteFont, Action<bool> setValue, bool currentValue, float onOffAlign)
-			: base(true)
+		public OnOffSelectorMenuItem(string text, float fontHeight, SpriteFont spriteFont, Action<bool> onSettingChanged, bool currentValue, float onOffAlign)
+			: base(true, GetScaledHeight(text, fontHeight, spriteFont))
 		{
 			this.text = text + ":";
-			this.scale = 1.0f;
+			this.scale = GetScale(fontHeight, spriteFont);
 			this.spriteFontForMeasuring = spriteFont;
-			this.height = spriteFont.MeasureString(text).Y;
-			this.setValue = setValue;
+			this.onSettingChanged = onSettingChanged;
 			this.currentValue = currentValue;
 			this.onOffAlign = onOffAlign;
 		}
 
-		public sealed override float ItemHeight() { return height; }
-
-		public sealed override void SetPosition(Vector2 position) { this.position = position; }
-
 		public sealed override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected)
 		{
-			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
-			Vector2 fontPos = position;
+			Vector2 shadowFontPos = new Vector2(Position.X + 1, Position.Y + 1);
+			Vector2 fontPos = Position;
 			Color shadowColor = Color.Black;
 			Color normalColor = Color.White;
 			Color color = isSelected ? Color.DarkOrange : normalColor;
@@ -184,7 +175,7 @@ namespace LegendOfCube.Screens
 			spriteBatch.DrawString(spriteFont, "On  ", shadowFontPos, shadowColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 			spriteBatch.DrawString(spriteFont, "On  ", fontPos, currentValue ? activatedColor : nonActivatedColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 
-			float onWidth = spriteFontForMeasuring.MeasureString("On  ").X;
+			float onWidth = scale * spriteFontForMeasuring.MeasureString("On  ").X;
 			shadowFontPos.X += onWidth;
 			fontPos.X += onWidth;
 
@@ -193,29 +184,31 @@ namespace LegendOfCube.Screens
 			spriteBatch.DrawString(spriteFont, "Off", fontPos, !currentValue ? activatedColor : nonActivatedColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
-		public sealed override void Update(MenuItemAction menuAction)
+		public sealed override void OnAction(MenuItemAction menuAction)
 		{
 			if (menuAction == MenuItemAction.RIGHT && currentValue)
 			{
 				currentValue = false;
-				setValue(currentValue);
+				onSettingChanged(currentValue);
 			}
 			else if (menuAction == MenuItemAction.LEFT && !currentValue)
 			{
 				currentValue = true;
-				setValue(currentValue);
+				onSettingChanged(currentValue);
 			}
 			else if (menuAction == MenuItemAction.ACTIVATE)
 			{
 				currentValue = !currentValue;
-				setValue(currentValue);
+				onSettingChanged(currentValue);
 			}
 		}
 
 		public sealed override Rectangle ActivationHitBox()
 		{
-			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
-						 (int)Math.Round((spriteFontForMeasuring.MeasureString(text + ":On  Off").X + onOffAlign) * scale), (int)Math.Round(ItemHeight()));
+			return new Rectangle((int)Math.Round(Position.X),
+			                     (int)Math.Round(Position.Y),
+			                     (int)Math.Round(onOffAlign + spriteFontForMeasuring.MeasureString(":On  Off").X * scale),
+			                     (int)Math.Round(Height));
 		}
 	}
 
@@ -224,38 +217,33 @@ namespace LegendOfCube.Screens
 
 	public class MultiChoiceSelectorMenuItem : MenuItem
 	{
-		private string text;
-		private float height;
+		private readonly string text;
+		private string[] options;
+		private int currentValue;
+		private readonly Action<int> onOptionChanged;
+		private readonly float optionsAlign;
+
 		private float scale;
-		private Vector2 position;
-		string[] options;
-		int currentValue;
-		Action<int> applyOption;
-		float optionsAlign;
-
 		private SpriteFont spriteFontForMeasuring;
+		private readonly float longestChoiceWidth;
 
-		public MultiChoiceSelectorMenuItem(string text, SpriteFont spriteFont, string[] options, int currentValue, Action<int> applyOption, float optionsAlign)
-			: base(true)
+		public MultiChoiceSelectorMenuItem(string text, float fontHeight, SpriteFont spriteFont, string[] options, int currentValue, Action<int> onOptionChanged, float optionsAlign)
+			: base(true, GetScaledHeight(text, fontHeight, spriteFont))
 		{
 			this.text = text + ":";
-			this.scale = 1.0f;
+			this.scale = GetScale(fontHeight, spriteFont);
 			this.spriteFontForMeasuring = spriteFont;
-			this.height = spriteFont.MeasureString(text).Y;
 			this.options = options;
-			this.applyOption = applyOption;
+			this.onOptionChanged = onOptionChanged;
 			this.currentValue = currentValue;
 			this.optionsAlign = optionsAlign;
+			this.longestChoiceWidth = options.Select(optionText => spriteFont.MeasureString(optionText).X).Max() * scale;
 		}
-
-		public sealed override float ItemHeight() { return height; }
-
-		public sealed override void SetPosition(Vector2 position) { this.position = position; }
 
 		public sealed override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool isSelected)
 		{
-			Vector2 shadowFontPos = new Vector2(position.X + 1, position.Y + 1);
-			Vector2 fontPos = position;
+			Vector2 shadowFontPos = new Vector2(Position.X + 1, Position.Y + 1);
+			Vector2 fontPos = Position;
 			Color shadowColor = Color.Black;
 			Color normalColor = Color.White;
 			Color color = isSelected ? Color.DarkOrange : normalColor;
@@ -272,30 +260,33 @@ namespace LegendOfCube.Screens
 			spriteBatch.DrawString(spriteFont, options[currentValue], fontPos, normalColor, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 0);
 		}
 
-		public sealed override void Update(MenuItemAction menuAction)
+		public sealed override void OnAction(MenuItemAction menuAction)
 		{
 			if (menuAction == MenuItemAction.RIGHT && currentValue < options.Length - 1)
 			{
 				currentValue++;
-				applyOption(currentValue);
+				onOptionChanged(currentValue);
 			}
 			else if (menuAction == MenuItemAction.LEFT && currentValue > 0)
 			{
 				currentValue--;
-				applyOption(currentValue);
+				onOptionChanged(currentValue);
 			}
 			else if (menuAction == MenuItemAction.ACTIVATE)
 			{
 				currentValue++;
 				if (currentValue == options.Length) currentValue = 0;
-				applyOption(currentValue);
+				onOptionChanged(currentValue);
 			}
 		}
 
 		public sealed override Rectangle ActivationHitBox()
 		{
-			return new Rectangle((int)Math.Round(position.X), (int)Math.Round(position.Y),
-						 (int)Math.Round((spriteFontForMeasuring.MeasureString(text + ":On  Off").X + optionsAlign) * scale), (int)Math.Round(ItemHeight()));
+			return new Rectangle((int)Math.Round(Position.X),
+			                     (int)Math.Round(Position.Y),
+			                     (int)Math.Round(optionsAlign + longestChoiceWidth),
+			                     (int)Math.Round(Height));
 		}
+
 	}
 }

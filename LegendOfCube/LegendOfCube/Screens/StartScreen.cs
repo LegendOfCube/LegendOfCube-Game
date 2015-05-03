@@ -23,7 +23,7 @@ namespace LegendOfCube.Screens
 			AddClickable("Start Game", () => { ScreenSystem.AddGameScreen(LevelConstants.LEVEL_1); return "Start Game"; });
 			AddClickable("Select Level", () => { ScreenSystem.AddScreen(new LevelSelectScreen(Game, ScreenSystem)); return "Select Level"; });
 			AddClickable("Options", () => { ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem)); return "Options"; });
-			AddSpace(35.0f);
+			AddSpace(20.0f);
 
 			AddClickable("Exit Game", () => { this.OnExit(); return "null"; });
 		}

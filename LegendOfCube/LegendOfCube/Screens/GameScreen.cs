@@ -33,7 +33,6 @@ namespace LegendOfCube.Screens
 		private Texture2D winScreen2;
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
-		private Vector2 fontPos;
 
 		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
 			: base(game, screenSystem, true)
@@ -59,6 +58,7 @@ namespace LegendOfCube.Screens
 					Highscore.Instance.AddHighScore(level.Name, world.GameStats.GameTime);
 				}
 				inputSystem.ApplyInput(gameTime, world);
+				animationSystem.Update(world, delta);
 				physicsSystem.ApplyPhysics(world, delta);
 
 				//Small delay before score screen.
@@ -77,8 +77,8 @@ namespace LegendOfCube.Screens
 				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
 				audioSystem.Update(world);
-				animationSystem.OnUpdate(world, delta);
-				cameraSystem.OnUpdate(world, delta);
+				animationSystem.Update(world, delta);
+				cameraSystem.Update(world, gameTime, delta);
 			}
 		}
 
@@ -97,9 +97,9 @@ namespace LegendOfCube.Screens
 				text.Append("FPS: ");
 				text.AppendLine(UiUtils.UIFormat(1.0f / (float)gameTime.ElapsedGameTime.TotalSeconds));
 				text.Append("CamPos: ");
-				text.AppendLine(UiUtils.UIFormat(world.CameraPosition));
+				text.AppendLine(UiUtils.UIFormat(world.Camera.Position));
 				text.Append("CamDir: ");
-				text.AppendLine(UiUtils.UIFormat(Vector3.Normalize(world.Transforms[world.Player.Id].Translation - world.CameraPosition)));
+				text.AppendLine(UiUtils.UIFormat(Vector3.Normalize(world.Camera.Target - world.Camera.Position)));
 				text.Append("CubePos: ");
 				text.AppendLine(UiUtils.UIFormat(world.Transforms[world.Player.Id].Translation));
 				text.Append("CubeVel: ");
@@ -111,7 +111,8 @@ namespace LegendOfCube.Screens
 				text.Append("OnWall: ");
 				text.AppendLine(world.PlayerCubeState.OnWall.ToString());
 
-				spriteBatch.DrawString(font, text, fontPos, Color.DarkGreen);
+				spriteBatch.DrawString(font, text, Vector2.One, Color.Black, 0, Vector2.Zero, 22.0f / font.LineSpacing, SpriteEffects.None, 0);
+				spriteBatch.DrawString(font, text, Vector2.Zero, Color.White, 0, Vector2.Zero, 22.0f / font.LineSpacing, SpriteEffects.None, 0);
 			}
 
 			//Gameover screen
@@ -127,23 +128,25 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-			audioSystem = new AudioSystem(contentCollection);
 			world = level.CreateWorld(Game, contentCollection);
+
 			inputSystem = new InputSystem(Game, ScreenSystem);
 			movementSystem = new MovementSystem();
+			audioSystem = new AudioSystem(contentCollection);
 			physicsSystem = new PhysicsSystem(world.MaxNumEntities);
 			cameraSystem = new CameraSystem();
 			aiSystem = new AISystem();
 			animationSystem = new AnimationSystem();
 			renderSystem = new RenderSystem(Game, graphicsManager);
 			spriteBatch = new SpriteBatch(Game.GraphicsDevice);
+
+			renderSystem.LoadContent();
+
 			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
 			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
 			font = Game.Content.Load<SpriteFont>("Arial");
 
-			renderSystem.LoadContent();
-
-			fontPos = new Vector2(0, 0);
+			cameraSystem.OnStart(world);
 		}
 	}
 }
