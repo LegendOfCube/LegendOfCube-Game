@@ -70,14 +70,15 @@ namespace LegendOfCube.Levels
 			var locomotiveBuilder = new EntityBuilder().WithModelData(contentCollection.Locomotive);
 			var woodenPlatformBuilder = new EntityBuilder().WithModelData(contentCollection.WoodenPlatform);
 			var woodPileBuilder = new EntityBuilder().WithModelData(contentCollection.WoodPile);
+			var roofBuilder = new EntityBuilder().WithModelData(contentCollection.Roof);
 
 
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-			MediaPlayer.Play(contentCollection.level1full);
-			//MediaPlayer.Play(contentCollection.music);
+			//MediaPlayer.Play(contentCollection.level1full);
+			MediaPlayer.Play(contentCollection.level1amb);
 			MediaPlayer.IsRepeating = true;
 
 			//Level geometry
@@ -170,7 +171,7 @@ namespace LegendOfCube.Levels
 				.AddToWorld(world);
 
 			woodPileBuilder.Copy().WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationY(MathHelper.ToRadians(90)))
-				.WithPosition(0, -41.2f, 90).AddToWorld(world);
+				.WithPosition(5, -41.2f, 90).AddToWorld(world);
 
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 0.5f) * Matrix.CreateRotationX(MathHelper.ToRadians(-13))
 				 * Matrix.CreateRotationY(MathHelper.ToRadians(-90))).WithPosition(-37.2f, -38.7f, 90).AddToWorld(world);
@@ -390,7 +391,7 @@ namespace LegendOfCube.Levels
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG | Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);
 			placeholderWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(5, 3, 3))
+				.WithTransform(Matrix.CreateScale(5, 0.5f, 3) * Matrix.CreateRotationY(MathHelper.ToRadians(180)))
 				.WithPosition(0, 30, 40)
 				.WithAdditionalProperties(new Properties(Properties.NO_SHADOW_CAST_FLAG | Properties.DEATH_ZONE_FLAG))
 				.AddToWorld(world);

@@ -179,7 +179,6 @@ namespace LegendOfCube.Engine
 			WoodPileModel = cm.Load<Model>("Models/Wood_Stack/wood_pile");
 			WoodenPlatformModel = cm.Load<Model>("Models/Wooden_Platform/wood_platform");
 
-
 			placeholderWall = new ModelData
 			{
 				Model = Ground50x50,
@@ -757,7 +756,6 @@ namespace LegendOfCube.Engine
 					SpecularTexture = cm.Load<Texture>("Models/Wooden_Platform/spec"),
 				},
 			};
-
 		}
 	}
 }
