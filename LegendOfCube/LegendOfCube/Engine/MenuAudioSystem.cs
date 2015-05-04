@@ -35,7 +35,7 @@ namespace LegendOfCube.Engine.Events
 				{
 					pitch = 0;
 				}
-				select2.Play(1, pitch, 0);
+				select2.Play(0.15f, pitch, 0);
 			}
 			if (inputHelper.KeyWasJustPressed(Keys.Space) || inputHelper.ButtonWasJustPressed(Buttons.A))
 			{
@@ -44,7 +44,7 @@ namespace LegendOfCube.Engine.Events
 				{
 					pitch = 0;
 				}
-				select.Play(1, pitch, 0);
+				select.Play(0.15f, pitch, 0);
 			}
 			oldSelection = selection;
 		}
