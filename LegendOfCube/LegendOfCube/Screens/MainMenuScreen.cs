@@ -11,9 +11,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace LegendOfCube.Screens
 {
-	public class StartScreen : BaseMenuScreen
+	public class MainMenuScreen : BaseMenuScreen
 	{
-		internal StartScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
+		internal MainMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
 
 		internal override void InitializeScreen()
 		{

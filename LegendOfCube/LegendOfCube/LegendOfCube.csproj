@@ -104,7 +104,7 @@
     <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItems.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
-    <Compile Include="Screens\StartScreen.cs" />
+    <Compile Include="Screens\MainMenuScreen.cs" />
     <Compile Include="Screens\GameScreen.cs" />
     <Compile Include="Engine\ContentCollection.cs" />
     <Compile Include="Levels\WallClimbLevel.cs" />

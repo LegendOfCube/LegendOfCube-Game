@@ -79,7 +79,7 @@ namespace LegendOfCube.Screens
 		}
 		public void LoadContent()
 		{
-			AddScreen(new StartScreen(game, this));
+			AddScreen(new MainMenuScreen(game, this));
 		}
 
 		public void ResetGameScreen()
