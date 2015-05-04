@@ -6,6 +6,7 @@ using LegendOfCube.Engine.Events;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Engine
 {
@@ -73,6 +74,7 @@ namespace LegendOfCube.Engine
 		public PointLight PointLight0;
 
 		public DebugState DebugState;
+		public Song Ambience;
 
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *

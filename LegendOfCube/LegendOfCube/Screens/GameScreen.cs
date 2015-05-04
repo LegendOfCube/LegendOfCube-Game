@@ -147,6 +147,7 @@ namespace LegendOfCube.Screens
 			font = Game.Content.Load<SpriteFont>("Arial");
 
 			cameraSystem.OnStart(world);
+			audioSystem.OnStart(world);
 		}
 	}
 }

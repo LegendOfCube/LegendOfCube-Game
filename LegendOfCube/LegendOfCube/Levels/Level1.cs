@@ -1,10 +1,6 @@
 ﻿using LegendOfCube.Engine;
 using LegendOfCube.Engine.BoundingVolumes;
-using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Levels
 {
@@ -20,8 +16,10 @@ namespace LegendOfCube.Levels
 				SpawnPoint = new Vector3(0, -40, 0),
 				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
 				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
-				AmbientIntensity = 0.25f
+				AmbientIntensity = 0.25f,
+				Ambience = contentCollection.level1amb
 			};
+
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)
@@ -79,9 +77,6 @@ namespace LegendOfCube.Levels
 
 			world.Player = playerBuilder.AddToWorld(world);
 
-			//MediaPlayer.Play(contentCollection.level1full);
-			MediaPlayer.Play(contentCollection.level1amb);
-			MediaPlayer.IsRepeating = true;
 
 			//Level geometry
 			groundStoneBuilder.Copy().WithTransform(Matrix.CreateScale(0.25f, 0.25f, 0.25f)).WithPosition(0, -40, 0).AddToWorld(world);
