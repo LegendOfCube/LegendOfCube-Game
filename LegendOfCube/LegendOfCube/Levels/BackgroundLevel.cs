@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using LegendOfCube.Engine;
+using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Levels
@@ -16,8 +17,8 @@ namespace LegendOfCube.Levels
 			World world = new World(1000)
 			{
 				SpawnPoint = new Vector3(0, 8, 0),
-				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
-				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0))
+				DirLight = new DirLight(Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f))),
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
 			};
 
 			world.Camera = new Camera(

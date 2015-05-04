@@ -2,8 +2,8 @@
 
 // Will determine the bluriness of shadows, it's the distance between
 // sampled shadow map coordinates in a 3x3 grid
-#define LEVEL_0_PCF_SPACING 1.0 / 2000.0
-#define LEVEL_1_PCF_SPACING 1.0 / 3000.0
+#define LEVEL_0_PCF_SPACING 1.0 / 2800.0
+#define LEVEL_1_PCF_SPACING 1.0 / 1500.0
 
 float4x4 World;
 float4x4 View;
@@ -13,7 +13,7 @@ float4x4 NormalMatrix;
 // Light properties for diffuse and specular illumination
 float3 DirLight0ViewSpaceDir;
 float4 DirLight0Color = WHITE_COLOR;
-bool ApplyShadows;
+
 float4x4 DirLight0ShadowMatrix0;
 float4x4 DirLight0ShadowMatrix1;
 
@@ -21,8 +21,8 @@ float3 PointLight0ViewSpacePos;
 float4 PointLight0Color = WHITE_COLOR;
 float PointLight0Reach = 20.0;
 
-// Defines the the ambient look of an object (simulate that all surfaces are somewhat lit)
-float AmbientIntensity = 0.0;
+// Defines the the ambient look of objects (simulate that all surfaces are somewhat lit)
+float4 AmbientColor;
 
 // Defines the the diffuse look of an object (light spread in all directions)
 bool UseDiffuseTexture;
@@ -36,6 +36,8 @@ float Shininess = 30.0;
 // Defines the self illumination of an object
 bool UseEmissiveTexture;
 float4 MaterialEmissiveColor = WHITE_COLOR;
+
+bool ApplyShadows;
 
 // These are set at XNA-level by using I from sI as an index
 sampler DiffuseTextureSampler  : register(ps, s0);
@@ -181,8 +183,8 @@ float4 CalculateLightContribution(
 	// Determine diffuse, specular and fresnel factor (0 to 1)
 	// At the moment, scale light with negative ambient intensity to easier be
 	// able to balance light for different levels
-	float diffuseFactor = (1.0 - AmbientIntensity) * max(0.0, dot(normal, directionToLight));
-	float specularFactor = (1.0 - AmbientIntensity) * specularDot <= 0.0 ? 0.0 : max(pow(specularDot, Shininess), 0.0);
+	float diffuseFactor = max(0.0, dot(normal, directionToLight));
+	float specularFactor = specularDot <= 0.0 ? 0.0 : max(pow(specularDot, Shininess), 0.0);
 	float fresnelFactor = pow(clamp(1.0 - dot(directionToEye, normal), 0.0, 1.0), 5.0);
 
 	// Apply fresnel effect
@@ -284,7 +286,7 @@ float4 MainPixelShading(float2 textureCoordinate, float4 lightSpacePos0, float4 
 
 	float4 totalLightContribution = dirLight0Contribution + pointLight0Contribution;
 
-	float4 ambientFinal = AmbientIntensity * diffuseColor; // Currently locked to diffuse color
+	float4 ambientFinal = AmbientColor * diffuseColor; // Currently locked to diffuse color
 	float4 emissiveFinal = emissiveColor;
 
 	return saturate(

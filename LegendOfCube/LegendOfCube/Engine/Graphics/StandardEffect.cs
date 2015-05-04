@@ -28,7 +28,7 @@ namespace LegendOfCube.Engine.Graphics
 		// Lights
 		private readonly EffectParameter dirLight0ViewSpaceDirParam;
 		private readonly EffectParameter dirLight0ColorParam;
-		private readonly EffectParameter applyShadowsParam;
+
 		private readonly EffectParameter dirLight0ShadowMatrix0Param;
 		private readonly EffectParameter dirLight0ShadowMatrix1Param;
 
@@ -36,7 +36,7 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectParameter pointLight0ReachParam;
 		private readonly EffectParameter pointLight0ColorParam;
 
-		private readonly EffectParameter ambientIntensity;
+		private readonly EffectParameter ambientColor;
 
 		// Material properties
 		private readonly EffectParameter useDiffuseTextureParam;
@@ -51,6 +51,8 @@ namespace LegendOfCube.Engine.Graphics
 		private readonly EffectTechnique defaultTechnique;
 		private readonly EffectTechnique normalMapTechnique;
 		private readonly EffectTechnique shadowMapTechnique;
+
+		private readonly EffectParameter applyShadowsParam;
 
 		private readonly SamplerState standardSamplerState;
 		private readonly SamplerState shadowSamplerState;
@@ -74,7 +76,6 @@ namespace LegendOfCube.Engine.Graphics
 			// Lights
 			this.dirLight0ViewSpaceDirParam = effect.Parameters["DirLight0ViewSpaceDir"];
 			this.dirLight0ColorParam = effect.Parameters["DirLight0Color"];
-			this.applyShadowsParam = effect.Parameters["ApplyShadows"];
 			this.dirLight0ShadowMatrix0Param = effect.Parameters["DirLight0ShadowMatrix0"];
 			this.dirLight0ShadowMatrix1Param = effect.Parameters["DirLight0ShadowMatrix1"];
 
@@ -82,7 +83,7 @@ namespace LegendOfCube.Engine.Graphics
 			this.pointLight0ColorParam = effect.Parameters["PointLight0Color"];
 			this.pointLight0ReachParam = effect.Parameters["PointLight0Reach"];
 
-			this.ambientIntensity = effect.Parameters["AmbientIntensity"];
+			this.ambientColor = effect.Parameters["AmbientColor"];
 
 			// Material properties
 			
@@ -94,6 +95,8 @@ namespace LegendOfCube.Engine.Graphics
 
 			this.useEmissiveTextureParam = effect.Parameters["UseEmissiveTexture"];
 			this.materialEmissiveColorParam = effect.Parameters["MaterialEmissiveColor"];
+
+			this.applyShadowsParam = effect.Parameters["ApplyShadows"];
 
 			// Get handles to techniques
 			this.defaultTechnique = this.effect.Techniques["DefaultTechnique"];
@@ -196,15 +199,14 @@ namespace LegendOfCube.Engine.Graphics
 		}
 
 		/// <summary>
-		/// Set the intensity of ambient light in the scene. The diffuse color
-		/// will be used for ambient as well. A value of 0.0 mean no ambient
-		/// light, and 1.0 would mean that the object appears fully lit without
-		/// being lit by light source.
+		/// Set the coloring of ambient light. The diffuse color will or texture will
+		/// be used in addition to this. Black means no ambient light, and white
+		/// would mean that the object appears fully lit without being lit by light
+		/// source.
 		/// </summary>
-		/// <param name="intensity">The intensity, should be in range [0, 1]</param>
-		public void SetAmbientIntensity(float intensity)
+		public void SetAmbientColor(Vector4 color)
 		{
-			ambientIntensity.SetValue(intensity);
+			ambientColor.SetValue(color);
 		}
  
 		public void SetDiffuseColor(Vector4 color)
@@ -280,5 +282,6 @@ namespace LegendOfCube.Engine.Graphics
 		{
 			return new StandardEffect(contentManager.Load<Effect>("Effects/standardEffect"));
 		}
+
 	}
 }

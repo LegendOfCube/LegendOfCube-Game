@@ -1,4 +1,5 @@
-﻿﻿using System.Collections.Generic;
+﻿﻿using System;
+﻿using System.Collections.Generic;
 ﻿using System.Diagnostics;
 ﻿using LegendOfCube.Engine.BoundingVolumes;
 ﻿using Microsoft.Xna.Framework;
@@ -24,7 +25,6 @@ namespace LegendOfCube.Engine.Graphics
 		private static readonly Properties NO_SHADOW_CAST = new Properties(Properties.NO_SHADOW_CAST_FLAG);
 		private static readonly Properties NO_SHADOW_RECEIVE = new Properties(Properties.NO_SHADOW_RECEIVE_FLAG);
 
-		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 		private static readonly Vector3 OCCLUDED_EFFECT_COLOR = new Color(0x00,0x94,0xaa).ToVector3();
 		private const int SHADOW_MAP_SIZE = 2048;
 
@@ -153,8 +153,8 @@ namespace LegendOfCube.Engine.Graphics
 			// Create shadow map for the primary light
 			Matrix shadowMatrix0;
 			Matrix shadowMatrix1;
-			RenderShadowMap(world, renderableEntities, 80, 80, shadowRenderTarget0, out shadowMatrix0);
-			RenderShadowMap(world, renderableEntities, 500, 500, shadowRenderTarget1, out shadowMatrix1);
+			RenderShadowMap(world, renderableEntities, 160, 160, shadowRenderTarget0, out shadowMatrix0);
+			RenderShadowMap(world, renderableEntities, 400, 400, shadowRenderTarget1, out shadowMatrix1);
 
 			// For some reason, it seems that changing the render target will undo the previous clear
 			game.GraphicsDevice.Clear(Color.CornflowerBlue);
@@ -179,12 +179,44 @@ namespace LegendOfCube.Engine.Graphics
 			game.GraphicsDevice.RasterizerState = shadowMapRasterizerState;
 			standardEffect.SetShadowMapRendering(true);
 
-			// The shadow map is based on an orthographic projection that could
-			// be thought of as a plane with a center that's a fixed distance
-			// from the player with its normal parallel to the light direction
-			// and pointed toward the player
-			Vector3 lightTarget = world.Transforms[world.Player.Id].Translation;
-			Matrix lightView = Matrix.CreateLookAt(lightTarget - 1500.0f * world.LightDirection, lightTarget, Vector3.Forward);
+			// The shadow map is based on an orthographic projection, that could
+			// be thought of as a plane that's a fixed distance from the player,
+			// with its normal parallel to the light direction and pointed toward
+			// the camera position.
+			//
+			// It won't alwayes be centered on the camera, but rather some rounding
+			// is performed to reduse the amount of flickering
+
+			Vector3 lightTarget = world.Camera.Position;
+			Vector3 lightDir = world.DirLight.Direction;
+
+			// Use world up if light isn't pointed up or down
+			Vector3 lightUp = Math.Abs(Vector3.Dot(lightDir, Vector3.Up)) <= 0.95f ? Vector3.Up : Vector3.Forward;
+
+			// Round of target to somewhere on grid, which is sort-of aligned with
+			// the camera view space
+
+			// A higher value gives more flickering, a lower gives more pop-in
+			const float GRID_SIZE = 10.0f; 
+
+			Vector3 gridX = Vector3.Normalize(Vector3.Cross(lightUp, lightDir));
+			Vector3 gridY = Vector3.Cross(gridX, lightDir);
+
+			float targetGridX = Vector3.Dot(gridX, lightTarget);
+			float targetGridY = Vector3.Dot(gridY, lightTarget);
+
+			float targetGridXRound = GRID_SIZE * (float)Math.Round(targetGridX / GRID_SIZE);
+			float targetGridYRound = GRID_SIZE * (float)Math.Round(targetGridY / GRID_SIZE);
+
+			lightTarget -= gridX * targetGridX;
+			lightTarget -= gridY * targetGridY;
+
+			lightTarget += gridX * targetGridXRound;
+			lightTarget += gridY * targetGridYRound;
+
+			Vector3 lightSourcePos = lightTarget - 1500.0f * world.DirLight.Direction;
+
+			Matrix lightView = Matrix.CreateLookAt(lightSourcePos, lightTarget, lightUp);
 			Matrix lightProjection = Matrix.CreateOrthographic(width, height, 100.0f, 3000.0f);
 
 			standardEffect.SetViewProjection(ref lightView, ref lightProjection);
@@ -241,21 +273,21 @@ namespace LegendOfCube.Engine.Graphics
 
 		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection, ref Matrix shadowMatrix0, ref Matrix shadowMatrix1)
 		{
-			standardEffect.SetViewProjection(ref view, ref projection);
-			standardEffect.SetAmbientIntensity(world.AmbientIntensity);
+			var finalAmbientColor = new Vector4(world.AmbientIntensity * world.AmbientColor, 1.0f);
+			var finalDir0Color = new Vector4(world.DirLight.Intensity * world.DirLight.Color, 1.0f);
 
-			var lightColor = LIGHT_COLOR;
-			standardEffect.SetDirLight0Properties(ref world.LightDirection, ref lightColor);
+			standardEffect.SetViewProjection(ref view, ref projection);
+			standardEffect.SetAmbientColor(finalAmbientColor);
+
+
+			standardEffect.SetDirLight0Properties(ref world.DirLight.Direction, ref finalDir0Color);
 			standardEffect.SetDirLight0ShadowMap0(shadowRenderTarget0);
 			standardEffect.SetDirLight0ShadowMatrix0(ref shadowMatrix0);
 
 			standardEffect.SetDirLight0ShadowMap1(shadowRenderTarget1);
 			standardEffect.SetDirLight0ShadowMatrix1(ref shadowMatrix1);
 
-			if (world.PointLight0Enabled)
-			{
-				standardEffect.SetPointLight0Properties(ref world.PointLight0.LightPosition, ref world.PointLight0.Reach, ref world.PointLight0.Color);
-			}
+			standardEffect.SetPointLight0Properties(ref world.PointLight0.LightPosition, ref world.PointLight0.Reach, ref world.PointLight0.Color);
 
 			foreach (var entity in entities)
 			{

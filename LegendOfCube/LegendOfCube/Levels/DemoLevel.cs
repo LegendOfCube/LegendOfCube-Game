@@ -18,13 +18,12 @@ namespace LegendOfCube.Levels
 			{
 				SpawnPoint = new Vector3(0, 0, 0),
 				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
-				LightDirection = Vector3.Normalize(new Vector3
+				DirLight = new DirLight(Vector3.Normalize(new Vector3
 				{
 					X = -2.0f,
 					Y = -1.0f,
 					Z = -2.0f
-				}),
-				AmbientIntensity = 0.25f
+				})),
 			};
 
 			var cubeModel = game.Content.Load<Model>("Models/Cube/cube_clean");

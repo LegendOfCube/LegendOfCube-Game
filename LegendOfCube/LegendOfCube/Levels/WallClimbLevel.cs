@@ -19,8 +19,7 @@ namespace LegendOfCube.Levels
 			{
 				SpawnPoint = new Vector3(-30.0f, 5.0f, 0.0f),
 				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
-				LightDirection = Vector3.Normalize(new Vector3(1.0f, -1.0f, -1.0f)),
-				AmbientIntensity = 0.3f
+				DirLight = new DirLight(Vector3.Normalize(new Vector3(1.0f, -1.0f, -1.0f))),
 			};
 
 			world.Player = new EntityBuilder()

@@ -32,7 +32,7 @@ namespace LegendOfCube.Engine
 			}
 
 			float speed = world.Velocities[e.Id].Length();
-			float brightness = MathUtils.MapRangeToRange(speed, 0.0f, maxspeed, 0.3f, 1.0f);
+			float brightness = MathUtils.MapRangeToRange(speed, 0.0f, maxspeed, 0.5f, 1.0f);
 
 			Vector4 vecColor = (newColor * brightness).ToVector4();
 			newEffect.EmissiveColor = vecColor;
@@ -44,7 +44,6 @@ namespace LegendOfCube.Engine
 			Matrix cubeTransform = world.Transforms[world.Player.Id];
 			Vector3 lightPosition = cubeTransform.Translation + 0.5f * cubeTransform.Up;
 			PointLight cubeLight = new PointLight(10.0f, vecColor, lightPosition);
-			world.PointLight0Enabled = true;
 			world.PointLight0 = cubeLight;
 		}
 	}

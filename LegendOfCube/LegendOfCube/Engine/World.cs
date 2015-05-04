@@ -20,6 +20,9 @@ namespace LegendOfCube.Engine
 
 		private static readonly Properties NO_COMPONENTS = new Properties(Properties.NO_PROPERTIES);
 
+		private const float DEFAULT_AMBIENT_INTENSITY = 0.35f;
+		private static readonly Vector3 DEFAULT_AMBIENT_COLOR = Color.White.ToVector3();
+
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		public readonly UInt32 MaxNumEntities;
@@ -64,10 +67,11 @@ namespace LegendOfCube.Engine
 
 		public Camera Camera;
 
-		public Vector3 LightDirection;
+		public Vector3 AmbientColor;
 		public float AmbientIntensity;
 
-		public bool PointLight0Enabled;
+		public DirLight DirLight;
+
 		public PointLight PointLight0;
 
 		public DebugState DebugState;
@@ -127,15 +131,15 @@ namespace LegendOfCube.Engine
 			SpawnPoint = new Vector3(0, 25, 0);
 			CheckpointsPassed = 0;
 
-			LightDirection = new Vector3(0, -1, 0);
-			AmbientIntensity = 0.5f;
-			PointLight0Enabled = false;
+			DirLight = new DirLight();
+
+			AmbientIntensity = DEFAULT_AMBIENT_INTENSITY;
+			AmbientColor = DEFAULT_AMBIENT_COLOR;
 
 			Camera = Camera.DEFAULT_CAMERA;
 
 			EventBuffer = new EventBuffer();
 		}
-
 
 		// Public Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
