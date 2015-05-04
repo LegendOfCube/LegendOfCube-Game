@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Engine
 {
@@ -19,6 +20,9 @@ namespace LegendOfCube.Engine
 		public SoundEffect hit { get; private set; }
 		public SoundEffect select { get; private set; }
 		public SoundEffect select2 { get; private set; }
+		public Song music { get; private set; }
+		public Song level1amb { get; private set; }
+		public Song level1full { get; private set; }
 
 		public ModelData PlayerCube2 { get; private set; }
 		public ModelData PlayerCube { get; private set; }
@@ -59,7 +63,18 @@ namespace LegendOfCube.Engine
 		public ModelData GrassSmall { get; private set; }
 		public ModelData GrassRound { get; private set; }
 		public ModelData GrassLong { get; private set; }
-		public ModelData Container { get; private set; }
+		public ModelData ContainerBlue { get; private set; }
+		public ModelData ContainerRed { get; private set; }
+		public ModelData ContainerGreen { get; private set; }
+		public ModelData Cart1 { get; private set; }
+		public ModelData Cart2 { get; private set; }
+		public ModelData TrainDoor { get; private set; }
+		public ModelData TrainDoorClosed { get; private set; }
+		public ModelData Rails { get; private set; }
+		public ModelData Locomotive { get; private set; }
+		public ModelData WoodPile { get; private set; }
+		public ModelData WoodenPlatform { get; private set; }
+
 		// Placeholders
 		public ModelData placeholderWall { get; private set; }
 
@@ -97,6 +112,14 @@ namespace LegendOfCube.Engine
 		public Model GrassRoundModel { get; private set; }
 		public Model GrassLongModel { get; private set; }
 		public Model ContainerModel { get; private set; }
+		public Model Cart1Model { get; private set; }
+		public Model Cart2Model { get; private set; }
+		public Model TrainDoorModel { get; private set; }
+		public Model TrainDoorClosedModel { get; private set; }
+		public Model RailsModel { get; private set; }
+		public Model LocomotiveModel { get; private set; }
+		public Model WoodPileModel { get; private set; }
+		public Model WoodenPlatformModel { get; private set; }
 
 		public void LoadContent(ContentManager cm)
 		{
@@ -111,6 +134,9 @@ namespace LegendOfCube.Engine
 			hit = cm.Load<SoundEffect>("SoundEffects/hit");
 			select = cm.Load<SoundEffect>("SoundEffects/select");
 			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+			music = cm.Load<Song>("SoundEffects/LoC_music");
+			level1amb = cm.Load<Song>("SoundEffects/LoC_level1_amb");
+			level1full = cm.Load<Song>("SoundEffects/LoC_full");
 
 			CubeModel = cm.Load<Model>("Models/Cube/cube_clean");
 			PlainCubeModel = cm.Load<Model>("Models/cube/cube_plain");
@@ -144,15 +170,23 @@ namespace LegendOfCube.Engine
 			//GrassRoundModel = cm.Load<Model>("Models/Vegetation/grass_round_optimized");
 			GrassLongModel = cm.Load<Model>("Models/Vegetation/grass_long_optimized");
 			ContainerModel = cm.Load<Model>("Models/Container/container_mapped");
-
+			Cart1Model = cm.Load<Model>("Models/Train/cart1");
+			Cart2Model = cm.Load<Model>("Models/Train/cart2");
+			TrainDoorModel = cm.Load<Model>("Models/Train/dooropen_fix");
+			TrainDoorClosedModel = cm.Load<Model>("Models/Train/doorclosed");
+			RailsModel = cm.Load<Model>("Models/Train/rails");
+			LocomotiveModel = cm.Load<Model>("Models/Train/locomotive");
+			WoodPileModel = cm.Load<Model>("Models/Wood_Stack/wood_pile");
+			WoodenPlatformModel = cm.Load<Model>("Models/Wooden_Platform/wood_platform");
 
 			placeholderWall = new ModelData
 			{
 				Model = Ground50x50,
-				//Obb = OBB.CreateAxisAligned(Vector3.Zero, 100, 50, 1),
+				Obb = OBB.CreateAxisAligned(Vector3.Zero, 50, 2, 50),
 				EffectParams = new StandardEffectParams
 				{
-					DiffuseColor = Color.DarkGray.ToVector4(),
+					DiffuseTexture = cm.Load<Texture>("Models/Ground/groundconcrete_d"),
+					//DiffuseColor = Color.DarkGray.ToVector4(),
 				}
 			};
 
@@ -224,7 +258,7 @@ namespace LegendOfCube.Engine
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
 					//DiffuseColor = Color.White.ToVector4(),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/new_normal_disp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -237,7 +271,7 @@ namespace LegendOfCube.Engine
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_h_d"),
 					//DiffuseColor = Color.White.ToVector4(),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/new_normal_disp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -250,7 +284,7 @@ namespace LegendOfCube.Engine
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_arrows_v_d"),
 					//DiffuseColor = Color.White.ToVector4(),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/new_normal_disp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -262,7 +296,7 @@ namespace LegendOfCube.Engine
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Brick_Wall/brick_d"),
-					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/brick_normal_enhanced"),
+					NormalTexture = cm.Load<Texture>("Models/Brick_Wall/new_normal_disp"),
 					SpecularColor = new Vector4(new Vector3(0.1f), 1.0f)
 				},
 				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, 1.25f, 0.0f), 0.5f, 2.5f, 5.0f)
@@ -605,16 +639,122 @@ namespace LegendOfCube.Engine
 				}
 			};
 
-			Container = new ModelData
+			ContainerRed = new ModelData
 			{
 				Model = ContainerModel,
 				EffectParams = new StandardEffectParams
 				{
 					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
-					DiffuseColor = Color.DarkOrange.ToVector4(),
+					DiffuseColor = Color.DarkRed.ToVector4(),
 					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
 				},
-				Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+				//Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+			};
+			ContainerBlue = new ModelData
+			{
+				Model = ContainerModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					//DiffuseColor = Color.DarkRed.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				//Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+			};
+			ContainerGreen = new ModelData
+			{
+				Model = ContainerModel,
+				EffectParams = new StandardEffectParams
+				{
+					//DiffuseTexture = cm.Load<Texture>("Models/Railing/blue_metal"),
+					DiffuseColor = Color.DarkGreen.ToVector4(),
+					NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+				//Obb = OBB.CreateAxisAligned(new Vector3(0, 10.16f, 0), 45.08f, 20.32f, 16.544f)
+			};
+
+			Cart1 = new ModelData
+			{
+				Model = Cart1Model,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			Cart2 = new ModelData
+			{
+				Model = Cart2Model,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Hanging_Platform/metal_plate-diffuse"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			TrainDoor = new ModelData
+			{
+				Model = TrainDoorModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Train/traindoor_d"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			TrainDoorClosed = new ModelData
+			{
+				Model = TrainDoorClosedModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Train/traindoor_d"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			Rails = new ModelData
+			{
+				Model = RailsModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Platform/metal_rust_tex_01"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			Locomotive = new ModelData
+			{
+				Model = LocomotiveModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Train/tgm3_1010a"),
+					//DiffuseColor = Color.DarkOrange.ToVector4(),
+					//NormalTexture = cm.Load<Texture>("Models/Railing/blue_metal_normal")
+				},
+			};
+			
+			WoodPile = new ModelData
+			{
+				Model = WoodPileModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-d"),
+					NormalTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-n"),
+					SpecularTexture = cm.Load<Texture>("Models/Wood_Stack/wood-pile-s")
+				},
+				Obb = OBB.CreateAxisAligned(new Vector3(0, 0.5f, 0), 1.5f, 1.3f, 3.3f)
+			};
+			
+			WoodenPlatform = new ModelData
+			{
+				Model = WoodenPlatformModel,
+				EffectParams = new StandardEffectParams
+				{
+					DiffuseTexture = cm.Load<Texture>("Models/Wooden_Platform/defuse"),
+					NormalTexture = cm.Load<Texture>("Models/Wooden_Platform/normals"),
+					SpecularTexture = cm.Load<Texture>("Models/Wooden_Platform/spec"),
+				},
 			};
 		}
 	}

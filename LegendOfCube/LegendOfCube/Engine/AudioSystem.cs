@@ -7,6 +7,7 @@ using LegendOfCube.Engine.CubeMath;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Engine
 {
@@ -70,6 +71,15 @@ namespace LegendOfCube.Engine
 			}
 
 			oldPlayerCubeState = world.PlayerCubeState;
+		}
+
+		public void OnStart(World world)
+		{
+			if (world.Ambience != null)
+			{
+				MediaPlayer.IsRepeating = true;
+				MediaPlayer.Play(world.Ambience);
+			}
 		}
 	}
 }
