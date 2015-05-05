@@ -110,15 +110,20 @@ namespace LegendOfCube.Screens
 			//Gameover screen
 			if (world.TimeSinceGameOver >= 1 && world.WinState)
 			{
+				float width = Game.GraphicsDevice.Viewport.Width;
+				float height = Game.GraphicsDevice.Viewport.Height;
+				const float BOX_WIDTH = 300;
+				const float BOX_HEIGHT = 200;
+				Vector2 topLeft = new Vector2(width / 2 - BOX_WIDTH, height / 2 - BOX_HEIGHT);
 				spriteBatch.DrawString(font,
 					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
 						? "NEEEEEEEEEEEEW HIGHSCORE!"
-						: "You win, absolutely cubical!", new Vector2(300, 150), Color.White);
-				spriteBatch.DrawString(font, "Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 250), Color.White);
+						: "You win, absolutely cubical!", topLeft, Color.White);
+				spriteBatch.DrawString(font, "Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s", topLeft + new Vector2(0, 50.0f), Color.White);
 				spriteBatch.DrawString(font, world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
 						? "Old Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[1])
-						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]), new Vector2(300, 300), Color.White);
-				spriteBatch.DrawString(font, "Press 'r' to restart or 'esc' to go to menu.", new Vector2(300, 400), Color.White);
+						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]), topLeft + new Vector2(0, 100.0f), Color.White);
+				spriteBatch.DrawString(font, "Press 'r' to restart or 'esc' to go to menu.", topLeft + new Vector2(0,200.0f), Color.White);
 
 			}
 			spriteBatch.End();
