@@ -118,6 +118,16 @@ namespace LegendOfCube.Screens
 			//Gameover screen
 			if (world.TimeSinceGameOver >= 1 && world.WinState)
 			{
+				spriteBatch.DrawString(font,
+					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(level.Name)[0]
+						? "NEEEEEEEEEEEEW HIGHSCORE!"
+						: "You win, absolutely cubical!", new Vector2(300, 150), Color.White);
+				spriteBatch.DrawString(font, "Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 250), Color.White);
+				spriteBatch.DrawString(font, world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(level.Name)[0]
+						? "Old Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[1])
+						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[0]), new Vector2(300, 300), Color.White);
+				spriteBatch.DrawString(font, "Press 'r' to restart or 'esc' to go to menu.", new Vector2(300, 400), Color.White);
+
 			}
 			spriteBatch.End();
 		}
