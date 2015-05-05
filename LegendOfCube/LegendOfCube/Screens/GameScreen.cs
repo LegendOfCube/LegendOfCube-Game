@@ -134,6 +134,9 @@ namespace LegendOfCube.Screens
 				spriteBatch.DrawString(font, winText, topLeft, Color.White);
 
 			}
+
+			//Game timer
+			spriteBatch.DrawString(font, UiUtils.UIFormat(world.GameStats.GameTime), new Vector2(Game.GraphicsDevice.Viewport.Width - 100, Game.GraphicsDevice.Viewport.Height - 50), Color.White);
 			spriteBatch.End();
 		}
 
