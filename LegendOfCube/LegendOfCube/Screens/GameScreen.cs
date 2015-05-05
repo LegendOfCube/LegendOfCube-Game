@@ -108,22 +108,30 @@ namespace LegendOfCube.Screens
 			}
 
 			//Gameover screen
-			if (world.TimeSinceGameOver >= 1 && world.WinState)
+			if (true || world.TimeSinceGameOver >= 1 && world.WinState)
 			{
 				float width = Game.GraphicsDevice.Viewport.Width;
 				float height = Game.GraphicsDevice.Viewport.Height;
-				const float BOX_WIDTH = 300;
-				const float BOX_HEIGHT = 200;
-				Vector2 topLeft = new Vector2(width / 2 - BOX_WIDTH, height / 2 - BOX_HEIGHT);
-				spriteBatch.DrawString(font,
+
+				var winTextBuild = new StringBuilder();
+				winTextBuild.AppendLine(
 					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
 						? "NEEEEEEEEEEEEW HIGHSCORE!"
-						: "You win, absolutely cubical!", topLeft, Color.White);
-				spriteBatch.DrawString(font, "Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s", topLeft + new Vector2(0, 50.0f), Color.White);
-				spriteBatch.DrawString(font, world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
+						: "You win, absolutely cubical!");
+				winTextBuild.AppendLine("Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s");
+				winTextBuild.AppendLine(
+					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
 						? "Old Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[1])
-						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]), topLeft + new Vector2(0, 100.0f), Color.White);
-				spriteBatch.DrawString(font, "Press 'r' to restart or 'esc' to go to menu.", topLeft + new Vector2(0,200.0f), Color.White);
+						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]));
+
+				winTextBuild.AppendLine();
+				winTextBuild.AppendLine("Press 'r' to restart or 'esc' to go to menu.");
+				string winText = winTextBuild.ToString();
+				var box = font.MeasureString(winText);
+
+				Vector2 topLeft = new Vector2(width / 2 - box.X / 2, height / 2 - box.Y / 2);
+				spriteBatch.DrawString(font, winText, topLeft + Vector2.One, Color.Black);
+				spriteBatch.DrawString(font, winText, topLeft, Color.White);
 
 			}
 			spriteBatch.End();
