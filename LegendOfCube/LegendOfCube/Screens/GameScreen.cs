@@ -108,7 +108,7 @@ namespace LegendOfCube.Screens
 			}
 
 			//Gameover screen
-			if (true || world.TimeSinceGameOver >= 1 && world.WinState)
+			if (world.TimeSinceGameOver >= 1 && world.WinState)
 			{
 				float width = Game.GraphicsDevice.Viewport.Width;
 				float height = Game.GraphicsDevice.Viewport.Height;
