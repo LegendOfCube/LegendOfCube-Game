@@ -124,14 +124,14 @@ namespace LegendOfCube.Engine
 		public void LoadContent(ContentManager cm)
 		{
 			CubeModel2 = cm.Load<Model>("Models/Cube/newcube_ep");
-			respawn = cm.Load<SoundEffect>("SoundEffects/bwiip");
-			oldJump = cm.Load<SoundEffect>("SoundEffects/waom");
+			respawn = cm.Load<SoundEffect>("SoundEffects/respawn");
+			oldJump = cm.Load<SoundEffect>("SoundEffects/jump");
 			wallJump = cm.Load<SoundEffect>("SoundEffects/waom2");
-			jump = cm.Load<SoundEffect>("SoundEffects/waom3");
+			jump = cm.Load<SoundEffect>("SoundEffects/jump");
 			whoopJump = cm.Load<SoundEffect>("SoundEffects/whoop");
 			whoopJump2 = cm.Load<SoundEffect>("SoundEffects/whoopShort");
 			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
-			hit = cm.Load<SoundEffect>("SoundEffects/hit");
+			hit = cm.Load<SoundEffect>("SoundEffects/hit_ground");
 			select = cm.Load<SoundEffect>("SoundEffects/menu1");
 			select2 = cm.Load<SoundEffect>("SoundEffects/menu2");
 			music = cm.Load<Song>("SoundEffects/LoC_music");

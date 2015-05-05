@@ -27,7 +27,7 @@ namespace LegendOfCube.Engine
 
 				if (world.PlayerRespawAudioCue)
 				{
-					cc.respawn.Play(0.05f, 0f, 0f);
+					cc.respawn.Play(1, 0f, 0f);
 					world.PlayerRespawAudioCue = false;
 				}
 				if (collider == world.Player.Id || collidedWith == world.Player.Id)
@@ -51,7 +51,7 @@ namespace LegendOfCube.Engine
 				{
 					pitch = 0;
 				}
-				cc.oldJump.Play(1, 0, 0);
+				cc.oldJump.Play(0.7f, 0, 0);
 			}
 			else if (!world.PlayerCubeState.OnWall && oldPlayerCubeState.OnWall && !world.PlayerCubeState.OnGround && world.InputData[world.Player.Id].IsJumping() && world.InputData[world.Player.Id].NewJump())
 			{
