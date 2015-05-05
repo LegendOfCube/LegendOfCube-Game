@@ -182,7 +182,7 @@ namespace LegendOfCube.Engine
 			placeholderWall = new ModelData
 			{
 				Model = Ground50x50,
-				Obb = OBB.CreateAxisAligned(Vector3.Zero, 50, 2, 50),
+				Obb = OBB.CreateAxisAligned(new Vector3(0.0f, -1f, 0.0f), 50, 2, 50),
 				EffectParams = new StandardEffectParams
 				{
 					DiffuseTexture = cm.Load<Texture>("Models/Ground/groundconcrete_d"),
