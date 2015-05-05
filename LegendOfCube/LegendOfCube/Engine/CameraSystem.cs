@@ -15,7 +15,7 @@ namespace LegendOfCube.Engine
 
 		// Scale input
 		private const float X_SCALE = 4.0f;
-		private const float Y_SCALE = -4.0f;
+		private const float Y_SCALE = 4.0f;
 
 		// How close camera can be to target without correcting
 		private const float MIN_DISTANCE = 5.0f;
