@@ -118,10 +118,6 @@ namespace LegendOfCube.Screens
 			//Gameover screen
 			if (world.TimeSinceGameOver >= 1 && world.WinState)
 			{
-				spriteBatch.Draw(winScreen1, new Vector2(0, 0), Color.Red);
-				spriteBatch.DrawString(font, world.GameStats.PlayerDeaths.ToString(), new Vector2(400, 260), Color.Red);
-				spriteBatch.DrawString(font, UiUtils.UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 160), Color.Red);
-				spriteBatch.DrawString(font, "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[0]), new Vector2(300, 360), Color.Red);
 			}
 			spriteBatch.End();
 		}
