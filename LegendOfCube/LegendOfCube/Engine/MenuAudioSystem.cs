@@ -19,28 +19,28 @@ namespace LegendOfCube.Engine.Events
 			oldSelection = 0;
 			pitch = 0;
 
-			select = cm.Load<SoundEffect>("SoundEffects/select");
-			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+			select = cm.Load<SoundEffect>("SoundEffects/menu2");
+			select2 = cm.Load<SoundEffect>("SoundEffects/menu1");
 		}
 		public void Update(int selection)
 		{
 			if (selection != oldSelection)
 			{
-				pitch += 0.1f;
+				/*pitch += 0.1f;
 				if (pitch > 1)
 				{
 					pitch = 0;
-				}
-				select2.Play(0.15f, pitch, 0);
+				}*/
+				select2.Play(1, pitch, 0);
 			}
 			if (inputHelper.KeyWasJustPressed(Keys.Space) || inputHelper.ButtonWasJustPressed(Buttons.A))
 			{
-				pitch += 0.1f;
+				/*pitch += 0.1f;
 				if (pitch > 1)
 				{
 					pitch = 0;
-				}
-				select.Play(0.15f, pitch, 0);
+				}*/
+				select.Play(1, pitch, 0);
 			}
 			oldSelection = selection;
 		}
