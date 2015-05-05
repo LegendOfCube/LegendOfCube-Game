@@ -132,8 +132,8 @@ namespace LegendOfCube.Engine
 			whoopJump2 = cm.Load<SoundEffect>("SoundEffects/whoopShort");
 			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
 			hit = cm.Load<SoundEffect>("SoundEffects/hit");
-			select = cm.Load<SoundEffect>("SoundEffects/select");
-			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+			select = cm.Load<SoundEffect>("SoundEffects/menu1");
+			select2 = cm.Load<SoundEffect>("SoundEffects/menu2");
 			music = cm.Load<Song>("SoundEffects/LoC_music");
 			level1amb = cm.Load<Song>("SoundEffects/LoC_level1_amb");
 			level1full = cm.Load<Song>("SoundEffects/LoC_full");
