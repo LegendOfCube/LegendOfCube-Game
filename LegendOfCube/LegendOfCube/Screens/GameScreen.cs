@@ -148,8 +148,6 @@ namespace LegendOfCube.Screens
 
 			renderSystem.LoadContent();
 
-			winScreen1 = Game.Content.Load<Texture2D>("Menu/winnerScreen1");
-			winScreen2 = Game.Content.Load<Texture2D>("Menu/winnerScreen2");
 			font = Game.Content.Load<SpriteFont>("Arial");
 
 			cameraSystem.OnStart(world);
