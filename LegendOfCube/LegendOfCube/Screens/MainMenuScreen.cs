@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine;
-using LegendOfCube.Engine.Input;
-using LegendOfCube.Levels;
+﻿using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace LegendOfCube.Screens
 {

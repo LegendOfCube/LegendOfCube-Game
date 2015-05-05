@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using LegendOfCube.Engine.Input;
 using LegendOfCube.Engine.Events;
 using Microsoft.Xna.Framework;

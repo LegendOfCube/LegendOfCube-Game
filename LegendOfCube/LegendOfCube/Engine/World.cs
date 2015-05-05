@@ -61,9 +61,6 @@ namespace LegendOfCube.Engine
 		public readonly EventBuffer EventBuffer;
 
 		public Vector3 Gravity;
-		public readonly float AirMovement;
-		public readonly float StopTime;
-		public readonly float BaseJump;
 
 		public Camera Camera;
 
@@ -110,12 +107,14 @@ namespace LegendOfCube.Engine
 				StandardEffectParams[i] = null;
 				ModelSpaceBVs[i] = new OBB(Vector3.Zero, Vector3.UnitX, Vector3.UnitY, Vector3.UnitZ, Vector3.One);
 			}
-			
-			PlayerCubeState = new PlayerCubeState();
-			PlayerCubeState.OnWall = false;
-			PlayerCubeState.OnGround = false;
-			PlayerCubeState.WallAxis = Vector3.Zero;
-			PlayerCubeState.GroundAxis = Vector3.Zero;
+
+			PlayerCubeState = new PlayerCubeState
+			{
+				OnWall = false,
+				OnGround = false,
+				WallAxis = Vector3.Zero,
+				GroundAxis = Vector3.Zero
+			};
 
 			PlayerRespawAudioCue = true;
 

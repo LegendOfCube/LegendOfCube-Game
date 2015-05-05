@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
-using LegendOfCube.Engine.Graphics;
-using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
@@ -86,7 +80,7 @@ namespace LegendOfCube.Screens
 		{
 			var sc = (GameScreen)screens[screens.Count - 1];
 			RemoveCurrentScreen();
-			AddGameScreen(sc.level);
+			AddGameScreen(sc.Level);
 		}
 
 	}

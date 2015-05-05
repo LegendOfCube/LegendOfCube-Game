@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using LegendOfCube.Engine;
-using LegendOfCube.Engine.Input;
 using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 

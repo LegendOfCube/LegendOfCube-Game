@@ -1,19 +1,14 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using LegendOfCube.Engine.Graphics;
-using LegendOfCube.Levels;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using LegendOfCube.Engine;
-using LegendOfCube.Engine.Input;
 
 namespace LegendOfCube.Screens
 {
 	class GameScreen : Screen
 	{
-		public readonly Level level;
+		public readonly Level Level;
 		private World world;
 
 		private InputSystem inputSystem;
@@ -27,17 +22,14 @@ namespace LegendOfCube.Screens
 
 		private readonly GraphicsDeviceManager graphicsManager;
 		private readonly ContentCollection contentCollection;
-		private readonly InputHelper inputHelper;
 
-		private Texture2D winScreen1;
-		private Texture2D winScreen2;
 		private SpriteFont font;
 		private SpriteBatch spriteBatch;
 
 		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
 			: base(game, screenSystem, true)
 		{
-			this.level = level;
+			this.Level = level;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
 		}
@@ -55,7 +47,7 @@ namespace LegendOfCube.Screens
 			{
 				if (world.TimeSinceGameOver == 0)
 				{
-					Highscore.Instance.AddHighScore(level.Name, world.GameStats.GameTime);
+					Highscore.Instance.AddHighScore(Level.Name, world.GameStats.GameTime);
 				}
 				inputSystem.ApplyInput(gameTime, world);
 				animationSystem.Update(world, delta);
@@ -119,13 +111,13 @@ namespace LegendOfCube.Screens
 			if (world.TimeSinceGameOver >= 1 && world.WinState)
 			{
 				spriteBatch.DrawString(font,
-					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(level.Name)[0]
+					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
 						? "NEEEEEEEEEEEEW HIGHSCORE!"
 						: "You win, absolutely cubical!", new Vector2(300, 150), Color.White);
 				spriteBatch.DrawString(font, "Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s", new Vector2(300, 250), Color.White);
-				spriteBatch.DrawString(font, world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(level.Name)[0]
-						? "Old Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[1])
-						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(level.Name)[0]), new Vector2(300, 300), Color.White);
+				spriteBatch.DrawString(font, world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
+						? "Old Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[1])
+						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]), new Vector2(300, 300), Color.White);
 				spriteBatch.DrawString(font, "Press 'r' to restart or 'esc' to go to menu.", new Vector2(300, 400), Color.White);
 
 			}
@@ -134,7 +126,7 @@ namespace LegendOfCube.Screens
 
 		internal override void LoadContent()
 		{
-			world = level.CreateWorld(Game, contentCollection);
+			world = Level.CreateWorld(Game, contentCollection);
 
 			inputSystem = new InputSystem(Game, ScreenSystem);
 			movementSystem = new MovementSystem();

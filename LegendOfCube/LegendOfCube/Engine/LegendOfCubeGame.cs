@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using LegendOfCube.Engine.Graphics;
-using LegendOfCube.Engine.Input;
+﻿using LegendOfCube.Engine.Input;
 using Microsoft.Xna.Framework;
 using LegendOfCube.Screens;
 

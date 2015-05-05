@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using LegendOfCube.Engine;
+﻿using LegendOfCube.Engine;
 
 namespace LegendOfCube.Levels
 {

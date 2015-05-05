@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using LegendOfCube.Engine;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;

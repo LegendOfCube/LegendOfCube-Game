@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using LegendOfCube.Engine.CubeMath;
 using Microsoft.Xna.Framework;
 
@@ -48,8 +47,7 @@ namespace LegendOfCube.Engine
 				viewDirection = Vector3.Down;
 			}
 			lastKnownDirection = viewDirection;
-			var camera = new Camera(target - MAX_DISTANCE * viewDirection, target);
-			camera.Fov = GlobalConfig.Instance.Fov;
+			var camera = new Camera(target - MAX_DISTANCE*viewDirection, target) {Fov = GlobalConfig.Instance.Fov};
 			world.Camera = camera;
 		}
 
@@ -165,8 +163,7 @@ namespace LegendOfCube.Engine
 
 			// Set new camera in world
 			var newPosition = newTarget + ToCartesian(newDistance, newTiltAngle, newGroundAngle);
-			Camera newCamera = new Camera(newPosition, newTarget);
-			newCamera.Fov = GlobalConfig.Instance.Fov;
+			Camera newCamera = new Camera(newPosition, newTarget) {Fov = GlobalConfig.Instance.Fov};
 			world.Camera = newCamera;
 
 			lastKnownDirection = targetCameraDirection;

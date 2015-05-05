@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using LegendOfCube.Engine.BoundingVolumes;
 using LegendOfCube.Engine.Events;
 using LegendOfCube.Engine.CubeMath;

@@ -1,7 +1,4 @@
-﻿using System;
-using LegendOfCube.Engine.Graphics;
-using Microsoft.Xna.Framework;
-using LegendOfCube.Engine;
+﻿using Microsoft.Xna.Framework;
 
 namespace LegendOfCube.Screens
 {
