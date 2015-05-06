@@ -62,6 +62,10 @@ namespace LegendOfCube.Engine
 			{
 				world.DebugState.ShowDebugOverlay = !world.DebugState.ShowDebugOverlay;
 			}
+			if (iH.KeyWasJustPressed(Keys.F3))
+			{
+				world.DebugState.FreeCamera = !world.DebugState.FreeCamera;
+			}
 
 			if (iH.KeyWasJustPressed(Keys.R) || iH.ButtonWasJustPressed(Buttons.Back))
 			{
