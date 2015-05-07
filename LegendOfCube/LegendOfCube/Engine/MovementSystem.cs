@@ -43,6 +43,8 @@ namespace LegendOfCube.Engine
 
 		public void ProcessInputData(World world, float delta)
 		{
+			if (world.DebugState.FreeCamera) return;
+
 			UInt32 i = world.Player.Id;
 			if (!world.EntityProperties[i].Satisfies(Properties.TRANSFORM |
 			                                         Properties.INPUT |
