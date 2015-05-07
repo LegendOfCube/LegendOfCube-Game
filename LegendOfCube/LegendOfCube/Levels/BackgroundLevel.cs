@@ -17,9 +17,7 @@ namespace LegendOfCube.Levels
 			{
 				SpawnPoint = new Vector3(0, 0, 0),
 				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
-				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0)),
-				AmbientIntensity = 0.25f,
-				Ambience = contentCollection.level1amb
+				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0))
 			};
 
 			var playerBuilder = new EntityBuilder()
@@ -36,7 +34,7 @@ namespace LegendOfCube.Levels
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			placeholderWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(3) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithTransform(Matrix.CreateScale(4) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(0, 0, -3).AddToWorld(world);
 
 			ductBuilder.Copy().WithPosition(0, 10, 0).AddToWorld(world);
@@ -51,13 +49,13 @@ namespace LegendOfCube.Levels
 				 * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(-20, -20, 0).AddToWorld(world);
 
 			groundWoodBuilder.Copy().WithTransform(Matrix.CreateScale(0.14f, 0.1f, 1f) * Matrix.CreateRotationX(MathHelper.ToRadians(-25))
-				 * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(0, -40, 0).AddToWorld(world);
+				 * Matrix.CreateRotationY(MathHelper.ToRadians(90))).WithPosition(5, -40, 0).AddToWorld(world);
 
 
-			ductBuilder.Copy().WithPosition(-30, -65, 0).WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG)).AddToWorld(world);
-			ductBuilder.Copy().WithPosition(-30, -75, 0).AddToWorld(world);
-			ductBuilder.Copy().WithPosition(-30, -85, 0).AddToWorld(world);
-			ductBuilder.Copy().WithPosition(-30, -95, 0).AddToWorld(world);
+			ductBuilder.Copy().WithPosition(-25, -65, 0).WithAdditionalProperties(new Properties(Properties.DEATH_ZONE_FLAG)).AddToWorld(world);
+			ductBuilder.Copy().WithPosition(-25, -75, 0).AddToWorld(world);
+			ductBuilder.Copy().WithPosition(-25, -85, 0).AddToWorld(world);
+			ductBuilder.Copy().WithPosition(-25, -95, 0).AddToWorld(world);
 
 			return world;
 		}
