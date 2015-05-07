@@ -8,12 +8,7 @@ namespace LegendOfCube.Engine
 		public String Name { get; private set; }
 		public bool FixedCamera { get; private set; }
 
-		protected Level(String name) : this(name, false)
-		{
-			Name = name;
-		}
-
-		protected Level(String name, bool fixedCamera)
+		protected Level(String name, bool fixedCamera = false)
 		{
 			Name = name;
 			FixedCamera = fixedCamera;

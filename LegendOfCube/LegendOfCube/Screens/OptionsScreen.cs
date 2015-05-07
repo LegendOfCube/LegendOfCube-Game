@@ -20,7 +20,7 @@ namespace LegendOfCube.Screens
 		private string[] fovStrings;
 		private int startFovIndex;
 
-		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) { }
+		public OptionsScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) { }
 
 		internal sealed override void InitializeScreen()
 		{
@@ -46,8 +46,8 @@ namespace LegendOfCube.Screens
 			AddOnOffSelector("InvertY", cfg.RightStickInvertedY, (bool b) => { cfg.RightStickInvertedY = b; });
 			AddSpace(35.0f);
 
-			AddClickable("Reset to defaults", () => { cfg.ResetToDefaults(); this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Reset to defaults"; });
-			AddClickable("Back", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "Back"; });
+			AddClickable("Reset to defaults", () => { cfg.ResetToDefaults(); Exit(); return "Reset to defaults"; });
+			AddClickable("Back", () => { Exit(); return "Back"; });
 
 		}
 

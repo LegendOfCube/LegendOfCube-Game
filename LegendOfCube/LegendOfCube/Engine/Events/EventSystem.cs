@@ -139,9 +139,6 @@ namespace LegendOfCube.Engine
 
 		public static void RespawnPlayer(World world)
 		{
-			// Look toward where you died
-			// TODO: Refine this, view direction per spawn point?
-
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
 			world.WinState = false;

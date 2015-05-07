@@ -19,6 +19,7 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 		private SpriteFont spriteFont;
 		private MenuAudioSystem menuAudioSystem;
+		private bool isRoot;
 
 		private List<MenuItem> menuItems = new List<MenuItem>();
 		private int selected = -1;
@@ -28,9 +29,11 @@ namespace LegendOfCube.Screens
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public BaseMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false, false) { }
+		public BaseMenuScreen(Game game, ScreenSystem screenSystem, bool isRoot) : base(game, screenSystem, false, false)
+		{
+			this.isRoot = isRoot;
+		}
 		internal abstract void InitializeScreen();
-		internal abstract void OnExit();
 
 		// Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -123,8 +126,7 @@ namespace LegendOfCube.Screens
 			}
 			else if (iH.MenuCancelPressed())
 			{
-				OnExit();
-				ScreenSystem.RemoveCurrentScreen();
+				Exit();
 			}
 			else
 			{
@@ -144,6 +146,15 @@ namespace LegendOfCube.Screens
 			menuAudioSystem.Update(selected);
 		}
 
+		protected void Exit()
+		{
+			OnExit();
+			if (!isRoot)
+			{
+				ScreenSystem.RemoveCurrentScreen();
+			}
+		}
+
 		internal sealed override void Draw(GameTime gameTime, bool isBackground)
 		{
 			spriteBatch.Begin();
@@ -161,5 +172,8 @@ namespace LegendOfCube.Screens
 			menuAudioSystem = new MenuAudioSystem(Game.Content);
 			InitializeScreen();
 		}
+
+		internal virtual void OnExit() {}
+
 	}
 }

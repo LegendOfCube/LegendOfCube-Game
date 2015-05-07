@@ -26,10 +26,10 @@ namespace LegendOfCube.Screens
 			screens.Add(screen);
 		}
 
-		public void AddGameScreen(Level level)
+		public void SetGameScreen(Level level)
 		{
 			Screen s = new GameScreen(level, game, this, contentCollection, graphicsManager);
-			AddScreen(s);
+			SetScreen(s);
 		}
 
 		public void RemoveCurrentScreen()
@@ -61,10 +61,11 @@ namespace LegendOfCube.Screens
 				}
 			}
 
-			for (int i = firstUpdate; i < screens.Count; i++)
+			int screenCount = screens.Count;
+			for (int i = firstUpdate; i < screenCount; i++)
 			{
 				Screen s = screens[i];
-				s.Update(gameTime, i != screens.Count - 1);
+				s.Update(gameTime, i != screenCount - 1);
 			}
 		}
 
@@ -87,7 +88,13 @@ namespace LegendOfCube.Screens
 				s.Draw(gameTime, i != screens.Count - 1);
 			}
 		}
+
 		public void LoadContent()
+		{
+			ResetToMainMenu();
+		}
+
+		public void ResetToMainMenu()
 		{
 			AddScreen(new GameScreen(LevelConstants.BACKGROUND_LEVEL, game, this, contentCollection, graphicsManager));
 			AddScreen(new MainMenuScreen(game, this));
@@ -96,8 +103,7 @@ namespace LegendOfCube.Screens
 		public void ResetGameScreen()
 		{
 			var sc = (GameScreen)screens[screens.Count - 1];
-			RemoveCurrentScreen();
-			AddGameScreen(sc.Level);
+			SetGameScreen(sc.Level);
 		}
 
 	}
