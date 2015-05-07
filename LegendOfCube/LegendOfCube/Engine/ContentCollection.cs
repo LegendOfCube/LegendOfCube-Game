@@ -125,7 +125,7 @@ namespace LegendOfCube.Engine
 		{
 			CubeModel2 = cm.Load<Model>("Models/Cube/newcube_ep");
 			respawn = cm.Load<SoundEffect>("SoundEffects/respawn");
-			oldJump = cm.Load<SoundEffect>("SoundEffects/walljump");
+			oldJump = cm.Load<SoundEffect>("SoundEffects/walljump_new");
 			wallJump = cm.Load<SoundEffect>("SoundEffects/jump_new");
 			jump = cm.Load<SoundEffect>("SoundEffects/jump_new");
 			whoopJump = cm.Load<SoundEffect>("SoundEffects/whoop");
