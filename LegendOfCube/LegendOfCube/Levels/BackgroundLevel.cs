@@ -15,19 +15,20 @@ namespace LegendOfCube.Levels
 		{
 			World world = new World(1000)
 			{
-				SpawnPoint = new Vector3(0, 0, 0),
+				SpawnPoint = new Vector3(0, 8, 0),
 				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
 				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0))
 			};
 
-			var target = new Vector3(-10, -35, 0);
-			var position = new Vector3(0, 0, -100);
+			var target = new Vector3(-10, -10, 0);
+			var position = new Vector3(-10, 0, 40);
 
 			var camera = new Camera(position, target) { Fov = GlobalConfig.Instance.Fov };
 			world.Camera = camera;
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)
+				.WithTransform(Matrix.CreateScale(2.5f))
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 15)
 				.WithAcceleration(Vector3.Zero)
@@ -40,7 +41,7 @@ namespace LegendOfCube.Levels
 			var placeholderWallBuilder = new EntityBuilder().WithModelData(contentCollection.placeholderWall);
 
 			placeholderWallBuilder.Copy()
-				.WithTransform(Matrix.CreateScale(4) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
+				.WithTransform(Matrix.CreateScale(10) * Matrix.CreateRotationX(MathHelper.ToRadians(90)))
 				.WithPosition(0, 0, -3).AddToWorld(world);
 
 			ductBuilder.Copy().WithPosition(0, 10, 0).AddToWorld(world);
