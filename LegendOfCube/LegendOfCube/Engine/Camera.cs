@@ -12,11 +12,11 @@ namespace LegendOfCube.Engine
 		public Vector3 Target;
 		public Vector3 Up;
 
-		public Camera(Vector3 position, Vector3 target)
+		public Camera(Vector3 position, Vector3 target, float fov = DEFAULT_FOV)
 		{
 			Position = position;
 			Target = target;
-			Fov = DEFAULT_FOV;
+			Fov = fov;
 			Up = Vector3.Up;
 		}
 	}

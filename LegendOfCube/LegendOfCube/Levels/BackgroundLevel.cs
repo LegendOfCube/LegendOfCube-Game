@@ -20,11 +20,10 @@ namespace LegendOfCube.Levels
 				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0))
 			};
 
-			var target = new Vector3(-10, -10, 0);
-			var position = new Vector3(-10, 0, 40);
-
-			var camera = new Camera(position, target) { Fov = GlobalConfig.Instance.Fov };
-			world.Camera = camera;
+			world.Camera = new Camera(
+				new Vector3(-10, 0, 50),
+				new Vector3(-10, -12, 0),
+				75.0f);
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)
