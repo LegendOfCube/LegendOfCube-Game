@@ -54,15 +54,6 @@ namespace LegendOfCube.Engine
 			world.Camera = camera;
 		}
 
-		public void StaticCamera(World world)
-		{
-			var target = new Vector3(-10, -35, 0);
-			var position = new Vector3(0, 0, -100);
-
-			var camera = new Camera(position, target) {Fov = GlobalConfig.Instance.Fov};
-			world.Camera = camera;
-		}
-
 		public void Update(World world, GameTime gameTime, float delta)
 		{
 			if (!world.DebugState.FreeCamera)

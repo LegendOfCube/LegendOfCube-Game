@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine;
+using LegendOfCube.Levels;
 
 namespace LegendOfCube.Screens
 {
@@ -49,18 +50,33 @@ namespace LegendOfCube.Screens
 
 		public void Update(GameTime gameTime)
 		{
-			screens[screens.Count - 1].Update(gameTime);
+			int firstUpdate = screens.Count - 1;
+			for (int i = firstUpdate; i >= 0; i--)
+			{
+				Screen s = screens[i];
+				if (!s.UpdateBehind)
+				{
+					firstUpdate = i;
+					break;
+				}
+			}
+
+			for (int i = firstUpdate; i < screens.Count; i++)
+			{
+				Screen s = screens[i];
+				s.Update(gameTime, i != screens.Count - 1);
+			}
 		}
 
 		public void Draw(GameTime gameTime)
 		{
-			int firstRender= screens.Count - 1;
-			for (int i = firstRender - 1; i >= 0; i--)
+			int firstRender = screens.Count - 1;
+			for (int i = firstRender; i >= 0; i--)
 			{
 				Screen s = screens[i];
-				if (!s.BackgroundRender)
+				if (!s.RenderBehind)
 				{
-					firstRender = i + 1;
+					firstRender = i;
 					break;
 				}
 			}
@@ -68,11 +84,12 @@ namespace LegendOfCube.Screens
 			for (int i = firstRender; i < screens.Count; i++)
 			{
 				Screen s = screens[i];
-				s.Draw(gameTime);
+				s.Draw(gameTime, i != screens.Count - 1);
 			}
 		}
 		public void LoadContent()
 		{
+			AddScreen(new GameScreen(LevelConstants.BACKGROUND_LEVEL, game, this, contentCollection, graphicsManager));
 			AddScreen(new MainMenuScreen(game, this));
 		}
 

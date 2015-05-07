@@ -4,7 +4,10 @@ namespace LegendOfCube.Screens
 {
 	public class PauseScreen : BaseMenuScreen
 	{
-		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
+		public PauseScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
+		{
+			RenderBehind = true;
+		}
 
 		internal override void InitializeScreen()
 		{

@@ -5,7 +5,11 @@ namespace LegendOfCube.Screens
 {
 	public class MainMenuScreen : BaseMenuScreen
 	{
-		internal MainMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
+		internal MainMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem)
+		{
+			RenderBehind = true;
+			UpdateBehind = true;
+		}
 
 		internal override void InitializeScreen()
 		{

@@ -9,7 +9,7 @@ namespace LegendOfCube.Levels
 {
 	class BackgroundLevel : Level
 	{
-		public BackgroundLevel() : base("BackgroundLevel") {}
+		public BackgroundLevel() : base("BackgroundLevel", true) {}
 
 		public override World CreateWorld(Game game, ContentCollection contentCollection)
 		{
@@ -19,6 +19,12 @@ namespace LegendOfCube.Levels
 				LightDirection = Vector3.Normalize(new Vector3(3.5f, -3.0f, -3.0f)),
 				InitialViewDirection = Vector3.Normalize(new Vector3(1, 0, 0))
 			};
+
+			var target = new Vector3(-10, -35, 0);
+			var position = new Vector3(0, 0, -100);
+
+			var camera = new Camera(position, target) { Fov = GlobalConfig.Instance.Fov };
+			world.Camera = camera;
 
 			var playerBuilder = new EntityBuilder()
 				.WithModelData(contentCollection.PlayerCube2)

@@ -28,7 +28,7 @@ namespace LegendOfCube.Screens
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public BaseMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) { }
+		public BaseMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false, false) { }
 		internal abstract void InitializeScreen();
 		internal abstract void OnExit();
 
@@ -84,7 +84,7 @@ namespace LegendOfCube.Screens
 		// Inherited functions from Screen
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		internal sealed override void Update(GameTime gameTime)
+		internal sealed override void Update(GameTime gameTime, bool isBackground)
 		{
 			InputHelper iH = InputHelper.Instance;
 
@@ -144,7 +144,7 @@ namespace LegendOfCube.Screens
 			menuAudioSystem.Update(selected);
 		}
 
-		internal sealed override void Draw(GameTime gameTime)
+		internal sealed override void Draw(GameTime gameTime, bool isBackground)
 		{
 			spriteBatch.Begin();
 			for (int i = 0; i < menuItems.Count; i++)

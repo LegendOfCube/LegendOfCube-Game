@@ -24,7 +24,6 @@ namespace LegendOfCube.Levels
 			BEANSTALK_LEVEL,
 			LEVEL_13,
 			STAIRWAY_LEVEL,
-			BACKGROUND_LEVEL
 		};
 	}
 }
