@@ -60,7 +60,7 @@ namespace LegendOfCube.Engine
 				{
 					pitch = 0;
 				}
-				cc.wallJump.Play(1, 0, 0);
+				cc.wallJump.Play(0.6f, 0, 0);
 			}
 
 			oldPlayerCubeState = world.PlayerCubeState;
