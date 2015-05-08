@@ -139,24 +139,12 @@ namespace LegendOfCube.Engine
 
 		public static void RespawnPlayer(World world)
 		{
-			// Look toward where you died
-			// TODO: Refine this, view direction per spawn point?
-			var deathToSpawnPoint = world.Transforms[world.Player.Id].Translation - world.SpawnPoint;
-			if (deathToSpawnPoint.Length() > 1)
-			{
-				world.Camera.Position = world.SpawnPoint - 2.0f * Vector3.Normalize(deathToSpawnPoint);
-			}
-			else
-			{
-				world.Camera.Position = world.SpawnPoint;
-			}
-			world.Camera.Position.Y = world.SpawnPoint.Y + 2.0f;
-
 			world.Transforms[world.Player.Id].Translation = world.SpawnPoint;
 			world.Velocities[world.Player.Id] = Vector3.Zero;
 			world.WinState = false;
 			world.TimeSinceGameOver = 0;
 			world.GameStats.PlayerDeaths += 1;
+			world.GameStats.GameTime = 0;
 			world.PlayerRespawAudioCue = true;
 		}
 

@@ -7,7 +7,7 @@ namespace LegendOfCube.Screens
 {
 	public class LevelSelectScreen : BaseMenuScreen
 	{
-		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem) {}
+		public LevelSelectScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) {}
 
 		internal override void InitializeScreen()
 		{
@@ -26,16 +26,15 @@ namespace LegendOfCube.Screens
 					highscore = UiUtils.UIFormat(highscores[0]);
 				}
 				string name = level.Name + " \nHighScore: " + highscore + "s\n";
-				AddClickable(name, () => { ScreenSystem.AddGameScreen(level); return name; });
+				AddClickable(name, () => { ScreenSystem.SetGameScreen(level); return name; });
 			}
 			AddSpace(35.0f);
 
-			AddClickable("Main Menu", () => { this.OnExit(); ScreenSystem.RemoveCurrentScreen(); return "null"; });
+			AddClickable("Back", () =>
+			{
+				Exit(); return "Back";
+			});
 		}
 
-		internal override void OnExit()
-		{
-			// Do nothing.
-		}
 	}
 }

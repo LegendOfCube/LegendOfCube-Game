@@ -6,17 +6,19 @@ namespace LegendOfCube.Screens
 	{
 		protected Game Game { get; private set; }
 		protected ScreenSystem ScreenSystem { get; private set; }
-		public bool BackgroundRender { get; private set; }
+		public bool RenderBehind { get; protected set; }
+		public bool UpdateBehind { get; protected set; }
 
-		internal Screen(Game game, ScreenSystem screenSystem, bool backgroundRender)
+		internal Screen(Game game, ScreenSystem screenSystem, bool renderBehind, bool updateBehind)
 		{
 			Game = game;
 			ScreenSystem = screenSystem;
-			BackgroundRender = backgroundRender;
+			RenderBehind = renderBehind;
+			UpdateBehind = updateBehind;
 		}
 
-		internal abstract void Update(GameTime gameTime);
-		internal abstract void Draw(GameTime gameTime);
+		internal abstract void Update(GameTime gameTime, bool isBackground);
+		internal abstract void Draw(GameTime gameTime, bool isBackground);
 
 		internal abstract void LoadContent();
 	}

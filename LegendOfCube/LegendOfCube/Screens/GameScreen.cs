@@ -27,14 +27,14 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 
 		internal GameScreen(Level level, Game game, ScreenSystem screenSystem, ContentCollection contentCollection, GraphicsDeviceManager graphicsManager)
-			: base(game, screenSystem, true)
+			: base(game, screenSystem, false, false)
 		{
 			this.Level = level;
 			this.contentCollection = contentCollection;
 			this.graphicsManager = graphicsManager;
 		}
 
-		internal override void Update(GameTime gameTime)
+		internal override void Update(GameTime gameTime, bool isBackground)
 		{
 			float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -49,7 +49,7 @@ namespace LegendOfCube.Screens
 				{
 					Highscore.Instance.AddHighScore(Level.Name, world.GameStats.GameTime);
 				}
-				inputSystem.ApplyInput(gameTime, world);
+				if (!isBackground) inputSystem.ApplyInput(gameTime, world);
 				animationSystem.Update(world, delta);
 				physicsSystem.ApplyPhysics(world, delta);
 
@@ -62,19 +62,20 @@ namespace LegendOfCube.Screens
 			//Normal update
 			else
 			{
-				inputSystem.ApplyInput(gameTime, world);
+				if (!isBackground) inputSystem.ApplyInput(gameTime, world);
 				aiSystem.Update(world, delta);
-				movementSystem.ProcessInputData(world, delta);
+				if (!isBackground) movementSystem.ProcessInputData(world, delta);
+
 				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
 				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
 				audioSystem.Update(world);
 				animationSystem.Update(world, delta);
-				cameraSystem.Update(world, gameTime, delta);
+				if (!Level.FixedCamera) cameraSystem.Update(world, gameTime, delta);
 			}
 		}
 
-		internal override void Draw(GameTime gameTime)
+		internal override void Draw(GameTime gameTime, bool isBackground)
 		{
 			Game.GraphicsDevice.Clear(Color.CornflowerBlue);
 			Game.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -160,7 +161,7 @@ namespace LegendOfCube.Screens
 
 			font = Game.Content.Load<SpriteFont>("Arial");
 
-			cameraSystem.OnStart(world);
+			if (!Level.FixedCamera) cameraSystem.OnStart(world);
 			audioSystem.OnStart(world);
 		}
 	}

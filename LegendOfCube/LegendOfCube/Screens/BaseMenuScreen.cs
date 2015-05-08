@@ -19,6 +19,7 @@ namespace LegendOfCube.Screens
 		private SpriteBatch spriteBatch;
 		private SpriteFont spriteFont;
 		private MenuAudioSystem menuAudioSystem;
+		private bool isRoot;
 
 		private List<MenuItem> menuItems = new List<MenuItem>();
 		private int selected = -1;
@@ -28,9 +29,11 @@ namespace LegendOfCube.Screens
 		// Constructors
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		public BaseMenuScreen(Game game, ScreenSystem screenSystem) : base(game, screenSystem, false) { }
+		public BaseMenuScreen(Game game, ScreenSystem screenSystem, bool isRoot) : base(game, screenSystem, false, false)
+		{
+			this.isRoot = isRoot;
+		}
 		internal abstract void InitializeScreen();
-		internal abstract void OnExit();
 
 		// Methods
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -84,7 +87,7 @@ namespace LegendOfCube.Screens
 		// Inherited functions from Screen
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		internal sealed override void Update(GameTime gameTime)
+		internal sealed override void Update(GameTime gameTime, bool isBackground)
 		{
 			InputHelper iH = InputHelper.Instance;
 
@@ -123,8 +126,7 @@ namespace LegendOfCube.Screens
 			}
 			else if (iH.MenuCancelPressed())
 			{
-				OnExit();
-				ScreenSystem.RemoveCurrentScreen();
+				Exit();
 			}
 			else
 			{
@@ -144,7 +146,16 @@ namespace LegendOfCube.Screens
 			menuAudioSystem.Update(selected);
 		}
 
-		internal sealed override void Draw(GameTime gameTime)
+		protected void Exit()
+		{
+			OnExit();
+			if (!isRoot)
+			{
+				ScreenSystem.RemoveCurrentScreen();
+			}
+		}
+
+		internal sealed override void Draw(GameTime gameTime, bool isBackground)
 		{
 			spriteBatch.Begin();
 			for (int i = 0; i < menuItems.Count; i++)
@@ -161,5 +172,8 @@ namespace LegendOfCube.Screens
 			menuAudioSystem = new MenuAudioSystem(Game.Content);
 			InitializeScreen();
 		}
+
+		internal virtual void OnExit() {}
+
 	}
 }
