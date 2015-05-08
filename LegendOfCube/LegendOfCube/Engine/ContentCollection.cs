@@ -124,16 +124,16 @@ namespace LegendOfCube.Engine
 		public void LoadContent(ContentManager cm)
 		{
 			CubeModel2 = cm.Load<Model>("Models/Cube/newcube_ep");
-			respawn = cm.Load<SoundEffect>("SoundEffects/bwiip");
-			oldJump = cm.Load<SoundEffect>("SoundEffects/waom");
-			wallJump = cm.Load<SoundEffect>("SoundEffects/waom2");
-			jump = cm.Load<SoundEffect>("SoundEffects/waom3");
+			respawn = cm.Load<SoundEffect>("SoundEffects/respawn");
+			oldJump = cm.Load<SoundEffect>("SoundEffects/walljump_new");
+			wallJump = cm.Load<SoundEffect>("SoundEffects/jump_new");
+			jump = cm.Load<SoundEffect>("SoundEffects/jump_new");
 			whoopJump = cm.Load<SoundEffect>("SoundEffects/whoop");
 			whoopJump2 = cm.Load<SoundEffect>("SoundEffects/whoopShort");
 			bounce = cm.Load<SoundEffect>("SoundEffects/boing");
-			hit = cm.Load<SoundEffect>("SoundEffects/hit");
-			select = cm.Load<SoundEffect>("SoundEffects/select");
-			select2 = cm.Load<SoundEffect>("SoundEffects/select2");
+			hit = cm.Load<SoundEffect>("SoundEffects/hit_ground");
+			select = cm.Load<SoundEffect>("SoundEffects/menu1");
+			select2 = cm.Load<SoundEffect>("SoundEffects/menu2");
 			music = cm.Load<Song>("SoundEffects/LoC_music");
 			level1amb = cm.Load<Song>("SoundEffects/LoC_level1_amb");
 			level1full = cm.Load<Song>("SoundEffects/LoC_full");
