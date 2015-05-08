@@ -31,7 +31,7 @@ using System.Runtime.InteropServices;
 //      Revision
 //
 // Will automatically be appended with .0 for unspecified numbers
-[assembly: AssemblyVersion("0.1")]
+[assembly: AssemblyVersion("0.2")]
 
 // Free-form version name (example: "1.0 RC1")
-[assembly: AssemblyInformationalVersion("0.1")]
+[assembly: AssemblyInformationalVersion("0.2")]
