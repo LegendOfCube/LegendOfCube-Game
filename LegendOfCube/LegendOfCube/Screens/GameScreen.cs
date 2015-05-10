@@ -1,8 +1,8 @@
 ﻿using System.Text;
+using LegendOfCube.Engine;
 using LegendOfCube.Engine.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using LegendOfCube.Engine;
 
 namespace LegendOfCube.Screens
 {
@@ -114,16 +114,23 @@ namespace LegendOfCube.Screens
 				float width = Game.GraphicsDevice.Viewport.Width;
 				float height = Game.GraphicsDevice.Viewport.Height;
 
+				var highscores = Highscore.Instance.GetHighScoresForLevel(Level.Name);
+				bool oldHighscoreExists = highscores.Count > 1;
+				bool beatHighscore = !oldHighscoreExists || world.GameStats.GameTime <= highscores[0];
+
 				var winTextBuild = new StringBuilder();
-				winTextBuild.AppendLine(
-					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
-						? "NEEEEEEEEEEEEW HIGHSCORE!"
-						: "You win, absolutely cubical!");
+				winTextBuild.AppendLine(beatHighscore ? "NEEEEEEEEEEEEW HIGHSCORE!" : "You win, absolutely cubical!");
 				winTextBuild.AppendLine("Time: " + UiUtils.UIFormat(world.GameStats.GameTime) + "s");
-				winTextBuild.AppendLine(
-					world.GameStats.GameTime <= Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]
-						? "Old Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[1])
-						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]));
+				if (oldHighscoreExists)
+				{
+					winTextBuild.AppendLine(beatHighscore
+						? "Previous Highscore: " + UiUtils.UIFormat(highscores[1])
+						: "Highscore: " + UiUtils.UIFormat(highscores[0]));
+				}
+				else
+				{
+					winTextBuild.AppendLine("Highscore: " + UiUtils.UIFormat(highscores[0]));
+				}
 
 				winTextBuild.AppendLine();
 				winTextBuild.AppendLine("Press 'r' to restart or 'esc' to go to menu.");
