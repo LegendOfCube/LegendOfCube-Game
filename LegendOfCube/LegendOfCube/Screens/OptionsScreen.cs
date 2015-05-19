@@ -39,6 +39,7 @@ namespace LegendOfCube.Screens
 			AddOnOffSelector("VSync", cfg.VSync, (bool b) => { cfg.VSync = b; });
 			AddOnOffSelector("MultiSampling", cfg.MultiSampling, (bool b) => { cfg.MultiSampling = b; });
 			AddMultiChoiceSelector("FOV", startFovIndex, fovStrings, (int i) => { cfg.Fov = fovValues[i]; });
+			AddOnOffSelector("Show shadows", cfg.ShowShadows, (bool b) => { cfg.ShowShadows = b; });
 			AddSpace(35.0f);
 
 			AddHeading("Controls");

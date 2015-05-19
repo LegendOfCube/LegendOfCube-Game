@@ -151,16 +151,25 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.PrepareRendering();
 
 			// Create shadow map for the primary light
-			Matrix shadowMatrix0;
-			Matrix shadowMatrix1;
-			RenderShadowMap(world, renderableEntities, 160, 160, shadowRenderTarget0, out shadowMatrix0);
-			RenderShadowMap(world, renderableEntities, 400, 400, shadowRenderTarget1, out shadowMatrix1);
+			if (GlobalConfig.Instance.ShowShadows)
+			{
+				Matrix shadowMatrix0;
+				Matrix shadowMatrix1;
+				RenderShadowMap(world, renderableEntities, 160, 160, shadowRenderTarget0, out shadowMatrix0);
+				RenderShadowMap(world, renderableEntities, 400, 400, shadowRenderTarget1, out shadowMatrix1);
+
+				standardEffect.SetDirLight0ShadowMap0(shadowRenderTarget0);
+				standardEffect.SetDirLight0ShadowMatrix0(ref shadowMatrix0);
+
+				standardEffect.SetDirLight0ShadowMap1(shadowRenderTarget1);
+				standardEffect.SetDirLight0ShadowMatrix1(ref shadowMatrix1);
+			}
 
 			// For some reason, it seems that changing the render target will undo the previous clear
 			game.GraphicsDevice.Clear(Color.CornflowerBlue);
 
 			// Render all visible entities in the world
-			RenderFinal(world, visibleEntities, ref cameraView, ref cameraProjection, ref shadowMatrix0, ref shadowMatrix1);
+			RenderFinal(world, visibleEntities, ref cameraView, ref cameraProjection);
 
 			// Render OBB wireframes
 			if (world.DebugState.ShowOBBWireFrame)
@@ -271,7 +280,7 @@ namespace LegendOfCube.Engine.Graphics
 			return transforms;
 		}
 
-		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection, ref Matrix shadowMatrix0, ref Matrix shadowMatrix1)
+		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection)
 		{
 			var finalAmbientColor = new Vector4(world.AmbientIntensity * world.AmbientColor, 1.0f);
 			var finalDir0Color = new Vector4(world.DirLight.Intensity * world.DirLight.Color, 1.0f);
@@ -279,13 +288,9 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetViewProjection(ref view, ref projection);
 			standardEffect.SetAmbientColor(finalAmbientColor);
 
-
+			standardEffect.SetApplyShadows(GlobalConfig.Instance.ShowShadows);
 			standardEffect.SetDirLight0Properties(ref world.DirLight.Direction, ref finalDir0Color);
-			standardEffect.SetDirLight0ShadowMap0(shadowRenderTarget0);
-			standardEffect.SetDirLight0ShadowMatrix0(ref shadowMatrix0);
 
-			standardEffect.SetDirLight0ShadowMap1(shadowRenderTarget1);
-			standardEffect.SetDirLight0ShadowMatrix1(ref shadowMatrix1);
 
 			standardEffect.SetPointLight0Properties(ref world.PointLight0.LightPosition, ref world.PointLight0.Reach, ref world.PointLight0.Color);
 
@@ -361,7 +366,7 @@ namespace LegendOfCube.Engine.Graphics
 			standardEffect.SetSpecularTexture(sep.SpecularTexture);
 			standardEffect.SetNormalTexture(sep.NormalTexture);
 
-			bool noShadowReceive = world.EntityProperties[entity.Id].Satisfies(NO_SHADOW_RECEIVE);
+			bool noShadowReceive = !GlobalConfig.Instance.ShowShadows || world.EntityProperties[entity.Id].Satisfies(NO_SHADOW_RECEIVE);
 			standardEffect.SetApplyShadows(!noShadowReceive);
 
 			RenderModelWithStandardEffect(entity, model, transforms, ref worldTransform);
