@@ -210,9 +210,9 @@ namespace LegendOfCube.Engine
 
 			Vector3 dir = Vector3.Normalize(world.Camera.Target - world.Camera.Position);
 
-			const float FREE_CAM_X_SCALE = -5.0f;
-			const float FREE_CAM_Y_SCALE = -5.0f;
-			const float FREE_CAM_FORWARD_SCALE = 18.0f;
+			const float FREE_CAM_X_SCALE = -2.0f;
+			const float FREE_CAM_Y_SCALE = -2.0f;
+			const float FREE_CAM_FORWARD_SCALE = 6.0f;
 			dir = Vector3.TransformNormal(dir, Matrix.CreateRotationY(FREE_CAM_X_SCALE * delta * cameraModifierInput.X));
 			dir = Vector3.TransformNormal(dir,
 				Matrix.CreateFromAxisAngle(Vector3.Cross(Vector3.Up, dir), FREE_CAM_Y_SCALE * delta * cameraModifierInput.Y));

@@ -126,7 +126,7 @@ namespace LegendOfCube.Screens
 						: "Highscore: " + UiUtils.UIFormat(Highscore.Instance.GetHighScoresForLevel(Level.Name)[0]));
 
 				winTextBuild.AppendLine();
-				winTextBuild.AppendLine("Press 'r' to restart or 'esc' to go to menu.");
+				winTextBuild.AppendLine("Press 'back' to restart or 'start' to go to menu.");
 				string winText = winTextBuild.ToString();
 				var box = font.MeasureString(winText);
 
@@ -139,7 +139,7 @@ namespace LegendOfCube.Screens
 			//Game timer
 			string timerText = UiUtils.UIFormat(world.GameStats.GameTime);
 			Vector2 timerTextSize = font.MeasureString(timerText);
-			spriteBatch.DrawString(font, timerText, new Vector2(Game.GraphicsDevice.Viewport.Width - timerTextSize.X - 30.0f, 30.0f), Color.White);
+			//spriteBatch.DrawString(font, timerText, new Vector2(Game.GraphicsDevice.Viewport.Width - timerTextSize.X - 30.0f, 30.0f), Color.White);
 			spriteBatch.End();
 		}
 

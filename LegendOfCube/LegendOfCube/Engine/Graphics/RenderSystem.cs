@@ -26,7 +26,7 @@ namespace LegendOfCube.Engine.Graphics
 
 		private static readonly Vector4 LIGHT_COLOR = Color.White.ToVector4();
 		private static readonly Vector3 OCCLUDED_EFFECT_COLOR = new Color(0x00,0x94,0xaa).ToVector3();
-		private const int SHADOW_MAP_SIZE = 2048;
+		private const int SHADOW_MAP_SIZE = 4096;
 
 		// Members
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
