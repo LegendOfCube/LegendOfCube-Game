@@ -29,7 +29,7 @@ namespace LegendOfCube.Levels
 			platformDeathEffect.DiffuseColor = Color.DarkRed.ToVector4();
 
 			var playerBuilder = new EntityBuilder()
-				.WithModelData(contentCollection.PlayerCube)
+				.WithModelData(contentCollection.PlayerCube2)
 				.WithPosition(world.SpawnPoint)
 				.WithVelocity(Vector3.Zero, 30)
 				.WithAcceleration(Vector3.Zero)
