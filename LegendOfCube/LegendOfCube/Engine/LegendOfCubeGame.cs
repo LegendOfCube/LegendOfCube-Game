@@ -35,8 +35,6 @@ namespace LegendOfCube.Engine
 				PreferMultiSampling = cfg.MultiSampling
 			};
 
-			// XNA initiation moved out of RenderSystem since it's more of a "WorldRenderer"
-			// that could be disposed and reused
 			Window.AllowUserResizing = true;
 
 			graphicsManager.ApplyChanges();
