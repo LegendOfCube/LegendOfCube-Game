@@ -96,7 +96,7 @@ namespace LegendOfCube.Screens
 
 		public void ResetToMainMenu()
 		{
-			AddScreen(new GameScreen(LevelConstants.BACKGROUND_LEVEL, game, this, contentCollection, graphicsManager));
+			SetScreen(new GameScreen(LevelConstants.BACKGROUND_LEVEL, game, this, contentCollection, graphicsManager));
 			AddScreen(new MainMenuScreen(game, this));
 		}
 
