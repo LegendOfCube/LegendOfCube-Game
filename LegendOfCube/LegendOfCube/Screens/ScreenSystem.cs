@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using LegendOfCube.Engine;
 using LegendOfCube.Levels;
@@ -22,6 +23,7 @@ namespace LegendOfCube.Screens
 
 		public void AddScreen(Screen screen)
 		{
+			if (screens.Count > 0) GetCurrentScreen().OnPause();
 			screen.LoadContent();
 			screens.Add(screen);
 		}
@@ -34,11 +36,17 @@ namespace LegendOfCube.Screens
 
 		public void RemoveCurrentScreen()
 		{
+			GetCurrentScreen().OnPause();
 			screens.RemoveAt(screens.Count - 1);
+			if(screens.Count > 0) GetCurrentScreen().OnResume();
 		}
 
 		public void SetScreen(Screen screen)
 		{
+			foreach (var s in screens.AsEnumerable().Reverse())
+			{
+				s.OnPause();
+			}
 			screens.Clear();
 			AddScreen(screen);
 		}

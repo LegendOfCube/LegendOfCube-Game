@@ -75,5 +75,21 @@ namespace LegendOfCube.Engine
 				MediaPlayer.Volume = 0.2f;
 			}
 		}
+
+		public void OnResume(World world)
+		{
+			if (world.Ambience != null)
+			{
+				MediaPlayer.Resume();
+			}
+		}
+
+		public void OnPause(World world)
+		{
+			if (world.Ambience != null)
+			{
+				MediaPlayer.Pause();
+			}
+		}
 	}
 }

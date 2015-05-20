@@ -21,6 +21,8 @@ namespace LegendOfCube.Screens
 		internal abstract void Draw(GameTime gameTime, bool isBackground);
 
 		internal abstract void LoadContent();
+		internal abstract void OnPause();
+		internal abstract void OnResume();
 	}
 
 }

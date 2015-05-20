@@ -174,6 +174,7 @@ namespace LegendOfCube.Screens
 		}
 
 		internal virtual void OnExit() {}
-
+		internal override void OnPause() { }
+		internal override void OnResume() { }
 	}
 }

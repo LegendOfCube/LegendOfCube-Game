@@ -171,5 +171,15 @@ namespace LegendOfCube.Screens
 			if (!Level.FixedCamera) cameraSystem.OnStart(world);
 			audioSystem.OnStart(world);
 		}
+
+		internal override void OnPause()
+		{
+			audioSystem.OnPause(world);
+		}
+
+		internal override void OnResume()
+		{
+			audioSystem.OnResume(world);
+		}
 	}
 }
