@@ -133,7 +133,7 @@ namespace LegendOfCube.Screens
 				}
 
 				winTextBuild.AppendLine();
-				winTextBuild.AppendLine("Press 'r' to restart or 'esc' to go to menu.");
+				winTextBuild.AppendLine("Press 'back' to restart or 'start' to go to menu.");
 				string winText = winTextBuild.ToString();
 				var box = font.MeasureString(winText);
 
