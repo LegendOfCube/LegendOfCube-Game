@@ -107,8 +107,10 @@ namespace LegendOfCube.Engine
 
 				inputData.SetDirection(directionInput);
 
+				if (iH.KeyState.IsKeyDown(Keys.Space) || iH.ButtonIsDown(Buttons.A) || iH.ButtonIsDown(Buttons.RightShoulder))
 				{
 					inputData.SetStateOfJumping(true);
+					if (!iH.OldKeyState.IsKeyDown(Keys.Space) && !iH.OldButtonIsDown(Buttons.A) && !iH.OldButtonIsDown(Buttons.RightShoulder))
 					{
 						inputData.SetNewJump(true);
 						inputData.BufferedJump = true;
