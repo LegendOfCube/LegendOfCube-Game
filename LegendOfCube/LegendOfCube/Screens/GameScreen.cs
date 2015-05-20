@@ -69,7 +69,7 @@ namespace LegendOfCube.Screens
 				physicsSystem.ApplyPhysics(world, delta); // Note, delta should be fixed time step.
 				EventSystem.CalculateCubeState(world, physicsSystem);
 				EventSystem.HandleEvents(world);
-				audioSystem.Update(world);
+				if(!isBackground) audioSystem.Update(world);
 				animationSystem.Update(world, delta);
 				if (!Level.FixedCamera) cameraSystem.Update(world, gameTime, delta);
 			}
