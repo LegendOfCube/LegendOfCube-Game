@@ -3,6 +3,7 @@ using LegendOfCube.Engine.Input;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using LegendOfCube.Screens;
+using Microsoft.Xna.Framework.Media;
 
 namespace LegendOfCube.Engine
 {
@@ -67,7 +68,7 @@ namespace LegendOfCube.Engine
 				world.DebugState.FreeCamera = !world.DebugState.FreeCamera;
 			}
 
-			if (iH.KeyWasJustPressed(Keys.R) || iH.ButtonWasJustPressed(Buttons.Back))
+			if (iH.KeyWasJustPressed(Keys.R) || iH.ButtonWasJustPressed(Buttons.Back) || iH.ButtonWasJustPressed(Buttons.X))
 			{
 				if (world.WinState || world.CheckpointsPassed == 0)
 				{
@@ -106,10 +107,8 @@ namespace LegendOfCube.Engine
 
 				inputData.SetDirection(directionInput);
 
-				if (iH.KeyState.IsKeyDown(Keys.Space) || iH.GamePadState.Buttons.A == ButtonState.Pressed)
 				{
 					inputData.SetStateOfJumping(true);
-					if (!iH.OldKeyState.IsKeyDown(Keys.Space) && !(iH.OldGamePadState.Buttons.A == ButtonState.Pressed))
 					{
 						inputData.SetNewJump(true);
 						inputData.BufferedJump = true;

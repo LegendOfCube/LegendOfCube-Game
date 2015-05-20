@@ -51,6 +51,16 @@ namespace LegendOfCube.Engine.Input
 			return GamePadState.IsButtonDown(button) && OldGamePadState.IsButtonUp(button);
 		}
 
+		public bool ButtonIsDown(Buttons button)
+		{
+			return GamePadState.IsButtonDown(button);
+		}
+
+		public bool OldButtonIsDown(Buttons button)
+		{
+			return OldGamePadState.IsButtonDown(button);
+		}
+
 		public bool KeyWasJustPressed(Keys key)
 		{
 			return KeyState.IsKeyDown(key) && OldKeyState.IsKeyUp(key);
