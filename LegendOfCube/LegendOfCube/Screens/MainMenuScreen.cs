@@ -18,6 +18,7 @@ namespace LegendOfCube.Screens
 
 			AddClickable("Start Game", () => { ScreenSystem.SetGameScreen(LevelConstants.LEVEL_1); return "Start Game"; });
 			AddClickable("Select Level", () => { ScreenSystem.AddScreen(new LevelSelectScreen(Game, ScreenSystem)); return "Select Level"; });
+			AddClickable("Instructions", () => { ScreenSystem.AddScreen(new InstructionsScreen(Game, ScreenSystem)); return "Instructions"; });
 			AddClickable("Options", () => { ScreenSystem.AddScreen(new OptionsScreen(Game, ScreenSystem)); return "Options"; });
 			AddSpace(20.0f);
 
