@@ -84,6 +84,11 @@ namespace LegendOfCube.Screens
 			AddMenuItem(new MultiChoiceSelectorMenuItem(name, 22.0f, this.spriteFont, options, currentValue, applyOption, 200.0f));
 		}
 
+		protected void AddImage(Texture2D image, float height)
+		{
+			AddMenuItem(new ImageMenuItem(image, height));
+		}
+
 		// Inherited functions from Screen
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 

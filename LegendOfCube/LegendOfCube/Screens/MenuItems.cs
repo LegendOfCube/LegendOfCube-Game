@@ -287,4 +287,24 @@ namespace LegendOfCube.Screens
 		}
 
 	}
+
+	// ImageMenuItem
+	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+	public class ImageMenuItem : MenuItem
+	{
+		private readonly Texture2D image;
+
+		public ImageMenuItem(Texture2D image, float height)
+			: base(false, height)
+		{
+			this.image = image;
+		}
+
+		public override void Draw(SpriteBatch spriteBatch, SpriteFont spriteFont, bool unused)
+		{
+			spriteBatch.Draw(image, new Rectangle((int) Position.X, (int) Position.Y, (int) ((Height * image.Width) / image.Height), (int) Height), Color.White);
+		}
+	}
+
 }
