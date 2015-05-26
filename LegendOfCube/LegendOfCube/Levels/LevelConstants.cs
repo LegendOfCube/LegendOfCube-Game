@@ -19,10 +19,10 @@ namespace LegendOfCube.Levels
 			LEVEL_1,
 			DEMO_LEVEL,
 			CONCEPT_LEVEL,
-			TEST_LEVEL1,
+			LEVEL_13,
 			WALL_CLIMB_LEVEL,
 			BEANSTALK_LEVEL,
-			LEVEL_13,
+			TEST_LEVEL1,
 			STAIRWAY_LEVEL,
 		};
 	}
