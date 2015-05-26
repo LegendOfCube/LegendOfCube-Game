@@ -120,8 +120,7 @@ namespace LegendOfCube.Engine.Graphics
 			                              0.1f,
 			                              5000.0f);
 
-			// View frustrum culling is disabled, due to problems with generated BoundingSpheres
-			// TODO: Fix or completely remove
+			// View frustum culling is disabled, due to problems with generated BoundingSpheres
 			//var boundingFrustum = new BoundingFrustum(cameraView * cameraProjection);
 
 			// Filter out a list of interesting entities to be used in different steps
@@ -132,14 +131,15 @@ namespace LegendOfCube.Engine.Graphics
 			{
 				renderableEntities.Add(entity);
 
-				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
-				// TODO: Fix or completely remove
-				/*Model model = world.Models[entity.Id];
+				// View frustum culling is disabled, due to problems with generated BoundingSpheres
+				/*
+				Model model = world.Models[entity.Id];
 				Matrix worldTransform = world.Transforms[entity.Id];
-				if (IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
+				if (IsModelInFrustum(model, boundingFrustum, ref worldTransform))
 				{
 					visibleEntities.Add(entity);
-				}*/
+				}
+				*/
 				visibleEntities.Add(entity);
 			}
 
@@ -230,8 +230,7 @@ namespace LegendOfCube.Engine.Graphics
 
 			standardEffect.SetViewProjection(ref lightView, ref lightProjection);
 
-			// View frustrum culling is disabled, due to problems with generated BoundingSpheres
-			// TODO: Fix or completely remove
+			// View frustum culling is disabled, due to problems with generated BoundingSpheres
 			//var boundingFrustum = new BoundingFrustum(lightView * lightProjection);
 
 			foreach (var entity in entities)
@@ -244,11 +243,9 @@ namespace LegendOfCube.Engine.Graphics
 				var model = world.Models[entity.Id];
 				var worldTransform = world.Transforms[entity.Id];
 
-				// View frustrum culling is disabled, due to problems with generated BoundingSpheres
-				// TODO: Fix or completely remove
+				// View frustum culling is disabled, due to problems with generated BoundingSpheres
 				/*
-				// Don't render if entity wouldn't be seen
-				if (!IsModelInFrustrum(model, boundingFrustum, ref worldTransform))
+				if (!IsModelInFrustum(model, boundingFrustum, ref worldTransform))
 				{
 					continue;
 				}
@@ -268,16 +265,6 @@ namespace LegendOfCube.Engine.Graphics
 			game.GraphicsDevice.SetRenderTargets(origRenderTargets);
 			standardEffect.SetShadowMapRendering(false);
 			shadowMatrix = lightView * lightProjection;
-		}
-
-		private Matrix[] GetTransformsForModel(Model model)
-		{
-			int boneCount = model.Bones.Count;
-			// Reuse the same array if larger array isn't needed
-			Matrix[] transforms = boneCount <= boneTransforms.Length ? boneTransforms : new Matrix[boneCount];
-			// Not exactly sure about the reason for this, but seems to be the standard way to do it
-			model.CopyAbsoluteBoneTransformsTo(transforms);
-			return transforms;
 		}
 
 		private void RenderFinal(World world, List<Entity> entities, ref Matrix view, ref Matrix projection)
@@ -421,35 +408,55 @@ namespace LegendOfCube.Engine.Graphics
 			}
 		}
 
-		private static bool IsModelInFrustrum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
+		private Matrix[] GetTransformsForModel(Model model)
 		{
+			int boneCount = model.Bones.Count;
+			// Reuse the same array if larger array isn't needed
+			Matrix[] transforms = boneCount <= boneTransforms.Length ? boneTransforms : new Matrix[boneCount];
+			// Not exactly sure about the reason for this, but seems to be the standard way to do it
+			model.CopyAbsoluteBoneTransformsTo(transforms);
+			return transforms;
+		}
 
+		private bool IsModelInFrustum(Model model, BoundingFrustum boundingFrustum, ref Matrix worldTransform)
+		{
 			BoundingSphere boundingSphere;
 			CreateMergedBoundingSphere(model, out boundingSphere);
 
-			// Not entirely sure if model.Root.Transform should be used in
-			// this context, but it seems like mesh.BoundingSphere doesn't
-			// cover the whole object otherwise. The bug might lie
-			// elsewhere.
-			var modifiedWorldTransform = model.Root.Transform * worldTransform;
 			BoundingSphere worldBoundingSphere;
-			boundingSphere.Transform(ref modifiedWorldTransform, out worldBoundingSphere);
+			Matrix bsWorldTransform = SanitizeBoundingSphereTransform(ref worldTransform);
+			boundingSphere.Transform(ref bsWorldTransform, out worldBoundingSphere);
 			bool intersects;
 			boundingFrustum.Intersects(ref worldBoundingSphere, out intersects);
 			return intersects;
 		}
 
-		private static void CreateMergedBoundingSphere(Model model, out BoundingSphere boundingSphere)
+		private void CreateMergedBoundingSphere(Model model, out BoundingSphere boundingSphere)
 		{
+			Matrix[] boneTransforms = GetTransformsForModel(model);
+
 			boundingSphere = model.Meshes[0].BoundingSphere;
+			boundingSphere = boundingSphere.Transform(SanitizeBoundingSphereTransform(ref boneTransforms[0]));
+
 			for (int i = 1; i < model.Meshes.Count; i++)
 			{
 				ModelMesh mesh = model.Meshes[i];
 				// As with model.Root.Transform, it may be that this 
-				// mesh.ParentBone.Transform shouldn't be used
-				BoundingSphere additional = mesh.BoundingSphere.Transform(mesh.ParentBone.Transform);
+				BoundingSphere additional = mesh.BoundingSphere;
+				additional = additional.Transform(SanitizeBoundingSphereTransform(ref boneTransforms[i]));
 				boundingSphere = BoundingSphere.CreateMerged(boundingSphere, additional);
 			}
+		}
+
+		private static Matrix SanitizeBoundingSphereTransform(ref Matrix transform)
+		{
+			Vector3 scale, translation;
+			Quaternion rotation;
+			transform.Decompose(out scale, out rotation, out translation);
+
+			float maxScale = Math.Max(Math.Max(scale.X, scale.Y), scale.Z);
+
+			return Matrix.CreateScale(maxScale) * Matrix.CreateFromQuaternion(rotation) * Matrix.CreateTranslation(translation);
 		}
 	}
 }
