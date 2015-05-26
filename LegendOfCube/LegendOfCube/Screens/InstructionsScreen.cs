@@ -9,8 +9,9 @@ namespace LegendOfCube.Screens
 {
 	class InstructionsScreen : BaseMenuScreen
 	{
-		private const string INSTRUCTION_TEXT = 
-@"Some text here...";
+		private const string INSTRUCTION_TEXT =
+@"The goal of the game is to navigate the playable cube to the end of the level. The fastest
+time for each level is stored and can be seen in the level select screen.";
 
 		private const int IMAGE_HEIGHT = 350;
 
@@ -25,6 +26,9 @@ namespace LegendOfCube.Screens
 			AddTitle("Instructions");
 
 			AddDescription(INSTRUCTION_TEXT);
+			AddSpace(20.0f);
+
+			AddTitle("Control Scheme");
 
 			AddSpace(40.0f);
 			AddImage(controllerImage, IMAGE_HEIGHT);
