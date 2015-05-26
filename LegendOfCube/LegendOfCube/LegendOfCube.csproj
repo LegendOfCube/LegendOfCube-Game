@@ -103,7 +103,7 @@
     <Compile Include="Levels\LevelConstants.cs" />
     <Compile Include="Levels\StairwayLevel.cs" />
     <Compile Include="Screens\BaseMenuScreen.cs" />
-    <Compile Include="Screens\InstructionsScreen.cs" />
+    <Compile Include="Screens\ControlsScreen.cs" />
     <Compile Include="Screens\LevelSelectScreen.cs" />
     <Compile Include="Screens\MenuItems.cs" />
     <Compile Include="Screens\OptionsScreen.cs" />
